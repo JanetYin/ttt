@@ -2,6 +2,12 @@
 
 You can take semi-compulsory courses in later semesters.
 
+You have to register with the correct code:
+
+* BSc: IP-18KVSZTME
+* MSc: IPM-18sztKVTEE
+* MSc evening course: IPM-18EsztKVTEE
+
 Tutorials:
 
 1. Kaposi Ágoston
