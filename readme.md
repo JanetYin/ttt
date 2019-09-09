@@ -10,10 +10,10 @@ Tutorials:
 
 Requirements:
 
- * Canvas quiz for each lecture
- * At the beginning of each tutorial a small assignment in the bead
-   system. Weekly homeworks in the same system help preparing.
- * Exam on the computer during the exam period.
+* Canvas quiz for each lecture
+* At the beginning of each tutorial a small assignment in the bead
+  system. Weekly homeworks in the same system help preparing.
+* Exam on the computer during the exam period.
 
 For the tutorial, you get the following marks according to how many
 assignments you completed (out of 10, for each assignment you can get
@@ -30,6 +30,7 @@ Recommended literature:
 * [Kaposi Ambrus. Bevezetés a homotópia-típuselméletbe](https://akaposi.github.io/hott_bevezeto.pdf) (magyar)
 * [Martin Hofmann. Syntax and Semantics of Dependent Types](https://www.tcs.ifi.lmu.de/mitarbeiter/martin-hofmann/pdfs/syntaxandsemanticsof-dependenttypes.pdf)
 
+
 # Intro
 
 `t : A`
@@ -40,19 +41,24 @@ examples: `(1 + 1) : ℕ`, `(λ b → if b then 1 else 3) : Bool → ℕ`
 
 Sometimes type theory means the study of type systems for programming
 languages. Here we study Martin-Löf's type theory. This is a
-programming language and a foundation of mathematics.
+functional programming language and a foundation of mathematics at the
+same time.
 
-It can be used as a replacement for set theory. Differences.
+It can be used as a replacement for set theory. Differences:
 
-`x ∈ A` in set theory is a proposition, while `t : A` is a judgement
-(analogy: static and dynamic type systems: Haskell vs Python). `1 + 1 =
-2` is at a different level from `(1 + 1) : ℕ`, but in set theory `(1 + 1) ∈
-ℕ` is a proposition too. Representation independence in type theory, we
-cannot ask `2 ∈ 3` or `Bool ∩ ℕ = ∅`.
+* `x ∈ A` in set theory is a proposition, while `t : A` is a judgement
+  (analogy: static and dynamic type systems: Haskell vs Python). `1 +
+  1 = 2` is at a different level from `(1 + 1) : ℕ`, but in set theory
+  `(1 + 1) ∈ ℕ` is a proposition too. Representation independence in
+  type theory, we cannot ask `2 ∈ 3` or `Bool ∩ ℕ = ∅`.
+
+* Proofs in type theory are constructive: GCD example. This is what we
+  use to write functional programs.
 
 We define a programming language by listing all the ways to construct
 programs of different types and equalities which explain how programs
 run.
+
 
 # Simple type theory
 
@@ -60,24 +66,29 @@ Rules, constructing programs with it
 
 Booleans
 
+Functions
+
 Natural numbers
 
 Product
 
 Sum
 
-Functions
-
-# Some propositional logic
+## Propositional logic
 
 Maybe talk about Curry-Howard?
+
 
 # Indexed types
 
 Vectors
+
 Equality
 
-# Predicate logic
+Inductive types in general
 
-do some discrete math
+## Predicate logic
 
+Do some discrete math.
+
+Internalise simple type theory
