@@ -102,15 +102,15 @@ There are only two elements of `Bool`.
 
 Rules:
 
-* introduction:
-  * if `t : B` and `t` can contain `x` and `x : A`, then `(λ x → t) : (A → B)`
-* elimination:
-  * if `t : A → B` and `u : A`, then `t u : B`
-* computation:
-  * `(λ x → t) u = t[x↦u]` where `t[x↦u]` means that all copies of
-    `x` are replaced by `u`
-* uniqueness:
-  * `(λ x → t x) = t`
+ * introduction:
+    * if `t : B` and `t` can contain `x` and `x : A`, then `(λ x → t) : (A → B)`
+ * elimination:
+    * if `t : A → B` and `u : A`, then `t u : B`
+ * computation:
+    * `(λ x → t) u = t[x↦u]` where `t[x↦u]` means that all copies of
+      `x` are replaced by `u`
+ * uniqueness:
+    * `(λ x → t x) = t`
 
 Examples, compute.
 
@@ -143,14 +143,14 @@ y → t`, `t u v` means `(t u) v`.
 
 Rules:
 
-* introduction:
-  * `zero : ℕ`
-  * if `t : ℕ` then `suc t : ℕ`
-* elimination:
-  * if `u : A`, `v : ℕ → A → A` and `t : ℕ` then `ind u v t : A`
-* computation:
-  * `ind u v zero = u`
-  * `ind u v (suc t) = v t (ind u v t)
+ * introduction:
+    * `zero : ℕ`
+    * if `t : ℕ` then `suc t : ℕ`
+ * elimination:
+    * if `u : A`, `v : ℕ → A → A` and `t : ℕ` then `ind u v t : A`
+ * computation:
+    * `ind u v zero = u`
+    * `ind u v (suc t) = v t (ind u v t)
 
 Examples.
 
@@ -175,15 +175,15 @@ Examples.
 
 Rules:
 
-* introduction:
-  * if `u : A` and `v : B`, then `(u , v) : A × B`
-* elimination:
-  * if `t : A × B` then `proj₁ t : A` and `proj₂ t : B`
-* computation:
-  * `proj₁ (u , v)` = u
-  * `proj₂ (u , v)` = v
-* uniqueness:
-  * `(proj₁ t , proj₂ t) = t`
+ * introduction:
+    * if `u : A` and `v : B`, then `(u , v) : A × B`
+ * elimination:
+    * if `t : A × B` then `proj₁ t : A` and `proj₂ t : B`
+ * computation:
+    * `proj₁ (u , v)` = u
+    * `proj₂ (u , v)` = v
+ * uniqueness:
+    * `(proj₁ t , proj₂ t) = t`
 
 How many terms of type `Bool × Bool` are there?
 
@@ -217,14 +217,14 @@ Examples. How many possible definitions are there?
 
 Rules:
 
-* introduction:
-  * if `u : A` then `inj₁ u : A ⊎ B`
-  * if `v : B` then `inj₂ v : A ⊎ B`
-* elimination:
-  * if `u : A → C`, `v : B → C` and `t : A ⊎ B` then `case t u v : C`
-* computation:
-  * `case u v (inj₁ t) = u t`
-  * `case u v (inj₂ t) = v t`
+ * introduction:
+    * if `u : A` then `inj₁ u : A ⊎ B`
+    * if `v : B` then `inj₂ v : A ⊎ B`
+ * elimination:
+    * if `u : A → C`, `v : B → C` and `t : A ⊎ B` then `case t u v : C`
+ * computation:
+    * `case u v (inj₁ t) = u t`
+    * `case u v (inj₂ t) = v t`
 
 ## Propositional logic
 
