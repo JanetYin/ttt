@@ -150,7 +150,7 @@ Rules:
     * if `u : A`, `v : ℕ → A → A` and `t : ℕ` then `ind u v t : A`
  * computation:
     * `ind u v zero = u`
-    * `ind u v (suc t) = v t (ind u v t)
+    * `ind u v (suc t) = v t (ind u v t)`
 
 Examples.
 
@@ -180,8 +180,8 @@ Rules:
  * elimination:
     * if `t : A × B` then `proj₁ t : A` and `proj₂ t : B`
  * computation:
-    * `proj₁ (u , v)` = u
-    * `proj₂ (u , v)` = v
+    * `proj₁ (u , v) = u`
+    * `proj₂ (u , v) = v`
  * uniqueness:
     * `(proj₁ t , proj₂ t) = t`
 
