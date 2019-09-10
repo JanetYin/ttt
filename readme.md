@@ -102,10 +102,11 @@ There are only two elements of `Bool`.
 
 Rules:
 
- * introduction:
-    * if `t : B` and `t` can contain `x` and `x : A`, then `(λ x → t) : (A → B)`
  * elimination:
     * if `t : A → B` and `u : A`, then `t u : B`
+ * introduction:
+    * if `t : B` assuming `x : A` then `(λ x → t) : (A → B)`
+       * `x` is just a name (a variable), it is not an arbitrary term
  * computation:
     * `(λ x → t) u = t[x↦u]` where `t[x↦u]` means that all copies of
       `x` are replaced by `u`
