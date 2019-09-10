@@ -53,10 +53,11 @@ same time.
 It can be used as a replacement for set theory. Differences:
 
 * `x ∈ A` in set theory is a proposition, while `t : A` is a judgement
-  (analogy: static and dynamic type systems: Haskell vs Python). `1 +
-  1 = 2` is at a different level from `(1 + 1) : ℕ`, but in set theory
-  `(1 + 1) ∈ ℕ` is a proposition too. Representation independence in
-  type theory, we cannot ask `2 ∈ 3` or `Bool ∩ ℕ = ∅`.
+  (analogy: static and dynamic type systems: Haskell vs Python). In
+  type theory, `1 + 1 = 2` is at a different level from `(1 + 1) : ℕ`,
+  but in set theory `1 + 1 = 2` and `(1 + 1) ∈ ℕ` are both
+  propositions. Representation independence in type theory, we cannot
+  ask `2 ∈ 3` or `Bool ∩ ℕ = ∅`.
 
 * Proofs in type theory are constructive: GCD example. This is what we
   use to write functional programs.
@@ -68,17 +69,77 @@ run.
 
 # Simple type theory
 
-Rules, constructing programs with it
+## `Bool`
 
-Booleans
+Rules:
 
-Functions
+* introduction:
+  * `true : Bool`
+  * `false : Bool`
+* elimination:
+  * if `t : Bool`, `u : A`, `v : A`, then `if t then u else v : A`
+    * this works for any `A`
+* computation:
+  * `if true then u else v = u`
+  * `if false then u else v = u`
 
-Natural numbers
+Examples. How many terms of type `Bool` can you write with these
+rules?
 
-Product
+    b1 b2 b3 b4 : Bool
+    b1 = true
+    b2 = false
+    b3 = if b1 then b2 else b1
+    b4 = if b3 then b1 else b2
 
-Sum
+Let's compute:
+
+`b3 = if b1 then b2 else b1 = if true then b2 else b1 = b2 = true`
+
+## Funcion space: `A → B` (for any two types `A`, `B`)
+
+Rules:
+
+* introduction:
+  * if `t : B` and `t` can contain `x` and `x : A`, then `(λ x → t) : (A → B)`
+* elimination:
+  * if `t : A → B` and `u : A`, then `t u : B`
+* computation:
+  * `(λ x → t) u = t[x↦u]` where `t[x↦u]` means that all copies of
+    `x` are replaced by `u`
+* uniqueness:
+  * `(λ x → t x) = t`
+
+Examples, compute!
+
+    id id' id'' : Bool → Bool
+    id = λ x → x
+    id' = λ x → if x then true else false
+    id'' = λ x → if true then x else false
+
+Do we have `id = id'`? Do we have `id = id''`?
+
+    not
+
+    b5 : Bool
+    b5 = id true
+
+Multiple arguments, currying.
+
+Notation: `A → B → C` means `A → (B → C)`, `λ x y → t` means `λ x → λ
+y → t`, `t u v` means `(t u) v`.
+
+    and
+    or
+    xor
+
+## `ℕ`
+
+
+
+## `A × B`
+
+## `A ⊎ B`
 
 ## Propositional logic
 
@@ -97,4 +158,5 @@ Inductive types in general
 
 Do some discrete math.
 
-Internalise simple type theory
+Internalise simple type theory. Define a model in which `id` is not
+equal to `id'`?
