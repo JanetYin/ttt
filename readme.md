@@ -191,10 +191,27 @@ How many terms of type `Bool × Bool` are there?
 
 Rules: `A`, `B`, `C` are types. That's it.
 
-Examples.
+Examples. How many possible definitions are there?
 
-    xxx
+    idA     : A → A
+    pick₁   : A → A → A
+    pick₂   : A → A → A
+    pick*   : A → (A → A) → A
+    pick?   : (A → A) → A
+    
+    curry   : (A × B → C) → (A → B → C)
+    uncurry : (A → B → C) → (A × B → C)
+    swap    : A × B → B × A
+    assoc   : (A × B) × C → A × (B × C)
+    diag    : A → A × A
 
+## Empty type
+
+## Unit type
+
+## Abbreviated types
+
+`↔` and `¬`
 
 ## Coproducts: `A ⊎ B`
 

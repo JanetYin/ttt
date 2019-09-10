@@ -3,6 +3,7 @@ module lib where
 infix  4 _,_
 infixr 2 _×_
 infixr 1 _⊎_
+infixr 0 _↔_
 
 data Bool : Set where
   true false : Bool
@@ -27,6 +28,23 @@ ind : {A : Set}(u : A)(v : ℕ → A → A)(t : ℕ) → A
 ind u v zero = u
 ind u v (suc t) = v t (ind u v t)
 
+postulate
+   A B C : Set
+
 data _⊎_ (A B : Set) : Set where
   inj₁ : A → A ⊎ B
   inj₂ : B → A ⊎ B
+
+_↔_ : (A B : Set) → Set
+A ↔ B = (A → B) × (B → A)
+
+data ⊥ : Set where
+
+exfalso : {A : Set} → ⊥ → A
+exfalso ()
+
+record ⊤ : Set where
+  constructor rr
+
+¬_ : (A : Set) → Set
+¬ A = A → ⊥
