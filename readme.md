@@ -114,8 +114,10 @@ Rules:
 
 Examples, compute.
 
-    id id' id'' : Bool → Bool
+    id idy id1 id' id'' : Bool → Bool
     id = λ x → x
+    idy = λ y → y
+    id1 = λ x → id x
     id' = λ x → if x then true else false
     id'' = λ x → if true then x else false
 
@@ -184,6 +186,15 @@ Rules:
   * `(proj₁ t , proj₂ t) = t`
 
 How many terms of type `Bool × Bool` are there?
+
+## Abstract types
+
+Rules: `A`, `B`, `C` are types. That's it.
+
+Examples.
+
+    xxx
+
 
 ## Coproducts: `A ⊎ B`
 
