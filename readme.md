@@ -74,14 +74,14 @@ run.
 Rules:
 
  * introduction:
-   * `true : Bool`
-   * `false : Bool`
+    * `true : Bool`
+    * `false : Bool`
  * elimination:
-   * if `t : Bool`, `u : A`, `v : A`, then `if t then u else v : A`
-     * this works for any `A`
+    * if `t : Bool`, `u : A`, `v : A`, then `if t then u else v : A`
+       * this works for any `A`
  * computation:
-   * `if true then u else v = u`
-   * `if false then u else v = u`
+    * `if true then u else v = u`
+    * `if false then u else v = u`
 
 Examples. How many terms of type `Bool` can you write with these
 rules?
