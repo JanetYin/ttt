@@ -10,9 +10,9 @@ You have to register with the correct code:
 
 Tutorials:
 
-1. Kaposi Ágoston
-2. Kovács András
-3. Rafaël Bocquet (English)
+1. Kaposi Ágoston (Kedd 16:00-17:30 Déli Tömb 2-709 (PC 9))
+2. Kovács András (Szerda 17:45-19:15 Északi Tömb 2.63 (PC 8))
+3. Rafaël Bocquet (English, Csütörtök 19:30-21:00 Déli Tömb 00-410 (PC 1))
 
 Requirements:
 
@@ -69,7 +69,7 @@ run.
 
 # Simple type theory
 
-## `Bool`
+## Booleans: `Bool`
 
 Rules:
 
@@ -96,7 +96,9 @@ Let's compute:
 
 `b3 = if b1 then b2 else b1 = if true then b2 else b1 = b2 = true`
 
-## Funcion space: `A → B` (for any two types `A`, `B`)
+There are only two elements of `Bool`.
+
+## Function space: `A → B` (for any two types `A`, `B`)
 
 Rules:
 
@@ -110,12 +112,14 @@ Rules:
 * uniqueness:
   * `(λ x → t x) = t`
 
-Examples, compute!
+Examples, compute.
 
     id id' id'' : Bool → Bool
     id = λ x → x
     id' = λ x → if x then true else false
     id'' = λ x → if true then x else false
+
+How many elements of `Bool → Bool` are there?
 
 Do we have `id = id'`? Do we have `id = id''`?
 
@@ -133,24 +137,81 @@ y → t`, `t u v` means `(t u) v`.
     or
     xor
 
-## `ℕ`
+## Natural numbers: `ℕ`
 
+Rules:
 
+* introduction:
+  * `zero : ℕ`
+  * if `t : ℕ` then `suc t : ℕ`
+* elimination:
+  * if `u : A`, `v : ℕ → A → A` and `t : ℕ` then `ind u v t : A`
+* computation:
+  * `ind u v zero = u`
+  * `ind u v (suc t) = v t (ind u v t)
 
-## `A × B`
+Examples.
 
-## `A ⊎ B`
+    three : ℕ
+    three = suc (suc (suc zero))
+
+    plus3 : ℕ → ℕ
+
+    times3plus2 : ℕ → ℕ
+
+    plus : ℕ → ℕ → ℕ
+    
+    pred : ℕ → ℕ
+    even : ℕ → Bool
+    odd  : ℕ → Bool
+    _*_ : ℕ → ℕ → ℕ
+    _^_ : ℕ → ℕ → ℕ
+    equal? : ℕ → ℕ → Bool
+    _≥?_ : ℕ → ℕ → Bool
+
+## Products: `A × B` (for any two types `A`, `B`)
+
+Rules:
+
+* introduction:
+  * if `u : A` and `v : B`, then `(u , v) : A × B`
+* elimination:
+  * if `t : A × B` then `proj₁ t : A` and `proj₂ t : B`
+* computation:
+  * `proj₁ (u , v)` = u
+  * `proj₂ (u , v)` = v
+* uniqueness:
+  * `(proj₁ t , proj₂ t) = t`
+
+How many terms of type `Bool × Bool` are there?
+
+## Coproducts: `A ⊎ B`
+
+Rules:
+
+* introduction:
+  * if `u : A` then `inj₁ u : A ⊎ B`
+  * if `v : B` then `inj₂ v : A ⊎ B`
+* elimination:
+  * if `u : A → C`, `v : B → C` and `t : A ⊎ B` then `case t u v : C`
+* computation:
+  * `case u v (inj₁ t) = u t`
+  * `case u v (inj₂ t) = v t`
 
 ## Propositional logic
 
 Maybe talk about Curry-Howard?
 
+Holes?
 
 # Indexed types
 
 Vectors
 
 Equality
+
+Disjointness of constructors of inductive types, injectivity of
+constructors, pattern matching.
 
 Inductive types in general
 
@@ -159,4 +220,5 @@ Inductive types in general
 Do some discrete math.
 
 Internalise simple type theory. Define a model in which `id` is not
-equal to `id'`?
+equal to `id'`? Notion of simply typed CwF or a simplification of
+that? Canonicity?
