@@ -23,7 +23,7 @@ Requirements:
 
 For the tutorial, you get the following marks according to how many
 assignments you completed (out of 10, for each assignment you can get
-0 or 1 points): 5-6: 2, 7: 3, 8: 4, 9-10: 5
+0 or 1 points): 5-6: 2, 7: 3, 8: 4, 9-10: 5.
 
 To enter the exam, you need 50% in Canvas quizes and a minimum 2 mark
 for the tutorial.
