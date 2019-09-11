@@ -97,7 +97,7 @@ Let's compute:
 
 There are only two elements of `Bool`.
 
-## Function space: `A → B` (for any two types `A`, `B`)
+## Functions: `A → B` (for any two types `A`, `B`)
 
 Rules:
 
@@ -121,9 +121,23 @@ Examples, compute.
     id' = λ x → if x then true else false
     id'' = λ x → if true then x else false
 
-How many elements of `Bool → Bool` are there?
-
 Do we have `id = id'`? Do we have `id = id''`?
+
+We have
+
+    id =
+                           by definition
+    λ x → x =
+                           by the computation rule for functions (x:=y, t:=y, u:=x)
+    λ x → (λ y → y) x =
+                           by the uniqueness rule for functions (x:=x, t:=(λ y → y))
+    λ y → y =
+                           by definition
+    idy
+
+How many elements of `Bool → Bool` are there? Infinitely many.
+
+More examples.
 
     not
 
@@ -133,7 +147,8 @@ Do we have `id = id'`? Do we have `id = id''`?
 Multiple arguments, currying.
 
 Notation: `A → B → C` means `A → (B → C)`, `λ x y → t` means `λ x → λ
-y → t`, `t u v` means `(t u) v`.
+y → t`, `t u v` means `(t u) v`. `λ` extends as far right as possible,
+so `λ x → t u = λ x → (t u)` instead of `(λ x → t) u`.
 
     and
     or
@@ -248,5 +263,5 @@ Inductive types in general
 Do some discrete math.
 
 Internalise simple type theory. Define a model in which `id` is not
-equal to `id'`? Notion of simply typed CwF or a simplification of
-that? Canonicity?
+equal to `id'`? Notion of simply typed CwF with extra structure or a
+simplification of that? Canonicity?
