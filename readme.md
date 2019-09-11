@@ -80,7 +80,7 @@ Rules:
        * this works for any `A`
  * computation:
     * `if true then u else v = u`
-    * `if false then u else v = u`
+    * `if false then u else v = v`
 
 Examples. How many terms of type `Bool` can you write with these
 rules?
