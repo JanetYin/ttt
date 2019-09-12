@@ -154,6 +154,15 @@ so `λ x → t u = λ x → (t u)` instead of `(λ x → t) u`.
     or
     xor
 
+## Equality checking in Agda
+
+It is possible to decide for any two terms whether they are
+equal. Agda implements this as follows: it can normalise (`C-c C-n`)
+any two terms, that is, unfold all the abbreviations and use the
+computation and uniqueness rules to simplify them. Once two terms are
+normalised, if they coincide (up to renaming of bound variables), they
+are equal. If they don't, they are not equal.
+
 ## Natural numbers: `ℕ`
 
 Rules:
