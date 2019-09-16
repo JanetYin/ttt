@@ -163,6 +163,12 @@ computation and uniqueness rules to simplify them. Once two terms are
 normalised, if they coincide (up to renaming of bound variables), they
 are equal. If they don't, they are not equal.
 
+## Equality and behaviour
+
+There are only 4 terms of type `Bool → Bool` if we only consider
+behaviour, but there are infinitely many up to equality. If two terms
+have different behaviour, can they be still equal?
+
 ## Natural numbers: `ℕ`
 
 Rules:
@@ -171,10 +177,10 @@ Rules:
     * `zero : ℕ`
     * if `t : ℕ` then `suc t : ℕ`
  * elimination:
-    * if `u : A`, `v : ℕ → A → A` and `t : ℕ` then `ind u v t : A`
+    * if `u : A`, `v : ℕ → A → A` and `t : ℕ` then `primrec u v t : A`
  * computation:
-    * `ind u v zero = u`
-    * `ind u v (suc t) = v t (ind u v t)`
+    * `primrec u v zero = u`
+    * `primrec u v (suc t) = v t (primrec u v t)`
 
 Examples.
 

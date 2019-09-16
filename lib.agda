@@ -24,9 +24,9 @@ data ℕ : Set where
   suc : ℕ → ℕ
 {-# BUILTIN NATURAL ℕ #-}
 
-ind : {A : Set}(u : A)(v : ℕ → A → A)(t : ℕ) → A
-ind u v zero = u
-ind u v (suc t) = v t (ind u v t)
+primrec : {A : Set}(u : A)(v : ℕ → A → A)(t : ℕ) → A
+primrec u v zero = u
+primrec u v (suc t) = v t (primrec u v t)
 
 postulate
    A B C : Set
