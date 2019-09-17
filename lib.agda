@@ -29,7 +29,7 @@ primrec u v zero = u
 primrec u v (suc t) = v t (primrec u v t)
 
 postulate
-   A B C : Set
+   X Y Z : Set
 
 data _⊎_ (A B : Set) : Set where
   inj₁ : A → A ⊎ B
