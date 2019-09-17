@@ -169,6 +169,8 @@ There are only 4 terms of type `Bool → Bool` if we only consider
 behaviour, but there are infinitely many up to equality. If two terms
 have different behaviour, can they be still equal?
 
+Why are they different? Can't we make these two things coincide?
+
 ## Natural numbers: `ℕ`
 
 Rules:
