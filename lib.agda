@@ -4,6 +4,7 @@ infix  4 _,_
 infixr 2 _×_
 infixr 1 _⊎_
 infixr 0 _↔_
+infixr 0 _←_
 
 data Bool : Set where
   true false : Bool
@@ -48,3 +49,6 @@ record ⊤ : Set where
 
 ¬_ : (A : Set) → Set
 ¬ A = A → ⊥
+
+_←_ : (A B : Set) → Set
+A ← B = B → A

@@ -93,7 +93,7 @@ rules?
 
 Let's compute:
 
-`b3 = if b1 then b2 else b1 = if true then b2 else b1 = b2 = true`
+`b3 = if b1 then b2 else b1 = if true then b2 else b1 = b2 = false`
 
 There are only two elements of `Bool`.
 
@@ -139,7 +139,8 @@ How many elements of `Bool → Bool` are there? Infinitely many.
 
 More examples.
 
-    not
+    not : Bool → Bool
+    not = λ x → if x then false else true
 
     b5 : Bool
     b5 = id true
@@ -150,26 +151,27 @@ Notation: `A → B → C` means `A → (B → C)`, `λ x y → t` means `λ x �
 y → t`, `t u v` means `(t u) v`. `λ` extends as far right as possible,
 so `λ x → t u = λ x → (t u)` instead of `(λ x → t) u`.
 
-    and
-    or
-    xor
+    and : Bool → Bool → Bool
+    and = λ x y → if x then y else false
 
 ## Equality checking in Agda
 
 It is possible to decide for any two terms whether they are
 equal. Agda implements this as follows: it can normalise (`C-c C-n`)
 any two terms, that is, unfold all the abbreviations and use the
-computation and uniqueness rules to simplify them. Once two terms are
-normalised, if they coincide (up to renaming of bound variables), they
-are equal. If they don't, they are not equal.
+computation and uniqueness rules to simplify them. Once the two terms
+are normalised, if they coincide (up to renaming of bound variables),
+they are equal. If they don't, they are not equal.
 
 ## Equality and behaviour
 
 There are only 4 terms of type `Bool → Bool` if we only consider
-behaviour, but there are infinitely many up to equality. If two terms
-have different behaviour, can they be still equal?
+behaviour, but there are infinitely many up to equality.
 
-Why are they different? Can't we make these two things coincide?
+If two terms have different behaviour, can they be still equal?
+
+Why are terms which have the same behaviour different? Can't we make
+behaviour and equality coincide?
 
 ## Natural numbers: `ℕ`
 
@@ -195,13 +197,7 @@ Examples.
 
     plus : ℕ → ℕ → ℕ
     
-    pred : ℕ → ℕ
     even : ℕ → Bool
-    odd  : ℕ → Bool
-    _*_ : ℕ → ℕ → ℕ
-    _^_ : ℕ → ℕ → ℕ
-    equal? : ℕ → ℕ → Bool
-    _≥?_ : ℕ → ℕ → Bool
 
 ## Products: `A × B` (for any two types `A`, `B`)
 
@@ -219,31 +215,42 @@ Rules:
 
 How many terms of type `Bool × Bool` are there?
 
+Example.
+
+    uncurry : (Bool → Bool → Bool) → Bool × Bool → Bool
+
 ## Abstract types
 
-Rules: `A`, `B`, `C` are types. That's it.
+Rules: `X`, `Y`, `Z` are types. That's it.
 
 Examples. How many possible definitions are there?
 
-    idA     : A → A
-    pick₁   : A → A → A
-    pick₂   : A → A → A
-    pick*   : A → (A → A) → A
-    pick?   : (A → A) → A
+    idX     : X → X
+    pick    : X → X → X
+    pick*   : X → (X → X) → X
+    pick?   : (X → X) → X
     
-    curry   : (A × B → C) → (A → B → C)
-    uncurry : (A → B → C) → (A × B → C)
-    swap    : A × B → B × A
-    assoc   : (A × B) × C → A × (B × C)
-    diag    : A → A × A
+    swap    : X × Y → Y × X
 
-## Empty type
+## Empty type: `⊥`
 
-## Unit type
+Rules:
+
+ * elimination:
+    * if `t : ⊥` then `exfalso t : C` for any type `C`
+
+## Unit type: `⊤`
+
+ * introuction:
+    * `tt : ⊤`
+ * uniqueness:
+    * if `t : ⊤` then `t = tt`
 
 ## Abbreviated types
 
-`↔` and `¬`
+`A ↔ B` abbreviates `(A → B) × (B → A)` for any `A`, `B`
+
+`¬ A` abbreviates `A → ⊥`
 
 ## Coproducts: `A ⊎ B`
 
@@ -263,6 +270,8 @@ Rules:
 Maybe talk about Curry-Howard?
 
 Holes?
+
+Universe, large functions which compute types.
 
 # Indexed types
 
