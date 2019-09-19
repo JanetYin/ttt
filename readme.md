@@ -199,6 +199,9 @@ Examples.
     
     even : ℕ → Bool
 
+Question: is there a function of type `ℕ → ℕ` which cannot be given by
+primrec?
+
 ## Products: `A × B` (for any two types `A`, `B`)
 
 Rules:
@@ -218,6 +221,17 @@ How many terms of type `Bool × Bool` are there?
 Example.
 
     uncurry : (Bool → Bool → Bool) → Bool × Bool → Bool
+
+Question: `A → B → C` represents `A × B → C`. Is there a way to
+represent `A → B × C` without `×`? Answer: yes, using two separate
+terms of types `A → B` and `A → C`, respectively.
+
+Without the uniqueness rule, the following two terms of type `Bool ×
+Bool → Bool × Bool` would be not equal:
+
+    λ x → x
+
+    λ x → (proj₁ x , proj₂ x)
 
 ## Abstract types
 
