@@ -18,7 +18,7 @@ record _×_ (A B : Set) : Set where
   field
     proj₁ : A
     proj₂ : B
-open _×_
+open _×_ public
 
 data ℕ : Set where
   zero : ℕ
@@ -45,7 +45,8 @@ exfalso : {A : Set} → ⊥ → A
 exfalso ()
 
 record ⊤ : Set where
-  constructor rr
+  constructor tt
+open ⊤ public
 
 ¬_ : (A : Set) → Set
 ¬ A = A → ⊥
