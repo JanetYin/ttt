@@ -4,22 +4,22 @@ You can take semi-compulsory courses in later semesters.
 
 You have to register with the correct code:
 
-* BSc: IP-18KVSZTME
-* MSc: IPM-18sztKVTEE
-* MSc evening course: IPM-18EsztKVTEE
+ * BSc: IP-18KVSZTME
+ * MSc: IPM-18sztKVTEE
+ * MSc evening course: IPM-18EsztKVTEE
 
 Tutorials:
 
-1. Kaposi Ágoston (Kedd 16:00-17:30 Déli Tömb 2-709 (PC 9))
-2. Kovács András (Szerda 17:45-19:15 Északi Tömb 2.63 (PC 8))
-3. Rafaël Bocquet (English, Csütörtök 19:30-21:00 Déli Tömb 00-410 (PC 1))
+ 1. Kaposi Ágoston (Kedd 16:00-17:30 Déli Tömb 2-709 (PC 9))
+ 2. Kovács András (Szerda 17:45-19:15 Északi Tömb 2.63 (PC 8))
+ 3. Rafaël Bocquet (English, Csütörtök 19:30-21:00 Déli Tömb 00-410 (PC 1))
 
 Requirements:
 
-* Canvas quiz for each lecture
-* At the beginning of each tutorial a small assignment in the bead
-  system. Weekly homeworks in the same system help preparing.
-* Exam on the computer during the exam period.
+ * Canvas quiz for each lecture
+ * At the beginning of each tutorial a small assignment in the bead
+   system. Weekly homeworks in the same system help preparing.
+ * Exam on the computer during the exam period.
 
 For the tutorial, you get the following marks according to how many
 assignments you completed (out of 10, for each assignment you can get
@@ -30,15 +30,15 @@ for the tutorial.
 
 Recommended literature:
 
-* [Thorsten Altenkirch. Naive Type Theory](http://www.cs.nott.ac.uk/~psztxa/publ/fomus19.pdf)
-* [Homotopy Type Theory book](http://saunders.phil.cmu.edu/book/hott-online.pdf) (especially Chapter 1 Type theory)
-* [Kaposi Ambrus. Bevezetés a homotópia-típuselméletbe](https://akaposi.github.io/hott_bevezeto.pdf) (magyar)
-* [Martin Hofmann. Syntax and Semantics of Dependent Types](https://www.tcs.ifi.lmu.de/mitarbeiter/martin-hofmann/pdfs/syntaxandsemanticsof-dependenttypes.pdf)
+ * [Thorsten Altenkirch. Naive Type Theory](http://www.cs.nott.ac.uk/~psztxa/publ/fomus19.pdf)
+ * [Homotopy Type Theory book](http://saunders.phil.cmu.edu/book/hott-online.pdf) (especially Chapter 1 Type theory)
+ * [Kaposi Ambrus. Bevezetés a homotópia-típuselméletbe](https://akaposi.github.io/hott_bevezeto.pdf) (magyar)
+ * [Martin Hofmann. Syntax and Semantics of Dependent Types](https://www.tcs.ifi.lmu.de/mitarbeiter/martin-hofmann/pdfs/syntaxandsemanticsof-dependenttypes.pdf)
 
 
 # Intro
 
-`t : A`
+    t : A
 
 t is a term (program), A is its type
 
@@ -51,15 +51,15 @@ same time.
 
 It can be used as a replacement for set theory. Differences:
 
-* `x ∈ A` in set theory is a proposition, while `t : A` is a judgement
-  (analogy: static and dynamic type systems: Haskell vs Python). In
-  type theory, `1 + 1 = 2` is at a different level from `(1 + 1) : ℕ`,
-  but in set theory `1 + 1 = 2` and `(1 + 1) ∈ ℕ` are both
-  propositions. Representation independence in type theory, we cannot
-  ask `2 ∈ 3` or `Bool ∩ ℕ = ∅`.
+ * `x ∈ A` in set theory is a proposition, while `t : A` is a
+   judgement (analogy: static and dynamic type systems: Haskell vs
+   Python). In type theory, `1 + 1 = 2` is at a different level from
+   `(1 + 1) : ℕ`, but in set theory `1 + 1 = 2` and `(1 + 1) ∈ ℕ` are
+   both propositions. Representation independence in type theory, we
+   cannot ask `2 ∈ 3` or `Bool ∩ ℕ = ∅`.
 
-* Proofs in type theory are constructive: GCD example. This is what we
-  use to write functional programs.
+ * Proofs in type theory are constructive: GCD example. This is what
+   we use to write functional programs.
 
 We define a programming language by listing all the ways to construct
 programs of different types and equalities which explain how programs
@@ -270,12 +270,21 @@ Rules:
  * elimination:
     * if `t : ⊥` then `exfalso t : C` for any type `C`
 
+Example.
+
+    magicZ : (X → ⊥) → X → Z
+
 ## Unit type: `⊤`
 
  * introduction:
     * `tt : ⊤`
  * uniqueness:
     * if `t : ⊤` then `t = tt`
+
+Question: how many terms are there of the following types?
+
+    interesting   : ⊥ → X
+    uninteresting : X → ⊤
 
 ## Coproducts: `A ⊎ B`
 
@@ -290,19 +299,61 @@ Rules:
     * `case u v (inj₁ t) = u t`
     * `case u v (inj₂ t) = v t`
 
+Example.
+
+    undiag : X ⊎ X → X
+
 ## Abbreviated types
 
 `A ↔ B` abbreviates `(A → B) × (B → A)` for any `A`, `B`
 
 `¬ A` abbreviates `A → ⊥`
 
+Examples.
+
+    return : X → ¬ ¬ X
+    join   : ¬ ¬ ¬ ¬ X → ¬ ¬ X
+
 ## Propositional logic
 
-Maybe talk about Curry-Howard?
+`t : A` in programming means that the progam `t` has type `A`.
 
-Holes?
+`t : A` in logic means `t` is a proof of `A`.
 
-Universe, large functions which compute types.
+Translation:
+
+| type theory       | programming                               | logic                         |
+|:-----------------:|:-----------------------------------------:|:-----------------------------:|
+| `X`, `Y`, `Z`     | abstract types                            | propositional variables       |
+| `A → B`           | function                                  | implication, `A ⊃ B`, `A ⇒ B` |    
+| `A × B`           | record, multiple inputs                   | conjunction, `A ∧ B`    	|
+| `⊤`               | unit, void (in C)                         | true         		  	|
+| `⊥`               | empty type (uncommon)                     | false        		  	|
+| `A ⊎ B`           | disjoint union, superclass of `A` and `B` | disjunction, `A ∨ B`    	|
+| `¬ A`             | `A` has no elements (uncommon)            | negation, `¬ A`         	|
+| `A ↔ B`           | functions in both direction               | if and only if, `⇔`     	|
+|                   |                                           |                         	|
+|                   |                                           |                         	|
+|                   |                                           |                         	|
+| `Bool`            | `Bool`                                    | (`𝟚`)       		  	|
+| `ℕ`               | `unsigned int`                            | (`ℕ`)        		  	|
+
+Laws of logic, all up to `↔`:
+
+ * Types form a commutative semigroup using `⊥`, `⊎`.
+ 
+ * Types form a commutative semigroup with null element using `⊤`,
+   `×`, `⊥`.
+
+ * `×` and `⊎` distribute in both directions.
+
+ * Implication: `¬ X ⊎ Y → (X → Y)` but not the other direction.
+
+ * Negation: De Morgan laws (one missing), `¬¬` is involutive.
+
+ * Classical logic: `¬ ¬ (¬ ¬ X → X)`
+
+TODO: universe, large functions which compute types.
 
 # Indexed types
 
