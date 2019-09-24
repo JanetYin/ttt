@@ -82,8 +82,7 @@ Rules:
     * `if true then u else v = u`
     * `if false then u else v = v`
 
-Examples. How many terms of type `Bool` can you write with these
-rules?
+Examples.
 
     b1 b2 b3 b4 : Bool
     b1 = true
@@ -95,7 +94,9 @@ Let's compute:
 
 `b3 = if b1 then b2 else b1 = if true then b2 else b1 = b2 = false`
 
-There are only two elements of `Bool`.
+Question: how many terms of type `Bool` can you write with these
+rules? Answer: only two, everything is equal to either `true` or
+`false`.
 
 ## Functions: `A → B` (for any two types `A`, `B`)
 
@@ -112,7 +113,7 @@ Rules:
  * uniqueness:
     * `(λ x → t x) = t`
 
-Examples, compute.
+Examples.
 
     id idy id1 id' id'' : Bool → Bool
     id = λ x → x
@@ -120,8 +121,6 @@ Examples, compute.
     id1 = λ x → id x
     id' = λ x → if x then true else false
     id'' = λ x → if true then x else false
-
-Do we have `id = id'`? Do we have `id = id''`?
 
 We have
 
@@ -135,7 +134,7 @@ We have
                            by definition
     idy
 
-How many elements of `Bool → Bool` are there? Infinitely many.
+We don't have `id = id'` but we do have `id = id''`.
 
 More examples.
 
@@ -144,6 +143,10 @@ More examples.
 
     b5 : Bool
     b5 = id true
+
+Question: how many elements of `Bool → Bool` are there? Answer:
+infinitely many, e.g. `λ x → not x`, `λ x → not (not x)`, `λ x → not
+(not (not x))`, `λ x → not (not (not (not x)))` etc.
 
 Multiple arguments, currying.
 
@@ -168,10 +171,22 @@ they are equal. If they don't, they are not equal.
 There are only 4 terms of type `Bool → Bool` if we only consider
 behaviour, but there are infinitely many up to equality.
 
-If two terms have different behaviour, can they be still equal?
+Question: if two terms have different behaviour, can they be still
+equal? Answer: no.
 
-Why are terms which have the same behaviour different? Can't we make
-behaviour and equality coincide?
+Question: why are terms which have the same behaviour different? Can't
+we make behaviour and equality coincide? Answer: for `Bool`, we could
+do this by adding the rule
+
+ * if `t[x↦true] = t'[x↦true]` and `t[x↦false] = t'[x↦false]` then `t = t'`.
+
+But this wouldn't be very efficient. If we wanted to check two terms
+`t`, `t'` each containing `n` `Bool`-variables, then we would need to
+check `2ⁿ` cases when deciding `t = t'`.
+
+If we added the same kind of rules for `ℕ` (see below), we would need
+to check infinitely many equalities. Hence, equality checking for
+terms would become undecidable.
 
 ## Natural numbers: `ℕ`
 
@@ -216,7 +231,8 @@ Rules:
  * uniqueness:
     * `(proj₁ t , proj₂ t) = t`
 
-How many terms of type `Bool × Bool` are there?
+Question: how many terms of type `Bool × Bool` are there? Answer:
+four.
 
 Example.
 
@@ -237,14 +253,15 @@ Bool → Bool × Bool` would be not equal:
 
 Rules: `X`, `Y`, `Z` are types. That's it.
 
-Examples. How many possible definitions are there?
+Question: how many possible terms are of the following types?
 
-    idX     : X → X
-    pick    : X → X → X
-    pick*   : X → (X → X) → X
-    pick?   : (X → X) → X
+                                             Answer:
+    idX     : X → X                          1
+    pick    : X → X → X                      2
+    pick*   : X → (X → X) → X                ∞
+    pick?   : (X → X) → X                    0
     
-    swap    : X × Y → Y × X
+    swap    : X × Y → Y × X                  1
 
 ## Empty type: `⊥`
 
@@ -255,16 +272,10 @@ Rules:
 
 ## Unit type: `⊤`
 
- * introuction:
+ * introduction:
     * `tt : ⊤`
  * uniqueness:
     * if `t : ⊤` then `t = tt`
-
-## Abbreviated types
-
-`A ↔ B` abbreviates `(A → B) × (B → A)` for any `A`, `B`
-
-`¬ A` abbreviates `A → ⊥`
 
 ## Coproducts: `A ⊎ B`
 
@@ -278,6 +289,12 @@ Rules:
  * computation:
     * `case u v (inj₁ t) = u t`
     * `case u v (inj₂ t) = v t`
+
+## Abbreviated types
+
+`A ↔ B` abbreviates `(A → B) × (B → A)` for any `A`, `B`
+
+`¬ A` abbreviates `A → ⊥`
 
 ## Propositional logic
 
