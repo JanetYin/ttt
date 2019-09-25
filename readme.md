@@ -8,6 +8,8 @@ You have to register with the correct code:
  * MSc: IPM-18sztKVTEE
  * MSc evening course: IPM-18EsztKVTEE
 
+Teacher of lecture: Kaposi Ambrus ([website](http://akaposi.web.elte.hu))
+
 Tutorials:
 
  1. Kaposi Ágoston (Kedd 16:00-17:30 Déli Tömb 2-709 (PC 9))
@@ -67,6 +69,11 @@ run.
 
 
 # Simple type theory
+
+Type theory is a game that we play using a finite number of rules. For
+each type former, there is a number of rules. In this section, we
+learn about the rules for `Bool`, `→`, `ℕ`, `×`, abstract types, `⊥`,
+`⊤`, `⊎`.
 
 ## Booleans: `Bool`
 
@@ -263,6 +270,10 @@ Question: how many possible terms are of the following types?
     
     swap    : X × Y → Y × X                  1
 
+If we can write a function for abstract types, we can also write it
+for concrete ones. E.g. `pick = λ x y → x : X → X → X`, but we can
+write a `pickBool = λ x y → x : Bool → Bool → Bool`.
+
 ## Empty type: `⊥`
 
 Rules:
@@ -303,22 +314,126 @@ Example.
 
     undiag : X ⊎ X → X
 
-## Abbreviated types
+## Logical equivalence `↔` and an algebraic structure on types
 
-`A ↔ B` abbreviates `(A → B) × (B → A)` for any `A`, `B`
+We have all finite types now:
 
-`¬ A` abbreviates `A → ⊥`
+    type       	    	 number of elements
+    ⊤          	    	 1
+    ⊤ ⊎ ⊤      	    	 2
+    ⊤ ⊎ ⊤ ⊎ ⊤  	    	 3
+    ⊤ ⊎ ⊤ ⊎ ⊤ ⊎ ⊤   	 4
+    ...                  ...
+
+For finite types, the type formers `⊎`, `×`, `→` work like addition,
+multiplication and exponentiation for natural numbers. If we denote
+the number of terms of type `A` by |`A`|, we have:
+
+ * |`⊥`| = 0
+ 
+ * |`⊤`| = 1
+
+ * |`A ⊎ B`| = |`A`| + |`B`|
+ 
+ * |`A × B`| = |`A`| * |`B`|
+
+ * |`A → B`| ≥ |`B`| ^ |`A`| (here we can have more elements as we saw
+   for `Bool → Bool`)
+
+The mathematical operations obey some laws, e.g. associativity of
+multiplication: $(x * y) * z = x * (y * z)$.  The same laws hold for
+types, and not only for finite types, but for any type including
+infinite ones like `ℕ`.
+
+`A ↔ B` abbreviates `(A → B) × (B → A)` for any `A`, `B`, and we call
+a `t : A ↔ B` a logical equivalence between `A` and `B`.
+
+The law corresponding to associativity of multiplication given for
+abstract types `X`, `Y`, `Z`:
+
+    ass× : (X × Y) × Z ↔ X × (Y × Z)
+    ass× = (λ w → (proj₁ (proj₁ w) , (proj₂ (proj₁ w) , proj₂ w)) , λ w → ((proj₁ w , proj₁ (proj₂ w)) , proj₂ (proj₂ w)))
+
+We summarise the laws.
+
+Types form a commutative monoid with `⊎`, `⊥`:
+
+ * `(X ⊎ Y) ⊎ Z ↔ X ⊎ (Y ⊎ Z)` (associativity, $(x+y)+z = x+(y+z)$)
+
+ * `X ⊎ ⊥ ↔ X` (unit element, $x+0 = x$)
+
+ * `X ⊎ Y ↔ Y ⊎ X` (commutativity, $x+y = y+x$)
+
+Types form a commutative monoid with a null element with `×`, `⊤`,
+`⊥`:
+
+ * `(X × Y) × Z ↔ X × (Y × Z)` ($(x * y) * z = x * (y * z)$)
+
+ * `X × ⊤ ↔ X` ($x * 1 = x$)
+
+ * `X × Y ↔ Y × X` ($x * y = y * x$)
+
+ * `X × ⊥ ↔ ⊥` ($x * 0 = 0$)
+
+We also have distributivity:
+
+ * `(X ⊎ Y) × Z ↔ (X × Z) ⊎ (Y × Z)` ($(x+y) * z = (x * z) + (y*z)$)
+
+These above are called a commutative semiring structure on types (semi
+because addition has no inverse).
+
+For exponentiation we have:
+
+ * `(X ⊎ Y) → Z ↔ (X → Z) × (Y → Z)` ($z^{x+y} = (z^x)*(z^y)$)
+
+ * `(X × Y) → Z ↔ X → (Y → Z)` ($z^{x*y} = ({z^y})^x$)
+
+ * `⊥ → X ↔ ⊤` ($x^0=1$)
+
+ * `⊤ → X ↔ X` ($x^1=x$)
+
+ * `X → ⊤ ↔ ⊤` ($1^x=1$)
+
+We say that `A` and `B` are isomorphic if there is a logical
+equivalence `(u , v) : A ↔ B` such that `λ x → v (u x) = λ x → x` and
+`λ y → u (v y) = λ y → y`. We denote this by `A ≅ B` (this is not a
+type in Agda).
+
+Example. `(X × Y) × Z ≅ X × (Y × Z)` by the above definition `(u , v)
+= ass×`:
+
+    λ x → v (u x) = 
+                                                                    by definition of u
+    λ x → v (proj₁ (proj₁ x) , (proj₂ (proj₁ x) , proj₂ x)) =
+                                                                    by definition of v (we write _ for some long terms that won't matter)
+    λ x → ((proj₁ (proj₁ (proj₁ x) , _) ,
+            proj₁ (proj₂ (_ , (proj₂ (proj₁ x) , _)))) ,
+           proj₂ (proj₂ (_ , (_ , proj₂ x)))) =
+                                                                    by the computation rules for ×
+    λ x → ((proj₁ (proj₁ x) ,
+            proj₂ (proj₁ x)) ,
+           proj₂ x) =
+                                                                    by the uniqueness rule for ×
+    λ x → (proj₁ x , proj₂ x)
+                                                                    by the uniqueness rule for ×
+    λ x → x
+
+You can check that this is the case for the other direction. Also,
+check the same in Agda!
+
+## Negation `¬` and propositional logic
+
+`t : A` in programming means that the program `t` has type `A`.
+
+`t : A` in logic means `t` is a proof of `A`. You can think about a
+type as a set of its proofs.
+
+Negation: `¬ A` abbreviates `A → ⊥`.
 
 Examples.
 
     return : X → ¬ ¬ X
     join   : ¬ ¬ ¬ ¬ X → ¬ ¬ X
-
-## Propositional logic
-
-`t : A` in programming means that the progam `t` has type `A`.
-
-`t : A` in logic means `t` is a proof of `A`.
 
 Translation:
 
@@ -338,18 +453,20 @@ Translation:
 | `Bool`            | `Bool`                                    | (`𝟚`)       		  	|
 | `ℕ`               | `unsigned int`                            | (`ℕ`)        		  	|
 
-Laws of logic, all up to `↔`:
+Some laws of logic (in addition to the semiring laws above), all up to
+`↔`.
 
- * Types form a commutative semigroup using `⊥`, `⊎`.
- 
- * Types form a commutative semigroup with null element using `⊤`,
-   `×`, `⊥`.
+ * `¬ X ⊎ Y → (X → Y)`, but not the other direction.
 
- * `×` and `⊎` distribute in both directions.
+ * De Morgan laws (one missing):
 
- * Implication: `¬ X ⊎ Y → (X → Y)` but not the other direction.
+    * `¬ (X ⊎ Y) ↔ ¬ X × ¬ Y`
+    
+    * `¬ (X × Y) ← ¬ X ⊎ ¬ Y`
 
- * Negation: De Morgan laws (one missing), `¬¬` is involutive.
+ * No contradiction: `¬ (X ↔ ¬ X)`
+
+ * `¬¬` is involutive: `¬ ¬ ¬ ¬ X ↔ ¬ ¬ X`
 
  * Classical logic: `¬ ¬ (¬ ¬ X → X)`
 
