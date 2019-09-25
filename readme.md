@@ -307,8 +307,8 @@ Rules:
  * elimination:
     * if `u : A → C`, `v : B → C` and `t : A ⊎ B` then `case t u v : C`
  * computation:
-    * `case u v (inj₁ t) = u t`
-    * `case u v (inj₂ t) = v t`
+    * `case (inj₁ t) u v = u t`
+    * `case (inj₂ t) u v = v t`
 
 Example.
 
