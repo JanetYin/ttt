@@ -36,6 +36,10 @@ data _⊎_ (A B : Set) : Set where
   inj₁ : A → A ⊎ B
   inj₂ : B → A ⊎ B
 
+case : {A B C : Set}(t : A ⊎ B)(u : A → C)(v : B → C) → C
+case (inj₁ t) u v = u t
+case (inj₂ t) u v = v t
+
 _↔_ : (A B : Set) → Set
 A ↔ B = (A → B) × (B → A)
 
