@@ -70,10 +70,12 @@ run.
 
 # Simple type theory
 
-Type theory is a game that we play using a finite number of rules. For
+Type theory is a game which we play with a finite number of rules. For
 each type former, there is a number of rules. In this section, we
 learn about the rules for `Bool`, `→`, `ℕ`, `×`, abstract types, `⊥`,
-`⊤`, `⊎`.
+`⊤`, `⊎`. We also learn that equality of terms is decidable, the
+difference between equality and behaviour, the algebraic structure of
+types and the connection to propositional logic.
 
 ## Booleans: `Bool`
 
