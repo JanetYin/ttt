@@ -24,7 +24,25 @@ letölthető egy msi installer, ami elvileg mindent feltesz, amire szükség van
 
 Dokumentáció emacs parancsokról és unicode bevitelről: https://agda.readthedocs.io/en/v2.6.0.1/tools/emacs-mode.html
 
-## Alap emacs parancsok
+## Alap Emacs parancsok
 
 Lásd: https://www.cs.colostate.edu/helpdocs/emacs.html
+
+## Hogyan kell Emacs-ban visszalépni az Agda unicode beviteli módba
+
+`Alt-x`
+`set-input-method`
+`Agda`
+
+## BEAD feladat megoldásának menete:
+
+1. Másoljuk a kódrészletet saját gépre, `modulnév.agda` nevű fájlba, ahol a modulnév egyezik a kódrészletben látottal.
+2. Definiáljuk a ?-eket.
+3. Másoljuk a megoldást vissza a BEAD "megoldás" dobozba.
+
+## Szép unicode font beállítása Emacs-ban:
+
+1. Menüsor -> Options -> Set Default Font -> DejaVu Sans Mono (többféle is lehet ebből, és a Book variánst ajánlom)
+2. Menüsor -> Options -> Save Options
+
 
