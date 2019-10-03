@@ -44,7 +44,7 @@ Recommended literature:
 
 t is a term (program), A is its type
 
-examples: `(1 + 1) : ℕ`, `(λ b → if b then 1 else 3) : Bool → ℕ`
+Examples: `(1 + 1) : ℕ`, `(λ b → if b then 1 else 3) : Bool → ℕ`.
 
 Sometimes type theory means the study of type systems for programming
 languages. Here we study Martin-Löf's type theory. This is a
@@ -189,13 +189,17 @@ do this by adding the rule
 
  * if `t[x↦true] = t'[x↦true]` and `t[x↦false] = t'[x↦false]` then `t = t'`.
 
-But this wouldn't be very efficient. If we wanted to check two terms
-`t`, `t'` each containing `n` `Bool`-variables, then we would need to
-check `2ⁿ` cases when deciding `t = t'`.
+But this wouldn't be very efficient. If we wanted to check if two
+terms `t`, `t'` each containing `n` `Bool`-variables are equal, then
+we would need to check `2ⁿ` cases.
 
 If we added the same kind of rules for `ℕ` (see below), we would need
 to check infinitely many equalities. Hence, equality checking for
 terms would become undecidable.
+
+We say that equality in type theory is *intensional*. In contrast, if
+it was extensional, equality of functions would be determined by their
+extensions: all the possible use cases.
 
 ## Natural numbers: `ℕ`
 
@@ -216,12 +220,67 @@ Examples.
     three = suc (suc (suc zero))
 
     plus3 : ℕ → ℕ
+    plus3 = λ x → suc (suc (suc x))
+
+    even : ℕ → Bool
+    even = λ x → primrec true (λ _ b → not b) x
 
     times3plus2 : ℕ → ℕ
+    times3plus2 = λ x → primrec (suc (suc zero)) (λ _ n → suc (suc (suc n))) x
 
     plus : ℕ → ℕ → ℕ
+    plus = λ x y → primrec y (λ _ n → suc n) x
     
-    even : ℕ → Bool
+    pred : ℕ → ℕ
+    pred = λ x → prmirec zero (λ n _ → n) x
+
+We write (even in Agda) `0` for `zero`, `1` for `suc zero`, `2` for
+`suc (suc zero)`, and so on.
+
+`primrec u v t` roughly replaces `zero` by `u` and `suc`s by
+`v`s. More precisely, `v` also receives the number itself (which we
+only used in the definition of `pred` above). The first few cases:
+
+    x                                    primrec u v x
+    -----------------------------------------------------------------
+    0 = zero                             u
+    1 = suc zero                         v 0 u
+    2 = suc (suc zero)                   v 1 (v 0 u)
+    3 = suc (suc (suc zero))             v 2 (v 1 (v 0 u))
+    4 = suc (suc (suc (suc zero)))       v 3 (v 2 (v 1 (v 0 u)))
+    ...                                  ...
+
+A more complicated example: equality checking of two natural numbers.
+
+    eq : ℕ → ℕ → Bool
+    eq = λ x → primrec is0 (λ _ → f) x
+
+This is how `eq` works:
+
+    x                                    eq x
+    -----------------------------------------------------------------
+    0 = zero                             is0
+    1 = suc zero                         is1 = f is0
+    2 = suc (suc zero)                   is2 = f (f is0)
+    3 = suc (suc (suc zero))             is3 = f (f (f is0))
+    4 = suc (suc (suc (suc zero)))       is4 = f (f (f (f is0)))
+    ...                                  ...
+
+`is0` decides whether its input is `0`:
+
+    is0 : ℕ → Bool
+    is0 = λ y → primrec true (λ _ _ → false) y
+
+If we look at the above table, we can see what `f` has to do: from a
+function which decides whether a number is `n`, it has to create a
+function which decides whether a number is `suc n`.
+
+    f : (ℕ → Bool) → (ℕ → Bool)
+    f = λ isn → λ y → primrec false (λ y' _ → isn y') y
+
+If `y` is `zero`, it is certainly not `suc n` (hence the first
+argument of `primrec` is `false`), if `y` is `suc y'`, then we know
+that `suc n = suc y'` iff `n = y'`. And this can be decided by `isn`.
 
 Question: is there a function of type `ℕ → ℕ` which cannot be given by
 primrec?
@@ -472,13 +531,88 @@ Some laws of logic (in addition to the semiring laws above), all up to
 
  * Classical logic: `¬ ¬ (¬ ¬ X → X)`
 
-TODO: universe, large functions which compute types.
+# Universes
 
-# Indexed types
+We write the type of types as `Set`. For example, `Bool : Set`,
+`ℕ ⊎ ⊤ : Set` etc.
 
-Vectors
+We can write functions which create sets.
 
-Equality
+    _^2 : Set → Set
+    _^2 = λ A → A × A
+
+    _^_ : Set → ℕ → Set
+    _^_ = λ A n → primrec ⊤ (λ _ As → A × As) n
+
+For example, we have `Bool ^ 3 = Bool × Bool × Bool × ⊤`.
+
+    tff : Bool ^ 3
+    tff = true , (false , (false , tt))
+
+We have `Set : Set₁`, `Set₁ : Set₂`, and so on.
+
+# Dependent types
+
+We want to write a function which returns an element of `⊤ ^ n` for
+any `n`? What is a the type of this function?
+
+    ⊤s : (n : ℕ) → ⊤ ^ n
+
+## Dependent functions: `(x : A) → B`
+
+Rules:
+
+ * type formation:
+    * if `A` is a type and `B` is a type assuming `x : A`, then
+      `(x : A) → B` is a type
+ * elimination:
+    * if `t : (x : A) → B` and `u : A`, then `t u : B[x↦u]`
+ * introduction:
+    * if `t : B` assuming `x : A` then `(λ x → t) : (x : A) → B`
+ * computation:
+    * `(λ x → t) u = t[x↦u]`
+ * uniqueness:
+    * `(λ x → t x) = t`
+
+Examples. We don't need abstract types anymore.
+
+    id : (A : Set) → A → A
+    id = λ A x → x
+
+    comm× : (A B : Set) → (A × B) ↔ (B × A)
+    comm× = λ A B → ((λ w → proj₂ w , proj₁ w) , (λ w → proj₂ w , proj₁ w))
+
+Abbreviations: `(x : A)(y : B) → C` abbreviates `(x : A) → (y : B) → C`.
+`(x y : A) → B` abbreviates `(x : A)(y : A) → B`.
+
+We still can't write `⊤s`, why not? We need the following.
+
+## Dependent elimination for `ℕ`, `Bool` and `⊎`
+
+New rules:
+
+ * elimination:
+    * `indℕ    : (P : ℕ     → Set) → P zero → ((n : ℕ) → P n → P (suc n)) → (t : ℕ) → P t`
+    * `indBool : (P : Bool  → Set) → P true → P false → (t : Bool) → P t`
+    * `ind⊎    : (P : A ⊎ B → Set) → ((a : A) → P (inj₁ a)) → ((b : B) → P (inj₂ b)) → (t : A ⊎ B) → P t`
+ * computation:
+    * `indℕ P u v zero = u`
+    * `indℕ P u v (suc t) = v t (indℕ P u v t)`
+    * `indBool P u v true  = u`
+    * `indBool P u v false = v`
+    * `ind⊎ P u v (inj₁ t) = u t`
+    * `ind⊎ P u v (inj₂ t) = v t`
+
+Now we can define `⊤s`:
+
+    ⊤s : (n : ℕ) → ⊤ ^ n
+    ⊤s = indℕ (λ n → ⊤ ^' n) tt (λ n tts → tt , tts)
+
+`primrec` can be defined using `indℕ`.
+
+## Identity types
+
+Transport.
 
 Disjointness of constructors of inductive types, injectivity of
 constructors, pattern matching.
