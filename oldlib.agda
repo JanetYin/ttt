@@ -1,7 +1,5 @@
 module lib where
 
-open import Agda.Primitive
-
 infix  4 _,_
 infixr 2 _×_
 infixr 1 _⊎_
@@ -11,11 +9,11 @@ infixr 0 _←_
 data Bool : Set where
   true false : Bool
 
-if_then_else_ : ∀{i}{A : Set i}(t : Bool)(u v : A) → A
+if_then_else_ : {A : Set}(t : Bool)(u v : A) → A
 if true then u else v = u
 if false then u else v = v
 
-record _×_ {i}{j}(A : Set i)(B : Set j) : Set (i ⊔ j) where
+record _×_ (A B : Set) : Set where
   constructor _,_
   field
     proj₁ : A
@@ -27,36 +25,35 @@ data ℕ : Set where
   suc : ℕ → ℕ
 {-# BUILTIN NATURAL ℕ #-}
 
-primrec : ∀{i}{A : Set i}(u : A)(v : ℕ → A → A)(t : ℕ) → A
+primrec : {A : Set}(u : A)(v : ℕ → A → A)(t : ℕ) → A
 primrec u v zero = u
 primrec u v (suc t) = v t (primrec u v t)
 
 postulate
    X Y Z : Set
 
-data _⊎_ {i}{j}(A : Set i)(B : Set j) : Set (i ⊔ j) where
+data _⊎_ (A B : Set) : Set where
   inj₁ : A → A ⊎ B
   inj₂ : B → A ⊎ B
 
-case : ∀ {i j k}{A : Set i}{B : Set j}{C : Set k}
-       (t : A ⊎ B)(u : A → C)(v : B → C) → C
+case : {A B C : Set}(t : A ⊎ B)(u : A → C)(v : B → C) → C
 case (inj₁ t) u v = u t
 case (inj₂ t) u v = v t
 
-_↔_ : ∀{i j}(A : Set i)(B : Set j) → Set (i ⊔ j)
+_↔_ : (A B : Set) → Set
 A ↔ B = (A → B) × (B → A)
 
 data ⊥ : Set where
 
-exfalso : ∀{i}{A : Set i} → ⊥ → A
+exfalso : {A : Set} → ⊥ → A
 exfalso ()
 
 record ⊤ : Set where
   constructor tt
 open ⊤ public
 
-¬_ : ∀{i}(A : Set i) → Set i
+¬_ : (A : Set) → Set
 ¬ A = A → ⊥
 
-_←_ : ∀{i j}(A : Set i)(B : Set j) → Set (i ⊔ j)
+_←_ : (A B : Set) → Set
 A ← B = B → A
