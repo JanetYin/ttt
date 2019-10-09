@@ -1,0 +1,8 @@
+
+Típuselmélet előadás:
+
+Curry-Howard
+Universes,
+Large elim (e.g. Vectors recursively)
+
+Pi, dependent induction Nat, Bool
