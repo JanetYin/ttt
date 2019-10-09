@@ -29,10 +29,43 @@ factorial = {!!}
 
 -- egyenlőségvizsgálat Bool-al
 eq : ℕ → ℕ → Bool
-eq = {!!}
+eq = {!primrec!}
 
 lessThan : ℕ → ℕ → Bool
 lessThan = {!!}
 
---
+
+-- Set, függő függvények, ℕ-indukció
 ------------------------------------------------------------
+
+-- definiáld az if_then_else_ függvény újra a következő típussal:
+-- pl: ITE ℕ true 0 10 = 0
+
+ITE : (A : Set) → Bool → A → A → A
+ITE = {!!}
+
+-- ezzel ne fogalkozz, csak megadjuk a ℕ-indukciót későbbi használatra
+ℕInd : ∀{i}(P : ℕ → Set i) → P zero → ((n : ℕ) → P n → P (suc n))
+       → (n : ℕ) → P n
+ℕInd P pz ps zero    = pz
+ℕInd P pz ps (suc n) = ps n (ℕInd P pz ps n)
+
+
+-- definiáld (lásd: előadás) a következő függvényt:
+-- legyen A ^ n = A × A × ... × A × ⊤   (n-darab A-ból álló szorzat)
+infix 3 _^_
+_^_ : Set → ℕ → Set
+_^_ = {!!}
+
+-- definiáld újra a primrec-et, ℕInd felhasználásával!
+primrec' : (A : Set) → A → (ℕ → A → A) → ℕ → A
+primrec' = {!!}
+
+-- definiáld a következő függvényt ℕ-indukcióval!
+replicate : (A : Set) → (n : ℕ) → A → A ^ n
+replicate = {!!}
+
+-- definiáld a következő függvényt ℕ-indukcióval!
+-- legyen a végeredmény a két bemenő vektor összefüzése!
+append : (A : Set)(n m : ℕ) → A ^ n → A ^ m → A ^ (n + m)
+append = {!!}
