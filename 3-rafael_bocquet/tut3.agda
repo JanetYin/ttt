@@ -58,7 +58,7 @@ isZero = λ n → primrec true (λ _ _ → false) n
 -- _≤ suc m = λ n → pred n ≤ m
 _<_ _≤_ : ℕ → ℕ → Bool
 _≤_ = λ n m → primrec (λ n → isZero n) (λ _ f n → f (pred n)) m n
-_<_ = λ n m → primrec (λ n → false) (λ _ f n → f (pred n)) m n
+_<_ = λ n m → primrec (λ n → false) (λ _ f n → primrec true (λ n' _ → f n') n) m n
 
 -- eq 0       m       = isZero m
 -- eq (suc n) zero    = false
@@ -85,14 +85,14 @@ fib = λ n → proj₁ (primrec (1 , 1)
 -- inj₂ : B → A ⊎ B
 -- case : A ⊎ B → (A → C) → (B → C) → C
 
-a1 : Bool ⊎ Bool
-a1 = inj₁ {!!}
+-- a1 : Bool ⊎ Bool
+-- a1 = inj₁ {!!}
 
-a2 : Bool ⊎ Bool
-a2 = inj₂ {!!}
+-- a2 : Bool ⊎ Bool
+-- a2 = inj₂ {!!}
 
-f1 : Bool ⊎ Bool → Bool
-f1 = λ b → case b {!!} {!!}
+-- f1 : Bool ⊎ Bool → Bool
+-- f1 = λ b → case b {!!} {!!}
 
-assoc⊎ : (X ⊎ Y) ⊎ Z ↔ X ⊎ (Y ⊎ Z)
-assoc⊎ = {!!}
+-- assoc⊎ : (X ⊎ Y) ⊎ Z ↔ X ⊎ (Y ⊎ Z)
+-- assoc⊎ = {!!}
