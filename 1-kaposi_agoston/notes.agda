@@ -17,6 +17,7 @@ open import lib
 × = "\x"
 ⊎ = "\u+"
 ↔ = "\<->"
+¬ = "\neg"
 
 
 Hotkeys:
