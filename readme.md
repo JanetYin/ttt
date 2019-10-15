@@ -551,6 +551,18 @@ For example, we have `Bool ^ 3 = Bool × Bool × Bool × ⊤`.
 
 We have `Set : Set₁`, `Set₁ : Set₂`, and so on.
 
+Two ways of defining equality on `Bool`:
+
+    eqb1 : Bool → Bool → Bool
+    eqb1 = λ x y → if x then y else not y
+
+    eqb2 : Bool → Bool → Set
+    eqb2 = λ x y → if x then (if y then ⊤ else ⊥) else (if y then ⊥ else ⊤)
+
+For any two booleans `x` and `y`, `eqb1 x y` is another boolean, while
+`eqb2 x y` is a type. `eqb2 x y` has an element if and only if `x` and
+`y` are the same booleans.
+
 # Dependent types
 
 We want to write a function which returns an element of `⊤ ^ n` for
@@ -609,6 +621,9 @@ Now we can define `⊤s`:
     ⊤s = indℕ (λ n → ⊤ ^' n) tt (λ n tts → tt , tts)
 
 `primrec` can be defined using `indℕ`.
+
+Let's prove that we have `eqb2 (and true true) true`. Prove that `0`
+is a right inverse of addition.
 
 ## Identity types
 
