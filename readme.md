@@ -625,6 +625,22 @@ Now we can define `⊤s`:
 Let's prove that we have `eqb2 (and true true) true`. Prove that `0`
 is a right inverse of addition.
 
+    l : eqb2 (not (not true)) true
+    l1 : (x : Bool) → eqb2 (not (not x)) x
+    eqn = λ x y → eqb2 (eq x y) true
+    +
+    idl : (x : ℕ) → eqn (zero + x) x
+    idr : (x : ℕ) → eqn x (zero + x)
+
+Difference between
+
+    x = y
+
+and
+
+    eqn x y
+
+
 ## Identity types
 
 Transport.
