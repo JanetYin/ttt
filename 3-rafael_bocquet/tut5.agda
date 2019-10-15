@@ -38,76 +38,82 @@ open import lib
 -- ¬ X  is the same as  X → ⊥
 
 neg× : ¬ X → ¬ (X × Y)
-neg× = {!!}
+neg× = λ notX xy → notX (proj₁ xy)
 
 neg⊎ : ¬ (X ⊎ Y) → ¬ X
-neg⊎ = {!!}
+neg⊎ = λ notXY x → notXY (inj₁ x)
 
 f1 : ¬ (X × ¬ X)
-f1 = {!!}
+f1 = λ z → proj₂ z (proj₁ z)
 
 return¬ : X → ¬ ¬ X
-return¬ = {!!}
+return¬ = λ x notX → notX x
+
+map¬ : (X → Y) → (¬ ¬ X → ¬ ¬ Y)
+map¬ = λ f notNotX notY → notNotX (λ x → notY (f x))
+
+bind¬ : ¬ ¬ X → (X → ¬ ¬ Y) → ¬ ¬ Y
+bind¬ nnX f notY = nnX (λ x → f x notY)
 
 f2 : ¬ ¬ ¬ X → ¬ X
-f2 = {!!}
+f2 = λ nnnX x → nnnX (λ notX → notX x)
 
 dM1 : ¬ (X ⊎ Y) → (¬ X × ¬ Y)
-dM1 = {!!}
+dM1 = λ z → (λ x → z (inj₁ x)) , (λ x → z (inj₂ x))
 
 dM2 : (¬ X × ¬ Y) → ¬ (X ⊎ Y)
-dM2 = {!!}
+dM2 = λ x x₁ → case x₁ (proj₁ x) (proj₂ x)
 
 dM3 : (¬ X ⊎ ¬ Y) → ¬ (X × Y)
-dM3 = {!!}
+dM3 = λ x x₁ → case x (λ z → z (proj₁ x₁)) (λ z → z (proj₂ x₁))
 
 DM4 = ¬ (X × Y) → (¬ X ⊎ ¬ Y)
 LEM = X ⊎ ¬ X
 
-¬¬LEM : ¬ ¬ LEM
-¬¬LEM = {!!}
+¬¬LEM : ¬ ¬ (X ⊎ ¬ X)
+¬¬LEM = λ lem → lem (inj₂ (λ x → lem (inj₁ x)))
 
-¬¬DM4 : ¬ ¬ DM4
-¬¬DM4 = {!!}
+¬¬DM4 : ¬ ¬ (¬ (X × Y) → (¬ X ⊎ ¬ Y))
+¬¬DM4 = λ dm4 → dm4 (λ _ → inj₁ (λ x₁ → dm4 (λ z → inj₂ (λ x₂ → z (x₁ , x₂)))))
 
 --------------------------------------------------------------------------------
 -- Universes (Set), dependent functions and vectors
 --------------------------------------------------------------------------------
 
--- Using the universe Set, we can define for instance:
-neg×' : (A B : Set) → ¬ A → ¬ (A × B)
-neg×' = λ A B x → λ z → x (proj₁ z)
+-- -- Using the universe Set, we can define for instance:
+-- neg×' : (A B : Set) → ¬ A → ¬ (A × B)
+-- neg×' = λ A B x → λ z → x (proj₁ z)
 
--- The syntax for dependent functions is "(a : A) → B(a)"
+-- -- The syntax for dependent functions is "(a : A) → B(a)"
 
--- This is the definition of the induction principle for ℕ
-ℕInd : ∀ {i} (P : ℕ → Set i)
-            → P zero
-            → ((n : ℕ) → P n → P (suc n))
-            → (n : ℕ) → P n
-ℕInd P pz ps zero    = pz
-ℕInd P pz ps (suc n) = ps n (ℕInd P pz ps n)
+-- -- This is the definition of the induction principle for ℕ
+-- ℕInd : ∀ {i} (P : ℕ → Set i)
+--             → P zero
+--             → ((n : ℕ) → P n → P (suc n))
+--             → (n : ℕ) → P n
+-- ℕInd P pz ps zero    = pz
+-- ℕInd P pz ps (suc n) = ps n (ℕInd P pz ps n)
 
--- A ^ n = A × A × A × ... × ⊤    (n times)
-infix 3 _^_
-_^_ : Set → ℕ → Set
-_^_ = {!!}
+-- -- A ^ n = A × A × A × ... × ⊤    (n times)
+-- infix 3 _^_
+-- _^_ : Set → ℕ → Set
+-- _^_ = {!!}
 
-head : (A : Set) → (n : ℕ) → A ^ (suc n) → A
-head = {!!}
+-- head : (A : Set) → (n : ℕ) → A ^ (suc n) → A
+-- head = {!!}
 
--- replicate n a = (a , a , ... , a)    (n times)
-replicate : (A : Set) → (n : ℕ) → A → A ^ n
-replicate = {!!}
+-- -- replicate n a = (a , a , ... , a)    (n times)
+-- replicate : (A : Set) → (n : ℕ) → A → A ^ n
+-- replicate = {!!}
 
--- count n = (1 , 2 , ... , n)
-count : (A : Set) → (n : ℕ) → ℕ ^ n
-count = {!!}
+-- -- count n = (1 , 2 , ... , n)
+-- count : (A : Set) → (n : ℕ) → ℕ ^ n
+-- count = {!!}
 
--- snoc a (x , y , ... , z) = (a , x , y , ... , z)
-cons : (A : Set) → (n : ℕ) → (a : A) → A ^ n → A ^ (suc n)
-cons = {!!}
+-- -- snoc a (x , y , ... , z) = (a , x , y , ... , z)
+-- cons : (A : Set) → (n : ℕ) → (a : A) → A ^ n → A ^ (suc n)
+-- cons = {!!}
 
--- snoc (x , y , ... , z) a = (x , y , ... , z , a)
-snoc : (A : Set) → (n : ℕ) → A ^ n → (a : A) → A ^ (suc n)
-snoc = {!!}
+-- -- snoc (x , y , ... , z) a = (x , y , ... , z , a)
+-- snoc : (A : Set) → (n : ℕ) → A ^ n → (a : A) → A ^ (suc n)
+-- snoc = {!!}
