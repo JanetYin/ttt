@@ -4,68 +4,73 @@ open import lib
 -- Természetes számok
 ------------------------------------------------------------
 
+-- ℕ  \bN
 isZero : ℕ → Bool
-isZero = {!!}
+isZero = λ n → primrec
+  -- mit adjunk vissza 0 esetén
+  true
+  -- mit adjunk vissza (suc n) esetén
+  (λ _ _ → false)  -- NINCS szükség rekurzív hívásra
+  n
 
 -- A pred ("predecessor") függvény 1-et kivon egy számból, 0-ra 0-t ad.
 pred : ℕ → ℕ
-pred = {!!}
+pred = λ n → primrec
+  zero
+  (λ n _ → n) -- itt sem használjuk a rekurzív hívást
+              -- mivel n éppen a megelőző ℕ
+  n
+
+-- bónusz házi: pred, viszont nem használhatjuk
+-- a suc eset első paraméterét!
+pred' : ℕ → ℕ
+pred' = {!!}
+
 
 -- A kivonás 0-t ad vissza, ha egész számokon negatív lenne az eredmény.
+
+-- Iterált pred alkalmazás
 infixl 6 _-_
 _-_ : ℕ → ℕ → ℕ
-_-_ = {!!}
+_-_ = λ n m → primrec
+  n                     -- n - 0 = n
+  (λ m n-m → pred n-m)  -- n - suc m = pred (n - m)
+  m
 
+-- suc-ot kell iterálni!
 infixl 6 _+_
 _+_ : ℕ → ℕ → ℕ
-_+_ = {!!}
+_+_ = λ n m → primrec n (λ _ n+m → suc n+m) m
 
 infixl 7 _*_
 _*_ : ℕ → ℕ → ℕ
-_*_ = {!!}
+_*_ = λ n m → primrec 0 (λ _ n*m → n + n*m) m
 
 factorial : ℕ → ℕ
-factorial = {!!}
+factorial = λ n → primrec 1 (λ n factn → suc n * factn) n
+
+-- fact 0       = 1
+-- fact (suc n) = suc n * fact n
 
 -- egyenlőségvizsgálat Bool-al
+-- alapötlet: min 4 eset vizsgálat
 eq : ℕ → ℕ → Bool
-eq = {!primrec!}
+eq =
+  -- cél: ℕ → Bool függvény megadása, mindkét esetben
+  λ n → primrec
+   -- n = 0 : vizsgáljuk, hogy m = 0
+   (λ m → isZero m)
 
+   -- n = suc n : vizsgáljuk m-et
+   (λ n eqn m →
+      primrec
+        -- m = 0
+        false
+        -- m = suc m : eredmény (eqn m)
+        (λ m _ → eqn m)
+        m)
+   n
+
+-- házi feladat (hasonló eq-hez)
 lessThan : ℕ → ℕ → Bool
 lessThan = {!!}
-
-
--- Set, függő függvények, ℕ-indukció
-------------------------------------------------------------
-
--- definiáld az if_then_else_ függvény újra a következő típussal:
--- pl: ITE ℕ true 0 10 = 0
-
-ITE : (A : Set) → Bool → A → A → A
-ITE = {!!}
-
--- ezzel ne fogalkozz, csak megadjuk a ℕ-indukciót későbbi használatra
-ℕInd : ∀{i}(P : ℕ → Set i) → P zero → ((n : ℕ) → P n → P (suc n))
-       → (n : ℕ) → P n
-ℕInd P pz ps zero    = pz
-ℕInd P pz ps (suc n) = ps n (ℕInd P pz ps n)
-
-
--- definiáld (lásd: előadás) a következő függvényt:
--- legyen A ^ n = A × A × ... × A × ⊤   (n-darab A-ból álló szorzat)
-infix 3 _^_
-_^_ : Set → ℕ → Set
-_^_ = {!!}
-
--- definiáld újra a primrec-et, ℕInd felhasználásával!
-primrec' : (A : Set) → A → (ℕ → A → A) → ℕ → A
-primrec' = {!!}
-
--- definiáld a következő függvényt ℕ-indukcióval!
-replicate : (A : Set) → (n : ℕ) → A → A ^ n
-replicate = {!!}
-
--- definiáld a következő függvényt ℕ-indukcióval!
--- legyen a végeredmény a két bemenő vektor összefüzése!
-append : (A : Set)(n m : ℕ) → A ^ n → A ^ m → A ^ (n + m)
-append = {!!}
