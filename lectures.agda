@@ -19,6 +19,9 @@ eq = λ x → primrec is0 (λ _ → f) x
 eqb : Bool → Bool → Bool
 eqb = λ x y → if x then y else not y
 
+_^_ : Set → ℕ → Set
+_^_ = λ A n → primrec ⊤ (λ _ As → A × As) n
+
 Eqb : Bool → Bool → Set
 Eqb = λ x y → if x then (if y then ⊤ else ⊥) else (if y then ⊥ else ⊤)
 
