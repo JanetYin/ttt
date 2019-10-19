@@ -544,7 +544,7 @@ We can write functions which create sets.
     _^_ : Set → ℕ → Set
     _^_ = λ A n → primrec ⊤ (λ _ As → A × As) n
 
-For example, we have `Bool ^ 3 = Bool × Bool × Bool × ⊤`.
+For example, we have `Bool ^ 3 = Bool × (Bool × (Bool × ⊤))`.
 
     tff : Bool ^ 3
     tff = true , (false , (false , tt))
@@ -553,15 +553,21 @@ We have `Set : Set₁`, `Set₁ : Set₂`, and so on.
 
 Two ways of defining equality on `Bool`:
 
-    eqb1 : Bool → Bool → Bool
-    eqb1 = λ x y → if x then y else not y
+    eqb : Bool → Bool → Bool
+    eqb = λ x y → if x then y else not y
 
-    eqb2 : Bool → Bool → Set
-    eqb2 = λ x y → if x then (if y then ⊤ else ⊥) else (if y then ⊥ else ⊤)
+    Eqb : Bool → Bool → Set
+    Eqb = λ x y → if x then (if y then ⊤ else ⊥) else (if y then ⊥ else ⊤)
 
-For any two booleans `x` and `y`, `eqb1 x y` is another boolean, while
-`eqb2 x y` is a type. `eqb2 x y` has an element if and only if `x` and
-`y` are the same booleans.
+ * For any two booleans `x` and `y`, `eqb x y` is another boolean,
+   while `Eqb x y` is a type.
+
+ * `Eqb x y` has an element if and only if `x` and `y` are the same booleans.
+
+ * `Eqb x y` is the proposition saying that `x` is equal to `y`.
+
+ * `x = y` is a metatheoretic statement saying that the terms `x` and
+   `y` are the same. It is not a proposition in Agda.
 
 # Dependent types
 
@@ -586,7 +592,7 @@ Rules:
  * uniqueness:
     * `(λ x → t x) = t`
 
-Examples. We don't need abstract types anymore.
+We don't need abstract types anymore.
 
     id : (A : Set) → A → A
     id = λ A x → x
@@ -618,28 +624,64 @@ New rules:
 Now we can define `⊤s`:
 
     ⊤s : (n : ℕ) → ⊤ ^ n
-    ⊤s = indℕ (λ n → ⊤ ^' n) tt (λ n tts → tt , tts)
+    ⊤s = indℕ (λ n → ⊤ ^ n) tt (λ n tts → tt , tts)
 
-`primrec` can be defined using `indℕ`.
+`primrec`, `if_then_else`, `case` can be defined using `indℕ`,
+`indBool`, `ind⊎`, respectively.
 
-Let's prove that we have `eqb2 (and true true) true`. Prove that `0`
-is a right inverse of addition.
+We prove `Eqb (not (not true)) true`.
 
-    l : eqb2 (not (not true)) true
-    l1 : (x : Bool) → eqb2 (not (not x)) x
-    eqn = λ x y → eqb2 (eq x y) true
-    +
-    idl : (x : ℕ) → eqn (zero + x) x
-    idr : (x : ℕ) → eqn x (zero + x)
+    notUnitTest : Eqb (not (not true)) true
+    notUnitTest = tt
 
-Difference between
+Why is it so easy? Because
 
-    x = y
+    not (not true) = true,
 
-and
+hence
 
-    eqn x y
+    Eqb (not (not true)) true = Eqb true true = ⊤
 
+(We applied lots of computation rules.)
+
+Our first proof by induction:
+
+    notInvolutive : (x : Bool) → Eqb (not (not x)) x
+    notInvolutive = λ x → indBool (λ x → Eqb (not (not x)) x) tt tt x
+
+We want to prove `Eqb (not (not x)) x` for every `x : Bool`. We do
+this by induction, that is, for every constructor for `Bool` (`x =
+true` and `x = false`) we have to show `Eqb (not (not x)) x`. In the
+first case we need `Eqb (not (not true)) true = Eqb true true = ⊤`, in
+the second case we need `Eqb (not (not false)) false = Eqb false false
+= ⊤`. So we prove both cases simply be `tt`.
+
+Equality type for `ℕ`:
+
+    Eqn : ℕ → ℕ → Set
+    Eqn = λ x y → Eqb (eq x y) true
+
+You can check that this has the following properties:
+
+    Eqn zero zero = ⊤
+    Eqn (suc x) (suc y) = Eqn x y
+
+We show that `zero` is a left and right identity of addition.
+
+    plusLeftId : (x : ℕ) → Eqn (plus zero x) x
+    plusLeftId = λ x → indℕ (λ x → Eqn x x) tt (λ _ e → e) x
+
+First we note that `Eqn (plus zero x) x = Eqn x x`. So we only have to
+prove `Eqn x x` for every `x : ℕ`. Induction says that we have to
+prove this first for `x = zero`, that is `Eqn zero zero = ⊤`, this is
+easy: `tt`. Then, for any `n : ℕ`, given `e : Eqn n n`, we have to
+show `Eqn (suc n) (suc n)`. `e` is called the inductive
+hypothesis. But as we remarked above, `Eqn (suc n) (suc n) = Eqn n n`,
+so we can direcly reuse the induction hypothesis to prove the case for
+`x = suc n`.
+
+    plusRightId : (x : ℕ) → Eqn (plus x zero) x
+    plusRightId = λ x → indℕ (λ x → Eqn (plus x zero) x) tt (λ n e → e) x
 
 ## Identity types
 
