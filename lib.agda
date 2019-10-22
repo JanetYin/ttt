@@ -72,5 +72,12 @@ indBool P u v false = v
 ind⊎ P u v (inj₁ t) = u t
 ind⊎ P u v (inj₂ t) = v t
 
+record Σ {i}{j}(A : Set i)(B : A → Set j) : Set (i ⊔ j) where
+  constructor _,_
+  field
+    proj₁ : A
+    proj₂ : B proj₁
+open Σ public
+
 data Eq {i}(A : Set i)(a : A) : A → Set where
   refl : Eq A a a
