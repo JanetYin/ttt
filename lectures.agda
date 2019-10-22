@@ -25,6 +25,12 @@ _^_ = λ A n → primrec ⊤ (λ _ As → A × As) n
 Eqb : Bool → Bool → Set
 Eqb = λ x y → if x then (if y then ⊤ else ⊥) else (if y then ⊥ else ⊤)
 
+true=true : Eqb true true
+true=true = tt
+
+¬true=false : ¬ Eqb true false
+¬true=false = λ e → e
+
 notUnitTest : Eqb (not (not true)) true
 notUnitTest = tt
 
