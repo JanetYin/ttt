@@ -2,7 +2,7 @@ module lib where
 
 open import Agda.Primitive
 
-infix  4 _,_
+infixr 4 _,_
 infixr 2 _×_
 infixr 1 _⊎_
 infixr 0 _↔_
