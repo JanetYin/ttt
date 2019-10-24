@@ -28,9 +28,6 @@ open import lib
 --          ⊥ = \bot
 --          ¬ = \neg
 
--- Set, függő függvények, ℕ-indukció
-------------------------------------------------------------
-
 --------------------------------------------------------------------------------
 -- Universes (Set), dependent functions and vectors
 --------------------------------------------------------------------------------
@@ -53,30 +50,30 @@ BoolInd P pt pf false = pf
 -- A ^ n = A × A × A × ... × ⊤    (n times)
 infix 3 _^_
 _^_ : Set → ℕ → Set
-_^_ = {!!}
+_^_ = λ A n → primrec ⊤ (λ _ B → A × B) n
 
 head : (A : Set) → (n : ℕ) → A ^ (suc n) → A
-head = {!!}
+head = λ A n a → proj₁ a
 
 -- replicate n a = (a , a , ... , a)    (n times)
 replicate : (A : Set) → (n : ℕ) → A → A ^ n
-replicate = {!!}
-
--- count n = (1 , 2 , ... , n)
-count : (A : Set) → (n : ℕ) → ℕ ^ n
-count = {!!}
+replicate = λ A n x → ℕInd (λ n → A ^ n) tt (λ _ xs → x , xs) n
 
 -- snoc a (x , y , ... , z) = (a , x , y , ... , z)
 cons : (A : Set) → (n : ℕ) → (a : A) → A ^ n → A ^ (suc n)
-cons = {!!}
+cons = λ A n x xs → x , xs
 
 -- snoc (x , y , ... , z) a = (x , y , ... , z , a)
 snoc : (A : Set) → (n : ℕ) → A ^ n → (a : A) → A ^ (suc n)
-snoc = {!!}
+snoc = λ A n xs a → ℕInd (λ n → A ^ n → A ^ suc n) (λ _ → a , tt) (λ _ f xs → proj₁ xs , f (proj₂ xs)) n xs
+
+-- count n = (1 , 2 , ... , n)
+count : (n : ℕ) → ℕ ^ n
+count = λ n → ℕInd (λ n → ℕ ^ n) tt (λ i xs → snoc ℕ i xs (suc i)) n
 
 -- reverse (x , y, ..., z) = (z , ... , y, x)
 reverse : (A : Set) → (n : ℕ) → A ^ n → A ^ n
-reverse = {!!}
+reverse = λ A n z → ℕInd (λ n → A ^ n → A ^ n) (λ _ → tt) (λ n f xs → snoc A n (f (proj₂ xs)) (proj₁ xs)) n z
 
 --------------------------------------------------------------------------------
 -- Equality predicate for booleans
