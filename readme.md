@@ -646,23 +646,39 @@ Rules:
 
 ## Predicate logic
 
-    Person  : Set
-    Female  : Person → Set
-    Student : Person → Set
+We assume
 
-    ((p : Person) → Female p × Student p) ↔? ((p : Person) → Female p) × ((p : Person) → Student p)
+    A : Set
+    P : A → Set
+    Q : A → Set
+
+For example, you can think about the following propositions as
+
+    A = ℕ
+    P = isEven
+    Q = isOdd
+
+or
+
+    A = Student
+    P = Female
+    Q = Student
+
+Laws:
+
+    ((a : A) → P a × Q a) ↔ ((a : A) → P a) × ((a : A) → Q a)
     
-    ((p : Person) → Female p ⊎ Student p) ↔? ((p : Person) → Female p) ⊎ ((p : Person) → Student p)
+    ((a : A) → P a ⊎ Q a) ← ((a : A) → P a) ⊎ ((a : A) → Q a)
 
-    (Σ Person λ p → Female p × Student p) ↔? Σ Person Female × Σ Person Student
+    (Σ A λ a → P a × Q a) → Σ A P × Σ A Q
 
-    (Σ Person λ p → Female p ⊎ Student p) ↔? Σ Person Female ⊎ Σ Person Student
+    (Σ A λ a → P a ⊎ Q a) ↔ Σ A P ⊎ Σ A Q
 
 De Morgan:
 
-    (Σ Person λ p → ¬ Female p) ↔? ¬ ((p : Person) → Female p)
+    (Σ A λ a → ¬ P a) → ¬ ((a : A) → P a)
 
-    (¬ Σ Person λ p → Female p) ↔? ((p : Person) → ¬ Female p)
+    (¬ Σ A λ a → P a) ↔ ((a : A) → ¬ P a)
 
 ## Dependent elimination for `ℕ`, `Bool` and `⊎`
 
@@ -726,6 +742,8 @@ More examples:
 Hard exercises: define `pred` using `rec` instead of `primrec`, show
 that `Eqn` is an equivalence relation and congruence, transport for
 `Eqn`, commutativity of addition, multiplication of natural numbers.
+
+WE REACHED THIS POINT AT THE LECTURE.
 
 ## General inductive types
 
