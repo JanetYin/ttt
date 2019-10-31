@@ -644,42 +644,6 @@ Rules:
 
 `A × B` can be defined as `Σ A (λ _ → B)`.
 
-## Predicate logic
-
-We assume
-
-    A : Set
-    P : A → Set
-    Q : A → Set
-
-For example, you can think about the following propositions as
-
-    A = ℕ
-    P = isEven
-    Q = isOdd
-
-or
-
-    A = Student
-    P = Female
-    Q = Student
-
-Laws:
-
-    ((a : A) → P a × Q a) ↔ ((a : A) → P a) × ((a : A) → Q a)
-    
-    ((a : A) → P a ⊎ Q a) ← ((a : A) → P a) ⊎ ((a : A) → Q a)
-
-    (Σ A λ a → P a × Q a) → Σ A P × Σ A Q
-
-    (Σ A λ a → P a ⊎ Q a) ↔ Σ A P ⊎ Σ A Q
-
-De Morgan:
-
-    (Σ A λ a → ¬ P a) → ¬ ((a : A) → P a)
-
-    (¬ Σ A λ a → P a) ↔ ((a : A) → ¬ P a)
-
 ## Dependent elimination for `ℕ`, `Bool` and `⊎`
 
 Rules:
@@ -742,6 +706,40 @@ More examples:
 Hard exercises: define `pred` using `rec` instead of `primrec`, show
 that `Eqn` is an equivalence relation and congruence, transport for
 `Eqn`, commutativity of addition, multiplication of natural numbers.
+
+## Predicate logic
+
+Prove the following theorems (easy):
+
+       (A : Set)(P : A → Set)(Q : A → Set) → ((a : A) → P a × Q a)  ↔ ((a : A) → P a) × ((a : A) → Q a)
+       (A : Set)(P : A → Set)(Q : A → Set) → ((a : A) → P a ⊎ Q a)  ← ((a : A) → P a) ⊎ ((a : A) → Q a)
+       (A : Set)(P : A → Set)(Q : A → Set) → (Σ A λ a → P a × Q a)  → Σ A P × Σ A Q
+       (A : Set)(P : A → Set)(Q : A → Set) → (Σ A λ a → P a ⊎ Q a)  ↔ Σ A P ⊎ Σ A Q
+       (A : Set)(P : A → Set)              → (Σ A λ a → ¬ P a)      → ¬ ((a : A) → P a)
+       (A : Set)(P : A → Set)              → (¬ Σ A λ a → P a)      ↔ ((a : A) → ¬ P a)
+
+We can also prove the following theorems.
+
+    ¬ ((A : Set)(P : A → Set)(Q : A → Set) → (((a : A) → P a ⊎ Q a) → ((a : A) → P a) ⊎ ((a : A) → Q a)))
+    ¬ ((A : Set)(P : A → Set)(Q : A → Set) → ((Σ A λ a → P a × Q a) ← Σ A P × Σ A Q))
+
+These are negated theorems, so we need to construct functions where
+the input has a huge type and the output is `⊥`. We have to come up
+with counterexamples. E.g. the first one says that for all sets and
+two predicates on the set, if for all elements of the set, one of the
+predicates holds, then one of the predicates holds for all
+elements. Here is a counterexample:
+
+    A = ℕ
+    P = isEven
+    Q = isOdd
+
+So, the proof is
+
+    λ f → case (f ℕ isEven isOdd everyℕisEvenOrOdd) (λ allEven → allEven zero) (λ allOdd → allOdd (suc zero))
+
+where `everyℕisEvenOrOdd` is a proof that `(a : ℕ) → isEven a ⊎ isOdd
+a`.
 
 WE REACHED THIS POINT AT THE LECTURE.
 
