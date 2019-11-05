@@ -7,39 +7,39 @@ open import lib
 
 ×⊎dist : (A B C : Set) → (A × B) ⊎ C ↔ (A ⊎ C) × (B ⊎ C) -- this is not an isomorphism
 ×⊎dist = {!!}
+-- Give an example where this is not an isomorphism
 
+-- Implement this in a way that it is an isomorphism!
 squared : (A : Set) → (Bool → A) ↔ A × A
 squared = {!!}
 
 test1 : ℕ × ℕ
 test1 = proj₁ (squared ℕ) (proj₂ (squared ℕ) (3 , 2))
-
 test2 : Bool → ℕ
 test2 = proj₂ (squared ℕ) (proj₁ (squared ℕ) (λ b → if b then 3 else 2))
 
 transitivity : (A B C : Set) → (A ↔ B) → (B ↔ C) → (A ↔ C)
 transitivity = {!!}
 
-lemma : (A B : Set) → (A ↔ B) → ((Bool → A) ↔ (Bool → B))
-lemma = {!!}
+ex1 : (A B : Set) → (A ↔ B) → ((Bool → A) ↔ (Bool → B))
+ex1 = {!!}
+-- What does (Bool → A) mean? See squared function
 
-lem0' : (A B : Set) → (A → (B × B)) ↔ (A → Bool → B)
-lem0' = {!!}
+ex2 : (A B : Set) → (A → (B × B)) ↔ (A → Bool → B)
+ex2 = {!!}
 
-lemma2 : (A : Set) → (Bool → A ⊎ ⊤) ↔ ((Bool → A) ⊎ (Bool × A) ⊎ ⊤)
-lemma2 = {!!}
+ex3 : (A : Set) → (Bool → A ⊎ ⊤) ↔ ((Bool → A) ⊎ (Bool × A) ⊎ ⊤)
+ex3 = {!!}
 
 +² : (A B : Set) → (Bool → (A ⊎ B)) ↔ ((Bool → A) ⊎ (Bool × A × B) ⊎ (Bool → B))
 +² = {!!}
 
+
 Eqb : Bool → Bool → Set
-Eqb = {!!}
+Eqb = λ x y → if x then (if y then ⊤ else ⊥) else (if y then ⊥ else ⊤)
 
 not : Bool → Bool
-not = {!!}
-
-ex : Σ Bool (λ b → Eqb (not b) false)
-ex = {!!}
+not = λ b → if b then false else true
 
 -- sigma:
 -- record Σ {i}{j}(A : Set i)(B : A → Set j) : Set (i ⊔ j) where
@@ -47,6 +47,9 @@ ex = {!!}
 --   field
 --     proj₁ : A
 --     proj₂ : B proj₁
+ex : Σ Bool (λ b → Eqb (not b) false)
+ex = {!!}
+
 currying : (A C : Set) → (P : A → Set) → (Σ A P → C) ↔ ((x : A) → (P x → C))
 currying = {!!}
 
@@ -54,8 +57,8 @@ currying = {!!}
 -- indBool : ∀{i}(P : Bool → Set i) → P true → P false → (t : Bool) → P t
 -- indBool P u v true = u
 -- indBool P u v false = v
-ex2 : (A B : Set) → Σ Bool (λ b → if b then A else B) ↔ (A ⊎ B) 
-ex2 = {!!}
+ex4 : (A B : Set) → Σ Bool (λ b → if b then A else B) ↔ (A ⊎ B) 
+ex4 = {!!}
 
 --
 
@@ -130,6 +133,7 @@ eq = λ x → primrec
 Eqn : ℕ → ℕ → Set
 Eqn = λ x y → Eqb (eq x y) true
 
+-- use indℕ
 refl-= : (n : ℕ) → Eqn n n
 refl-= = {!!}
 
@@ -145,6 +149,7 @@ refl-= = {!!}
 lem : (a b : ℕ) → Eqn (suc (a + b)) (a + suc b)
 lem = {!!}
 
+-- Hard :)
 comm+ : (a b : ℕ) → Eqn (a + b) (b + a)
 comm+ = {!!}
 
