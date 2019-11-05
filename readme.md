@@ -507,7 +507,7 @@ translated to.
 | if and only if                | `⟦ P iff Q ⟧ := ⟦ P ⟧ ↔ ⟦ Q ⟧`    | functions in both direction                       |
 
 Now `t : ⟦ P ⟧` can be read as `t` is a proof of the proposition
-`P`. The type `⟦ P ⟧` is the set of proofs of the proposition `P`.
+`P`.
 
 Inspired by this, we introduce negation: `¬ A` abbreviates `A → ⊥`.
 
@@ -589,7 +589,9 @@ Equality type for `ℕ`:
 
 You can check that this has the following properties:
 
-    Eqn zero zero = ⊤
+    Eqn zero    zero    = ⊤
+    Eqn (suc x) zero    = ⊤
+    Eqn zero    (suc y) = ⊤
     Eqn (suc x) (suc y) = Eqn x y
 
 # Dependent types
@@ -644,6 +646,11 @@ Rules:
 
 `A × B` can be defined as `Σ A (λ _ → B)`.
 
+Example:
+
+    w : Σ ℕ (λ n → Eqn (suc zero + n) (suc (suc (suc zero))))
+    w = (suc (suc zero) , tt)
+
 ## Dependent elimination for `ℕ`, `Bool` and `⊎`
 
 Rules:
@@ -663,12 +670,10 @@ Rules:
 `primrec`, `if_then_else`, `case` can be defined using `indℕ`,
 `indBool`, `ind⊎`, respectively.
 
-Example:
+Examples:
 
     ⊤s : (n : ℕ) → ⊤ ^ n
     ⊤s = indℕ (λ n → ⊤ ^ n) tt (λ n tts → tt , tts)
-
-Our first proof by induction:
 
     notInvolutive : (x : Bool) → Eqb (not (not x)) x
     notInvolutive = λ x → indBool (λ x → Eqb (not (not x)) x) tt tt x
@@ -694,20 +699,21 @@ hypothesis. But as we remarked above, `Eqn (suc n) (suc n) = Eqn n n`,
 so we can direcly reuse the induction hypothesis to prove the case for
 `x = suc n`.
 
-    plusRightId : (x : ℕ) → Eqn (plus x zero) x
-    plusRightId = λ x → indℕ (λ x → Eqn (plus x zero) x) tt (λ n e → e) x
-
-More examples:
-
-    zero≠suc : (x : ℕ) → ¬ Eqn zero (suc x)
-
-    suc-inj : (x y : ℕ) → Eqn (suc x) (suc y) → Eqn x y
-
-Hard exercises: define `pred` using `rec` instead of `primrec`, show
-that `Eqn` is an equivalence relation and congruence, transport for
-`Eqn`, commutativity of addition, multiplication of natural numbers.
-
 ## Predicate logic
+
+Universal and existential quantifiers can also be translated to types:
+
+| logic                         | translation                            |
+|:-----------------------------:|:--------------------------------------:|
+| implication                   | `⟦ P ⇒ Q ⟧   	 := ⟦ P ⟧ → ⟦ Q ⟧`     	 |
+| conjunction                   | `⟦ P ∧ Q ⟧   	 := ⟦ P ⟧ × ⟦ Q ⟧`     	 |
+| true                          | `⟦ True ⟧    	 := ⊤`                 	 |
+| false                         | `⟦ False ⟧   	 := ⊥`                 	 |
+| disjunction                   | `⟦ P ∨ Q ⟧   	 := ⟦ P ⟧ ⊎ ⟦ Q ⟧`     	 |
+| negation                      | `⟦ ¬ P ⟧     	 := ⟦ P ⟧ → ⊥`         	 |
+| if and only if                | `⟦ P iff Q ⟧ 	 := ⟦ P ⟧ ↔ ⟦ Q ⟧`     	 |
+| forall                        | `⟦ ∀x∈ℕ, P x ⟧ := (x : ℕ) → ⟦ P x ⟧` 	 |
+| exists                        | `⟦ ∃x∈ℕ, P x ⟧ := (Σ ℕ λ x → ⟦ P x ⟧)` |
 
 Prove the following theorems (easy):
 
@@ -717,6 +723,7 @@ Prove the following theorems (easy):
        (A : Set)(P : A → Set)(Q : A → Set) → (Σ A λ a → P a ⊎ Q a)  ↔ Σ A P ⊎ Σ A Q
        (A : Set)(P : A → Set)              → (Σ A λ a → ¬ P a)      → ¬ ((a : A) → P a)
        (A : Set)(P : A → Set)              → (¬ Σ A λ a → P a)      ↔ ((a : A) → ¬ P a)
+       (A B : Set)                         → (A ⊎ B)                ↔ Σ Bool (λ b → if b then A else B)
 
 We can also prove the following theorems.
 
@@ -741,16 +748,83 @@ So, the proof is
 where `everyℕisEvenOrOdd` is a proof that `(a : ℕ) → isEven a ⊎ isOdd
 a`.
 
-WE REACHED THIS POINT AT THE LECTURE.
+## Properties of `ℕ` and pattern matching
 
-## General inductive types
+Addition:
 
-Transport.
+    _+_ : ℕ → ℕ → ℕ
+    _+_ = λ x y → primrec y (λ _ n → suc n) x
 
-Disjointness and injectivity of constructors.
+A shorter notation for this in Agda:
 
-Inductive types in general, pattern matching.
+    x + y = primrec y (λ _ n → suc n) x
 
-Internalise simple type theory. Define a model in which `id` is not
-equal to `id'`? Notion of simply typed CwF with extra structure or a
-simplification of that? Canonicity?
+Pattern matching definition:
+
+    zero  + y = y
+    suc x + y = suc (x + y)
+
+Note that this contains the same amount of information as the
+`primrec` variant and its behaviour is the same. Similarly, equality
+of natural numbers can be redefined this way:
+
+    Eqn : ℕ → ℕ → Set
+    Eqn zero    zero    = ⊤
+    Eqn (suc x) zero    = ⊥
+    Eqn zero    (suc y) = ⊥
+    Eqn (suc x) (suc y) = Eqn x y
+
+Every such pattern matching definition can be rewritten into a
+definition using `primrec` or `indℕ`. Hardcore people only use the
+eliminators, lazy people use pattern matching.
+
+Properties of this equality:
+
+    refl : (x : ℕ) → Eqn x x
+    refl zero = tt
+    refl (suc x) = refl x
+
+    transp : (P : ℕ → Set)(x y : ℕ) → Eqn x y → P x → P y
+    transp P zero    zero    e u = u
+    transp P (suc x) zero    e u = exfalso e
+    transp P zero    (suc y) e u = exfalso e
+    transp P (suc x) (suc y) e u = transp (λ x → P (suc x)) x y e u
+
+    sym : (x y : ℕ) → Eqn x y → Eqn y x
+    sym x y e = transp (λ z → Eqn z x) x y e (refln x)
+
+    trans : (x y z : ℕ) → Eqn x y → Eqn y z → Eqn x z
+    trans x y z e e' = transp (λ q → Eqn x q) y z e' e
+
+`zero` and `suc` are disjoint and successor is injective:
+
+    zero≠suc : (x : ℕ) → ¬ Eqn zero (suc x)
+    zero≠suc x e = e
+
+    suc-inj : (x y : ℕ) → Eqn (suc x) (suc y) → Eqn x y
+    suc-inj x y e = e
+
+Natural numbers form a commutative monoid with `_+_` and `zero`.
+
+    idl : (x : ℕ) → Eqn (zero + x) x
+    idl x = refln x
+
+    idr : (x : ℕ) → Eqn (x + zero) x
+    idr zero    = tt
+    idr (suc x) = idr x
+
+    ass : (x y z : ℕ) → Eqn ((x + y) + z) (x + (y + z))
+    ass zero    y z = refln (y + z)
+    ass (suc x) y z = ass x y z
+
+    comm-lemm : (x y : ℕ) → Eqn (suc x + y) (x + suc y)
+    comm-lemm zero    y = refln y
+    comm-lemm (suc x) y = comm-lemm x y
+
+    comm : (x y : ℕ) → Eqn (x + y) (y + x)
+    comm zero y    = sym (y + zero) y (idr y)
+    comm (suc x) y = trans (suc (x + y)) (suc (y + x)) (y + suc x) (comm x y) (comm-lemm y x)
+
+    _≤_ : ℕ → ℕ → Set
+    x ≤ y = ?
+
