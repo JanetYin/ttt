@@ -2,7 +2,7 @@ module lib where
 
 open import Agda.Primitive
 
-infix  4 _,_
+infixr 4 _,_
 infixr 2 _×_
 infixr 1 _⊎_
 infixr 0 _↔_
@@ -60,3 +60,24 @@ open ⊤ public
 
 _←_ : ∀{i j}(A : Set i)(B : Set j) → Set (i ⊔ j)
 A ← B = B → A
+
+indℕ : ∀{i}(P : ℕ → Set i) → P zero → ((n : ℕ) → P n → P (suc n)) → (t : ℕ) → P t
+indBool : ∀{i}(P : Bool → Set i) → P true → P false → (t : Bool) → P t
+ind⊎ : ∀{i j k}{A : Set i}{B : Set j}(P : A ⊎ B → Set k) → ((a : A) → P (inj₁ a)) → ((b : B) → P (inj₂ b)) → (t : A ⊎ B) → P t
+
+indℕ P u v zero = u
+indℕ P u v (suc t) = v t (indℕ P u v t)
+indBool P u v true = u
+indBool P u v false = v
+ind⊎ P u v (inj₁ t) = u t
+ind⊎ P u v (inj₂ t) = v t
+
+record Σ {i}{j}(A : Set i)(B : A → Set j) : Set (i ⊔ j) where
+  constructor _,_
+  field
+    proj₁ : A
+    proj₂ : B proj₁
+open Σ public
+
+data Eq {i}(A : Set i)(a : A) : A → Set where
+  refl : Eq A a a

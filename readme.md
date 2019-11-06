@@ -8,7 +8,8 @@ You have to register with the correct code:
  * MSc: IPM-18sztKVTEE
  * MSc evening course: IPM-18EsztKVTEE
 
-Teacher of lecture: Kaposi Ambrus ([website](http://akaposi.web.elte.hu))
+Teacher of the lectures: Kaposi Ambrus
+([website](http://akaposi.web.elte.hu))
 
 Tutorials:
 
@@ -348,6 +349,8 @@ Example.
 
 ## Unit type: `⊤`
 
+Rules:
+
  * introduction:
     * `tt : ⊤`
  * uniqueness:
@@ -441,7 +444,8 @@ We also have distributivity:
  * `(X ⊎ Y) × Z ↔ (X × Z) ⊎ (Y × Z)` ($(x+y) * z = (x * z) + (y*z)$)
 
 These above are called a commutative semiring structure on types (semi
-because addition has no inverse).
+because addition has no inverse). See also Tarski's high school
+algebra.
 
 For exponentiation we have:
 
@@ -486,33 +490,31 @@ check the same in Agda!
 
 `t : A` in programming means that the program `t` has type `A`.
 
-`t : A` in logic means `t` is a proof of `A`. You can think about a
-type as a set of its proofs.
+Some types can be seen as logical propositions. There is a translation
+from a proposition `P` to a type, we denote this by `⟦ P ⟧`. We also
+write how programmers view the type that a logical connective is
+translated to.
 
-Negation: `¬ A` abbreviates `A → ⊥`.
+| logic                         | translation                       | programming                                       |
+|:-----------------------------:|:---------------------------------:|:-------------------------------------------------:|
+| propositional variables       | `⟦ V ⟧       := X`                | abstract type                                     |
+| implication                   | `⟦ P ⇒ Q ⟧   := ⟦ P ⟧ → ⟦ Q ⟧`    | function                                          |    
+| conjunction                   | `⟦ P ∧ Q ⟧   := ⟦ P ⟧ × ⟦ Q ⟧`    | record, multiple inputs                           |
+| true                          | `⟦ True ⟧    := ⊤`                | unit (in C, C++, Java: void)                      |
+| false                         | `⟦ False ⟧   := ⊥`                | empty type (uncommon)                             |
+| disjunction                   | `⟦ P ∨ Q ⟧   := ⟦ P ⟧ ⊎ ⟦ Q ⟧`    | disjoint union, superclass of `⟦ P ⟧` and `⟦ Q ⟧` |
+| negation                      | `⟦ ¬ P ⟧     := ⟦ P ⟧ → ⊥`        | `⟦ P ⟧` has no elements (uncommon)                |
+| if and only if                | `⟦ P iff Q ⟧ := ⟦ P ⟧ ↔ ⟦ Q ⟧`    | functions in both direction                       |
+
+Now `t : ⟦ P ⟧` can be read as `t` is a proof of the proposition
+`P`.
+
+Inspired by this, we introduce negation: `¬ A` abbreviates `A → ⊥`.
 
 Examples.
 
     return : X → ¬ ¬ X
     join   : ¬ ¬ ¬ ¬ X → ¬ ¬ X
-
-Translation:
-
-| type theory       | programming                               | logic                         |
-|:-----------------:|:-----------------------------------------:|:-----------------------------:|
-| `X`, `Y`, `Z`     | abstract types                            | propositional variables       |
-| `A → B`           | function                                  | implication, `A ⊃ B`, `A ⇒ B` |    
-| `A × B`           | record, multiple inputs                   | conjunction, `A ∧ B`    	|
-| `⊤`               | unit, void (in C)                         | true         		  	|
-| `⊥`               | empty type (uncommon)                     | false        		  	|
-| `A ⊎ B`           | disjoint union, superclass of `A` and `B` | disjunction, `A ∨ B`    	|
-| `¬ A`             | `A` has no elements (uncommon)            | negation, `¬ A`         	|
-| `A ↔ B`           | functions in both direction               | if and only if, `⇔`     	|
-|                   |                                           |                         	|
-|                   |                                           |                         	|
-|                   |                                           |                         	|
-| `Bool`            | `Bool`                                    | (`𝟚`)       		  	|
-| `ℕ`               | `unsigned int`                            | (`ℕ`)        		  	|
 
 Some laws of logic (in addition to the semiring laws above), all up to
 `↔`.
@@ -544,7 +546,7 @@ We can write functions which create sets.
     _^_ : Set → ℕ → Set
     _^_ = λ A n → primrec ⊤ (λ _ As → A × As) n
 
-For example, we have `Bool ^ 3 = Bool × Bool × Bool × ⊤`.
+For example, we have `Bool ^ 3 = Bool × (Bool × (Bool × ⊤))`.
 
     tff : Bool ^ 3
     tff = true , (false , (false , tt))
@@ -553,22 +555,46 @@ We have `Set : Set₁`, `Set₁ : Set₂`, and so on.
 
 Two ways of defining equality on `Bool`:
 
-    eqb1 : Bool → Bool → Bool
-    eqb1 = λ x y → if x then y else not y
+    eqb : Bool → Bool → Bool
+    eqb = λ x y → if x then y else not y
 
-    eqb2 : Bool → Bool → Set
-    eqb2 = λ x y → if x then (if y then ⊤ else ⊥) else (if y then ⊥ else ⊤)
+    Eqb : Bool → Bool → Set
+    Eqb = λ x y → if x then (if y then ⊤ else ⊥) else (if y then ⊥ else ⊤)
 
-For any two booleans `x` and `y`, `eqb1 x y` is another boolean, while
-`eqb2 x y` is a type. `eqb2 x y` has an element if and only if `x` and
-`y` are the same booleans.
+ * For any two booleans `x` and `y`, `eqb x y` is another boolean,
+   while `Eqb x y` is a type.
+
+ * `Eqb x y` has an element if and only if `x` and `y` are the same booleans.
+
+ * `Eqb x y` is the proposition saying that `x` is equal to `y`.
+
+ * `x = y` is a metatheoretic statement saying that the terms `x` and
+   `y` are the same. It is not a type in Agda.
+
+Examples:
+
+    true=true : Eqb true true
+    true=true = tt
+
+    notUnitTest : Eqb (not (not true)) true
+    notUnitTest = tt
+
+    ¬true=false : ¬ Eqb true false
+    ¬true=false = λ e → e
+
+Equality type for `ℕ`:
+
+    Eqn : ℕ → ℕ → Set
+    Eqn = λ x y → Eqb (eq x y) true
+
+You can check that this has the following properties:
+
+    Eqn zero    zero    = ⊤
+    Eqn (suc x) zero    = ⊤
+    Eqn zero    (suc y) = ⊤
+    Eqn (suc x) (suc y) = Eqn x y
 
 # Dependent types
-
-We want to write a function which returns an element of `⊤ ^ n` for
-any `n`? What is a the type of this function?
-
-    ⊤s : (n : ℕ) → ⊤ ^ n
 
 ## Dependent functions: `(x : A) → B`
 
@@ -586,7 +612,10 @@ Rules:
  * uniqueness:
     * `(λ x → t x) = t`
 
-Examples. We don't need abstract types anymore.
+Simply typed functions `A → B` are a special case of dependent
+functions when `B` does not contain `x`.
+
+We don't need abstract types anymore.
 
     id : (A : Set) → A → A
     id = λ A x → x
@@ -597,11 +626,34 @@ Examples. We don't need abstract types anymore.
 Abbreviations: `(x : A)(y : B) → C` abbreviates `(x : A) → (y : B) → C`.
 `(x y : A) → B` abbreviates `(x : A)(y : A) → B`.
 
-We still can't write `⊤s`, why not? We need the following.
+## Dependent pairs: `Σ A B`
+
+Rules:
+
+ * type formation:
+    * if `A` is a type and `B : A → Set`, then
+      `Σ A B` is a type
+ * introduction:
+    * if `u : A` and `v : B u`, then `u , v : Σ A B`
+ * elimination:
+    * if `t : Σ A B` then `proj₁ t : A`
+    * if `t : Σ A B` then `proj₂ t : B (proj₁ t)`
+ * computation:
+    * `proj₁ (u , v) = u`
+    * `proj₂ (u , v) = v`
+ * uniqueness:
+    * `(λ x → t x) = t`
+
+`A × B` can be defined as `Σ A (λ _ → B)`.
+
+Example:
+
+    w : Σ ℕ (λ n → Eqn (suc zero + n) (suc (suc (suc zero))))
+    w = (suc (suc zero) , tt)
 
 ## Dependent elimination for `ℕ`, `Bool` and `⊎`
 
-New rules:
+Rules:
 
  * elimination:
     * `indℕ    : (P : ℕ     → Set) → P zero → ((n : ℕ) → P n → P (suc n)) → (t : ℕ) → P t`
@@ -615,45 +667,164 @@ New rules:
     * `ind⊎ P u v (inj₁ t) = u t`
     * `ind⊎ P u v (inj₂ t) = v t`
 
-Now we can define `⊤s`:
+`primrec`, `if_then_else`, `case` can be defined using `indℕ`,
+`indBool`, `ind⊎`, respectively.
+
+Examples:
 
     ⊤s : (n : ℕ) → ⊤ ^ n
-    ⊤s = indℕ (λ n → ⊤ ^' n) tt (λ n tts → tt , tts)
+    ⊤s = indℕ (λ n → ⊤ ^ n) tt (λ n tts → tt , tts)
 
-`primrec` can be defined using `indℕ`.
+    notInvolutive : (x : Bool) → Eqb (not (not x)) x
+    notInvolutive = λ x → indBool (λ x → Eqb (not (not x)) x) tt tt x
 
-Let's prove that we have `eqb2 (and true true) true`. Prove that `0`
-is a right inverse of addition.
+We want to prove `Eqb (not (not x)) x` for every `x : Bool`. We do
+this by induction, that is, for every constructor for `Bool` (`x =
+true` and `x = false`) we have to show `Eqb (not (not x)) x`. In the
+first case we need `Eqb (not (not true)) true = Eqb true true = ⊤`, in
+the second case we need `Eqb (not (not false)) false = Eqb false false
+= ⊤`. So we prove both cases simply be `tt`.
 
-    l : eqb2 (not (not true)) true
-    l1 : (x : Bool) → eqb2 (not (not x)) x
-    eqn = λ x y → eqb2 (eq x y) true
-    +
-    idl : (x : ℕ) → eqn (zero + x) x
-    idr : (x : ℕ) → eqn x (zero + x)
+We show that `zero` is a left and right identity of addition.
 
-Difference between
+    plusLeftId : (x : ℕ) → Eqn (plus zero x) x
+    plusLeftId = λ x → indℕ (λ x → Eqn x x) tt (λ _ e → e) x
 
-    x = y
-
-and
-
-    eqn x y
-
-
-## Identity types
-
-Transport.
-
-Disjointness of constructors of inductive types, injectivity of
-constructors, pattern matching.
-
-Inductive types in general
+First we note that `Eqn (plus zero x) x = Eqn x x`. So we only have to
+prove `Eqn x x` for every `x : ℕ`. Induction says that we have to
+prove this first for `x = zero`, that is `Eqn zero zero = ⊤`, this is
+easy: `tt`. Then, for any `n : ℕ`, given `e : Eqn n n`, we have to
+show `Eqn (suc n) (suc n)`. `e` is called the inductive
+hypothesis. But as we remarked above, `Eqn (suc n) (suc n) = Eqn n n`,
+so we can direcly reuse the induction hypothesis to prove the case for
+`x = suc n`.
 
 ## Predicate logic
 
-Do some discrete math.
+Universal and existential quantifiers can also be translated to types:
 
-Internalise simple type theory. Define a model in which `id` is not
-equal to `id'`? Notion of simply typed CwF with extra structure or a
-simplification of that? Canonicity?
+| logic                         | translation                            |
+|:-----------------------------:|:--------------------------------------:|
+| implication                   | `⟦ P ⇒ Q ⟧   	 := ⟦ P ⟧ → ⟦ Q ⟧`     	 |
+| conjunction                   | `⟦ P ∧ Q ⟧   	 := ⟦ P ⟧ × ⟦ Q ⟧`     	 |
+| true                          | `⟦ True ⟧    	 := ⊤`                 	 |
+| false                         | `⟦ False ⟧   	 := ⊥`                 	 |
+| disjunction                   | `⟦ P ∨ Q ⟧   	 := ⟦ P ⟧ ⊎ ⟦ Q ⟧`     	 |
+| negation                      | `⟦ ¬ P ⟧     	 := ⟦ P ⟧ → ⊥`         	 |
+| if and only if                | `⟦ P iff Q ⟧ 	 := ⟦ P ⟧ ↔ ⟦ Q ⟧`     	 |
+| forall                        | `⟦ ∀x∈ℕ, P x ⟧ := (x : ℕ) → ⟦ P x ⟧` 	 |
+| exists                        | `⟦ ∃x∈ℕ, P x ⟧ := (Σ ℕ λ x → ⟦ P x ⟧)` |
+
+Prove the following theorems (easy):
+
+       (A : Set)(P : A → Set)(Q : A → Set) → ((a : A) → P a × Q a)  ↔ ((a : A) → P a) × ((a : A) → Q a)
+       (A : Set)(P : A → Set)(Q : A → Set) → ((a : A) → P a ⊎ Q a)  ← ((a : A) → P a) ⊎ ((a : A) → Q a)
+       (A : Set)(P : A → Set)(Q : A → Set) → (Σ A λ a → P a × Q a)  → Σ A P × Σ A Q
+       (A : Set)(P : A → Set)(Q : A → Set) → (Σ A λ a → P a ⊎ Q a)  ↔ Σ A P ⊎ Σ A Q
+       (A : Set)(P : A → Set)              → (Σ A λ a → ¬ P a)      → ¬ ((a : A) → P a)
+       (A : Set)(P : A → Set)              → (¬ Σ A λ a → P a)      ↔ ((a : A) → ¬ P a)
+       (A B : Set)                         → (A ⊎ B)                ↔ Σ Bool (λ b → if b then A else B)
+
+We can also prove the following theorems.
+
+    ¬ ((A : Set)(P : A → Set)(Q : A → Set) → (((a : A) → P a ⊎ Q a) → ((a : A) → P a) ⊎ ((a : A) → Q a)))
+    ¬ ((A : Set)(P : A → Set)(Q : A → Set) → ((Σ A λ a → P a × Q a) ← Σ A P × Σ A Q))
+
+These are negated theorems, so we need to construct functions where
+the input has a huge type and the output is `⊥`. We have to come up
+with counterexamples. E.g. the first one says that for all sets and
+two predicates on the set, if for all elements of the set, one of the
+predicates holds, then one of the predicates holds for all
+elements. Here is a counterexample:
+
+    A = ℕ
+    P = isEven
+    Q = isOdd
+
+So, the proof is
+
+    λ f → case (f ℕ isEven isOdd everyℕisEvenOrOdd) (λ allEven → allEven zero) (λ allOdd → allOdd (suc zero))
+
+where `everyℕisEvenOrOdd` is a proof that `(a : ℕ) → isEven a ⊎ isOdd
+a`.
+
+## Properties of `ℕ` and pattern matching
+
+Addition:
+
+    _+_ : ℕ → ℕ → ℕ
+    _+_ = λ x y → primrec y (λ _ n → suc n) x
+
+A shorter notation for this in Agda:
+
+    x + y = primrec y (λ _ n → suc n) x
+
+Pattern matching definition:
+
+    zero  + y = y
+    suc x + y = suc (x + y)
+
+Note that this contains the same amount of information as the
+`primrec` variant and its behaviour is the same. Similarly, equality
+of natural numbers can be redefined this way:
+
+    Eqn : ℕ → ℕ → Set
+    Eqn zero    zero    = ⊤
+    Eqn (suc x) zero    = ⊥
+    Eqn zero    (suc y) = ⊥
+    Eqn (suc x) (suc y) = Eqn x y
+
+Every such pattern matching definition can be rewritten into a
+definition using `primrec` or `indℕ`. Hardcore people only use the
+eliminators, lazy people use pattern matching.
+
+Properties of this equality:
+
+    refl : (x : ℕ) → Eqn x x
+    refl zero = tt
+    refl (suc x) = refl x
+
+    transp : (P : ℕ → Set)(x y : ℕ) → Eqn x y → P x → P y
+    transp P zero    zero    e u = u
+    transp P (suc x) zero    e u = exfalso e
+    transp P zero    (suc y) e u = exfalso e
+    transp P (suc x) (suc y) e u = transp (λ x → P (suc x)) x y e u
+
+    sym : (x y : ℕ) → Eqn x y → Eqn y x
+    sym x y e = transp (λ z → Eqn z x) x y e (refln x)
+
+    trans : (x y z : ℕ) → Eqn x y → Eqn y z → Eqn x z
+    trans x y z e e' = transp (λ q → Eqn x q) y z e' e
+
+`zero` and `suc` are disjoint and successor is injective:
+
+    zero≠suc : (x : ℕ) → ¬ Eqn zero (suc x)
+    zero≠suc x e = e
+
+    suc-inj : (x y : ℕ) → Eqn (suc x) (suc y) → Eqn x y
+    suc-inj x y e = e
+
+Natural numbers form a commutative monoid with `_+_` and `zero`.
+
+    idl : (x : ℕ) → Eqn (zero + x) x
+    idl x = refln x
+
+    idr : (x : ℕ) → Eqn (x + zero) x
+    idr zero    = tt
+    idr (suc x) = idr x
+
+    ass : (x y z : ℕ) → Eqn ((x + y) + z) (x + (y + z))
+    ass zero    y z = refln (y + z)
+    ass (suc x) y z = ass x y z
+
+    comm-lemm : (x y : ℕ) → Eqn (suc x + y) (x + suc y)
+    comm-lemm zero    y = refln y
+    comm-lemm (suc x) y = comm-lemm x y
+
+    comm : (x y : ℕ) → Eqn (x + y) (y + x)
+    comm zero y    = sym (y + zero) y (idr y)
+    comm (suc x) y = trans (suc (x + y)) (suc (y + x)) (y + suc x) (comm x y) (comm-lemm y x)
+
+    _≤_ : ℕ → ℕ → Set
+    x ≤ y = ?
+
