@@ -88,6 +88,9 @@ module patternMatching where
     trans : (x y z : ℕ) → Eqn x y → Eqn y z → Eqn x z
     trans x y z e e' = transp (λ q → Eqn x q) y z e' e
 
+    cong : (f : ℕ → ℕ)(x y : ℕ) → Eqn x y → Eqn (f x) (f y)
+    cong f x y e = transp (λ y → Eqn (f x) (f y)) x y e (refln (f x))
+    
     -- 
 
     zero≠suc : (x : ℕ) → ¬ Eqn zero (suc x)
@@ -158,5 +161,3 @@ module patternMatching where
 
     test : Eqℕ^ 5 (insert 3 4 (1 , 2 , 4 , 5 , tt)) (1 , 2 , 3 , 4 , 5 , tt)
     test = ⊤s 5
-
-    
