@@ -784,6 +784,8 @@ Properties of this equality:
     refl zero = tt
     refl (suc x) = refl x
 
+WE REACHED THIS POINT AT THE LECTURE.
+
     transp : (P : ℕ → Set)(x y : ℕ) → Eqn x y → P x → P y
     transp P zero    zero    e u = u
     transp P (suc x) zero    e u = exfalso e
