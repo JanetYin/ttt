@@ -19,7 +19,9 @@ xor _     _    = false  -- _ mindenre illeszkedő minta
 -- a változóra
 
 Bool-eq : Bool → Bool → Bool
-Bool-eq x y = {!!}
+Bool-eq true true = true
+Bool-eq false false = true
+Bool-eq _ _ = false
 
 infixl 6 _+_
 _+_ : ℕ → ℕ → ℕ
