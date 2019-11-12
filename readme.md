@@ -791,8 +791,6 @@ Properties of this equality:
     refl zero = tt
     refl (suc x) = refl x
 
-WE REACHED THIS POINT AT THE LECTURE.
-
     transport : (P : ℕ → Set)(x y : ℕ) → Eqn x y → P x → P y
     transport P zero    zero    e u = u
     transport P (suc x) zero    e u = exfalso e
@@ -824,6 +822,8 @@ Natural numbers form a commutative monoid with `_+_` and `zero`.
     idr : (x : ℕ) → Eqn (x + zero) x
     idr zero    = tt
     idr (suc x) = idr x
+
+WE REACHED THIS POINT AT THE LECTURE.
 
     ass : (x y z : ℕ) → Eqn ((x + y) + z) (x + (y + z))
     ass zero    y z = refln (y + z)
