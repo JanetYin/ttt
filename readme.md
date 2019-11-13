@@ -768,11 +768,18 @@ Note that this contains the same amount of information as the
 `primrec` variant and its behaviour is the same. Similarly, equality
 of natural numbers can be redefined this way:
 
+    eq : ℕ → ℕ → Bool
+    eq zero    zero    = true
+    eq (suc x) zero    = false
+    eq zero    (suc y) = false
+    eq (suc x) (suc y) = eq x y
+
+    toSet : Bool → Set
+    toSet true  = ⊤
+    toSet false = ⊥
+
     Eqn : ℕ → ℕ → Set
-    Eqn zero    zero    = ⊤
-    Eqn (suc x) zero    = ⊥
-    Eqn zero    (suc y) = ⊥
-    Eqn (suc x) (suc y) = Eqn x y
+    Eqn x y = toSet (eq x y)
 
 Every such pattern matching definition can be rewritten into a
 definition using `primrec` or `indℕ`. Hardcore people only use the
@@ -784,20 +791,21 @@ Properties of this equality:
     refl zero = tt
     refl (suc x) = refl x
 
-WE REACHED THIS POINT AT THE LECTURE.
-
-    transp : (P : ℕ → Set)(x y : ℕ) → Eqn x y → P x → P y
-    transp P zero    zero    e u = u
-    transp P (suc x) zero    e u = exfalso e
-    transp P zero    (suc y) e u = exfalso e
-    transp P (suc x) (suc y) e u = transp (λ x → P (suc x)) x y e u
+    transport : (P : ℕ → Set)(x y : ℕ) → Eqn x y → P x → P y
+    transport P zero    zero    e u = u
+    transport P (suc x) zero    e u = exfalso e
+    transport P zero    (suc y) e u = exfalso e
+    transport P (suc x) (suc y) e u = transport (λ x → P (suc x)) x y e u
 
     sym : (x y : ℕ) → Eqn x y → Eqn y x
-    sym x y e = transp (λ z → Eqn z x) x y e (refln x)
+    sym x y e = transport (λ z → Eqn z x) x y e (refln x)
 
     trans : (x y z : ℕ) → Eqn x y → Eqn y z → Eqn x z
-    trans x y z e e' = transp (λ q → Eqn x q) y z e' e
+    trans x y z e e' = transport (λ q → Eqn x q) y z e' e
 
+    cong : (f : ℕ → ℕ)(x y : ℕ) → Eqn x y → Eqn (f x) (f y)
+    cong f x y e = transport (λ y → Eqn (f x) (f y)) x y e (refln (f x))
+    
 `zero` and `suc` are disjoint and successor is injective:
 
     zero≠suc : (x : ℕ) → ¬ Eqn zero (suc x)
@@ -815,6 +823,8 @@ Natural numbers form a commutative monoid with `_+_` and `zero`.
     idr zero    = tt
     idr (suc x) = idr x
 
+WE REACHED THIS POINT AT THE LECTURE.
+
     ass : (x y z : ℕ) → Eqn ((x + y) + z) (x + (y + z))
     ass zero    y z = refln (y + z)
     ass (suc x) y z = ass x y z
@@ -827,6 +837,59 @@ Natural numbers form a commutative monoid with `_+_` and `zero`.
     comm zero y    = sym (y + zero) y (idr y)
     comm (suc x) y = trans (suc (x + y)) (suc (y + x)) (y + suc x) (comm x y) (comm-lemm y x)
 
-    _≤_ : ℕ → ℕ → Set
-    x ≤ y = ?
+Less or equal.
 
+    _≤_ : ℕ → ℕ → Set
+    zero  ≤ y     = ⊤
+    suc x ≤ zero  = ⊥
+    suc x ≤ suc y = x ≤ y
+
+    ex : 3 ≤ 100
+    ex = tt
+    
+    refl≤ : (x : ℕ) → x ≤ x
+    refl≤ zero = tt
+    refl≤ (suc x) = refl≤ x
+
+    trans≤ : (x y z : ℕ) → x ≤ y → y ≤ z → x ≤ z
+    trans≤ zero    y       z       e e' = tt
+    trans≤ (suc x) (suc y) (suc z) e e' = trans≤ x y z e e'
+
+    ≤dec : (x y : ℕ) → x ≤ y ⊎ y ≤ x
+    ≤dec zero y = inj₁ tt
+    ≤dec (suc x) zero = inj₂ tt
+    ≤dec (suc x) (suc y) = ≤dec x y
+
+## Functions on vectors
+
+    _^_ : Set → ℕ → Set
+    A ^ zero  = ⊤
+    A ^ suc x = A × A ^ x
+
+    insert : ℕ → (l : ℕ) → ℕ ^ l → ℕ ^ (suc l)
+    insert x zero    xs       = x , tt
+    insert x (suc l) (y , xs) with ≤dec x y
+    insert x (suc l) (y , xs) | inj₁ e = x , y , xs
+    insert x (suc l) (y , xs) | inj₂ e = y , insert x l xs
+
+    _∧_ : Bool → Bool → Bool
+    true  ∧ true = true
+    _     ∧ _    = false
+
+    eq^ : (l : ℕ) → ℕ ^ l → ℕ ^ l → Bool
+    eq^ zero xs ys = true
+    eq^ (suc l) (x , xs) (y , ys) = eq x y ∧ eq^ l xs ys
+
+    Eq^ : (l : ℕ) → ℕ ^ l → ℕ ^ l → Set
+    Eq^ l xs ys = toSet (eq^ l xs ys)
+
+    test : Eq^ 5 (insert 3 4 (1 , 2 , 4 , 5 , tt)) (1 , 2 , 3 , 4 , 5 , tt)
+    test = tt
+
+    sort : (l : ℕ) → ℕ ^ l → ℕ ^ l
+    sort zero _ = tt
+    sort (suc l) (x , xs) = insert x l (sort l xs)
+
+## Isomorphisms internally
+
+    (Bool → ℕ) ≅ ℕ × ℕ
