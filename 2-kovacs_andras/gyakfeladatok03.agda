@@ -26,6 +26,12 @@ open import lib
 ℕ-subst P zero    zero    eq pn = pn
 ℕ-subst P (suc n) (suc m) eq pn = ℕ-subst (λ x → P (suc x)) n m eq pn
 
+-- implicit paraméterek: {}
+ℕ-cong : (f : ℕ → ℕ) → {a b : ℕ} → ℕEq a b → ℕEq (f a) (f b)
+ℕ-cong f {zero}  {zero}  eq = ℕ-refl (f zero)
+ℕ-cong f {suc a} {suc b} eq = ℕ-cong (λ x → f (suc x)) eq
+-- ℕ-subst (λ b → ℕEq (f a) (f b)) a b eq (ℕ-refl (f a))
+
 ------------------------------------------------------------
 
 infixl 6 _+_
