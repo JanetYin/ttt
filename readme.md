@@ -590,8 +590,8 @@ Equality type for `ℕ`:
 You can check that this has the following properties:
 
     Eqn zero    zero    = ⊤
-    Eqn (suc x) zero    = ⊤
-    Eqn zero    (suc y) = ⊤
+    Eqn (suc x) zero    = ⊥
+    Eqn zero    (suc y) = ⊥
     Eqn (suc x) (suc y) = Eqn x y
 
 Unit tests for functions on natural numbers:
