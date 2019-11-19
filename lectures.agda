@@ -62,6 +62,11 @@ module first where
 
 module patternMatching where
 
+    infixl 4 _+_
+    infixl 5 _*_
+    infixr 2 _≡⟨_⟩_
+    infix  3 _∎
+
     _+_ : ℕ → ℕ → ℕ
     zero  + y = y
     suc x + y = suc (x + y)
@@ -127,6 +132,78 @@ module patternMatching where
     comm zero y    = sym (y + zero) y (idr y)
     comm (suc x) y = trans (suc (x + y)) (suc (y + x)) (y + suc x) (comm x y) (comm-lemm y x)
 
+    _*_ : ℕ → ℕ → ℕ
+    zero * y = zero
+    suc x * y = y + (x * y)
+
+    ex1 : (x y : ℕ) → Eqn ((x + (y + zero)) + x) (2 * x + y)
+    ex1 x y = trans ((x + (y + zero)) + x) (x + (x + 0) + y) (2 * x + y)
+      (trans (x + (y + zero) + x) (x + x + y) (x + (x + 0) + y)
+             (trans (x + (y + zero) + x) (x + y + x) (x + x + y)
+                    (cong (λ z → x + z + x) _ _ (idr y))
+                    (trans (x + y + x) (x + (y + x)) (x + x + y)
+                           (ass x y x)
+                           (trans (x + (y + x)) (x + (x + y)) (x + x + y)
+                                  (cong (λ z → x + z) _ _ (comm y x))
+                                  (sym (x + x + y) (x + (x + y)) (ass x x y)))))
+             (cong (λ z → x + z + y) _ _ (sym (x + zero) x (idr x))))
+      (refln (2 * x + y))
+
+    ex1' : (x y : ℕ) → Eqn ((x + (y + zero)) + x) (2 * x + y)
+    ex1' x y = trans ((x + (y + zero)) + x) _ _
+      (trans (x + (y + zero) + x) _ _
+             (trans (x + (y + zero) + x) _ _
+                    (cong (λ z → x + z + x) _ _ (idr y))
+                    (trans (x + y + x) _ _
+                           (ass x y x)
+                           (trans (x + (y + x)) _ _
+                                  (cong (λ z → x + z) _ _ (comm y x))
+                                  (sym (x + x + y) (x + (x + y)) (ass x x y)))))
+             (cong (λ z → x + z + y) _ _ (sym (x + zero) x (idr x))))
+      (refln (2 * x + y))
+
+    ex1'' : (x y : ℕ) → Eqn ((x + (y + zero)) + x) (2 * x + y)
+    ex1'' x y =
+      (trans (x + (y + zero) + x) (x + y + x) (2 * x + y)
+                                                                   (cong (λ z → x + z + x) _ _ (idr y))
+      (trans (x + y + x) (x + (y + x)) (x + (x + zero) + y)
+                                                                   (ass x y x)
+      (trans (x + (y + x)) (x + (x + y)) (x + (x + zero) + y)
+                                                                   (cong (λ z → x + z) _ _ (comm y x))
+      (trans (x + (x + y)) (x + x + y) (x + (x + zero) + y)
+                                                                   (sym (x + x + y) (x + (x + y)) (ass x x y))
+      (trans (x + x + y) (x + (x + 0) + y) (x + (x + 0) + y)
+                                                                   (cong (λ z → x + z + y) _ _ (sym (x + zero) x (idr x)))
+      (refln (2 * x + y)))))))
+
+    ex1''' : (x y : ℕ) → Eqn ((x + (y + zero)) + x) (2 * x + y)
+    ex1''' x y =
+      (trans (x + (y + zero) + x) _ _
+                                                                   (cong (λ z → x + z + x) _ _ (idr y))
+      (trans (x + y + x) _ _
+                                                                   (ass x y x)
+      (trans (x + (y + x)) _ _
+                                                                   (cong (λ z → x + z) _ _ (comm y x))
+      (trans (x + (x + y)) _ _
+                                                                   (sym (x + x + y) _ (ass x x y))
+      (trans (x + x + y) _ _
+                                                                   (cong (λ z → x + z + y) _ _ (sym _ x (idr x)))
+      (refln (2 * x + y)))))))
+
+    _≡⟨_⟩_ : (x : ℕ){y z : ℕ} → Eqn x y → Eqn y z → Eqn x z
+    x ≡⟨ p ⟩ q = trans x _ _ p q
+
+    _∎ : (x : ℕ) → Eqn x x
+    x ∎ = refln x
+
+{-
+    ex1 x y =
+      (x + (y + zero)) + x
+                               ≡⟨ {!!} ⟩
+      x + (x + 0) + y
+                               ≡⟨ refln _ ⟩
+      2 * x + y ∎
+-}
     _≤_ : ℕ → ℕ → Set
     zero  ≤ y     = ⊤
     suc x ≤ zero  = ⊥
