@@ -833,8 +833,6 @@ Natural numbers form a commutative monoid with `_+_` and `zero`.
     idr zero    = tt
     idr (suc x) = idr x
 
-WE REACHED THIS POINT AT THE LECTURE.
-
     ass : (x y z : ℕ) → Eqn ((x + y) + z) (x + (y + z))
     ass zero    y z = refln (y + z)
     ass (suc x) y z = ass x y z
@@ -846,6 +844,11 @@ WE REACHED THIS POINT AT THE LECTURE.
     comm : (x y : ℕ) → Eqn (x + y) (y + x)
     comm zero y    = sym (y + zero) y (idr y)
     comm (suc x) y = trans (suc (x + y)) (suc (y + x)) (y + suc x) (comm x y) (comm-lemm y x)
+
+Proving `Eqn ((x + y) ^ 2) (x ^ 2 + 2 * x * y + y ^ 2)` using the
+algebraic laws, `cong` and `trans`.
+
+WE REACHED THIS POINT AT THE LECTURE.
 
 Less or equal.
 
