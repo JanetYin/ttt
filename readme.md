@@ -71,12 +71,13 @@ run.
 
 # Simple type theory
 
-Type theory is a game which we play with a finite number of rules. For
+Type theory is a game that we play with a finite set of rules. For
 each type former, there is a number of rules. In this section, we
-learn about the rules for `Bool`, `→`, `ℕ`, `×`, abstract types, `⊥`,
-`⊤`, `⊎`. We also learn that equality of terms is decidable, the
-difference between equality and behaviour, the algebraic structure of
-types and the connection to propositional logic.
+learn the rules for type formers `Bool`, `→`, `ℕ`, `×`, abstract
+types, `⊥`, `⊤`, `⊎`. We also learn that equality of terms is
+decidable, the difference between equality and behaviour, the
+algebraic structure of types and how to translate propositional logic
+formulas to types.
 
 ## Booleans: `Bool`
 
@@ -516,8 +517,7 @@ Examples.
     return : X → ¬ ¬ X
     join   : ¬ ¬ ¬ ¬ X → ¬ ¬ X
 
-Some laws of logic (in addition to the semiring laws above), all up to
-`↔`.
+Some laws of logic (in addition to the semiring laws above).
 
  * `¬ X ⊎ Y → (X → Y)`, but not the other direction.
 
@@ -590,9 +590,19 @@ Equality type for `ℕ`:
 You can check that this has the following properties:
 
     Eqn zero    zero    = ⊤
-    Eqn (suc x) zero    = ⊤
-    Eqn zero    (suc y) = ⊤
+    Eqn (suc x) zero    = ⊥
+    Eqn zero    (suc y) = ⊥
     Eqn (suc x) (suc y) = Eqn x y
+
+Unit tests for functions on natural numbers:
+
+    test+ : Eqn (3 + 2) 5
+    test+ = tt
+
+We even have negative unit tests:
+
+    test+' : ¬ Eqn (3 + 2) 4
+    test+' = λ x → x
 
 # Dependent types
 
@@ -651,7 +661,7 @@ Example:
     w : Σ ℕ (λ n → Eqn (suc zero + n) (suc (suc (suc zero))))
     w = (suc (suc zero) , tt)
 
-## Dependent elimination for `ℕ`, `Bool` and `⊎`
+## Dependent elimination for `Bool`, `ℕ` and `⊎`
 
 Rules:
 
@@ -743,7 +753,7 @@ elements. Here is a counterexample:
 
 So, the proof is
 
-    λ f → case (f ℕ isEven isOdd everyℕisEvenOrOdd) (λ allEven → allEven zero) (λ allOdd → allOdd (suc zero))
+    λ f → case (f ℕ isEven isOdd everyℕisEvenOrOdd) (λ allEven → allEven (suc zero)) (λ allOdd → allOdd zero)
 
 where `everyℕisEvenOrOdd` is a proof that `(a : ℕ) → isEven a ⊎ isOdd
 a`.
@@ -823,8 +833,6 @@ Natural numbers form a commutative monoid with `_+_` and `zero`.
     idr zero    = tt
     idr (suc x) = idr x
 
-WE REACHED THIS POINT AT THE LECTURE.
-
     ass : (x y z : ℕ) → Eqn ((x + y) + z) (x + (y + z))
     ass zero    y z = refln (y + z)
     ass (suc x) y z = ass x y z
@@ -836,6 +844,11 @@ WE REACHED THIS POINT AT THE LECTURE.
     comm : (x y : ℕ) → Eqn (x + y) (y + x)
     comm zero y    = sym (y + zero) y (idr y)
     comm (suc x) y = trans (suc (x + y)) (suc (y + x)) (y + suc x) (comm x y) (comm-lemm y x)
+
+Proving `Eqn ((x + y) ^ 2) (x ^ 2 + 2 * x * y + y ^ 2)` using the
+algebraic laws, `cong` and `trans`.
+
+WE REACHED THIS POINT AT THE LECTURE.
 
 Less or equal.
 
