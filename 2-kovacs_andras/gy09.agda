@@ -39,7 +39,10 @@ suc a * b = a * b + b
 -- ℕ kongruencia
 ------------------------------------------------------------
 
--- implicit paraméter
+
+
+-- implicit paraméterek
+------------------------------------------------------------
 
 -- Nem muszáj {a : _}-t sem definícióban,
 -- sem függvényalkalmazásnál kiírni
@@ -67,34 +70,18 @@ foo2 = const 10 10
 foo3 : ℕ
 foo3 = const {ℕ}{ℕ} 10 10
 
--- case :
---   {A : Set} {B : Set}{C : Set}
---   → A ⊎ B → (A → C) → (B → C) → C
-
 foo4 : ℕ
 foo4 =
   case {_}{_}{_}{ℕ} {Bool} {ℕ} (inj₁ 0)
   (λ _ → 10) (λ _ → 20)
 
 
--- implicit paraméterek: {}
-ℕ-cong : (f : ℕ → ℕ) → {a b : ℕ} → ℕEq a b → ℕEq (f a) (f b)
-ℕ-cong f {zero} {zero} eq = ℕ-refl (f zero)
-ℕ-cong f {suc a} {suc b} eq =
-  ℕ-cong (λ x → f (suc x)) {a}{b} eq
-
--- C-c-C-c : ha implicit paraméterre alkalmazzuk, ami
--- nincs még kapcsos zárójelben felvéve, akkor felveszi
-
-
--- ℕ-cong f {zero}  {zero}  eq = ℕ-refl (f zero)
--- ℕ-cong f {suc a} {suc b} eq = ℕ-cong (λ x → f (suc x)) eq
-
--- ℕ-subst (λ b → ℕEq (f a) (f b)) a b eq (ℕ-refl (f a))
-
-
 -- ℕ tételek
 ------------------------------------------------------------
+
+ℕ-cong : (f : ℕ → ℕ) → (a b : ℕ) → ℕEq a b → ℕEq (f a) (f b)
+ℕ-cong f zero    zero    eq = ℕ-refl (f zero)
+ℕ-cong f (suc a) (suc b) eq = ℕ-cong (λ x → f (suc x)) a b eq
 
 -- összeadás definíciójából triviális, hogy
 -- 0 + a = a
@@ -117,7 +104,7 @@ foo4 =
 +suc (suc a) b = +suc a b
 
 n-neq-sucn : (n : ℕ) → ¬ (ℕEq n (suc n))
-n-neq-sucn zero = λ z → z
+n-neq-sucn zero p = p
 n-neq-sucn (suc n) = n-neq-sucn n
 
 +-assoc : (a b c : ℕ) → ℕEq ((a + b) + c) (a + (b + c))
@@ -125,9 +112,9 @@ n-neq-sucn (suc n) = n-neq-sucn n
 +-assoc (suc a) b c = +-assoc a b c
 
 +-comm : (a b : ℕ) → ℕEq (a + b) (b + a)
-+-comm zero zero = tt
-+-comm zero (suc b) = +-comm zero b
-+-comm (suc a) zero = +-comm a zero
++-comm zero    zero    = tt
++-comm zero    (suc b) = +-comm zero b
++-comm (suc a) zero    = +-comm a zero
 +-comm (suc a) (suc b) =
   ℕ-trans (a + suc b) (suc (a + b)) (b + suc a)
           (ℕ-trans (a + suc b) (suc (b + a)) (suc (a + b))
@@ -147,64 +134,94 @@ n-neq-sucn (suc n) = n-neq-sucn n
 ------------------------------------------------------------
 
 g1 : ∀ x y z → ℕEq x y → ℕEq y z → ℕEq z x
-g1 = {!!}
+g1 x y z p q =
+  let eq : ℕEq x z
+      eq = ℕ-trans x y z p q
+  in ℕ-sym x z eq
 
+-- ∀ : rövidített jelölés függvényre
+-- (x y : ℕ) → ..
 g2 : ∀ x y → ℕEq x y → ℕEq (suc (suc x)) (suc (suc y))
-g2 = {!!}
+g2 x y eq = ℕ-cong (λ x → suc (suc x)) x y eq
 
 g3 : ∀ (f : ℕ → ℕ) x y  → ℕEq x y → ℕEq (f y) (f x)
-g3 = {!!}
+g3 f x y eq =
+    ℕ-sym (f x) (f y) (ℕ-cong f x y eq)
+    -- másik: ℕ-cong f y x (ℕ-sym x y eq)
 
 g4 : ∀ x y z → ℕEq (suc x) z → ℕEq (suc y) z → ℕEq y x
-g4 = {!!}
+g4 x y z eq1 eq2 =
+   let eq2' = ℕ-sym (suc y) z eq2
+       macska = ℕ-trans (suc x) z (suc y) eq1 eq2'
+   in ℕ-sym x y macska
 
 
 -- Σ típus
 ------------------------------------------------------------
 
-ex1 : Σ ℕ λ n → ℕEq n n
-ex1 = 0 , ℕ-refl 0
+-- _×_
 
-ex2 : Σ ℕ λ n → ℕEq n n
-ex2 = {!!}
+ex1 : Σ ℕ (λ n → ℕEq n n)
+ex1 = 10 , tt
 
-ex3 : Σ ℕ λ n → ℕEq n n
-ex3 = {!!}
-
-ex4 : (n : ℕ) → Σ ℕ λ m → ℕEq n m
-ex4 n = {!!}
+-- minden n : ℕ -re megad egy m : ℕ-t
+-- amire igaz, hogy ℕEq n m
+-- "létezik"
+ex4 : (n : ℕ) → Σ ℕ (λ m → ℕEq n m)
+ex4 n = n , ℕ-refl n
 
 ex5 : (n : ℕ) → Σ ℕ λ m → ¬ (ℕEq n m)
-ex5 n = {!!}
+ex5 n = (suc n) , (n-neq-sucn n)
 
 pair : {A : Set}{B : A → Set}(a : A) → B a → Σ A B
-pair = {!!}
+pair a b = a , b
 
 proj₁' : {A : Set}{B : A → Set} → Σ A B → A
-proj₁' ab = {!!}
+proj₁' ab = proj₁ ab
 
-proj₂' : {A : Set}{B : A → Set} → (ab : Σ A B) → B (proj₁' ab)
-proj₂' ab = {!!}
+proj₂' : {A : Set}{B : A → Set}
+       → (ab : Σ A B) → B (proj₁' ab)
+proj₂' ab = proj₂ ab
 
-f1 : (A : Set)(P : A → Set)(Q : A → Set) → ((a : A) → P a × Q a)  ↔ ((a : A) → P a) × ((a : A) → Q a)
-f1 = {!!}
+-- (ha minden a : A-ra igaz P a és Q a)
+-- ekvivalens azzal, hogy
+-- ((minden a : A-ra igaz P a) ÉS (minden a : A-ra igaz Q a)
 
-f2 : (A : Set)(P : A → Set)(Q : A → Set) → ((a : A) → P a ⊎ Q a)  ← ((a : A) → P a) ⊎ ((a : A) → Q a)
-f2 = {!!}
+-- ez annak az általánosítása, hogy:
+--   (A → B × C) ↔ ((A → B) × (A → C))
 
-f3 : (A : Set)(P : A → Set)(Q : A → Set) → (Σ A λ a → P a × Q a)  → Σ A P × Σ A Q
+f1 : (A : Set)(P : A → Set)(Q : A → Set)
+   → ((a : A) → P a × Q a)
+   ↔ (((a : A) → P a) × ((a : A) → Q a))
+f1 A P Q =
+    (λ f → (λ a → proj₁ (f a)) , (λ a → proj₂ (f a)))
+  , (λ fg → λ a → (proj₁ fg a) , (proj₂ fg a))
+
+-- nulladrendű (nem függő) speciális eset
+-- (A → P ⊎ Q) ← ((A → P) ⊎ (A → Q))
+
+f2 : (A : Set)(P : A → Set)(Q : A → Set)
+     → ((a : A) → P a ⊎ Q a)
+     ← ((a : A) → P a) ⊎ ((a : A) → Q a)
+f2 A P Q (inj₁ f) a = inj₁ (f a)
+f2 A P Q (inj₂ g) a = inj₂ (g a)
+
+-- nem függő: A × (B × C) → (A × B) × (A × C)
+f3 : (A : Set)(P : A → Set)(Q : A → Set)
+    → (Σ A λ a → P a × Q a)
+    → Σ A P × Σ A Q
 f3 = {!!}
 
 f4 : (A : Set)(P : A → Set)(Q : A → Set) → (Σ A λ a → P a ⊎ Q a)  ↔ Σ A P ⊎ Σ A Q
 f4 = {!!}
 
-f5 : (A : Set)(P : A → Set)              → (Σ A λ a → ¬ P a)      → ¬ ((a : A) → P a)
+f5 : (A : Set)(P : A → Set) → (Σ A λ a → ¬ P a) → ¬ ((a : A) → P a)
 f5 = {!!}
 
-f6 : (A : Set)(P : A → Set)              → (¬ Σ A λ a → P a)      ↔ ((a : A) → ¬ P a)
+f6 : (A : Set)(P : A → Set) → (¬ Σ A λ a → P a) ↔ ((a : A) → ¬ P a)
 f6 = {!!}
 
-f7 : (A B : Set)                         → (A ⊎ B)                ↔ Σ Bool (λ b → if b then A else B)
+f7 : (A B : Set) → (A ⊎ B) ↔ Σ Bool (λ b → if b then A else B)
 f7 = {!!}
 
 -- típuselméleti "kiválasztási axióma"
