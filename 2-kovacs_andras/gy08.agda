@@ -39,9 +39,53 @@ suc a * b = a * b + b
 -- ℕ kongruencia
 ------------------------------------------------------------
 
+-- implicit paraméter
+
+-- Nem muszáj {a : _}-t sem definícióban,
+-- sem függvényalkalmazásnál kiírni
+id : {A : Set} → A → A
+id x = x
+
+foo : ℕ
+foo = id 10
+
+id' : {A : Set} → A → A
+id' {A} x = x
+
+foo' : ℕ
+foo' = id {ℕ} 10
+
+const : {A B : Set} → A → B → A
+const x y = x
+
+const' : {A : Set} → A → {B : Set} → B → A
+const' x y = x
+
+foo2 : ℕ
+foo2 = const 10 10
+
+foo3 : ℕ
+foo3 = const {ℕ}{ℕ} 10 10
+
+-- case :
+--   {A : Set} {B : Set}{C : Set}
+--   → A ⊎ B → (A → C) → (B → C) → C
+
+foo4 : ℕ
+foo4 =
+  case {_}{_}{_}{ℕ} {Bool} {ℕ} (inj₁ 0)
+  (λ _ → 10) (λ _ → 20)
+
+
 -- implicit paraméterek: {}
 ℕ-cong : (f : ℕ → ℕ) → {a b : ℕ} → ℕEq a b → ℕEq (f a) (f b)
-ℕ-cong f eq = {!!}
+ℕ-cong f {zero} {zero} eq = ℕ-refl (f zero)
+ℕ-cong f {suc a} {suc b} eq =
+  ℕ-cong (λ x → f (suc x)) {a}{b} eq
+
+-- C-c-C-c : ha implicit paraméterre alkalmazzuk, ami
+-- nincs még kapcsos zárójelben felvéve, akkor felveszi
+
 
 -- ℕ-cong f {zero}  {zero}  eq = ℕ-refl (f zero)
 -- ℕ-cong f {suc a} {suc b} eq = ℕ-cong (λ x → f (suc x)) eq
@@ -52,79 +96,48 @@ suc a * b = a * b + b
 -- ℕ tételek
 ------------------------------------------------------------
 
+-- összeadás definíciójából triviális, hogy
+-- 0 + a = a
 0+ : (a : ℕ) → ℕEq (0 + a) a
-0+ a = {!!}
+0+ a = ℕ-refl a   -- C-u-C-c-C-,
 
+-- definícióból nem következik azonnal, hogy
+-- a + 0 = a
 +0 : (a : ℕ) → ℕEq (a + 0) a
-+0 a = {!!}
++0 zero = tt
+  -- Goal : ℕEq (zero + 0) zero
+  -- ℕEq és + definíció szerint ez ugyanaz, mint ⊤
++0 (suc a) = +0 a
+  -- Goal : ℕEq (suc a + 0) (suc a)
+  -- ℕEq és + definíció szerint ez ℕEq (a + 0) a
 
+-- ℕ-refl + mintaillesztéssel a következő belátható:
 +suc : (a b : ℕ) → ℕEq (a + suc b) (suc (a + b))
-+suc a b = {!!}
++suc zero b = ℕ-refl b
++suc (suc a) b = +suc a b
 
 n-neq-sucn : (n : ℕ) → ¬ (ℕEq n (suc n))
-n-neq-sucn n = {!!}
+n-neq-sucn zero = λ z → z
+n-neq-sucn (suc n) = n-neq-sucn n
 
 +-assoc : (a b c : ℕ) → ℕEq ((a + b) + c) (a + (b + c))
-+-assoc a b c = {!!}
++-assoc zero b c = ℕ-refl (b + c)
++-assoc (suc a) b c = +-assoc a b c
 
 +-comm : (a b : ℕ) → ℕEq (a + b) (b + a)
-+-comm a b = {!!}
++-comm zero zero = tt
++-comm zero (suc b) = +-comm zero b
++-comm (suc a) zero = +-comm a zero
++-comm (suc a) (suc b) =
+  ℕ-trans (a + suc b) (suc (a + b)) (b + suc a)
+          (ℕ-trans (a + suc b) (suc (b + a)) (suc (a + b))
+                   (+-comm a (suc b))
+                   (ℕ-sym (a + b) (b + a) (+-comm a b)))
+          (+-comm (suc a) b)
 
-0* : (a : ℕ) → ℕEq (0 * a) 0
-0* a = {!!}
-
-*0 : (a : ℕ) → ℕEq (a * 0) 0
-*0 a = {!!}
-
-
--- Σ típus
-------------------------------------------------------------
-
-ex1 : Σ ℕ λ n → ℕEq n n
-ex1 = 0 , ℕ-refl 0
-
-ex2 : Σ ℕ λ n → ℕEq n n
-ex2 = {!!}
-
-ex3 : Σ ℕ λ n → ℕEq n n
-ex3 = {!!}
-
-ex4 : (n : ℕ) → Σ ℕ λ m → ℕEq n m
-ex4 n = {!!}
-
-ex5 : (n : ℕ) → Σ ℕ λ m → ¬ (ℕEq n m)
-ex5 n = (suc n) , {!!}
-
-
-pair : {A : Set}{B : A → Set}(a : A) → B a → Σ A B
-pair = {!!}
-
-proj₁' : {A : Set}{B : A → Set} → Σ A B → A
-proj₁' ab = {!!}
-
-proj₂' : {A : Set}{B : A → Set} → (ab : Σ A B) → B (proj₁' ab)
-proj₂' ab = {!!}
-
--- típuselméleti "kiválasztási axióma"
-choice : {A : Set}{B : A → Set}{C : (a : A) → B a → Set}
-       → ((a : A) → Σ (B a) λ b → C a b)
-       → Σ ((a : A) → B a) (λ f → (a : A) → C a (f a))
-choice f = {!!}
-
-
--- vektorok, listák
-------------------------------------------------------------
-
-infix 5 _^_
-_^_ : Set → ℕ → Set
-A ^ n = {!!}
-
-List : Set → Set
-List A = {!!}
-
-[] : {A : Set} → List A
-[] = {!!}
-
-infixr 4 _∷_
-_∷_ : {A : Set} → A → List A → List A
-_∷_ = {!!}
+   -- használni kell: ℕ-sym, ℕ-trans
+   -- mi van, amit használni tudunk:
+   --  1.  +-comm (suc a) b : ℕEq (suc (a + b)) (b + suc a)
+   --  2.  +-comm a (suc b) : ℕEq (a + suc b) (suc (b + a))
+   --  3.  +-comm a b       : ℕEq (a + b) (b + a)
+   --
