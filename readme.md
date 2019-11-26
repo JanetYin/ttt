@@ -845,8 +845,11 @@ Natural numbers form a commutative monoid with `_+_` and `zero`.
     comm zero y    = sym (y + zero) y (idr y)
     comm (suc x) y = trans (suc (x + y)) (suc (y + x)) (y + suc x) (comm x y) (comm-lemm y x)
 
-Proving `Eqn ((x + y) ^ 2) (x ^ 2 + 2 * x * y + y ^ 2)` using the
+Prove `Eqn ((x + y) ^ 2) (x ^ 2 + 2 * x * y + y ^ 2)` using the
 algebraic laws, `cong` and `trans`.
+
+In the tutorials, show that natural numbers form a commutative
+semiring with `+` and `*`. You can follow the discrete math textbook.
 
 WE REACHED THIS POINT AT THE LECTURE.
 
@@ -879,11 +882,13 @@ Less or equal.
     A ^ zero  = ⊤
     A ^ suc x = A × A ^ x
 
+`nil`, `cons`, `head`, `tail`
+
     insert : ℕ → (l : ℕ) → ℕ ^ l → ℕ ^ (suc l)
     insert x zero    xs       = x , tt
-    insert x (suc l) (y , xs) with ≤dec x y
-    insert x (suc l) (y , xs) | inj₁ e = x , y , xs
-    insert x (suc l) (y , xs) | inj₂ e = y , insert x l xs
+    insert x (suc l) (y , xs) = case (≤dec x y)
+      (λ _ → x , y , xs)
+      (λ _ → y , insert x l xs)
 
     _∧_ : Bool → Bool → Bool
     true  ∧ true = true
