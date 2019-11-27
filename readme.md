@@ -851,8 +851,6 @@ algebraic laws, `cong` and `trans`.
 In the tutorials, show that natural numbers form a commutative
 semiring with `+` and `*`. You can follow the discrete math textbook.
 
-WE REACHED THIS POINT AT THE LECTURE.
-
 Less or equal.
 
     _≤_ : ℕ → ℕ → Set
@@ -883,6 +881,8 @@ Less or equal.
     A ^ suc x = A × A ^ x
 
 `nil`, `cons`, `head`, `tail`
+
+WE REACHED THIS POINT AT THE LECTURE.
 
     insert : ℕ → (l : ℕ) → ℕ ^ l → ℕ ^ (suc l)
     insert x zero    xs       = x , tt
