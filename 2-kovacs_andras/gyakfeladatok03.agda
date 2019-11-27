@@ -67,11 +67,11 @@ suc a * b = a * b + b
 *0 : (a : ℕ) → ℕEq (a * 0) 0
 *0 a = {!!}
 
+*+-distrib : (a b c : ℕ) → ℕEq (a * (b + c)) (a * b + a * c)
+*+-distrib a b c = {!!}
+
 *-assoc : (a b c : ℕ) → ℕEq ((a * b) * c) (a * (b * c))
 *-assoc a b c = {!!}
 
 *-comm : (a b : ℕ) → ℕEq (a * b) (b * a)
 *-comm a b = {!!}
-
-*+-distrib : (a b c : ℕ) → ℕEq (a * (b + c)) (a * b + a * c)
-*+-distrib a b c = {!!}
