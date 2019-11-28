@@ -881,7 +881,7 @@ Less or equal.
     A ^ zero  = ⊤
     A ^ suc x = A × A ^ x
 
-`nil`, `cons`, `head`, `tail`
+`nil`, `cons`, `head`, `tail`, `++`
 
 WE REACHED THIS POINT AT THE LECTURE.
 
