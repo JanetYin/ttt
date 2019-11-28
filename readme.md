@@ -850,7 +850,7 @@ algebraic laws, `cong` and `trans`.
 
 In the tutorials, show that natural numbers form a commutative
 semiring with `+` and `*`. You can follow the [discrete math
-textbook](https://bitbucket.org/akaposi/ttt/src/master/muveletek_termeszetes_szamokkal.pdf).
+textbook](https://bitbucket.org/akaposi/ttt/raw/master/muveletek_termeszetes_szamokkal.pdf).
 
 Less or equal.
 
