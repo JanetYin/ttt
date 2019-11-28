@@ -849,7 +849,8 @@ Prove `Eqn ((x + y) ^ 2) (x ^ 2 + 2 * x * y + y ^ 2)` using the
 algebraic laws, `cong` and `trans`.
 
 In the tutorials, show that natural numbers form a commutative
-semiring with `+` and `*`. You can follow the discrete math textbook.
+semiring with `+` and `*`. You can follow the [discrete math
+textbook](https://bitbucket.org/akaposi/ttt/src/master/muveletek_termeszetes_szamokkal.pdf).
 
 Less or equal.
 
