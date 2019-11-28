@@ -222,7 +222,13 @@ f6 : (A : Set)(P : A → Set) → (¬ Σ A λ a → P a) ↔ ((a : A) → ¬ P a
 f6 = {!!}
 
 f7 : (A B : Set) → (A ⊎ B) ↔ Σ Bool (λ b → if b then A else B)
-f7 = {!!}
+f7 A B = (λ ab → case ab (λ a → true , a) (λ b → false , b))
+       , (λ ab → indBool (λ b → (if b then A else B) → A ⊎ B)
+                         inj₁ inj₂ (proj₁ ab) (proj₂ ab))
+
+f7← : (A B : Set) → Σ Bool (λ b → if b then A else B) → A ⊎ B
+f7← A B (true  , ab) = inj₁ ab
+f7← A B (false , ab) = inj₂ ab
 
 -- típuselméleti "kiválasztási axióma"
 choice : {A : Set}{B : A → Set}{C : (a : A) → B a → Set}
