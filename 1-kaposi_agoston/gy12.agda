@@ -29,7 +29,7 @@ trans : (x y z : ℕ) → Eqn x y → Eqn y z → Eqn x z
 trans = λ x y z exy eyz → transport (λ n → Eqn x n) y z eyz exy 
 
 extratransitivity : (x y z : ℕ) → Eqn x y → Eqn x z → Eqn y z
-extratransitivity = {!!}
+extratransitivity x y z = transport (λ n → Eqn n z) x y 
   
 -- pattern matching
 idl : (x : ℕ) → Eqn (zero + x) x
@@ -88,7 +88,7 @@ zerol* = {!!}
 
 zeror* : (n : ℕ) → Eqn (n * zero) zero
 zeror* = {!!}
-
+--- EDDIG JUTOTTUNK EL ---
 idl* : (n : ℕ) → Eqn (1 * n) n
 idl* = {!!}
 
