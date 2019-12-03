@@ -18,6 +18,8 @@ refln = λ n → indℕ (λ n → Eqn n n) tt (λ _ e → e) n
 -- pattern matching
 transport : (P : ℕ → Set)(x y : ℕ) → Eqn x y → P x → P y
 transport P zero zero e px = px
+transport P (suc x) zero e px = exfalso e
+transport P zero (suc y) e px = exfalso e
 transport P (suc x) (suc y) e px = transport (λ n → P (suc n)) x y e px
 
 -- use transport to define sym
