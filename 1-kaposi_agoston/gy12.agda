@@ -18,6 +18,8 @@ refln = λ n → indℕ (λ n → Eqn n n) tt (λ _ e → e) n
 -- pattern matching
 transport : (P : ℕ → Set)(x y : ℕ) → Eqn x y → P x → P y
 transport P zero zero e px = px
+transport P (suc x) zero e px = exfalso e
+transport P zero (suc y) e px = exfalso e
 transport P (suc x) (suc y) e px = transport (λ n → P (suc n)) x y e px
 
 -- use transport to define sym
@@ -29,7 +31,7 @@ trans : (x y z : ℕ) → Eqn x y → Eqn y z → Eqn x z
 trans = λ x y z exy eyz → transport (λ n → Eqn x n) y z eyz exy 
 
 extratransitivity : (x y z : ℕ) → Eqn x y → Eqn x z → Eqn y z
-extratransitivity = {!!}
+extratransitivity x y z = transport (λ n → Eqn n z) x y 
   
 -- pattern matching
 idl : (x : ℕ) → Eqn (zero + x) x
@@ -88,7 +90,7 @@ zerol* = {!!}
 
 zeror* : (n : ℕ) → Eqn (n * zero) zero
 zeror* = {!!}
-
+--- EDDIG JUTOTTUNK EL ---
 idl* : (n : ℕ) → Eqn (1 * n) n
 idl* = {!!}
 
