@@ -883,8 +883,6 @@ Less or equal.
 
 `nil`, `cons`, `head`, `tail`, `++`
 
-WE REACHED THIS POINT AT THE LECTURE.
-
     count : (n : ℕ) → ℕ ^ n
     count zero = tt
     count (suc n) = n , count n
@@ -935,6 +933,8 @@ WE REACHED THIS POINT AT THE LECTURE.
     sort-ord : (l : ℕ)(xs : ℕ ^ l) → Ordered 0 l (sort l xs)
     sort-ord zero xs = tt
     sort-ord (suc l) (x , xs) = ins-ord l (sort l xs) 0 (sort-ord l xs) x tt
+
+WE REACHED THIS POINT AT THE LECTURE.
 
 ## Isomorphisms internally
 
