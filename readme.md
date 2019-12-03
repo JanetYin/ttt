@@ -885,11 +885,9 @@ Less or equal.
 
 WE REACHED THIS POINT AT THE LECTURE.
 
-    insert : ℕ → (l : ℕ) → ℕ ^ l → ℕ ^ (suc l)
-    insert x zero    xs       = x , tt
-    insert x (suc l) (y , xs) = case (≤dec x y)
-      (λ _ → x , y , xs)
-      (λ _ → y , insert x l xs)
+    count : (n : ℕ) → ℕ ^ n
+    count zero = tt
+    count (suc n) = n , count n
 
     _∧_ : Bool → Bool → Bool
     true  ∧ true = true
@@ -902,12 +900,41 @@ WE REACHED THIS POINT AT THE LECTURE.
     Eq^ : (l : ℕ) → ℕ ^ l → ℕ ^ l → Set
     Eq^ l xs ys = toSet (eq^ l xs ys)
 
-    test : Eq^ 5 (insert 3 4 (1 , 2 , 4 , 5 , tt)) (1 , 2 , 3 , 4 , 5 , tt)
-    test = tt
+    test-count : Eq^ 3 (count 3) (2 , 1 , 0 , tt)
+    test-count = tt
+
+    insert : ℕ → (l : ℕ) → ℕ ^ l → ℕ ^ (suc l)
+    insert y zero    xs       = y , tt
+    insert y (suc l) (x , xs) = case (≤dec y x)
+      (λ _ → y , x , xs)
+      (λ _ → x , insert y l xs)
+
+    test-insert : Eq^ 5 (insert 3 4 (1 , 2 , 4 , 5 , tt)) (1 , 2 , 3 , 4 , 5 , tt)
+    test-insert = tt
 
     sort : (l : ℕ) → ℕ ^ l → ℕ ^ l
     sort zero _ = tt
     sort (suc l) (x , xs) = insert x l (sort l xs)
+
+    test-sort : Eq^ 5 (sort 5 (3 , 2 , 1 , 5 , 4 , tt)) (1 , 2 , 3 , 4 , 5 , tt)
+    test-sort = tt
+
+    Ordered : ℕ → (l : ℕ) → ℕ ^ l → Set
+    Ordered b zero tt          = ⊤
+    Ordered b (suc l) (x , xs) = b ≤ x × Ordered x l xs
+
+    ins-ord : (l : ℕ)(xs : ℕ ^ l)(b : ℕ) → Ordered b l xs → (y : ℕ) → b ≤ y →
+      Ordered b (suc l) (insert y l xs)
+    ins-ord zero    xs       b tt               y b≤y = b≤y , tt
+    ins-ord (suc l) (x , xs) b (b≤x , ord-x-xs) y b≤y = ind⊎
+      (λ w → Ordered b (2 + l) (case w (λ _ → y , x , xs) (λ _ → x , insert y l xs)))
+      (λ y≤x → b≤y , y≤x , ord-x-xs)
+      (λ x≤y → b≤x , ins-ord l xs x ord-x-xs y x≤y)
+      (≤dec y x) 
+
+    sort-ord : (l : ℕ)(xs : ℕ ^ l) → Ordered 0 l (sort l xs)
+    sort-ord zero xs = tt
+    sort-ord (suc l) (x , xs) = ins-ord l (sort l xs) 0 (sort-ord l xs) x tt
 
 ## Isomorphisms internally
 
