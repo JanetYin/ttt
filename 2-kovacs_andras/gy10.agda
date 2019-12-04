@@ -73,66 +73,74 @@ n-neq-sucn (suc n) = n-neq-sucn n
 ------------------------------------------------------------
 
 0* : (a : ℕ) → ℕEq (0 * a) 0
-0* a = {!!}
+0* a = tt
 
 *0 : (a : ℕ) → ℕEq (a * 0) 0
-*0 a = {!!}
+*0 zero = tt
+*0 (suc a) =
+  ℕ-trans (a * 0 + 0) (a * 0) 0
+          (+0 (a * 0))
+          (*0 a)
 
-*+-distrib : (a b c : ℕ) → ℕEq (a * (b + c)) (a * b + a * c)
-*+-distrib a b c = {!!}
+1* : ∀ a → ℕEq (1 * a) a
+1* a = ℕ-refl a
+
+*1 : ∀ a → ℕEq (a * 1) a
+*1 zero = tt
+*1 (suc a) =
+   ℕ-trans (a * 1 + 1) (1 + a * 1) (suc a)
+            (+-comm (a * 1) 1)
+            (*1 a)
+
+*+-distrib :
+   (a b c : ℕ) → ℕEq (a * (b + c)) (a * b + a * c)
+*+-distrib zero b c = tt
+*+-distrib (suc a) b c =
+
+   let lem = ℕ-cong (λ x → x + (b + c))
+            (a * (b + c)) (a * b + a * c)
+            (*+-distrib a b c)
+
+       lem2 = ℕ-sym
+           (a * b + b + (a * c + c))
+           (a * b + (b + (a * c + c)))
+           (+-assoc (a * b) b (a * c + c))
+
+   in ℕ-trans (a * (b + c) + (b + c))
+              (a * b + a * c + (b + c))
+              (a * b + b + (a * c + c))
+              lem
+              (ℕ-trans
+                  (a * b + a * c + (b + c))
+                  (a * b + (b + (a * c + c)))
+                  (a * b + b + (a * c + c))
+                  (ℕ-trans
+                    (a * b + a * c + (b + c))
+                    (a * b + (a * c + (b + c)))
+                    (a * b + (b + (a * c + c)))
+                    (+-assoc (a * b) (a * c) (b + c))
+                    (ℕ-cong
+                      (λ x → a * b + x)
+                      (a * c + (b + c))
+                      (b + (a * c + c))
+                      (ℕ-trans
+                        (a * c + (b + c))
+                        (a * c + b + c)
+                        (b + (a * c + c))
+                        (ℕ-sym (a * c + b + c) (a * c + (b + c))
+                               (+-assoc (a * c) b c))
+                        (ℕ-trans
+                          (a * c + b + c)
+                          (b + a * c + c)
+                          (b + (a * c + c))
+                          (ℕ-cong
+                            (λ x → x + c)(a * c + b) (b + a * c)
+                            (+-comm (a * c) b))
+                            (+-assoc b (a * c) c)))))
+                  lem2)
 
 *-assoc : (a b c : ℕ) → ℕEq ((a * b) * c) (a * (b * c))
 *-assoc a b c = {!!}
 
 *-comm : (a b : ℕ) → ℕEq (a * b) (b * a)
 *-comm a b = {!!}
-
--- Σ típusok folytatás
-------------------------------------------------------------
-
-f4 : (A : Set)(P : A → Set)(Q : A → Set) → (Σ A λ a → P a ⊎ Q a)  ↔ Σ A P ⊎ Σ A Q
-f4 = {!!}
-
-f5 : (A : Set)(P : A → Set) → (Σ A λ a → ¬ P a) → ¬ ((a : A) → P a)
-f5 = {!!}
-
-f6 : (A : Set)(P : A → Set) → (¬ Σ A λ a → P a) ↔ ((a : A) → ¬ P a)
-f6 = {!!}
-
-f7→ : (A B : Set) → (A ⊎ B) → Σ Bool (λ b → if b then A else B)
-f7→ = {!!}
-
-f7← : (A B : Set) → Σ Bool (λ b → if b then A else B) → A ⊎ B
-f7← = {!!}
-
--- természetes számok rendezése
-------------------------------------------------------------
-
--- első definíció
-infix 3 _≤_
-_≤_ : ℕ → ℕ → Set
-zero  ≤ y     = ⊤
-suc x ≤ zero  = ⊥
-suc x ≤ suc y = x ≤ y
-
-infix 3 _<_
-_<_ : ℕ → ℕ → Set
-a < zero = ⊥
-a < suc b = ℕEq a b ⊎ a < b
-
--- második definíció
-infix 3 _≤'_
-_≤'_ : ℕ → ℕ → Set
-a ≤' b = (a < b) ⊎ ℕEq a b
-
-ex : 3 ≤ 100
-ex = {!!}
-
-refl≤ : (x : ℕ) → x ≤ x
-refl≤ = {!!}
-
-trans≤ : (x y z : ℕ) → x ≤ y → y ≤ z → x ≤ z
-trans≤ = {!!}
-
-≤dec : (x y : ℕ) → x ≤ y ⊎ y ≤ x
-≤dec x y = {!!}
