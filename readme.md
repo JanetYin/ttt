@@ -936,6 +936,46 @@ Less or equal.
 
 WE REACHED THIS POINT AT THE LECTURE.
 
+    ∈ : (y : ℕ)(l : ℕ)(xs : ℕ ^ l) → Set
+    ∈ y zero    tt       = ⊥
+    ∈ y (suc l) (x , xs) = Eqn y x ⊎ ∈ y l xs
+
+    ins-∈ : (y : ℕ)(l : ℕ)(xs : ℕ ^ l) → ∈ y (suc l) (insert y l xs)
+    ins-∈ y zero xs = inj₁ (Eqn-refl y)
+    ins-∈ y (suc l) (x , xs) = ind⊎
+      (λ w → ∈ y (suc (suc l)) (case w (λ _ → y , x , xs) (λ _ → x , insert y l xs)))
+      (λ y≤x → inj₁ (Eqn-refl y))
+      (λ x≤y → inj₂ (ins-∈ y l xs))
+      (≤dec y x)
+
+    ins-other : (y z l : ℕ)(xs : ℕ ^ l) → ∈ y l xs → ∈ y (suc l) (insert z l xs)
+    ins-other y z (suc l) (x , xs) y∈x,xs = ind⊎
+      (λ w → ∈ y (suc (suc l)) (case w (λ _ → z , x , xs) (λ _ → x , insert z l xs)))
+      (λ z≤x → inj₂ y∈x,xs)
+      (λ x≤z → case y∈x,xs inj₁ λ y∈xs → inj₂ (ins-other y z l xs y∈xs))
+      (≤dec z x)
+
+    sort-∈ : (y : ℕ)(l : ℕ)(xs : ℕ ^ l) → ∈ y l xs → ∈ y l (sort l xs)
+    sort-∈ y (suc l) (x , xs) (inj₁ y=x)  = transport (λ x → ∈ y (suc l) (sort (suc l) (x , xs))) y x y=x (ins-∈ y l (sort l xs))
+    sort-∈ y (suc l) (x , xs) (inj₂ y∈xs) = ins-other y x l _ (sort-∈ y l xs y∈xs)
+
 ## Isomorphisms internally
 
-    (Bool → ℕ) ≅ ℕ × ℕ
+    EqBool→ℕ : (Bool → ℕ) → (Bool → ℕ) → Set
+    EqBool→ℕ f₀ f₁ = (x : Bool) → Eqn (f₀ x) (f₁ x)
+
+    Eqℕ×ℕ : ℕ × ℕ → ℕ × ℕ → Set
+    Eqℕ×ℕ u v = Eqn (proj₁ u) (proj₁ v) × Eqn (proj₂ u) (proj₂ v)
+
+    α : (Bool → ℕ) → ℕ × ℕ
+    α f = f true , f false
+
+    β : ℕ × ℕ → (Bool → ℕ)
+    β u = λ b → if b then proj₁ u else proj₂ u
+
+    αβ : (u : ℕ × ℕ) → Eqℕ×ℕ (α (β u)) u
+    αβ (a , b) = Eqn-refl a , Eqn-refl b
+
+    βα : (f : Bool → ℕ) → EqBool→ℕ (β (α f)) f
+    βα f true  = Eqn-refl (f true)
+    βα f false = Eqn-refl (f false)
