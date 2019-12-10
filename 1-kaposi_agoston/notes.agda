@@ -21,7 +21,7 @@ open import lib
 ∀ = "\forall" or "\all"
 Σ = "\Sigma"
 ‌≠ = "\neq"
-
+∧ = "\and"
 
 Hotkeys:
 C-c C-l     : load in agda compiler
@@ -32,5 +32,7 @@ C-u C-u C-c C-, : normalized C-c C-,
 C-c C-c     : pattern matching for the variables in the hole
 
 Creating a hole: just type ? and load it in agda
+
+If you switched off the agda input mode, type C-\
 
 -}
