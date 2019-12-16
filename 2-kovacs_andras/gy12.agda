@@ -38,6 +38,13 @@ suc a + b = suc (a + b)
 -- természetes számok rendezése
 ------------------------------------------------------------
 
+-- 4.feladat: aki amiatt bukik, az mégse
+-- 8.feladatot beírom + jegyeket
+-- utána lehet reklamálni
+
+
+
+
 -- első definíció
 infix 3 _≤_
 _≤_ : ℕ → ℕ → Set
@@ -69,7 +76,12 @@ trans≤ : (x y z : ℕ) → x ≤ y → y ≤ z → x ≤ z
 trans≤ x y z p q = {!!}
 
 ≤dec : (x y : ℕ) → x ≤ y ⊎ y ≤ x
-≤dec x y = {!!}
+≤dec zero    zero    = inj₁ tt
+≤dec zero    (suc y) = inj₁ tt
+≤dec (suc x) zero    = inj₂ tt
+≤dec (suc x) (suc y) = ≤dec x y
+
+-- házi: ≤'dec : (x y : ℕ) → x ≤' y ⊎ y ≤' x
 
 -- extra rendezés feladatok
 ------------------------------------------------------------
@@ -96,11 +108,26 @@ suc¬Eq x p = {!!}
 ------------------------------------------------------------
 
 _^_ : Set → ℕ → Set
-A ^ zero  = ⊤
-A ^ suc x = A × A ^ x
+A ^ zero  = ⊤         -- 0-darab A-t tárol
+A ^ suc x = A × A ^ x -- x + 1 darab A-t tárol
+
+-- Haskell: replicate :: Int -> a -> [a]
+replicate : (A : Set)(n : ℕ) → A → A ^ n
+replicate A zero    a = tt
+replicate A (suc n) a = a , (replicate A n a)
+-- pl: replicate ℕ 3 3 = 3 , (3 , (3 , tt))
+
+-- "safe" tail verzió
+tail : (A : Set)(n : ℕ) → A ^ suc n → A ^ n
+tail A n xs = proj₂ xs
+  -- definíció: A ^ suc n = A × A ^ n
+
+-- Haskell head :: [a] -> a  (nincs totális definíció!)
+head : (A : Set)(n : ℕ) → A ^ suc n → A
+head A n xs = proj₁ xs
 
 count : (n : ℕ) → ℕ ^ n
-count zero = tt
+count zero    = tt
 count (suc n) = n , count n
 
 -- vektor egyenlőség
@@ -109,9 +136,12 @@ Eq^ zero    tt       tt       = ⊤
 Eq^ (suc l) (x , xs) (y , ys) = ℕEq x y × Eq^ l xs ys
 
 Eq^-refl : ∀ l xs → Eq^ l xs xs
-Eq^-refl l xs = {!!}
+Eq^-refl zero    xs       = tt
+Eq^-refl (suc l) (x , xs) = ℕ-refl x , Eq^-refl l xs
+-- vektor refl-je, refl-ök vektorja
 
-Eq^-trans : ∀ l xs ys zs → Eq^ l xs ys → Eq^ l ys zs → Eq^ l xs zs
+Eq^-trans :
+  ∀ l xs ys zs → Eq^ l xs ys → Eq^ l ys zs → Eq^ l xs zs
 Eq^-trans l xs ys zs p q = {!!}
 
 test-count : Eq^ 3 (count 3) (2 , 1 , 0 , tt)
@@ -119,27 +149,46 @@ test-count = Eq^-refl 3 (count 3)
 
 -- rendezett beszúrás
 insert : ℕ → (l : ℕ) → ℕ ^ l → ℕ ^ (suc l)
-insert y l xs = {!!}
+insert y zero    xs       = y , tt
+insert y (suc l) (x , xs) =
+  case (≤dec x y) (λ p → x , insert y l xs)
+                  (λ p → y , x , xs)
 
-test-insert : Eq^ 5 (insert 3 4 (1 , 2 , 4 , 5 , tt)) (1 , 2 , 3 , 4 , 5 , tt)
-test-insert = {!!}
+-- (insert 3 4 (1 , 2 , 4 , 5 , tt))
+-- == 3 , 1 , 2 , 4 , 5 , tt
+
+test-insert :
+  Eq^ 5
+    (insert 3 4 (1 , 2 , 4 , 5 , tt))
+    (1 , 2 , 3 , 4 , 5 , tt)
+test-insert = tt , tt , tt , tt , tt , tt
 
 sort : (l : ℕ) → ℕ ^ l → ℕ ^ l
-sort l xs = {!!}
+sort zero    xs       = xs
+sort (suc l) (x , xs) = insert x l (sort l xs)
+  -- O(n²)
 
 test-sort : Eq^ 5 (sort 5 (3 , 2 , 1 , 5 , 4 , tt)) (1 , 2 , 3 , 4 , 5 , tt)
-test-sort = {!!}
+test-sort = tt , tt , tt , tt , tt , tt
 
+-- Ordered b l xs
 Ordered : ℕ → (l : ℕ) → ℕ ^ l → Set
 Ordered b zero tt          = ⊤
-Ordered b (suc l) (x , xs) = b ≤ x × Ordered x l xs
+Ordered b (suc l) (x , xs) = (b ≤ x) × (Ordered x l xs)
 
 ins-ord :
     (l : ℕ)(xs : ℕ ^ l)(b : ℕ)
   → Ordered b l xs
   → (y : ℕ) → b ≤ y →
   Ordered b (suc l) (insert y l xs)
-ins-ord = {!!}
+ins-ord zero    xs b ord y p = p , tt
+ins-ord (suc l) (x , xs) b (q , ord) y p with ≤dec x y
+... | inj₁ r = q , ins-ord l xs x ord y r
+... | inj₂ r = p , r , ord
 
 sort-ord : (l : ℕ)(xs : ℕ ^ l) → Ordered 0 l (sort l xs)
-sort-ord l xs = {!!}
+sort-ord zero    xs       = tt
+sort-ord (suc l) (x , xs) =
+  ins-ord l (sort l xs) 0 (sort-ord l xs) x tt
+
+----------------------------------------
