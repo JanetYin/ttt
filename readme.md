@@ -934,8 +934,6 @@ Less or equal.
     sort-ord zero xs = tt
     sort-ord (suc l) (x , xs) = ins-ord l (sort l xs) 0 (sort-ord l xs) x tt
 
-WE REACHED THIS POINT AT THE LECTURE.
-
     ∈ : (y : ℕ)(l : ℕ)(xs : ℕ ^ l) → Set
     ∈ y zero    tt       = ⊥
     ∈ y (suc l) (x , xs) = Eqn y x ⊎ ∈ y l xs
