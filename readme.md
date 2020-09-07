@@ -9,13 +9,18 @@ You have to register with the correct code:
  * MSc evening course: IPM-18EsztKVTEE
 
 Teacher of the lectures: Kaposi Ambrus
-([website](http://akaposi.web.elte.hu))
 
 Tutorials:
 
- 1. Kaposi Ágoston (Kedd 16:00-17:30 Déli Tömb 2-709 (PC 9))
- 2. Kovács András (Szerda 17:45-19:15 Északi Tömb 2.63 (PC 8))
- 3. Rafaël Bocquet (English, Csütörtök 19:30-21:00 Déli Tömb 00-410 (PC 1))
+ 1. Széles Márk (Kedd 19:30-21:00)
+ 2. Luksa Norbert (Szerda 17:45-19:15)
+ 3. Luksa Norbert (Szerda 19:30-21:00)
+ 
+Contact:
+
+- Kaposi Ambrus, email: akaposi @ inf.elte.hu (szóköz nélkül).
+- Széles Márk, email: szelesmark @ caesar.elte.hu (szóköz nélkül).
+- Luksa Norbert, email: luksan @ inf.elte.hu (szóköz nélkül).
 
 Requirements:
 
