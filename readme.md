@@ -9,7 +9,6 @@ You have to register with the correct code:
  * MSc evening course: IPM-18EsztKVTEE
 
 Teacher of the lectures: Kaposi Ambrus
-([website](http://akaposi.web.elte.hu))
 
 Tutorials:
 
