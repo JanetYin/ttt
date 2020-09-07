@@ -15,7 +15,7 @@ Tutorials:
 
  1. Széles Márk (Kedd 19:30-21:00)
  2. Luksa Norbert (Szerda 17:45-19:15)
- 3. Luksa Norbert (Szerda 17:45-19:15)
+ 3. Luksa Norbert (Szerda 19:30-21:00)
  
 Contact:
 
