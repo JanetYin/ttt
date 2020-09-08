@@ -1,0 +1,128 @@
+
+Ezt el lehet olvasni?
+
+Kaposi Ambrus, adjunktus, Programozási Nyelvek és Fordítóprogramok
+
+Tegeződhetünk? Ha nem jó, akkor szóljon!
+
+Típuselmélet (type theory)
+két dolgot szoktat ezen érteni:
+1. programozási nyelvek típusrendszereinek elméletét (type systems, típusrendszerek)
+2. egy konkrét programozási nyelvet: Martin-Löf's type theory (MI EZT HASZNÁLJUK),
+   ennek is az Agda nevű implementációját
+
+   Agda      Martin-Löf típuselmélet
+   Haskell   System F
+   Lisp      untyped lambda calculus
+
+Ez az óra egyszerre fog logikáról és programozásról szólni.
+
+Praktikus információk:
+
+Többféle kód! BSc, MSc, MSc estis külön kóddal kell felvenni
+
+Kurzus honlapja: https://bitbucket.org/akaposi/ttt
+
+Fontos: nem muszáj most felvenni! Mások szívesen felvennék.
+
+Jelleg: elméleti, lehet Agdában kísérletezni
+
+  C++ ----> Haskell ----> Agda
+
+Amihez hasonlít: funkcionális programozás, diszkrét matek (Peano axiómák, algebra, félcsoportok, csoportok, gyűrűk), formális nyelvek és automaták, fordítóprogramok
+
+Függő típusokkal rendelkező programozási nyelvek: Agda, Coq, Lean, Idris
+
+Típuselmélet: 
+Halmazelmélet: 
+  formális nyelvek, amelyekre felépíthető a matematika (bizonyításokat lehet benne írni, nem pedig programokat)
+
+canvas.elte.hu
+teszt, időre megyn
+50% fölött van
+első teszt nagyon könnyű direkt
+
+Ajánlott irodalom:
+  magyarul: Bevezetés a homotópia-típuselméletbe
+  angolul: Naive type theory, Homotopy type theory
+
+Agda programozási nyelvet: https://wiki.portal.chalmers.se/agda
+
+
+Függő típusokkal rendelkező programozási nyelvek: Agda, Coq, Lean, Idris, (Haskell)
+
+List Int
+f :: Int -> List Int
+f(3) :: List Int
+f :: (n : Int) -> Σ (xs : List Int) (length xs = n)
+g :: (n : Int) -> Matrix n n
+Matrix 2 3 <- kétszer hármas mátrixok típusa
+
+Agda: legtöbb szolgáltatást nyújta, de nem praktikus - kísérleti terep a függő típusozási nyelveknél
+      cél: típuselmélet kutatása
+Coq:  legnépszerűbb, matematikai bizonyítások számítógépes leírására, két nyelvből áll: bizonyítások
+      nyelve, funkcionális programok nyelve; nagyon nagyméretű bizonyításokat formalizáltak
+      számítógépes bizonyító rendszer, proof assistant, proof checker
+Lean: legújabb rendszer, talán legszebb felhasználói felület, klasszikus matematikára optimalizálva
+Idris: programozásra van optimalizálva, Idris-ben van írva
+Haskell - egyre több függő típushoz hasonló eszköz van benne
+
+Nyelvek típusrendszere
+
+Technikai rész
+
+t : A
+
+t egy program
+A a t program típusa
+
+(1 + 1) : ℕ
+
+(λ b → if b then 1 else 3) : (Bool → ℕ)
+
+t ∈ A
+
+2 ∈ ℕ
+2 ∈ 3
+Bool ∩ ℕ = ∅
+2 : 3 <- ezt nem lehet leirni
+term : tipus
+
+konstruktivitás
+
+Típuselméletet szabályokkal építjük
+
+t : A <- ilyen ítéleteket építünk fel, szabályokkal
+
+Bool az egy típus, szabályok: bevezető, eliminációs, számítási szabályok
+Bevezető:
+1. true : Bool
+2. false : Bool
+Eliminációs:
+3. Ha t : Bool, u : A, v : A, akkor if t then u else v : A
+Számítási (mi történik, ha egy eliminációs szabályt egy bevezető szabályra alkalmazok):
+4. if true  then u else v = u
+5. if false then u else v = v
+                          ^ definicionális egyenlőség
+
+b1 : Bool
+b1 = true
+
+b2 : Bool
+b2 = if true then false else false
+        ^ : Bool  ^ : Bool   ^ : Bool
+
+A = Bool, t = true, u = false, v = false
+
+4. szabály alapján b2 = u = false
+
+b2 az mivel egyenlő? márpedig a b2 az false
+
+if (if true then false else true) then true else false = 
+   t = true, u = false, v = true
+if false then true else false = 
+t = false, u = true, v = false
+
+false
+
+law of excluded middle
