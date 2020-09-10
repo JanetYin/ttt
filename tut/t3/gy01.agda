@@ -1,4 +1,4 @@
-module tut.gy01 where
+module tut.t3.gy01 where
 
 open import lib
 
@@ -19,8 +19,8 @@ open import lib
 -- C-y : Paste
 --
 -- Agda-mode key bindings:
--- C-c C-l : Typecheck
--- C-c C-n : Evaluate
+-- C-c C-l   : Typecheck
+-- C-c C-n   : Evaluate
 -- C-c C-,   : Goal type and context
 -- C-c C-.   : Goal type and context + inferred type of current expr
 -- C-c C-SPC : Fill goal
@@ -57,10 +57,24 @@ b5 = if (if (if true then b2 else b1) then b1 else b1) then b2 else b3
 -- Functions
 ---------------------------------------------------------
 
+--if t : A → B and u : A, then t u : B
+--                             f(u)
+--if t : B assuming x : A then (λ x → t) : (A → B)
+--                              f(x) = t
+--(λ x → t) u = t[x↦u] where t[x↦u] means that all copies of x are replaced by u
+-- f(x) = 1 + x, akkor f(2) = 1 + 2
+-- λ x → 1 + x, akkor (λ x → 1 + x) 2 = 1 + 2
+-- (λ x → t x) = t
+
 -- unicode: λ, "information about character at a point"
--- λ = \lambda
+-- λ = \lambda \lamda \Gl
+-- → = \r1
+-- _⁴ = \^4
 
 -- spaces matter
+
+id''''''' : Bool → Bool
+id''''''' = λ x → x
 
 id idy id1 id'' id''' : Bool → Bool
 id = λ x → x
@@ -75,6 +89,15 @@ id' = λ x → if x then x else x
 
 id'' = λ x → if true then x else false
 id''' = λ x → if x then true else false
+id⁴ = λ x → if x then false else true 
+id⁵ = λ x → if x then true else x
+
+-- wildcard
+id⁸ : Bool → Bool
+id⁸ = λ _ → if false then false else true -- = λ _ → true
+
+id⁴² : Bool → Bool
+id⁴² = λ x → if (if (if x then x else x) then x else x) then x else x
 
 b6 : Bool
 b6 = id true
@@ -103,8 +126,10 @@ not''' = λ x → not (not (not (not (not (not (not x))))))
 -- Functions with multiple arguments / Currying :
 --   "Bool -> Bool -> Bool" = "Bool -> (Bool -> Bool)"
 
-and and' : Bool → Bool → Bool
+and andᶜ and' : Bool → Bool → Bool
 and = λ x y → if x then y else false
+andᶜ = λ x → (λ y → if x then y else false)
+
 and' = λ x y → if x then if y then true else false else false
 
 -- all Bool → Bool functions up to behaviour:
@@ -124,8 +149,12 @@ and'test = λ x → and' true x
 -- write as many different elements of Bool → Bool as possible!
 
 -- ask them to write functions of the following type:
+
+f' : Bool → Bool → Bool
+f' = λ x → λ y → x
+
 f : (Bool → Bool) → Bool
-f = {!!}
+f = λ x → x (x true)
 
 -- "f id" is not equal to "f not"
 -- => id does not have the same behaviour as not

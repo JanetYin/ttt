@@ -1,4 +1,4 @@
-module tut.gy01 where
+module tut.t2.gy01 where
 
 open import lib
 
@@ -19,8 +19,8 @@ open import lib
 -- C-y : Paste
 --
 -- Agda-mode key bindings:
--- C-c C-l : Typecheck
--- C-c C-n : Evaluate
+-- C-c C-l   : Typecheck
+-- C-c C-n   : Evaluate
 -- C-c C-,   : Goal type and context
 -- C-c C-.   : Goal type and context + inferred type of current expr
 -- C-c C-SPC : Fill goal
@@ -48,6 +48,8 @@ b5 = if (if (if true then b2 else b1) then b1 else b1) then b2 else b3
 
 -- how many different Bool-terms are there?
 
+b66 : Bool
+b66 = if (if (if (if true then b2 else b1) then b1 else b1) then b2 else b3) then if (if (if true then b2 else b1) then b1 else b1) then b2 else b3 else true
 -- what is b3? what is b4? normalise!
 
 -- Agda key combinations:
@@ -56,6 +58,12 @@ b5 = if (if (if true then b2 else b1) then b1 else b1) then b2 else b3
 ---------------------------------------------------------
 -- Functions
 ---------------------------------------------------------
+-- (λ x → t) : (A → B)
+-- f (x) = 1 + x
+-- f (3) = 1 + 3
+-- λ x → 1 + x
+-- (λ x → 1 + x) 3 = 1 + 3
+-- λ λ λ λ ω \r ⇄ → 
 
 -- unicode: λ, "information about character at a point"
 -- λ = \lambda
@@ -65,6 +73,12 @@ b5 = if (if (if true then b2 else b1) then b1 else b1) then b2 else b3
 id idy id1 id'' id''' : Bool → Bool
 id = λ x → x
 idy = λ y → y -- λ y → y = λ y → (λ x → x) y = λ x → x
+-- 4. uniqueness: (λ x → t x) = t
+-- λ y → y = (λ x → (λ y → y) x)
+-- 3. compution: (λ x → t) u = t[x↦u] where t[x↦u] means that all copies of x are replaced by u
+--               (λ y → y) x = y[y↦x] = x
+-- λ y → y = λ x → (λ y → y) x = λ x → x
+
 
 -- id b2 = (λ x → x) b2 = x[x ↦ b2] = b2 = false
 
@@ -75,6 +89,17 @@ id' = λ x → if x then x else x
 
 id'' = λ x → if true then x else false
 id''' = λ x → if x then true else false
+
+-- wildcard
+idᶜ : Bool → Bool
+idᶜ = λ _ → true
+
+id'''' : Bool → Bool
+id'''' = λ x → if x then x else (if x then x else x)
+--false
+
+id⁵ : Bool → Bool
+id⁵ = λ x → x
 
 b6 : Bool
 b6 = id true
@@ -104,8 +129,8 @@ not''' = λ x → not (not (not (not (not (not (not x))))))
 --   "Bool -> Bool -> Bool" = "Bool -> (Bool -> Bool)"
 
 and and' : Bool → Bool → Bool
-and = λ x y → if x then y else false
-and' = λ x y → if x then if y then true else false else false
+and = λ x y → if x then y else false 
+and' = λ x y → if x then if y then true else false else false 
 
 -- all Bool → Bool functions up to behaviour:
 TT TF FT FF : Bool → Bool
@@ -125,7 +150,10 @@ and'test = λ x → and' true x
 
 -- ask them to write functions of the following type:
 f : (Bool → Bool) → Bool
-f = {!!}
+f = λ x → x (x (x false))
+
+f' : Bool → (Bool → Bool)
+f' = λ x → λ y → {!and x y!} -- = and
 
 -- "f id" is not equal to "f not"
 -- => id does not have the same behaviour as not
