@@ -21,12 +21,11 @@ open import lib
 -- Agda-mode key bindings:
 -- C-c C-l : Typecheck
 -- C-c C-n : Evaluate
--- C-c C-, : Type of goal
--- C-x C-. : Type of goal and expression
--- C-c C-space : Fill hole
--- modules
+-- C-c C-, : Goal type and context
+-- C-x C-. : Goal type and context + inferred type of given expressiom
+-- C-c C-SPC : Fill hole
 
--- M-x describe-char - ha nem tudod, hogy kell írni
+-- M-x describe-char - check how to input character
 
 
 
@@ -34,12 +33,18 @@ open import lib
 -- Bool
 ---------------------------------------------------------
 {-
-t : Bool, u v : A
-----------------
-if t then u else v : A
+introduction:
+  true : Bool
+  false : Bool
 
-if true then u else v = u
-if false then u else v = v
+elimination:
+  if   t : Bool, u v : A
+  then if t then u else v : A
+  for any type A
+
+computation:
+  if true then u else v = u
+  if false then u else v = v
 -}
 
 b1 b2 b3 b4 b5 : Bool
@@ -69,18 +74,26 @@ b5 = if (if (if true then b2 else b1) then b1 else b1) then b2 else b3
 -- Functions
 ---------------------------------------------------------
 
--- A, B típusok. Ekkor A → B
--- bevezető
--- t : B, feltéve, hogy x : A. Ekkor (λ x → t) : A → B
--- eliminációs
--- t : A → B, u : A. Ekkor t u : B.
--- számítás
--- (λ x → t) u = t [x → u]
--- egyediség
--- (λ x → t x) = t
+{-
+if A and B are types, then so is A → B 
 
+introduction
+  if   t : B, assuming  x : A
+  then (λ x → t) : A → B
 
--- unicode: λ, "information about character at a point"
+elimination:
+  if   t : A → B, u : A
+  then t u : B.
+
+computation:
+  (λ x → t) u = t [x → u]
+
+uniqueness:
+  (λ x → t x) = t
+
+-}
+
+-- unicode: λ
 -- λ = \lambda = \Gl \-> = →
 
 -- spaces matter
@@ -95,23 +108,18 @@ idy = λ y → y
 
 id1 = λ x → id x
 
-
 -- id = id1
 -- function extensionality: ∀x (f x = g x) → f = g
--- nincs a típuselméletben
+-- we don't have this in our theory!
+-- in set theory, where everything is a set, we have extensionality
+-- (see : axiom of extensionality)
 
 id' : Bool → Bool
 id' = λ x → if x then x else x
 -- at the whiteboard: derive typing for id'!
--- x : Bool
--- if x then x else x : Bool
--- λ x → if x then x else x : Bool → Bool
 
 id'' = λ x → if true then x else false
 id''' = λ x → if x then true else false
-
--- nincs olyan:
--- f x = Ha x = true (def), akkor true, különben false
 
 b6 : Bool
 b6 = id true
@@ -120,9 +128,15 @@ b6 = id true
 -- and id = id''?
 
 -- If their normal forms are different, then they are different. Agda
--- decides equality of terms this way.
+-- decides equality of terms this way (definitional equality)
 
+-- we can't write a term that behaves like this:
+-- f x = if x = t (def), then u else v
+-- definitional equality is a judgement (like x : A), not a proposition
+
+-- can we write
 -- t : Bool
+-- such that
 -- t ≠ true, t ≠ false (def)
 
 -- f : Bool → Bool, f = λ x → t
