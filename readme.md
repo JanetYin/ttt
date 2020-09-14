@@ -216,10 +216,10 @@ Rules:
     * `zero : ℕ`
     * if `t : ℕ` then `suc t : ℕ`
  * elimination:
-    * if `u : A`, `v : ℕ → A → A` and `t : ℕ` then `primrec u v t : A`
+    * if `u : A`, `v : A → A` and `t : ℕ` then `rec u v t : A`
  * computation:
-    * `primrec u v zero = u`
-    * `primrec u v (suc t) = v t (primrec u v t)`
+    * `rec u v zero = u`
+    * `rec u v (suc t) = v (rec u v t)`
 
 Examples.
 
@@ -229,68 +229,53 @@ Examples.
     plus3 : ℕ → ℕ
     plus3 = λ x → suc (suc (suc x))
 
+    is0 : ℕ → Bool
+    is0 = λ y → rec true (λ _ → false) y
+
     even : ℕ → Bool
-    even = λ x → primrec true (λ _ b → not b) x
+    even = λ x → rec true (λ _ b → not b) x
 
     times3plus2 : ℕ → ℕ
-    times3plus2 = λ x → primrec (suc (suc zero)) (λ _ n → suc (suc (suc n))) x
+    times3plus2 = λ x → rec 2 (λ n → suc (suc (suc n))) x
 
     plus : ℕ → ℕ → ℕ
-    plus = λ x y → primrec y (λ _ n → suc n) x
-    
-    pred : ℕ → ℕ
-    pred = λ x → prmirec zero (λ n _ → n) x
+    plus = λ x y → rec y (λ n → suc n) x
 
 We write (even in Agda) `0` for `zero`, `1` for `suc zero`, `2` for
 `suc (suc zero)`, and so on.
 
-`primrec u v t` roughly replaces `zero` by `u` and `suc`s by
-`v`s. More precisely, `v` also receives the number itself (which we
-only used in the definition of `pred` above). The first few cases:
+`rec u v t` replaces `zero` by `u` and `suc`s by
+`v`s. The first few cases:
 
-    x                                    primrec u v x
-    -----------------------------------------------------------------
+    x                                    rec u v x
+    -----------------------------------------------------------------------------------------------
     0 = zero                             u
-    1 = suc zero                         v 0 u
-    2 = suc (suc zero)                   v 1 (v 0 u)
-    3 = suc (suc (suc zero))             v 2 (v 1 (v 0 u))
-    4 = suc (suc (suc (suc zero)))       v 3 (v 2 (v 1 (v 0 u)))
+    1 = suc zero                         v u
+    2 = suc (suc zero)                   v (v u)
+    3 = suc (suc (suc zero))             v (v (v u))
+    4 = suc (suc (suc (suc zero)))       v (v (v (v u)))
     ...                                  ...
 
-A more complicated example: equality checking of two natural numbers.
+Example `times3plus2`:
 
-    eq : ℕ → ℕ → Bool
-    eq = λ x → primrec is0 (λ _ → f) x
-
-This is how `eq` works:
-
-    x                                    eq x
-    -----------------------------------------------------------------
-    0 = zero                             is0
-    1 = suc zero                         is1 = f is0
-    2 = suc (suc zero)                   is2 = f (f is0)
-    3 = suc (suc (suc zero))             is3 = f (f (f is0))
-    4 = suc (suc (suc (suc zero)))       is4 = f (f (f (f is0)))
+    x                                    times3plus2 x
+    -----------------------------------------------------------------------------------------------
+    0 = zero                             2
+    1 = suc zero                         suc (suc (suc 2))
+    2 = suc (suc zero)                   suc (suc (suc (suc (suc (suc 2)))))
+    3 = suc (suc (suc zero))             suc (suc (suc (suc (suc (suc (suc (suc (suc 2))))))))
     ...                                  ...
 
-`is0` decides whether its input is `0`:
+Example `is0`:
 
-    is0 : ℕ → Bool
-    is0 = λ y → primrec true (λ _ _ → false) y
+    x                                    is0 x
+    -----------------------------------------------------------------------------------------------
+    0 = zero                             true
+    1 = suc zero                         (λ _ → false) true = false
+    2 = suc (suc zero)                   (λ _ → false) ((λ _ → false) true) = false
+    3 = suc (suc (suc zero))             (λ _ → false) ((λ _ → false) ((λ _ → false) true)) = false
+    ...                                  ...
 
-If we look at the above table, we can see what `f` has to do: from a
-function which decides whether a number is `n`, it has to create a
-function which decides whether a number is `suc n`.
-
-    f : (ℕ → Bool) → (ℕ → Bool)
-    f = λ isn → λ y → primrec false (λ y' _ → isn y') y
-
-If `y` is `zero`, it is certainly not `suc n` (hence the first
-argument of `primrec` is `false`), if `y` is `suc y'`, then we know
-that `suc n = suc y'` iff `n = y'`. And this can be decided by `isn`.
-
-Question: is there a function of type `ℕ → ℕ` which cannot be given by
-primrec?
 
 ## Products: `A × B` (for any two types `A`, `B`)
 
@@ -311,7 +296,7 @@ four.
 
 Example.
 
-    uncurry : (Bool → Bool → Bool) → Bool × Bool → Bool
+    uncurry : (Bool → ℕ → Bool) → Bool × ℕ → Bool
 
 Question: `A → B → C` represents `A × B → C`. Is there a way to
 represent `A → B × C` without `×`? Answer: yes, using two separate
@@ -323,6 +308,45 @@ Bool → Bool × Bool` would be not equal:
     λ x → x
 
     λ x → (proj₁ x , proj₂ x)
+
+With the help of products, we can define more interesting `ℕ → ℕ`
+functions.
+
+    fib : ℕ → ℕ
+    fib = λ x → proj₂ (rec (0 , 1) (λ w → (proj₂ w , proj₁ w + proj₂ w)) n)
+
+    n                                    rec (0 , 1) (λ w → (proj₂ w , proj₁ w + proj₂ w)) n
+    ----------------------------------------------------------------------------------------
+    0 = zero                             (0 , 1)
+    1 = suc zero                         (1 , 1)
+    2 = suc (suc zero)                   (1 , 2)
+    3 = suc (suc (suc zero))             (2 , 3)
+    4 = suc (suc (suc (suc zero)))       (3 , 5)
+    ...                                  ...
+
+The predecessor function:
+
+    n                                    pred n
+    ----------------------------------------------------------------------------------------
+    0 = zero                             zero
+    1 = suc zero                         zero
+    2 = suc (suc zero)                   suc zero
+    3 = suc (suc (suc zero))             suc (suc zero)
+    4 = suc (suc (suc (suc zero)))       suc (suc (suc zero))
+    ...                                  ...
+
+We need `u = zero` and `v` where `v = id` if `n = 1`, otherwise `v =
+suc`. We store the information about `n = 1` as a boolean.
+
+    n                                    rec (zero , true) (λ w → if proj₂ w then zero else proj₁ w)
+    ------------------------------------------------------------------------------------------------
+    0 = zero                             (zero , true)
+    1 = suc zero                         (zero, false)
+    2 = suc (suc zero)                   (suc zero , false)
+    3 = suc (suc (suc zero))             (suc (suc zero) , false)
+    4 = suc (suc (suc (suc zero)))       (suc (suc (suc zero)) , false)
+    ...                                  ...
+
 
 ## Abstract types
 
@@ -549,7 +573,7 @@ We can write functions which create sets.
     _^2 = λ A → A × A
 
     _^_ : Set → ℕ → Set
-    _^_ = λ A n → primrec ⊤ (λ _ As → A × As) n
+    _^_ = λ A n → rec ⊤ (λ _ As → A × As) n
 
 For example, we have `Bool ^ 3 = Bool × (Bool × (Bool × ⊤))`.
 
@@ -682,7 +706,7 @@ Rules:
     * `ind⊎ P u v (inj₁ t) = u t`
     * `ind⊎ P u v (inj₂ t) = v t`
 
-`primrec`, `if_then_else`, `case` can be defined using `indℕ`,
+`rec`, `if_then_else`, `case` can be defined using `indℕ`,
 `indBool`, `ind⊎`, respectively.
 
 Examples:
@@ -768,11 +792,11 @@ a`.
 Addition:
 
     _+_ : ℕ → ℕ → ℕ
-    _+_ = λ x y → primrec y (λ _ n → suc n) x
+    _+_ = λ x y → rec y (λ _ n → suc n) x
 
 A shorter notation for this in Agda:
 
-    x + y = primrec y (λ _ n → suc n) x
+    x + y = rec y (λ _ n → suc n) x
 
 Pattern matching definition:
 
@@ -780,7 +804,7 @@ Pattern matching definition:
     suc x + y = suc (x + y)
 
 Note that this contains the same amount of information as the
-`primrec` variant and its behaviour is the same. Similarly, equality
+`rec` variant and its behaviour is the same. Similarly, equality
 of natural numbers can be redefined this way:
 
     eq : ℕ → ℕ → Bool
@@ -797,7 +821,7 @@ of natural numbers can be redefined this way:
     Eqn x y = toSet (eq x y)
 
 Every such pattern matching definition can be rewritten into a
-definition using `primrec` or `indℕ`. Hardcore people only use the
+definition using `rec` or `indℕ`. Hardcore people only use the
 eliminators, lazy people use pattern matching.
 
 Properties of this equality:

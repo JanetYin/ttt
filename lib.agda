@@ -27,9 +27,9 @@ data ℕ : Set where
   suc : ℕ → ℕ
 {-# BUILTIN NATURAL ℕ #-}
 
-primrec : ∀{i}{A : Set i}(u : A)(v : ℕ → A → A)(t : ℕ) → A
-primrec u v zero = u
-primrec u v (suc t) = v t (primrec u v t)
+rec : ∀{i}{A : Set i}(u : A)(v : A → A)(t : ℕ) → A
+rec u v zero = u
+rec u v (suc t) = v (rec u v t)
 
 postulate
    X Y Z : Set
