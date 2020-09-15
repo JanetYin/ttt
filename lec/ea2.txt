@@ -1,0 +1,226 @@
+2. eloadas
+
+t : A
+
+Bool-ra vonatkozo szabalyok:
+bevezeto:  true : Bool, false : Bool
+eliminacios: ha t : Bool, u : A, v : A tetsz. A-ra, akkor if t then u else v : A
+szamitasi: if true then u else v = u, if false then u else v = v (tetsz. u, v-re)
+
+Agda helyettunk eldonti az egyenlosegeket.
+
+egyszerű típusok: Bool, →, Nat, ×, ⊎, nulladrendű logika (ítéletlogika)
+
+t : Bool
+
+if true then false else true = false : Bool
+
+Függvények:
+eliminációs: t : (A → B) (t egy A-ból B-be képező függvény), és u : A, akkor t u : B
+bevezető: ha t : B, feltéve, hogy x : A, akkor (λ x → t) : (A → B)  (x egy név, nem egy term)
+          ha u : C, feltéve, hogy y : D, akkor (λ y → u) : (D → C)  (y egy név, nem egy term)
+
+
+x : Bool, feltéve, hogy x : Bool        true : Bool        false : Bool
+-----------------------------------------------------------------------  Bool eliminációs szabály
+if x then true else false : Bool, feltéve, hogy x : Bool
+\_______________________/ 
+    t                     : B                   x : A
+-------------------------------------------------------- → bevezető szabály
+(λ x → if x then true else false) : Bool → Bool
+       \_______________________/
+ λ x →  t                         : A    → B
+
+-----------------------------------
+ha y : Bool, feltéve, hogy y : Bool
+   t   B                   x   A
+---------------------------------- → bevezető szabály
+(λ y → y) : Bool → Bool
+(λ x → t) : A    → B
+
+számítási: elim(bevezető) = ?       (λ x → t) u = t, ahol x összes előfordulás u-val van
+                                                     helyettesítve
+
+(λ x → if x then true else false) false = (if x then true else false)[x↦false] = if false then true else false = false
+(λ x → t                        ) u     = t[x↦u]
+
+(λ x → x + (3 + x)) 1 = 1 + (3 + 1) = 5
+
+→-re: bevezeto, eliminacios, szamitasi,
+egyediseg: bevezető(elim) = ?
+
+(λ x → t x) = t
+
+id idy : Bool → Bool
+id = λ x → x
+idy = λ y → y
+
+"kötött változók neve nem számít": lim(x→∞, 1/2+x) = lim(y→∞, 1/2+y)
+
+10           10       
+Σ  1/(2n)  = Σ  1/(2x)
+n:= 0        x:= 0    
+
+int f(int x) { return (x + 1); } = int f(int z) { return (z + 1); }
+
+
+id
+                    = def
+λ x → x                                         t[x↦u]     y[y↦x] = x
+                    = → szamitasi szabaly                  
+λ x → ((λ y → y) x)                             (λx→t)u    (λy→y) x
+                                                λ x → t x  λx→(λy→y)x
+                    = → egyediseg szabaly     
+λ y → y                                         t          λy→y
+                    = def
+idy
+
+Összefoglal: Bool bev,elim,szám
+             →    bev,elim,szám,egyediség
+
+not : Bool → Bool
+not = λ x → if x then false else true
+
+hány db Bool → Bool érték van?
+
+TF
+--
+TT      t1 = λ x → if x then true else true
+FF      t2 = λ x → if x then false else false
+TF      t3 = λ x → if x then true else false
+FT      t4 = λ x → if x then false else true
+        t5, t5 ≠ t1, t5 ≠ t2, ...
+        t5 = λ x → if x then x else true
+        t6 = λ x → true
+
+működés szerint 4 Bool → Bool típusú term van, viszont végtelen sok
+Bool → Bool típusú term van
+
+λ x → true
+λ x → if x then true else true
+λ x → if x then (if x then true else true) else true
+λ x → if x then (if x then (if x then true else true) else true) else true
+...
+
+Ezek mind különböző termek. Működés szerinti egyenlőség.
+
+Az Agda elméletileg támogathatna egy egyediség szabályt a Bool-ra, amiből következne, hogy
+csak 4 Bool → Bool típusú term van.
+
+egyediseg Bool-ra: t[x↦true] = t'[x↦true] és t[x↦false] = t'[x↦false], akkor t = t'
+
+  if x then u else (if y then v else v')  =  ?
+
+Nem lenne elég gyors az egyenlőség eldöntése, mert ha n db Bool típusú van két termben, akkor
+2^n egyenlőség-vizsgálatot kéne végezni
+
+egyediség természetes számokra:
+t[x↦0] = t'[x↦0] és t[x↦1] = t'[x↦1] és t[x↦2] = t'[x↦2], és ...., akkor t = t'
+
+Emiatt nincsenek egyediség szabályok Bool-ra és ℕ-ra (és általánosabban, induktív típusokra).
+
+Egyediség szabály csak →-re és ×-ra lesz.
+
+---------------------------------------------------------------------------
+
+Bool,→,ℕ
+
+bevezető: zero : ℕ, ha t : ℕ, akkor suc t : ℕ,  suc : ℕ → ℕ
+0 := zero
+1 := suc zero                                   true
+2 := suc (suc zero)                             false
+3 := suc (suc (suc zero))
+4 := suc 3
+...
+Unáris természetes számok.
+
+eliminációs szabály:                            if-then-else-
+u : A, v : A → A, t : ℕ, akkor rec u v t : A    u : A, v : A, t : Bool, if t then u else v : A
+rec = rekurzió, rekurzor
+
+számítási
+rec u v zero = u                                if true then u else v = u
+rec u v (suc n) = v (rec u v n)                 if false then u else v = v
+
+"rec u v t azt csinálja, hogy t-ben zero-t lecseréli u-ra, és az összes suc-ot lecseréli v-re"
+
+suc = successor, rákövetkező, ′
+
+not = λ x → if x then false else true
+
+rec false not 4 =
+rec false not (suc (suc (suc (suc zero)))) =
+not (rec false not (suc (suc (suc zero)))) =
+not (not (rec false not (suc (suc zero)))) =
+not (not (not (rec false not (suc zero)))) =
+not (not (not (not (rec false not zero)))) =
+not (not (not (not false))) =
+(λ b → if b then false else true) ((λ b → if b then false else true)
+  ((λ b → if b then false else true) ((λ b → if b then false else true) false))) = →szam
+(λ b → if b then false else true) ((λ b → if b then false else true)
+  ((λ b → if b then false else true) (if false then false else true))) = Bool-szam
+(λ b → if b then false else true) ((λ b → if b then false else true)
+  ((λ b → if b then false else true) true)) = 
+(λ b → if b then false else true) ((λ b → if b then false else true)
+  (if true then false else true)) = 
+(λ b → if b then false else true) ((λ b → if b then false else true) false) = 
+(λ b → if b then false else true) (if false then false else true) = 
+(λ b → if b then false else true) true = 
+if true then false else true =
+false
+
+suc (suc (suc (suc zero))) = not (not (not (not false))) = false
+
+rec false not t = t páratlan-e?
+odd : ℕ → Bool
+odd = λ t → rec false not t
+
+even : ℕ → Bool
+even = λ n → rec true not n
+
+n ↦ 3*n+2
+
+0 = zero                             2   u
+1 = suc zero                         5   v u
+2 = suc (suc zero)                   8   v (v u)
+3 = suc (suc (suc zero))             11  v (v (v u))
+4 = suc (suc (suc (suc zero)))       14  v (v (v (v u)))
+...
+
+u := 2
+v := λ t → suc (suc (suc t))
+
+Curry-uncurry
+
+_+_ : ℕ → ℕ → ℕ
+_+_ = λ x y → rec y suc x
+
+x   = suc (suc (suc ... suc zero)...)
+x+y = suc (suc (suc ... suc y   )...)
+
+3 + 2
+_+_ 3 2
+
+is0 : ℕ → Bool
+is0 = λ n → rec true (λ x → false) n
+
+is0 (suc (suc (suc zero))) =
+     (λ x → false) ((λ x → false) ((λ x → false) true)) =
+     false[x↦((λ x → false) ((λ x → false) true))] =
+     false
+
+challange:
+is1 : ℕ → Bool
+is1 = λ n → rec u v n   valamilyen u-ra es v-re
+
+????
+
+is1 0 = false
+is1 1 = true
+is1 2 = false
+is1 ... = false
+
+323 = suc (suc .... suc zero)..)
+        ^323-szor
+
+rec u v n = (x:=u; for i:=1 to n x:= v x; return x)
