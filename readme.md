@@ -348,23 +348,26 @@ suc`. We store the information about `n = 1` as a boolean.
     ...                                  ...
 
 
-## Abstract types
+## Assumptions of types
 
-Rules: `X`, `Y`, `Z` are types. That's it.
+Using `{X Y : Set} → `, we assume that `X` and `Y` are arbitrary
+types. The term needs to work for any types `X` and `Y`.
 
 Question: how many possible terms are of the following types?
 
-                                             Answer:
-    idX     : X → X                          1
-    pick    : X → X → X                      2
-    pick*   : X → (X → X) → X                ∞
-    pick?   : (X → X) → X                    0
+                                                         Answer:
+    idX     : {X : Set} → X → X                          1
+    pick    : {X : Set} → X → X → X                      2
+    pick*   : {X : Set} → X → (X → X) → X                ∞
+    pick?   : {X : Set} → (X → X) → X                    0
     
-    swap    : X × Y → Y × X                  1
+    swap    : {X : Set} → X × Y → Y × X                  1
 
-If we can write a function for abstract types, we can also write it
-for concrete ones. E.g. `pick = λ x y → x : X → X → X`, but we can
-write a `pickBool = λ x y → x : Bool → Bool → Bool`.
+Agda can figure out concrete use cases. E.g.:
+
+    idBool : Bool → Bool
+    idBool = idX
+
 
 ## Empty type: `⊥`
 
@@ -375,7 +378,7 @@ Rules:
 
 Example.
 
-    magicZ : (X → ⊥) → X → Z
+    magicZ : {X : Set} → (X → ⊥) → X → Z
 
 ## Unit type: `⊤`
 
@@ -388,8 +391,8 @@ Rules:
 
 Question: how many terms are there of the following types?
 
-    interesting   : ⊥ → X
-    uninteresting : X → ⊤
+    interesting   : {X : Set} → ⊥ → X
+    uninteresting : {X : Set} → X → ⊤
 
 ## Coproducts: `A ⊎ B`
 
@@ -406,7 +409,7 @@ Rules:
 
 Example.
 
-    undiag : X ⊎ X → X
+    undiag : {X : Set} → X ⊎ X → X
 
 ## Logical equivalence `↔` and an algebraic structure on types
 
