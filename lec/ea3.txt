@@ -1,0 +1,180 @@
+Canvas kvíz:
+
+h : ℕ → Bool
+h = λ n → rec (λ b → b) (λ f b → if b then false else f true) n false
+                        ^ f |-> if b then false else f true
+
+zero                   (λ b → b) false =
+                       false
+suc zero               (λ f b → if b then false else f true) (λ b → b) false =
+                       (λ b → if b then false else (λ b → b) true) false =
+                       (λ b → if b then false else true) false =
+                       if false then false else true =
+                       true
+suc (suc zero)         (λ f b → if b then false else f true) 
+                       ((λ f b → if b then false else f true) (λ b → b)) false =
+                       (λ f b → if b then false else f true) not false =
+                       (λ b → if b then false else not true) false =
+                       not true =
+                       false
+suc (suc (suc zero))
+
+h = is1 : ℕ → Bool
+is1 (suc zero) = true
+is1 _ = false
+
+
+megbeszéltük:
+
+t u v = (t u) v
+λ x y → t = λ x → λ y → t = λ x → (λ y → t)
+
+-----------------------------------------------------
+
+Bool, →, Nat: bevezető, eliminációs, számítási, (egyediség →)
+
+most:
+× szorzat   (bináris) (rekord, pár, Descartes-szorzat)
+⊎ összeg    (bináris) (enum, variant típus)
+⊥ üres      (nulláris összeg)
+⊤ egyelemű  (nulláris szorzat)
+
+Összes véges típus, szép strukturája van.
+
+tetszőleges A és B típusra A × B egy típus      -- \times
+
+bev: u : A     v : B
+     ---------------
+     (u , v) : A × B
+
+elim:  t : A × B        t : A × B 
+      -----------      -----------
+      proj₁ t : A      proj₂ t : B
+
+számítási: proj₁ (u , v) = u         (elim(bev))
+           proj₂ (u , v) = v
+
+egyediség: t : A × B, akkor t = (proj₁ t , proj₂ t)           bev(elim)
+                                 \_____/   \_____/
+                                  : A        : B
+                                 \________________/
+                                      : A × B
+
+is1 : ℕ → Bool
+is1 = λ n → proj₁ (rec z s n)
+                                                                 v is1   v volt-e suc?
+zero                     false                        z         (false , false)
+suc zero                 not false = true             s z       (true  , true)
+suc (suc zero)           not (not false) = false      s (s z)   (false , true)
+suc (suc (suc zero))     not (not (not false)) = true s(s(s z)) (false , true)
+
+z := (false , false)
+s : Bool × Bool → Bool × Bool
+s = λ w → if proj₂ w then (false , true) else (true , true)
+
+Bool × Bool ↔ (Bool → Bool)
+A    × A    ↔ (Bool  → A)
+
+z := (λ b → false)
+s : (Bool → Bool) → (Bool → Bool)
+s = λ w → if (w true) then (λ b → b) else (λ b → true)
+is1 = λ n → (rec z s n) false
+
+proj₁ w = w false
+proj₂ w = w true
+
+
+logikai ekvivalencia:
+A ↔ B := (A → B) × (B → A)         -- \<-> 
+
+(Bool → A) ↔ A × A
+ f : Bool → A     w : A × A
+ f true : A       proj₁ w : A
+ f false : A      proj₂ w : A
+
+(Bool → A) ≅ (A × A)
+
+(f , g) : A ↔ B
+g (f a) = a
+f (g b) = b
+
+
+equiv : {A : Set} → (Bool → A) ↔ (A × A)  -- C-u C-u C-c C-,
+equiv = (λ f → f true , f false) , λ w → λ b → if b then proj₁ w else proj₂ w
+
+hasznalat : (Bool → ℕ) → ℕ × ℕ
+hasznalat = proj₁ equiv
+
+-------------------------------------------------------
+
+⊎ \u+
+
+A, B típusok, akkor A ⊎ B is tipus
+
+duálisa a szorzat típusnak
+
+bev:     a : A               b : B     
+     --------------      --------------      injekcio
+     inj₁ a : A ⊎ B      inj₂ b : A ⊎ B
+
+elim: u : A → C    v : B → C      t : A ⊎ B
+      -------------------------------------
+               case t u v : C
+               
+szam: elim(bev)    case (inj₁ a) u v = u a
+                                       \__/
+                                        : C
+                   case (inj₂ b) u v = v b
+
+inj₁ true, inj₁ false, inj₂ 0, inj₂ 234, ... : Bool ⊎ ℕ
+
+----------------------------------------------------------
+
+inj₁ false, inj₁ true, inj₂ true, inj₂ false : Bool ⊎ Bool
+
+----------------------------------------------------------
+
+nulláris verziók:
+
+⊥  ⊎  üres, bottom
+
+case _ ax bx cx  : A ⊎ B ⊎ C → X
+case _ ax bx     : A ⊎ B     → X
+ax               : A         → X
+exfalso          : ⊥         → X
+
+elim: t : ⊥
+      -------------
+      exfalso t : C
+
+⊤  ×  egyelemű, top
+
+bev: tt : ⊤, egyediség(szorzatra is volt): minden x : ⊤-ra x = tt
+
+(a , b , c) : A × B × C
+(a , b)     : A × B
+a           : A
+tt          : ⊤
+
+----------------------------------------------------------
+
+Agda-ban vagyok, és Goal: A
+
+X       Bool       A→B          ℕ      A×B     ⊤      A⊎B        ⊥
+--------------------------------------------------------------------------
+Goal:X  true       λ x → ?      zero   ? , ?   tt     inj₁ ?     
+(bev)   false                   suc ?                 inj₂ ?
+
+
+—————   if t then  (t ?)        rec ?  proj₁ t        case t     exfalso t
+t : X     ? else ?                ? t  proj₂ t          ? ?
+(elim)
+
+
+================================================================
+
+Bool-ra már nincs szükség, elkódolható ⊤ ⊎ ⊤
+inj₁ tt : ⊤ ⊎ ⊤
+inj₂ tt : ⊤ ⊎ ⊤
+ifthenelse : {A : Set} → ⊤ ⊎ ⊤ → A → A
+ifthenelse = ?
