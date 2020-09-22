@@ -4,6 +4,31 @@ open import lib
 
 -- finite types
 
+-- adj meg kulonbozo termeket!
+a1 a2 a3 a4 a5 : ℕ × Bool
+a1 = {!!}
+a2 = {!!}
+a3 = {!!}
+a4 = {!!}
+a5 = {!!}
+
+-- adj meg kulonbozo termeket!
+b1 b2 : Bool ⊎ ⊤
+b1 = {!!}
+b2 = {!!}
+
+-- adj meg kulonbozo termeket!
+c1 c2 : Bool × ⊤
+c1 = {!!}
+c2 = {!!}
+
+d : (⊤ ⊎ (⊤ × ⊥)) × (⊤ ⊎ ⊥)
+d = {!!}
+
+e1 e2 : (⊤ → ⊥) ⊎ Bool
+e1 = {!!}
+e2 = {!!}
+
 from : ℕ × ℕ → (Bool → ℕ)
 from = {!!}
 
