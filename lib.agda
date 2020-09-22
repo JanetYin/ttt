@@ -31,9 +31,6 @@ rec : ∀{i}{A : Set i}(u : A)(v : A → A)(t : ℕ) → A
 rec u v zero = u
 rec u v (suc t) = v (rec u v t)
 
-postulate
-   X Y Z : Set
-
 data _⊎_ {i}{j}(A : Set i)(B : Set j) : Set (i ⊔ j) where
   inj₁ : A → A ⊎ B
   inj₂ : B → A ⊎ B
