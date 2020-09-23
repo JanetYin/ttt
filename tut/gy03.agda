@@ -89,7 +89,7 @@ dist = {!!}
 curry : {A B C : Set} → ((A × B) → C) ↔ (A → (B → C))
 curry = {!!}
 
-⊎×→ : {A B C D : Set} → (A ⊎ B) → C ↔ (A → C) × (B → C)
+⊎×→ : {A B C D : Set} → ((A ⊎ B) → C) ↔ (A → C) × (B → C)
 ⊎×→ = {!!}
 
 ^0 : {A : Set} → (⊥ → A) ↔ ⊤
