@@ -1,0 +1,1 @@
+terv: még a "típusok, mint számok" jelenségről: melyik izomorfizmusok nem működnek, miért
