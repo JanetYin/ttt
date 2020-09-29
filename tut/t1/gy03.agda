@@ -198,3 +198,16 @@ test>?3 = {!!}
 
 test>?4 : Eq _ (1 >? 1) false
 test>?4 = {!!}
+
+
+--assignment
+✂ : {A B C : Set} →  A × (B ⊎ C) → ((A → B × ⊤) ⊎ A × C)
+✂ = {!!}
+
+
+--nagyon extra
+dm1 : ∀{A B : Set} → ¬ (A ⊎ B) ↔ ¬ A × ¬ B
+dm1 = {!!}
+
+dm2 : ∀{A B : Set} → ¬ (A × B) ↔ ¬ A ⊎ ¬ B
+dm2 = {!!}
