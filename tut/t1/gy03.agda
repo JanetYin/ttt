@@ -144,7 +144,7 @@ backward = λ u → (λ b → if b then proj₁ (proj₂ (proj₂ u)) else proj�
 -- the same information as (ℕ × ℕ) which contains more information
 -- than (ℕ × Bool)
 is1 : ℕ → Bool
-is1 = {!!}
+is1 = λ n → rec (λ b → b) (λ f b → if b then false else f true) n false
 
 -- don't use × or other functions using ×!
 pred : ℕ → ℕ
@@ -153,11 +153,19 @@ pred = {!!}
 _>?_ : ℕ → ℕ → Bool
 _>?_ = {!!}
 
+
+-- plusz feladat, azoknak, akiket ez érdekel:
+-- gondoljátok meg, hogy teljesülnek-e a funktor/monád törvények az
+-- általatok megadott konstrukciókra
+
 dnp : {A : Set} → A → ((A → ⊥) → ⊥)
 dnp = {!!}
 
 join : {A : Set} → ((((A → ⊥) → ⊥) → ⊥) → ⊥) → ((A → ⊥) → ⊥)
 join = {!!}
+
+fmap : ∀{A B : Set} → (A → B) → ((A → ⊥) → ⊥) → (B → ⊥) → ⊥
+fmap = {!!}
 
 bind : {A B : Set} → ((A → ⊥) → ⊥) → (A → (B → ⊥) → ⊥) → (B → ⊥) → ⊥
 bind = {!!}
