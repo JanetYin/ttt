@@ -132,10 +132,11 @@ curry = {!!}
 -- random exercises
 
 forward : (Bool → ℕ) × (Bool → Bool) → ℕ × Bool × ℕ × Bool
-forward = {!!}
+forward = λ u → proj₁ u false , (proj₂ u false , proj₁ u true , proj₂ u true)
 
 backward : ℕ × Bool × ℕ × Bool → (Bool → ℕ) × (Bool → Bool)
-backward = {!!}
+backward = λ u → (λ b → if b then proj₁ (proj₂ (proj₂ u)) else proj₁ u)
+               , λ b → if b then proj₂ (proj₂ (proj₂ u)) else proj₁ (proj₂ u)
 
 -- extra
 
@@ -158,7 +159,12 @@ dnp = {!!}
 join : {A : Set} → ((((A → ⊥) → ⊥) → ⊥) → ⊥) → ((A → ⊥) → ⊥)
 join = {!!}
 
---
+bind : {A B : Set} → ((A → ⊥) → ⊥) → (A → (B → ⊥) → ⊥) → (B → ⊥) → ⊥
+bind = {!!}
+
+-- return : A → ¬ ¬ A
+-- join ¬ ¬ (¬ ¬ A) → ¬ ¬ A
+-- bind ¬ ¬ A → (A → ¬ ¬ B) → ¬ ¬ B
 
 testfromto1 : {a b : ℕ} → Eq ℕ (proj₁ (to (from (a , b)))) a
 testfromto1 = {!!}
@@ -179,7 +185,10 @@ testassoc× : {A B C : Set}{w : (A × B) × C} → Eq ((A × B) × C) (proj₂ a
 testassoc× = {!!}
 
 testforward : {w : ℕ × Bool × ℕ × Bool} → Eq _ (forward (backward w)) w
-testforward = {!!}
+testforward = refl
+
+--testbackward : {w : (Bool → ℕ) × (Bool → Bool)} → Eq _ (backward (forward w)) w
+--testbackward = ?
 
 testpred1 : Eq ℕ (pred 0) 0
 testpred1 = {!!}
@@ -200,12 +209,11 @@ test>?4 : Eq _ (1 >? 1) false
 test>?4 = {!!}
 
 
---assignment
+-- assignment
 ✂ : {A B C : Set} →  A × (B ⊎ C) → ((A → B × ⊤) ⊎ A × C)
-✂ = {!!}
+✂ = λ x → case (proj₂ x) (λ b → inj₁ λ a → b , tt) (λ c → inj₂ (proj₁ x , c))
 
-
---nagyon extra
+-- nagyon extra (egyik nem működik)
 dm1 : ∀{A B : Set} → ¬ (A ⊎ B) ↔ ¬ A × ¬ B
 dm1 = {!!}
 
