@@ -1,21 +1,43 @@
-module tut.gy03 where
+module tut.t1.gy03 where
 
 open import lib
 
 -- finite types
 
--- adj meg kulonbozo termeket!
-a1 a2 a3 a4 a5 : ℕ × Bool
-a1 = {!!}
-a2 = {!!}
-a3 = {!!}
-a4 = {!!}
-a5 = {!!}
+-- C-c, C-r
 
 -- adj meg kulonbozo termeket!
-b1 b2 : Bool ⊎ ⊤
-b1 = {!!}
-b2 = {!!}
+a1 a2 a3 a4 a5 : ℕ × Bool
+a1 = 1 , true
+a2 = 1 , false
+a3 = 4 , true
+a4 = 9 , false
+a5 = 7 , true
+
+-- Bool × Bool
+-- true , true
+-- false , false
+-- true , false
+-- ....
+
+-- ⊤ = \top
+-- ⊥ = \bot
+
+-- ⊤ × Bool
+-- tt , true
+-- tt , false
+-- ⊤ → A
+-- ⊥ × Bool
+-- ? , false
+-- ? , true
+-- if t : ⊥ then exfalso t : A 
+
+
+-- adj meg kulonbozo termeket!
+b1 b2 b3 : Bool ⊎ ⊤
+b1 = inj₁ true
+b2 = inj₁ false
+b3 = inj₂ tt
 
 -- adj meg kulonbozo termeket!
 c1 c2 : Bool × ⊤
@@ -23,31 +45,37 @@ c1 = {!!}
 c2 = {!!}
 
 d : (⊤ ⊎ (⊤ × ⊥)) × (⊤ ⊎ ⊥)
-d = {!!}
+d = inj₁ tt , inj₁ tt
 
 e1 e2 : (⊤ → ⊥) ⊎ Bool
-e1 = {!!}
-e2 = {!!}
+e1 = inj₂ true
+e2 = inj₂ false
 
 from : ℕ × ℕ → (Bool → ℕ)
-from = {!!}
+from = λ t → λ b → if b then proj₁ t else proj₂ t
 
 to : (Bool → ℕ) → ℕ × ℕ
-to = {!!}
+to = λ f → f true , f false
+
+fromto : ℕ × ℕ ↔ (Bool → ℕ)
+fromto = from , to
 
 -- implicit arguments
 
 comm× : {A B : Set} → A × B → B × A
-comm× = {!!}
+comm× = λ a×b → proj₂ a×b , proj₁ a×b
 
 -- use comm×
 usagecomm : ℕ × Bool → Bool × ℕ
-usagecomm = {!!}
+usagecomm = comm×
 
 -- (⊎, ⊥) form a commutative monoid (kommutativ egysegelemes felcsoport)
 
 assoc⊎ : {A B C : Set} → (A ⊎ B) ⊎ C ↔ A ⊎ (B ⊎ C)
-assoc⊎ = {!!}
+assoc⊎ = (λ x → case x
+                (λ y → case y inj₁ λ b → inj₂ ((inj₁ b)))
+                λ c → inj₂ (inj₂ c)) ,
+         {!!}
 
 idl⊎ : {A : Set} → ⊥ ⊎ A ↔ A
 idl⊎ = {!!}
@@ -89,7 +117,7 @@ dist = {!!}
 curry : {A B C : Set} → ((A × B) → C) ↔ (A → (B → C))
 curry = {!!}
 
-⊎×→ : {A B C D : Set} → ((A ⊎ B) → C) ↔ (A → C) × (B → C)
+⊎×→ : {A B C D : Set} → (A ⊎ B) → C ↔ (A → C) × (B → C)
 ⊎×→ = {!!}
 
 ^0 : {A : Set} → (⊥ → A) ↔ ⊤
@@ -104,10 +132,11 @@ curry = {!!}
 -- random exercises
 
 forward : (Bool → ℕ) × (Bool → Bool) → ℕ × Bool × ℕ × Bool
-forward = {!!}
+forward = λ u → proj₁ u false , (proj₂ u false , proj₁ u true , proj₂ u true)
 
 backward : ℕ × Bool × ℕ × Bool → (Bool → ℕ) × (Bool → Bool)
-backward = {!!}
+backward = λ u → (λ b → if b then proj₁ (proj₂ (proj₂ u)) else proj₁ u)
+               , λ b → if b then proj₂ (proj₂ (proj₂ u)) else proj₁ (proj₂ u)
 
 -- extra
 
@@ -130,7 +159,12 @@ dnp = {!!}
 join : {A : Set} → ((((A → ⊥) → ⊥) → ⊥) → ⊥) → ((A → ⊥) → ⊥)
 join = {!!}
 
---
+bind : {A B : Set} → ((A → ⊥) → ⊥) → (A → (B → ⊥) → ⊥) → (B → ⊥) → ⊥
+bind = {!!}
+
+-- return : A → ¬ ¬ A
+-- join ¬ ¬ (¬ ¬ A) → ¬ ¬ A
+-- bind ¬ ¬ A → (A → ¬ ¬ B) → ¬ ¬ B
 
 testfromto1 : {a b : ℕ} → Eq ℕ (proj₁ (to (from (a , b)))) a
 testfromto1 = {!!}
@@ -151,7 +185,10 @@ testassoc× : {A B C : Set}{w : (A × B) × C} → Eq ((A × B) × C) (proj₂ a
 testassoc× = {!!}
 
 testforward : {w : ℕ × Bool × ℕ × Bool} → Eq _ (forward (backward w)) w
-testforward = {!!}
+testforward = refl
+
+--testbackward : {w : (Bool → ℕ) × (Bool → Bool)} → Eq _ (backward (forward w)) w
+--testbackward = ?
 
 testpred1 : Eq ℕ (pred 0) 0
 testpred1 = {!!}
@@ -170,3 +207,15 @@ test>?3 = {!!}
 
 test>?4 : Eq _ (1 >? 1) false
 test>?4 = {!!}
+
+
+-- assignment
+✂ : {A B C : Set} →  A × (B ⊎ C) → ((A → B × ⊤) ⊎ A × C)
+✂ = λ x → case (proj₂ x) (λ b → inj₁ λ a → b , tt) (λ c → inj₂ (proj₁ x , c))
+
+-- nagyon extra (egyik nem működik)
+dm1 : ∀{A B : Set} → ¬ (A ⊎ B) ↔ ¬ A × ¬ B
+dm1 = {!!}
+
+dm2 : ∀{A B : Set} → ¬ (A × B) ↔ ¬ A ⊎ ¬ B
+dm2 = {!!}
