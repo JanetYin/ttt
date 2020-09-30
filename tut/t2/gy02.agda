@@ -1,6 +1,6 @@
 {-# OPTIONS --no-pattern-match #-}
 
-module tut.gy02 where
+module tut.t2.gy02 where
 
 open import lib
 
@@ -84,9 +84,11 @@ isnot0 : ℕ → Bool
 isnot0 = λ x → not (is0 x)
 
 -- szorzat tipusok
+--\x ≡ ×
+--proj\_1 ≡ proj₁ 
 
 flip : ℕ × Bool → Bool × ℕ
-flip = {!!}
+flip = λ p → proj₂ p , proj₁ p
 
 curry : (ℕ × Bool → ℕ) → (ℕ → Bool → ℕ)
 curry = {!!}
@@ -99,34 +101,44 @@ plus : ℕ × ℕ → ℕ
 plus = {!!}
 
 fac : ℕ → ℕ
-fac = {!!}
+fac = λ n → proj₂ (rec {A = ℕ × ℕ} (0 , 1) (λ p →  suc (proj₁ p) , (proj₂ p * (suc (proj₁ p)))) n)
+
+-- ha x = 0,     akkor                fac 0       = 1
+-- ha x = suc n, akkor tfh y = fac n, fac (suc n) = fac n * suc n = y * suc n
+-- Nálunk:
+--                         y = proj₂ p
+--                         n = proj₁ p
 
 fib : ℕ → ℕ
-fib = {!!}
+fib = λ n → proj₁ (rec {A = ℕ × ℕ} (1 , 1) (λ w → (proj₂ w , proj₁ w + proj₂ w)) n)
 
 -- sum n = szamok osszege 0-tol (n-1)-ig
 sum : ℕ → ℕ
 sum = {!!}
 
 pred : ℕ → ℕ
-pred = {!!}
+pred = λ n → proj₂ (rec {A = ℕ × ℕ} ( 0 , 0) (λ p → suc (proj₁ p) , proj₁ p) n)
+
+-- 0: 0 , 0
+-- 1: 0 , 0 → 1 , 0
+-- 2: 1 , 0 → 2 , 1
 
 and : Bool → Bool → Bool
 and = λ b c → if b then c else false
 
 is1 : ℕ → Bool
-is1 = {!!}
+is1 = λ x → and (is0 (pred x)) (isnot0 x)
 
 is2 : ℕ → Bool
-is2 = {!!}
+is2 = λ x → is1 (pred x)
 
 step : (ℕ → Bool) → (ℕ → Bool)
-step = {!!}
+step = λ f n → if is0 n then false else f (pred n)
 
 is3 = step is2
 
 eq : ℕ → ℕ → Bool
-eq = {!!}
+eq = rec is0 step
 
 -- tests
 
@@ -176,28 +188,28 @@ test12 : Eq ℕ (2 ^ 0) 1
 test12 = refl
 
 testpred1 : Eq ℕ (pred 0) 0
-testpred1 = {!!}
+testpred1 = refl
 
 testpred2 : Eq ℕ (pred 1000) 999
-testpred2 = {!!}
+testpred2 = refl
 
 testfac1 : Eq ℕ (fac 0) 1
-testfac1 = {!!}
+testfac1 = refl
 
 testfac2 : Eq ℕ (fac 3) 6
-testfac2 = {!!}
+testfac2 = refl
 
 testfac3 : Eq ℕ (fac 9) 362880
-testfac3 = {!!}
+testfac3 = refl
 
 testfib1 : Eq ℕ (fib 0) 1
-testfib1 = {!!}
+testfib1 = refl
 
 testfib2 : Eq ℕ (fib 5) 8
-testfib2 = {!!}
+testfib2 = refl
 
 testfib3 : Eq ℕ (fib 9) 55
-testfib3 = {!!}
+testfib3 = refl
 
 testsum1 : Eq ℕ (sum 0) 0
 testsum1 = {!!}
@@ -209,49 +221,49 @@ testsum3 : Eq ℕ (sum 11) 55
 testsum3 = {!!}
 
 testis1a : Eq Bool (is1 1) true
-testis1a = {!!}
+testis1a = refl
 
 testis1b : Eq Bool (is1 10) false
-testis1b = {!!}
+testis1b = refl
 
 testis1c : Eq Bool (is1 0) false
-testis1c = {!!}
+testis1c = refl
 
 testis2a : Eq Bool (is2 2) true
-testis2a = {!!}
+testis2a = refl
 
 testis2b : Eq Bool (is2 10) false
-testis2b = {!!}
+testis2b = refl
 
 testis2c : Eq Bool (is2 1) false
-testis2c = {!!}
+testis2c = refl
 
 testis2d : Eq Bool (is2 0) false
-testis2d = {!!}
+testis2d = refl
 
 testis3a : Eq Bool (is3 3) true
-testis3a = {!!}
+testis3a = refl
 
 testis3a' : Eq Bool (is3 4) false
-testis3a' = {!!}
+testis3a' = refl
 
 testis3b : Eq Bool (is3 10) false
-testis3b = {!!}
+testis3b = refl
 
 testis3c : Eq Bool (is3 2) false
-testis3c = {!!}
+testis3c = refl
 
 testis3d : Eq Bool (is3 1) false
-testis3d = {!!}
+testis3d = refl
 
 testeq1 : Eq Bool (eq 7 8) false
-testeq1 = {!!}
+testeq1 = refl
 
 testeq2 : Eq Bool (eq 8 8) true
-testeq2 = {!!}
+testeq2 = refl
 
 testeq3 : Eq Bool (eq 1 80) false
-testeq3 = {!!}
+testeq3 = refl
 
 testeq4 : Eq Bool (eq 80 1) false
-testeq4 = {!!}
+testeq4 = refl
