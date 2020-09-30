@@ -41,8 +41,8 @@ b3 = inj₂ tt
 
 -- adj meg kulonbozo termeket!
 c1 c2 : Bool × ⊤
-c1 = {!!}
-c2 = {!!}
+c1 = true , tt
+c2 = false , tt
 
 d : (⊤ ⊎ (⊤ × ⊥)) × (⊤ ⊎ ⊥)
 d = inj₁ tt , inj₁ tt
@@ -75,59 +75,71 @@ assoc⊎ : {A B C : Set} → (A ⊎ B) ⊎ C ↔ A ⊎ (B ⊎ C)
 assoc⊎ = (λ x → case x
                 (λ y → case y inj₁ λ b → inj₂ ((inj₁ b)))
                 λ c → inj₂ (inj₂ c)) ,
-         {!!}
+         λ x → case x
+               (λ a → inj₁ (inj₁ a))
+               λ y → case y (λ b → inj₁ (inj₂ b)) inj₂
 
 idl⊎ : {A : Set} → ⊥ ⊎ A ↔ A
-idl⊎ = {!!}
+idl⊎ = (λ u → case u exfalso λ x → x) , inj₂
 
 idr⊎ : {A : Set} → A ⊎ ⊥ ↔ A
-idr⊎ = {!!}
+idr⊎ = (λ u → case u (λ x → x) exfalso) , inj₁
 
 comm⊎ : {A B : Set} → A ⊎ B ↔ B ⊎ A
-comm⊎ = {!!}
+comm⊎ = (λ u → case u inj₂ inj₁)
+      , (λ u → case u inj₂ inj₁)
 
 -- (×, ⊤) form a commutative monoid (kommutativ egysegelemes felcsoport)
 
 assoc× : {A B C : Set} → (A × B) × C ↔ A × (B × C)
-assoc× = {!!}
+assoc× = (λ u → (proj₁ (proj₁ u)) , ((proj₂ (proj₁ u)) , (proj₂ u)))
+       , λ u → ((proj₁ u) , (proj₁ (proj₂ u))) , (proj₂ (proj₂ u))
 
+-- assoc× implicit paramétereit a typechecker kitalálja
 usageassoc : (ℕ × Bool) × (ℕ → ℕ) → ℕ × (Bool × (ℕ → ℕ))
-usageassoc = {!!}
+usageassoc = proj₁ assoc×
 
 idl× : {A : Set} → ⊤ × A ↔ A
-idl× = {!!}
+idl× = proj₂ , (tt ,_)
 
 idr× : {A : Set} → A × ⊤ ↔ A
-idr× = {!!}
+idr× = proj₁ , (_, tt)
 
 -- commutativity above
 
 -- ⊥ is a null element
 
 null× : {A : Set} → A × ⊥ ↔ ⊥
-null× = {!!}
+null× = proj₂ , exfalso
 
 -- distributivity of × and ⊎
 
 dist : {A B C : Set} → A × (B ⊎ C) ↔ (A × B) ⊎ (A × C)
-dist = {!!}
+dist = (λ u → case (proj₂ u)
+                   (λ b → inj₁ (proj₁ u , b))
+                   λ c → inj₂ (proj₁ u , c))
+     , λ u → case u
+                  (λ v → proj₁ v , inj₁ (proj₂ v))
+                  λ v → proj₁ v , inj₂ (proj₂ v)
 
 -- exponentiation laws
 
 curry : {A B C : Set} → ((A × B) → C) ↔ (A → (B → C))
-curry = {!!}
+curry = (λ f a b → f (a , b))
+      , (λ f ab → f (proj₁ ab) (proj₂ ab))
 
 ⊎×→ : {A B C D : Set} → (A ⊎ B) → C ↔ (A → C) × (B → C)
-⊎×→ = {!!}
+⊎×→ = λ u → (λ c → (λ _ → c) , (λ _ → c))
+          , (λ v → case u (proj₁ v) (proj₂ v))
 
 ^0 : {A : Set} → (⊥ → A) ↔ ⊤
-^0 = {!!}
+^0 = (λ _ → tt) , (λ _ → exfalso)
 
 ^1 : {A : Set} → (⊤ → A) ↔ A
-^1 = {!!}
+^1 = (λ f → f tt) , (λ a _ → a)
 
 1^ : {A : Set} → (A → ⊤) ↔ ⊤
-1^ = {!!}
+1^ = (λ _ → tt) , (λ _ _ → tt)
 
 -- random exercises
 
@@ -146,10 +158,32 @@ backward = λ u → (λ b → if b then proj₁ (proj₂ (proj₂ u)) else proj�
 is1 : ℕ → Bool
 is1 = λ n → rec (λ b → b) (λ f b → if b then false else f true) n false
 
+pred' : ℕ → ℕ
+pred' = λ n → proj₂
+              (rec {A = Bool × ℕ}
+              (true , zero)
+              (λ t → false , if proj₁ t then zero else suc (proj₂ t))
+              n)
+
+-- lehet, hogy van szebb megoldás, de ebben szerintem nagyon érthető a koncepció
+-- a fenti pred'-ből indulunk ki
+-- a ~ b jelentése: a-t b-vé kódoljuk (tehát nem jelent egyenlőséget/izomorfizmust/ilyesmit)
+-- true ∼ 1
+-- false ~ 0
+-- Bool × ℕ ∼ Bool → ℕ 
+-- proj₁ t ∼ f true
+-- proj₂ t ∼ f false
+-- t = b , n ∼ f = λ x → if x then b(átírása) else n
+
 -- don't use × or other functions using ×!
 pred : ℕ → ℕ
-pred = {!!}
+pred = λ n → rec {A = Bool → ℕ}
+                 (λ b → if b then suc zero else zero)
+                 (λ f b → if b then zero else (if is1 (f true) then zero else suc (f false)) )
+                 n
+                 false
 
+-- próbáljátok meg esetleg hasonló módon ezt is
 _>?_ : ℕ → ℕ → Bool
 _>?_ = {!!}
 
@@ -175,34 +209,31 @@ bind = {!!}
 -- bind ¬ ¬ A → (A → ¬ ¬ B) → ¬ ¬ B
 
 testfromto1 : {a b : ℕ} → Eq ℕ (proj₁ (to (from (a , b)))) a
-testfromto1 = {!!}
+testfromto1 = refl
 
 testfromto2 : {a b : ℕ} → Eq ℕ (proj₂ (to (from (a , b)))) b
-testfromto2 = {!!}
+testfromto2 = refl
 
 testfromto3 : {a b : ℕ} → Eq ℕ (from (to (λ x → if x then a else b)) true) a
-testfromto3 = {!!}
+testfromto3 = refl
 
 testfromto4 : {a b : ℕ} → Eq ℕ (from (to (λ x → if x then a else b)) false) b
-testfromto4 = {!!}
+testfromto4 = refl
 
 testcomm : {A B : Set}{w : ℕ × Bool} → Eq (ℕ × Bool) (comm× (comm× w)) w
-testcomm = {!!}
+testcomm = refl
 
 testassoc× : {A B C : Set}{w : (A × B) × C} → Eq ((A × B) × C) (proj₂ assoc× (proj₁ assoc× w)) w
-testassoc× = {!!}
+testassoc× = refl
 
 testforward : {w : ℕ × Bool × ℕ × Bool} → Eq _ (forward (backward w)) w
 testforward = refl
 
---testbackward : {w : (Bool → ℕ) × (Bool → Bool)} → Eq _ (backward (forward w)) w
---testbackward = ?
-
 testpred1 : Eq ℕ (pred 0) 0
-testpred1 = {!!}
+testpred1 = refl
 
 testpred2 : Eq ℕ (pred 1000) 999
-testpred2 = {!!}
+testpred2 = refl
 
 test>?1 : Eq _ (3 >? 4) false
 test>?1 = {!!}
@@ -222,6 +253,7 @@ test>?4 = {!!}
 ✂ = λ x → case (proj₂ x) (λ b → inj₁ λ a → b , tt) (λ c → inj₂ (proj₁ x , c))
 
 -- nagyon extra (egyik nem működik)
+-- esetleg gondolkodjatok rajta, hogy hogyan kéne átírni, hogy működjék
 dm1 : ∀{A B : Set} → ¬ (A ⊎ B) ↔ ¬ A × ¬ B
 dm1 = {!!}
 
