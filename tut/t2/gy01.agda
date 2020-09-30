@@ -19,11 +19,12 @@ open import lib
 -- C-y : Paste
 --
 -- Agda-mode key bindings:
--- C-c C-l   : Typecheck
--- C-c C-n   : Evaluate
--- C-c C-,   : Goal type and context
--- C-c C-.   : Goal type and context + inferred type of current expr
--- C-c C-SPC : Fill goal
+-- C-c C-l         : Typecheck
+-- C-c C-n         : Evaluate
+-- C-c C-,         : Goal type and context
+-- C-c C-.         : Goal type and context + inferred type of current expr
+-- C-c C-SPC       : Fill goal
+-- C-u C-u C-c C-, : Normalise goal
 
 -- modules
 

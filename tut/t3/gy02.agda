@@ -146,12 +146,18 @@ is2 : ℕ → Bool
 is2 = λ n → is1 (pred n)
 
 step : (ℕ → Bool) → (ℕ → Bool)
-step = λ isn y → and (isn (pred y)) (not (isn y))
+step = λ isn-1 n → and (isn-1 (pred n)) (not (isn-1 n))
 
 is3 = step is2
 
 eq : ℕ → ℕ → Bool
-eq = rec {A = ℕ → Bool} is0 step
+eq = λ x →  rec {A = ℕ → Bool} is0 (λ f m → step f m) x
+
+-- ha x = 0,     akkor is0
+-- ha x = suc n, akkor tfh f = eq n : ℕ → Bool, akkor
+--     and (eq n (pred x)) (not (eq n x)) 
+--   = and (eq n n)        (not (eq n (suc n)))
+--   = and (f n)           (not (f (suc n))
 
 -- tests
 

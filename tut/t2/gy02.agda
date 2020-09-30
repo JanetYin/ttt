@@ -133,7 +133,7 @@ is2 : ℕ → Bool
 is2 = λ x → is1 (pred x)
 
 step : (ℕ → Bool) → (ℕ → Bool)
-step = λ f n → if is0 n then false else f (pred n)
+step = λ isn-1 n → and (isn-1 (pred n)) (not (isn-1 n))
 
 is3 = step is2
 

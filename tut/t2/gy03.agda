@@ -6,78 +6,92 @@ open import lib
 
 -- adj meg kulonbozo termeket!
 a1 a2 a3 a4 a5 : ℕ × Bool
-a1 = {!!}
-a2 = {!!}
-a3 = {!!}
-a4 = {!!}
-a5 = {!!}
+a1 = 1 , true
+a2 = 1 , false
+a3 = 2 , true
+a4 = 3 , true
+a5 = 4 , true
 
 -- adj meg kulonbozo termeket!
 b1 b2 : Bool ⊎ ⊤
-b1 = {!!}
-b2 = {!!}
+b1 = inj₁ true
+b2 = inj₁ false
 
 -- adj meg kulonbozo termeket!
 c1 c2 : Bool × ⊤
-c1 = {!!}
-c2 = {!!}
+c1 = true , tt
+c2 = false , tt
 
 d : (⊤ ⊎ (⊤ × ⊥)) × (⊤ ⊎ ⊥)
-d = {!!}
+d = inj₁ tt , inj₁ tt
 
 e1 e2 : (⊤ → ⊥) ⊎ Bool
-e1 = {!!}
-e2 = {!!}
+e1 = inj₂ true
+e2 = inj₂ false
 
 from : ℕ × ℕ → (Bool → ℕ)
-from = {!!}
+from = λ p → λ b → if b then proj₁ p else proj₂ p
 
 to : (Bool → ℕ) → ℕ × ℕ
-to = {!!}
+to = λ f → f true , f false
 
 -- implicit arguments
 
 comm× : {A B : Set} → A × B → B × A
-comm× = {!!}
+comm× = λ axb → proj₂ axb , proj₁ axb
 
 -- use comm×
 usagecomm : ℕ × Bool → Bool × ℕ
-usagecomm = {!!}
+usagecomm = comm×
 
 -- (⊎, ⊥) form a commutative monoid (kommutativ egysegelemes felcsoport)
 
 assoc⊎ : {A B C : Set} → (A ⊎ B) ⊎ C ↔ A ⊎ (B ⊎ C)
-assoc⊎ = {!!}
+assoc⊎ = (λ abc →  case abc
+                        (λ ab → case ab (λ a → inj₁ a) λ b → inj₂ (inj₁ b))
+                        λ c → inj₂ (inj₂ c))
+         ,
+          λ abc → case abc
+                        (λ a → inj₁ (inj₁ a))
+                        λ bc → case bc (λ b → inj₁ (inj₂ b)) λ c → inj₂ c
 
 idl⊎ : {A : Set} → ⊥ ⊎ A ↔ A
-idl⊎ = {!!}
+idl⊎ = (λ ba → case ba exfalso λ x → x )
+       ,
+       inj₂
 
 idr⊎ : {A : Set} → A ⊎ ⊥ ↔ A
-idr⊎ = {!!}
+idr⊎ = (λ ab → case ab (λ x → x) exfalso)
+       ,
+       inj₁
 
 comm⊎ : {A B : Set} → A ⊎ B ↔ B ⊎ A
-comm⊎ = {!!}
+comm⊎ = (λ ab → case ab inj₂ inj₁)
+        ,
+        λ ba → case ba inj₂ inj₁
 
 -- (×, ⊤) form a commutative monoid (kommutativ egysegelemes felcsoport)
 
 assoc× : {A B C : Set} → (A × B) × C ↔ A × (B × C)
-assoc× = {!!}
+assoc× = (λ abc → proj₁ (proj₁ abc) , proj₂ (proj₁ abc) , proj₂ abc)
+         ,
+         {!!} -- TODO...
 
 usageassoc : (ℕ × Bool) × (ℕ → ℕ) → ℕ × (Bool × (ℕ → ℕ))
-usageassoc = {!!}
+usageassoc = proj₁ assoc×
 
 idl× : {A : Set} → ⊤ × A ↔ A
-idl× = {!!}
+idl× = (λ ta → proj₂ ta) , λ a → tt , a
 
 idr× : {A : Set} → A × ⊤ ↔ A
-idr× = {!!}
+idr× = proj₁ , λ a → a , tt
 
 -- commutativity above
 
 -- ⊥ is a null element
 
 null× : {A : Set} → A × ⊥ ↔ ⊥
-null× = {!!}
+null× = (λ ab → proj₂ ab) , exfalso
 
 -- distributivity of × and ⊎
 
@@ -87,19 +101,21 @@ dist = {!!}
 -- exponentiation laws
 
 curry : {A B C : Set} → ((A × B) → C) ↔ (A → (B → C))
-curry = {!!}
+curry = (λ abc a b → abc (a , b)) , λ abc ab → abc (proj₁ ab) (proj₂ ab)
 
-⊎×→ : {A B C D : Set} → (A ⊎ B) → C ↔ (A → C) × (B → C)
-⊎×→ = {!!}
+⊎×→ : {A B C D : Set} → ((A ⊎ B) → C) ↔ (A → C) × (B → C)
+⊎×→ = (λ abc → (λ a → abc (inj₁ a)) , {!!} )
+      ,
+      λ b ab → case ab (proj₁ b ) (proj₂ b)
 
 ^0 : {A : Set} → (⊥ → A) ↔ ⊤
-^0 = {!!}
+^0 = (λ _ → tt) , λ _ → exfalso
 
 ^1 : {A : Set} → (⊤ → A) ↔ A
-^1 = {!!}
+^1 = (λ f → f tt) , λ a _ → a
 
 1^ : {A : Set} → (A → ⊤) ↔ ⊤
-1^ = {!!}
+1^ = (λ _ → tt) , λ _ _ → tt
 
 -- random exercises
 

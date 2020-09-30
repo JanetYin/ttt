@@ -25,6 +25,7 @@ open import lib
 -- C-c C-.   : Goal type and context + inferred type of current expr
 -- C-c C-SPC : Fill goal
 -- C-c C-x = : Describe character at point
+-- C-u C-u C-c C-, : Normalise goal
 -- modules
 
 ---------------------------------------------------------
