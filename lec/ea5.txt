@@ -1,1 +1,217 @@
-terv: még a "típusok, mint számok" jelenségről: melyik izomorfizmusok nem működnek, miért
+Hány eleme van ((⊤ ⊎ ⊤) × (⊥ ⊎ ⊤)) → ⊤ -nak?
+
+(A → ⊤)-nak tetszőleges A-ra csak 1 eleme van:
+
+(f : A → ⊤)
+
+                v ⊤ egyediségi szabálya
+f = (λ x → f x) = (λ x → tt) = (λ x → g x) = g
+  ^ függvény típus egyediségi szabálya miatt
+
+tetszőleges t : ⊤ -ra t = tt (⊤ típus egyediség szabálya).
+
+(Bool → Bool-nak 2^2 = 4 eleme van (sajnos nem, hanem ∞))
+
+
+
+g : (ℕ → ℕ) → (ℕ → ℕ)
+g = λ f x → f (f (f x))
+
+g (g (g (g (λ x → suc x)))) 0 =
+g (g (g (g suc))) 0 =
+g (g (g (suc∘suc∘suc))) 0 =
+g (g ((suc∘suc∘suc)∘(suc∘suc∘suc)∘(suc∘suc∘suc))) 0 =
+g (((suc∘suc∘suc)∘(suc∘suc∘suc)∘(suc∘suc∘suc))∘
+   ((suc∘suc∘suc)∘(suc∘suc∘suc)∘(suc∘suc∘suc))∘
+   ((suc∘suc∘suc)∘(suc∘suc∘suc)∘(suc∘suc∘suc))) 0 =
+((((suc∘suc∘suc)∘(suc∘suc∘suc)∘(suc∘suc∘suc))∘
+   ((suc∘suc∘suc)∘(suc∘suc∘suc)∘(suc∘suc∘suc))∘
+   ((suc∘suc∘suc)∘(suc∘suc∘suc)∘(suc∘suc∘suc)))∘
+(((suc∘suc∘suc)∘(suc∘suc∘suc)∘(suc∘suc∘suc))∘
+   ((suc∘suc∘suc)∘(suc∘suc∘suc)∘(suc∘suc∘suc))∘
+   ((suc∘suc∘suc)∘(suc∘suc∘suc)∘(suc∘suc∘suc)))∘
+(((suc∘suc∘suc)∘(suc∘suc∘suc)∘(suc∘suc∘suc))∘
+   ((suc∘suc∘suc)∘(suc∘suc∘suc)∘(suc∘suc∘suc))∘
+   ((suc∘suc∘suc)∘(suc∘suc∘suc)∘(suc∘suc∘suc)))) 0   
+
+81	
+
+g f    = f∘f∘f
+g suc =  suc∘suc∘suc
+
+=====================================================================
+
+intuíció:
+
+|A ⊎ B| = |A| + |B|
+|A × B| = |A| * |B|
+∣⊥∣     = 0
+∣⊤∣     = 1
+∣A → B∣ = ∣B∣ ^ ∣A∣
+
+{A B : Set} → ((A × B) → (B × A)) × ((B × A) → (A × B))
+
+Ez azért romlik el, mert bizonyos típusoknak nincs egyediség szabálya.
+
+not : Bool → Bool
+not = λ x → if x then false else true =
+λ x → not x
+
+λ x → not (not x) = 
+λ x → if (if x then false else true) then false else true
+
+Bool-ra vonatkozó számítási szabályok:
+
+if true then u else v = u
+if false then u else v = v
+if x then u else v = (nincs szabály)
+
+Jó feladat kitalálni, hogy hány eleme van egy típusnak.
+
+                             aritmetika
+ℕ → ⊤                  ?     1^∞ = 1           ∞            19/3 jó: f, g : ℕ → ⊤, akkor f = λ x → f x = λ x → tt = λ x → g x = g
+⊥ → Bool               ?     2^0 = 1           ∞            15/3 rossz: végtelen sok
+
+f : ⊥ → Bool
+f1 = λ x → exfalso x
+f2 = λ x → not (exfalso x) = λ x → if exfalso x then false else true
+f3 = λ x → not (not (exfalso x))
+f4 = λ x → not (not (not (exfalso x)))
+...
+
+⊤ → ⊤                  ?     1^1 = 1           ∞            21/0 jó
+⊤ → ((⊤ → ⊤) → ⊤)      ?     ((1^1)^1)^1 = 1   ∞            23/0 jó
+
+⊤ → Bool               ?     2^1 = 2           ∞            13/6 jó
+
+f : ⊤ → Bool
+f = λ x → false
+
+======================================================================
+
+termek egyenlősége kicsit csúnya, nem teljesen úgy működik, mint ahogy
+várnánk
+
+======================================================================
+
+Hány darab term van? (aritmetikai szabályok alapján)
+
+Tetszőleges típusokra megadni egy függvényt (polimorf függvény).
+
+f f' : {X : Set} → X → X
+f = λ x → x
+f' = λ x → proj₁ (x , false) = λ x → x = f
+
+nem tudok eliminációs szabályt alkalmazni az x-re
+
+if x then ? else ?    Bool
+case x ? ?            ⊎
+x ?                   →
+proj₁ x, proj₂ x      ×
+exfalso               ⊥
+
+proj₁ (u , v) = u
+proj₂ (u , v) = v
+
+f1 f2 : {X : Set} → X → X → X
+f1 = λ x → λ x' → x
+f2 = λ x → λ x' → x'
+
+g : {X : Set} → X × (X → X) → X-nek 0 eleme van
+g : {X : Set} → X × (X → X) → X-nek 1 eleme van
+g : {X : Set} → X × (X → X) → X-nek 2 eleme van
+g : {X : Set} → X × (X → X) → X-nek 3 eleme van
+g : {X : Set} → X × (X → X) → X-nek ∞ eleme van <- jó
+
+g1 = λ w → proj₁ w
+g2 = λ w → proj₂ w (proj₁ w)
+g3 = λ w → proj₂ w (proj₂ w (proj₁ w))
+g4 = λ w → proj₂ w (proj₂ w (proj₂ w (proj₁ w)))
+...
+------------------
+  Goal : X
+  w : X × (X → X)
+  proj₁ w : X
+  proj₂ w : X → X
+
+=============================================================
+
+g : {X : Set} → X × (X → X) → X
+g (zero , suc) : ℕ
+g1 (zero , suc) = 0
+g2 (zero , suc) = suc zero = 1
+g3 (zero , suc) = suc (suc zero) = 2
+g4 (zero , suc) = 3
+...
+
+=============================================================
+
+h : {X : Set} → (X → X) → X -nak 0 eleme van   7
+h : {X : Set} → (X → X) → X -nak 1 eleme van   6
+h : {X : Set} → (X → X) → X -nak 2 eleme van   3
+h : {X : Set} → (X → X) → X -nak ∞ eleme van   2
+
+h = λ f → f (f (f ?))
+-------------
+  f : X → X
+  Goal : X
+
+h-nak működnie kell abban az esetben is, ha X = ⊥
+h (λ z → z) : ⊥
+
+=============================================================
+
+i : {X Y : Set} → X × Y → Y × X -nak 0 eleme van
+i : {X Y : Set} → X × Y → Y × X -nak 1 eleme van
+i : {X Y : Set} → X × Y → Y × X -nak 2 eleme van
+i : {X Y : Set} → X × Y → Y × X -nak ∞ eleme van
+
+i = λ w → (proj₂ w , proj₁ w)
+-----
+Goal : Y × X
+   w : X × Y
+   proj₁ w : X
+   proj₂ w : Y
+
+i : {X Y : Set} → X × Y → Y × X × X    1 eleme van
+i : {X : Set} → X × X → X              2 eleme van
+i : {X : Set} → X → X × X              1 eleme van
+i : {X : Set} → X × X → X × X          4 eleme van, id, swap, 1.-t ∀hová, 2.-at ∀hová
+....
+
+===============================================================
+
+absztrverem : {X : Set} → (X × ((X × ℕ → X) × ((X → (ℕ ⊎ ⊤) × X) × (X → Bool)))) → X
+absztrverem = λ veremimpl → empty
+                            push (empty , 12)
+                            push (push (empty , 12) , 20)
+                            pop (push (push (empty , 12) , 20)) : (ℕ ⊎ ⊤) × X
+                            proj₂ (pop (push (push (empty , 12) , 20))) : X
+                            ...
+  where
+    empty = proj₁ verempl
+    push  = proj₁ (proj₂ verempl)
+    pop   = proj₁ (proj₂ (proj₂ verempl))
+    isempty = proj₁ (proj₂ (proj₂ (proj₂ verempl)))
+
+veremimpl = (empty , push , pop , isempty)
+
+==============================================================================
+
+logikai ekvivalencia: A ↔ B := (A → B) × (B → A)
+
+Izomorfizmus: A ≅ B, ez nem egy típus, hanem egy olyan logikai
+ekvivalencia, amire teljesül kté egyenlőség:
+
+  f : A → B
+  g : B → A
+
+izomorfizmus, ha
+
+  (λ x → g (f x)) = λ x → x
+  (λ y → f (g y)) = λ y → y
+
+==============================================================================
+
+Bool × ⊤ ≅ Bool   \~= 
+Bool ⊎ Bool ≅ ⊤ ⊎ ⊤ ⊎ Bool ez már nem igaz (Bool-nak és ⊎-nak nincs egyediség szabálya)
