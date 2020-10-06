@@ -1,3 +1,4 @@
+terv:
 
 {Z ⊃ M ∨ P, Z, ¬P } |= M
 {¬P ⊃ Q, S ⊃ R, ¬Q ∧ ¬R} |= ¬¬P ∧ ¬S
