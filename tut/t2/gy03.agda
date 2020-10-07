@@ -80,6 +80,9 @@ assoc× = (λ abc → proj₁ (proj₁ abc) , proj₂ (proj₁ abc) , proj₂ ab
 usageassoc : (ℕ × Bool) × (ℕ → ℕ) → ℕ × (Bool × (ℕ → ℕ))
 usageassoc = proj₁ assoc×
 
+-- ⊤ × A → A
+-- True ∧ A → A
+
 idl× : {A : Set} → ⊤ × A ↔ A
 idl× = (λ ta → proj₂ ta) , λ a → tt , a
 

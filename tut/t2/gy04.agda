@@ -2,25 +2,34 @@ module tut.t2.gy04 where
 
 open import lib
 
+-- ¬ A = A → ⊥
+
+-- nincs: ¬ ¬ A → A
+-- nincs: A ⊎ ¬ A
+-- A klasszikus logikában bizonyítható az A akkor és csak akkor ha ¬ ¬ A a konstruktív logikában is bizonyítható
+
+
 anything : {X Y : Set} → ¬ X → X → Y
-anything = {!!}
+anything = λ nx x → exfalso (nx x)
 
 ret : {X : Set} → X → ¬ ¬ X
-ret = {!!}
+ret = λ x → λ nx → nx x
 
 fun : {X Y : Set} → (¬ X) ⊎ Y → (X → Y)
-fun = {!!}
+fun = λ nxy → λ x → case nxy (λ nx → exfalso (nx x)) λ y → y
 
 -- De Morgan
 
 dm1 : {X Y : Set} →  ¬ (X ⊎ Y) ↔ ¬ X × ¬ Y
 dm1 = {!!}
 
+-- ¬ X V ¬ Y ⇒ ¬ (X ∧ Y)
 dm2 : {X Y : Set} → ¬ X ⊎ ¬ Y → ¬ (X × Y)
 dm2 = {!!}
 
+-- ez nem igaz, de ennek a tagadása igen: ¬ (X ∧ Y) ⇒ ¬ X V ¬ Y
 dm2b : {X Y : Set} → ¬ ¬ (¬ (X × Y) → ¬ X ⊎ ¬ Y)
-dm2b = {!!}
+dm2b = λ m → m λ nxy → inj₁ λ x → m λ nxy2 → inj₂ λ y → nxy (x , y)
 
 -- stuff
 
