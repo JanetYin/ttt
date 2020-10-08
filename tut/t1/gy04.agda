@@ -8,7 +8,7 @@ open import lib
 
 -- a logikánk nem a klasszikus logika
 -- nincs lem: A ⊎ ¬ A
--- dne : ¬ ¬ A → A
+-- dne sincs: ¬ ¬ A → A 
 -- intuicionista logikánk van
 -- A klasszikus logikában A bizonyítható ↔ ¬ ¬ A intuicionista logikában bizonyítható
 
