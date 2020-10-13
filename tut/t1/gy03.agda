@@ -262,5 +262,3 @@ dm2 : ∀{A B : Set} → ¬ (A × B) ↔ ¬ ¬ (¬ A ⊎ ¬ B)
 dm2 = (λ u v → v (inj₁ λ a → v (inj₂ λ b → u (a , b))))
     , (λ u v → u λ t → case t (λ f → f (proj₁ v)) λ f → f (proj₂ v))
 
-
-
