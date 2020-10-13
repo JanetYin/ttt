@@ -54,18 +54,15 @@ nocontra = λ u → proj₁ u (proj₂ u (λ x → proj₁ u x x)) ((proj₂ u (
 ¬¬invol₂ = {!!}
 
 nnlem : {X : Set} → ¬ ¬ (X ⊎ ¬ X)
-nnlem = {!!}
+nnlem = λ u → u (inj₂ λ x → u (inj₁ x))
 
 nndnp : {X : Set} → ¬ ¬ (¬ ¬ X → X)
-nndnp = {!!}
+nndnp = λ u → u λ v → exfalso (v λ x → u λ t → x)
 
 dec2stab : {X : Set} → (X ⊎ ¬ X) → (¬ ¬ X → X)
-dec2stab = {!!}
+dec2stab = λ u v → case u (λ x → x) λ nx → exfalso (v nx)
 
 -- the other direction does not hold, but (this is a bit tricky to read):
 
 dnp2lem : ({X : Set} → (¬ ¬ X → X)) → ({X : Set} → (X ⊎ ¬ X))
-dnp2lem dnp {X} = {!!}
-
-a4 : {A B : Set} → ⊥ ⊎ ((A → B) × A) ↔ A × B
-a4 = {!!}
+dnp2lem dnp {X} = dnp nnlem
