@@ -1,4 +1,4 @@
-module tut++ where
+module tut.t1.tut++ where
 
 open import lib
 
