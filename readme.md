@@ -576,7 +576,7 @@ We can write functions which create sets.
     _^2 = λ A → A × A
 
     _^_ : Set → ℕ → Set
-    _^_ = λ A n → rec ⊤ (λ _ As → A × As) n
+    _^_ = λ A n → rec ⊤ (λ As → A × As) n
 
 For example, we have `Bool ^ 3 = Bool × (Bool × (Bool × ⊤))`.
 
