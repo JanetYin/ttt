@@ -255,7 +255,12 @@ test>?4 = {!!}
 -- nagyon extra (egyik nem működik)
 -- esetleg gondolkodjatok rajta, hogy hogyan kéne átírni, hogy működjék
 dm1 : ∀{A B : Set} → ¬ (A ⊎ B) ↔ ¬ A × ¬ B
-dm1 = {!!}
+dm1 = (λ u → (λ a → u (inj₁ a)) , λ b → u (inj₂ b))
+    , (λ u v → case v (proj₁ u) (proj₂ u))
 
-dm2 : ∀{A B : Set} → ¬ (A × B) ↔ ¬ A ⊎ ¬ B
-dm2 = {!!}
+dm2 : ∀{A B : Set} → ¬ (A × B) ↔ ¬ ¬ (¬ A ⊎ ¬ B)
+dm2 = (λ u v → v (inj₁ λ a → v (inj₂ λ b → u (a , b))))
+    , (λ u v → u λ t → case t (λ f → f (proj₁ v)) λ f → f (proj₂ v))
+
+
+

@@ -53,6 +53,8 @@ assoc⊎ = {!!}
 idl⊎ : {A : Set} → ⊥ ⊎ A ↔ A
 idl⊎ = {!!}
 
+
+-- A V False
 idr⊎ : {A : Set} → A ⊎ ⊥ ↔ A
 idr⊎ = {!!}
 
@@ -67,6 +69,8 @@ assoc× = {!!}
 usageassoc : (ℕ × Bool) × (ℕ → ℕ) → ℕ × (Bool × (ℕ → ℕ))
 usageassoc = {!!}
 
+--⊤ × A → A
+--True ∧ A ⇒ A
 idl× : {A : Set} → ⊤ × A ↔ A
 idl× = {!!}
 
