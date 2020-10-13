@@ -6,8 +6,9 @@ open import lib
 dec_by_ : ℕ → ℕ → (ℕ × Bool)
 dec n by m = {!!}
 
--- ha m = 0, n mod m = 0 , false (ez nem trivi)
+-- ha m = 0, n mod m = 0 , false 
 -- nem kell feltétlenül használni az előzőt
+-- (ez a feladat nem trivi)
 _mod_ : ℕ → ℕ → (ℕ × Bool)
 n mod m = {!!}
 
