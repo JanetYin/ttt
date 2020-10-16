@@ -7,10 +7,10 @@ Dec : ∀{i} → Set i → Set i
 Dec A = A ⊎ ¬ A
 
 e1 : {X Y : Set} → Dec (X ⊎ Y → ¬ ¬ (Y ⊎ X))
-e1 = {!!}
+e1 = inj₁ λ xy → λ nyx → nyx (case xy (λ x → inj₂ x) inj₁)
 
 e2 : {X : Set} → Dec (¬ (X ⊎ ¬ X))
-e2 = {!!}
+e2 = inj₂ {!!}
 
 e3 : {X : Set} → Dec (¬ (X → (¬ X → X)))
 e3 = {!!}
@@ -37,8 +37,8 @@ f2 : ({X Y : Set} → ¬ (X × Y) → ¬ X ⊎ ¬ Y) → {X Y : Set} → ¬ ¬ (
 f2 = {!!}
 
 -- no chance:
--- f3 : {X Y : Set} → Dec (X ⊎ Y → Y)
--- f3 = {!!}
+--f3 : {X Y : Set} → Dec (X ⊎ Y → Y)
+--f3 = ?
 
 -- because:
 module f3a where
@@ -57,7 +57,7 @@ module f3b where
 
 -- but:
 f4 : Dec ((X Y : Set) → X ⊎ Y → Y)
-f4 = {!!}
+f4 = inj₂ λ lem → lem ⊤ ⊥ (inj₁ tt)
 
 f5 : Dec ((X Y Z : Set) → (X → Z) ⊎ (Y → Z) → (X ⊎ Y → Z))
 f5 = {!!}
