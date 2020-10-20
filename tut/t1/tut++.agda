@@ -21,3 +21,5 @@ e1 : ({A B : Set} → ¬ (A × B) → (¬ A ⊎ ¬ B)) →
   {A : Set} → ¬ A ⊎ ¬ ¬ A ↔ ⊤
 e1 dm = {!!}
       , {!!}
+
+-- listákkal felvértezve, próbáljatok Eratoszthenészi szitát implementálni
