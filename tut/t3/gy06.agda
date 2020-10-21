@@ -5,8 +5,22 @@ open import numbers-and-bools
 
 -- Pattern matching
 
+--C-c C-c
 _∧_ : Bool → Bool → Bool
-_∧_ = {!!}
+true ∧ y = y
+false ∧ y = false
+--true ∧ true = true
+--true ∧ false = false
+--false ∧ true = false
+--false ∧ false = false
+
+--true ∧ y = y
+--false ∧ y = false
+
+--x ∧ y = if x then y else false
+--_∧_ x y
+
+--_∧_ = λ x y → if x then y else false
 
 _∨_ : Bool → Bool → Bool
 _∨_ = {!!}
@@ -14,17 +28,30 @@ _∨_ = {!!}
 -- Universe
 
 _^3 : Set → Set
-A ^3 = {!!}
+A ^3 = A × A × A
+
+example : Bool ^3
+example = true , false , true
+
+ex2 : ℕ ^3
+ex2 = 1 , 2 , 3
+
+ex3 : (Bool ^3) ^3
+ex3 = (true , false , false) , example , example
 
 _^'_ : Set → ℕ → Set
-_^'_ = {!!}
+A ^' zero = ⊤
+A ^' suc n = A × A ^' n
+
+-- ¬ : Set → Set
+-- ¬ A = A → ⊥
 
 Vec : Set → ℕ → Set
 Vec = _^'_
 
 tff tft : Vec Bool 3
-tff = {!!}
-tft = {!!}
+tff = true , false , false , tt
+tft = true , false , true , tt
 
 5nums : Vec ℕ 5
 5nums = {!!}
@@ -34,21 +61,24 @@ tft = {!!}
 -- we don't need abstract types anymore, we can say that something
 -- works for every type:
 
+-- sima fv: A → B
+-- fuggo fv: (x : A) → B
+--   (x : A  ) → B
 ID : (A : Set) → A → A
-ID = {!!}
+ID = λ _ x → x
 
 CONST : (A B : Set) → A → B → A
 CONST = {!!}
 
 comm× : (A B : Set) → (A × B) ↔ (B × A)
-comm× = {!!}
+comm× = λ A B → (λ ab → proj₂ ab , proj₁ ab) , {!!}
 
 -- Vectors
 nil : (A : Set) → Vec A 0
-nil = {!!}
+nil = λ A → tt
 
 cons : (A : Set)(n : ℕ) → A → Vec A n → Vec A (suc n)
-cons = {!!}
+cons A n x xs = x , xs 
 
 head : (A : Set)(n : ℕ) → Vec A (suc n) → A
 head = {!!}

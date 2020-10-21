@@ -4,9 +4,17 @@ open import lib
 open import numbers-and-bools
 
 -- Pattern matching
-
+-- C-c C-c
 _∧_ : Bool → Bool → Bool
-_∧_ = {!!}
+true ∧ y = y
+false ∧ y = false
+--true ∧ true = true
+--_ ∧ _ = false
+--true ∧ false = false
+--false ∧ false = false
+--false ∧ true = false
+--x ∧ y = if x then y else false
+--_∧_ = λ x y → if x then y else false
 
 _∨_ : Bool → Bool → Bool
 _∨_ = {!!}
@@ -14,16 +22,17 @@ _∨_ = {!!}
 -- Universe
 
 _^3 : Set → Set
-A ^3 = {!!}
+A ^3 = A × A × A
 
 _^'_ : Set → ℕ → Set
-_^'_ = {!!}
+A ^' zero = ⊤
+A ^' suc n = A × A ^' n
 
 Vec : Set → ℕ → Set
 Vec = _^'_
 
 tff tft : Vec Bool 3
-tff = {!!}
+tff = true , false , false , tt
 tft = {!!}
 
 5nums : Vec ℕ 5
@@ -35,20 +44,20 @@ tft = {!!}
 -- works for every type:
 
 ID : (A : Set) → A → A
-ID = {!!}
+ID = λ A x → x
 
 CONST : (A B : Set) → A → B → A
 CONST = {!!}
 
 comm× : (A B : Set) → (A × B) ↔ (B × A)
-comm× = {!!}
+comm× A B = (λ p → proj₂ p , proj₁ p) , {!!}
 
 -- Vectors
 nil : (A : Set) → Vec A 0
-nil = {!!}
+nil = λ A → tt
 
 cons : (A : Set)(n : ℕ) → A → Vec A n → Vec A (suc n)
-cons = {!!}
+cons = λ A n x xs → x , xs
 
 head : (A : Set)(n : ℕ) → Vec A (suc n) → A
 head = {!!}
@@ -69,13 +78,16 @@ isEmpty = {!!}
 -- Equality
 
 Eqb : Bool → Bool → Set
-Eqb = {!!}
+Eqb true true = ⊤
+Eqb true false = ⊥
+Eqb false true = ⊥
+Eqb false false = ⊤
 
 true=true : Eqb true true
-true=true = {!!}
+true=true = tt
 
 ¬true=false : ¬ Eqb true false
-¬true=false = {!!}
+¬true=false = λ x → x
 
 -- now we can write unit tests inside Agda:
 
@@ -89,13 +101,14 @@ testAnd2 : Eqb (and true true) true
 testAnd2 = {!!}
 
 toSet : Bool → Set
-toSet = {!!}
+toSet true = ⊤
+toSet false = ⊥
 
 Eqn : ℕ → ℕ → Set
 Eqn = λ x y → toSet (eq x y)
 
 test+1 : Eqn (3 + 2) 5
-test+1 = {!!}
+test+1 = tt
 
 test+2 : ¬ Eqn (3 + 2) 4
 test+2 = {!!}
@@ -111,7 +124,8 @@ EqVec = {!!}
 
 -- More vectors
 map : (A B : Set)(n : ℕ)(f : A → B) → Vec A n → Vec B n
-map = {!!}
+map A B zero f xs = xs
+map A B (suc n) f (x , xs) = f x , map A B n f xs
 
 foldl : (A B : Set)(n : ℕ) → A → Vec B n → A
 foldl = {!!}
