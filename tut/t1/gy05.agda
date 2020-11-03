@@ -62,20 +62,23 @@ module f3b where
 f4 : Dec ((X Y : Set) → X ⊎ Y → Y)
 f4 = inj₂ λ u → u ⊤ ⊥ (inj₁ tt)
 
+-- minden állításra: (x ⊃ z) ∨ (y ⊃ z) ⊃ (x ∨ y ⊃ z)
 f5 : Dec ((X Y Z : Set) → (X → Z) ⊎ (Y → Z) → (X ⊎ Y → Z))
-f5 = {!!}
+f5 = inj₂ λ t → t ⊤ ⊥ ⊥ (inj₂ (λ x → x)) (inj₁ tt) 
 
+-- (x ⊃ z) ∧ (y ⊃ z) ⊃ (x ∧ y ⊃ z)
 f6 : Dec ((X Y Z : Set) → (X → Z) × (Y → Z) → (X × Y → Z))
-f6 = {!!}
+f6 = inj₁ λ X Y Z t u → proj₁ t (proj₁ u)
 
+-- (x ∧ y ⊃ z) ⊃ (x ⊃ z) ∧ (y ⊃ z)
 f7 : Dec ((X Y Z : Set) → (X × Y → Z) → (X → Z) × (Y → Z))
-f7 = {!!}
+f7 = inj₂ λ t → proj₁ (t ⊤ ⊥ ⊥ proj₂) tt  
 
-f8 : Dec ((X Y Z : Set) → (X ⊎ Y × Z) → (X ⊎ Y) × (X ⊎ Z))
-f8 = {!!}
+f8 : Dec ((X Y Z : Set) → (X ⊎ (Y × Z)) → (X ⊎ Y) × (X ⊎ Z))
+f8 = inj₁ λ X Y Z t → case t inj₁ (λ u → inj₂ (proj₁ u)) , case t inj₁ λ u → inj₂ (proj₂ u)
 
 f9 : Dec ((X Y Z : Set) → (X ⊎ Y) × (X ⊎ Z) → (X ⊎ Y × Z))
-f9 = {!!}
+f9 = inj₁ λ X Y Z t → case (proj₁ t) inj₁ (case (proj₂ t) (λ x _ → inj₁ x) λ z y → inj₂ (y , z))
 
 f10 : Dec ((X Y Z : Set) → (X ⊎ Y) × (X ⊎ Z) → ((X ⊎ Y) × Z))
-f10 = {!!}
+f10 = inj₂ λ t → proj₂ (t ⊤ ℕ ⊥ ((inj₁ tt) , (inj₁ tt)))
