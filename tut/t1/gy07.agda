@@ -50,6 +50,10 @@ transp-Eqb = {!!}
 trans-Eqb : (a b c : Bool) → Eqb a b → Eqb b c → Eqb a c
 trans-Eqb = {!!}
 
+-- solve this using transp-Eqb! (without using indBool)
+sym-Eqb' : (a b : Bool) → Eqb a b → Eqb b a
+sym-Eqb' = {!!}
+
 notBoolFunction : ¬ ((f : Bool → Bool) → (x : Bool) → Eqb (f (f x)) x)
 notBoolFunction = {!!}
 
