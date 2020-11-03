@@ -229,8 +229,8 @@ Examples.
     plus3 : ℕ → ℕ
     plus3 = λ x → suc (suc (suc x))
 
-    is0 : ℕ → Bool
-    is0 = λ y → rec true (λ _ → false) y
+    eq0 : ℕ → Bool
+    eq0 = λ y → rec true (λ _ → false) y
 
     even : ℕ → Bool
     even = λ x → rec true (λ _ b → not b) x
@@ -266,9 +266,9 @@ Example `times3plus2`:
     3 = suc (suc (suc zero))             suc (suc (suc (suc (suc (suc (suc (suc (suc 2))))))))
     ...                                  ...
 
-Example `is0`:
+Example `eq0`:
 
-    x                                    is0 x
+    x                                    eq0 x
     -----------------------------------------------------------------------------------------------
     0 = zero                             true
     1 = suc zero                         (λ _ → false) true = false
@@ -322,29 +322,6 @@ functions.
     2 = suc (suc zero)                   (1 , 2)
     3 = suc (suc (suc zero))             (2 , 3)
     4 = suc (suc (suc (suc zero)))       (3 , 5)
-    ...                                  ...
-
-The predecessor function:
-
-    n                                    pred n
-    ----------------------------------------------------------------------------------------
-    0 = zero                             zero
-    1 = suc zero                         zero
-    2 = suc (suc zero)                   suc zero
-    3 = suc (suc (suc zero))             suc (suc zero)
-    4 = suc (suc (suc (suc zero)))       suc (suc (suc zero))
-    ...                                  ...
-
-We need `u = zero` and `v` where `v = id` if `n = 1`, otherwise `v =
-suc`. We store the information about `n = 1` as a boolean.
-
-    n                                    rec (zero , true) (λ w → if proj₂ w then zero else proj₁ w)
-    ------------------------------------------------------------------------------------------------
-    0 = zero                             (zero , true)
-    1 = suc zero                         (zero, false)
-    2 = suc (suc zero)                   (suc zero , false)
-    3 = suc (suc (suc zero))             (suc (suc zero) , false)
-    4 = suc (suc (suc (suc zero)))       (suc (suc (suc zero)) , false)
     ...                                  ...
 
 
@@ -410,6 +387,44 @@ Rules:
 Example.
 
     undiag : {X : Set} → X ⊎ X → X
+
+The predecessor function `pred : ℕ → ℕ ⊎ ⊤`:
+
+    n                                    pred n
+    ----------------------------------------------------------------
+    0 = zero                             inj₂ tt
+    1 = suc zero                         inj₁ zero
+    2 = suc (suc zero)                   inj₁ (suc zero)
+    3 = suc (suc (suc zero))             inj₁ (suc (suc zero))
+    4 = suc (suc (suc (suc zero)))       inj₁ (suc (suc (suc zero)))
+    ...                                  ...
+
+    pred = λ n → rec (inj₂ tt) (λ w → case w (λ n → inj₁ (suc n)) (λ _ → inj₁ zero)) n
+
+Equality of natural numbers `eqℕ : ℕ → ℕ → Bool`
+
+    n                                    eqℕ n
+    -------------------------------------------------
+    0 = zero                             eq0
+    1 = suc zero                         "eq0 ∘ pred"
+    2 = suc (suc zero)                   "eq1 ∘ pred"
+    3 = suc (suc (suc zero))             "eq2 ∘ pred"
+    4 = suc (suc (suc (suc zero)))       "eq3 ∘ pred"
+    ...                                  ...
+
+Because `pred` returns a `ℕ ⊎ ⊤`, we have to handle the `inj₂ tt` case:
+
+    n                                    eqℕ n
+    --------------------------------------------------------------------------
+    0 = zero                             eq0
+    1 = suc zero                         λ m → case (pred m) eq0 (λ _ → false)
+    2 = suc (suc zero)                   λ m → case (pred m) eq1 (λ _ → false)
+    3 = suc (suc (suc zero))             λ m → case (pred m) eq2 (λ _ → false)
+    4 = suc (suc (suc (suc zero)))       λ m → case (pred m) eq3 (λ _ → false)
+    ...                                  ...
+    
+    eqℕ = λ n → rec eq0 (λ eqn m → case (pred m) eqn (λ _ → false)) n
+
 
 ## Logical equivalence `↔` and an algebraic structure on types
 
@@ -614,27 +629,22 @@ Examples:
     ¬true=false : ¬ Eqb true false
     ¬true=false = λ e → e
 
-Equality type for `ℕ`:
+Equality of natural numbers:
 
-    Eqn : ℕ → ℕ → Set
-    Eqn = λ x y → Eqb (eq x y) true
+    eqℕ : ℕ → ℕ → Bool -- see above
+    
+    Eqℕ : ℕ → ℕ → Set
+    Eqℕ a b = if eqℕ a b then ⊤ else ⊥
 
-You can check that this has the following properties:
+    10=10 : Eqℕ 10 10
+    10=10 = tt
+    
+    10≠7 : ¬ Eqℕ 10 7
+    10≠7 = λ e → e
 
-    Eqn zero    zero    = ⊤
-    Eqn (suc x) zero    = ⊥
-    Eqn zero    (suc y) = ⊥
-    Eqn (suc x) (suc y) = Eqn x y
+    7≠10 : ¬ Eqℕ 7 10
+    7≠10 = λ e → e
 
-Unit tests for functions on natural numbers:
-
-    test+ : Eqn (3 + 2) 5
-    test+ = tt
-
-We even have negative unit tests:
-
-    test+' : ¬ Eqn (3 + 2) 4
-    test+' = λ x → x
 
 # Dependent types
 
@@ -690,7 +700,7 @@ Rules:
 
 Example:
 
-    w : Σ ℕ (λ n → Eqn (suc zero + n) (suc (suc (suc zero))))
+    w : Σ ℕ (λ n → Eqℕ (suc zero + n) (suc (suc (suc zero))))
     w = (suc (suc zero) , tt)
 
 ## Dependent elimination for `Bool`, `ℕ` and `⊎`
@@ -729,15 +739,15 @@ the second case we need `Eqb (not (not false)) false = Eqb false false
 
 We show that `zero` is a left and right identity of addition.
 
-    plusLeftId : (x : ℕ) → Eqn (plus zero x) x
-    plusLeftId = λ x → indℕ (λ x → Eqn x x) tt (λ _ e → e) x
+    plusLeftId : (x : ℕ) → Eqℕ (plus zero x) x
+    plusLeftId = λ x → indℕ (λ x → Eqℕ x x) tt (λ _ e → e) x
 
-First we note that `Eqn (plus zero x) x = Eqn x x`. So we only have to
-prove `Eqn x x` for every `x : ℕ`. Induction says that we have to
-prove this first for `x = zero`, that is `Eqn zero zero = ⊤`, this is
-easy: `tt`. Then, for any `n : ℕ`, given `e : Eqn n n`, we have to
-show `Eqn (suc n) (suc n)`. `e` is called the inductive
-hypothesis. But as we remarked above, `Eqn (suc n) (suc n) = Eqn n n`,
+First we note that `Eqℕ (plus zero x) x = Eqℕ x x`. So we only have to
+prove `Eqℕ x x` for every `x : ℕ`. Induction says that we have to
+prove this first for `x = zero`, that is `Eqℕ zero zero = ⊤`, this is
+easy: `tt`. Then, for any `n : ℕ`, given `e : Eqℕ n n`, we have to
+show `Eqℕ (suc n) (suc n)`. `e` is called the inductive
+hypothesis. But as we remarked above, `Eqℕ (suc n) (suc n) = Eqℕ n n`,
 so we can direcly reuse the induction hypothesis to prove the case for
 `x = suc n`.
 
@@ -820,8 +830,8 @@ of natural numbers can be redefined this way:
     toSet true  = ⊤
     toSet false = ⊥
 
-    Eqn : ℕ → ℕ → Set
-    Eqn x y = toSet (eq x y)
+    Eqℕ : ℕ → ℕ → Set
+    Eqℕ x y = toSet (eq x y)
 
 Every such pattern matching definition can be rewritten into a
 definition using `rec` or `indℕ`. Hardcore people only use the
@@ -829,55 +839,55 @@ eliminators, lazy people use pattern matching.
 
 Properties of this equality:
 
-    refl : (x : ℕ) → Eqn x x
+    refl : (x : ℕ) → Eqℕ x x
     refl zero = tt
     refl (suc x) = refl x
 
-    transport : (P : ℕ → Set)(x y : ℕ) → Eqn x y → P x → P y
+    transport : (P : ℕ → Set)(x y : ℕ) → Eqℕ x y → P x → P y
     transport P zero    zero    e u = u
     transport P (suc x) zero    e u = exfalso e
     transport P zero    (suc y) e u = exfalso e
     transport P (suc x) (suc y) e u = transport (λ x → P (suc x)) x y e u
 
-    sym : (x y : ℕ) → Eqn x y → Eqn y x
-    sym x y e = transport (λ z → Eqn z x) x y e (refln x)
+    sym : (x y : ℕ) → Eqℕ x y → Eqℕ y x
+    sym x y e = transport (λ z → Eqℕ z x) x y e (refln x)
 
-    trans : (x y z : ℕ) → Eqn x y → Eqn y z → Eqn x z
-    trans x y z e e' = transport (λ q → Eqn x q) y z e' e
+    trans : (x y z : ℕ) → Eqℕ x y → Eqℕ y z → Eqℕ x z
+    trans x y z e e' = transport (λ q → Eqℕ x q) y z e' e
 
-    cong : (f : ℕ → ℕ)(x y : ℕ) → Eqn x y → Eqn (f x) (f y)
-    cong f x y e = transport (λ y → Eqn (f x) (f y)) x y e (refln (f x))
+    cong : (f : ℕ → ℕ)(x y : ℕ) → Eqℕ x y → Eqℕ (f x) (f y)
+    cong f x y e = transport (λ y → Eqℕ (f x) (f y)) x y e (refln (f x))
     
 `zero` and `suc` are disjoint and successor is injective:
 
-    zero≠suc : (x : ℕ) → ¬ Eqn zero (suc x)
+    zero≠suc : (x : ℕ) → ¬ Eqℕ zero (suc x)
     zero≠suc x e = e
 
-    suc-inj : (x y : ℕ) → Eqn (suc x) (suc y) → Eqn x y
+    suc-inj : (x y : ℕ) → Eqℕ (suc x) (suc y) → Eqℕ x y
     suc-inj x y e = e
 
 Natural numbers form a commutative monoid with `_+_` and `zero`.
 
-    idl : (x : ℕ) → Eqn (zero + x) x
+    idl : (x : ℕ) → Eqℕ (zero + x) x
     idl x = refln x
 
-    idr : (x : ℕ) → Eqn (x + zero) x
+    idr : (x : ℕ) → Eqℕ (x + zero) x
     idr zero    = tt
     idr (suc x) = idr x
 
-    ass : (x y z : ℕ) → Eqn ((x + y) + z) (x + (y + z))
+    ass : (x y z : ℕ) → Eqℕ ((x + y) + z) (x + (y + z))
     ass zero    y z = refln (y + z)
     ass (suc x) y z = ass x y z
 
-    comm-lemm : (x y : ℕ) → Eqn (suc x + y) (x + suc y)
+    comm-lemm : (x y : ℕ) → Eqℕ (suc x + y) (x + suc y)
     comm-lemm zero    y = refln y
     comm-lemm (suc x) y = comm-lemm x y
 
-    comm : (x y : ℕ) → Eqn (x + y) (y + x)
+    comm : (x y : ℕ) → Eqℕ (x + y) (y + x)
     comm zero y    = sym (y + zero) y (idr y)
     comm (suc x) y = trans (suc (x + y)) (suc (y + x)) (y + suc x) (comm x y) (comm-lemm y x)
 
-Prove `Eqn ((x + y) ^ 2) (x ^ 2 + 2 * x * y + y ^ 2)` using the
+Prove `Eqℕ ((x + y) ^ 2) (x ^ 2 + 2 * x * y + y ^ 2)` using the
 algebraic laws, `cong` and `trans`.
 
 In the tutorials, show that natural numbers form a commutative
@@ -968,13 +978,13 @@ Less or equal.
 
     ∈ : (y : ℕ)(l : ℕ)(xs : ℕ ^ l) → Set
     ∈ y zero    tt       = ⊥
-    ∈ y (suc l) (x , xs) = Eqn y x ⊎ ∈ y l xs
+    ∈ y (suc l) (x , xs) = Eqℕ y x ⊎ ∈ y l xs
 
     ins-∈ : (y : ℕ)(l : ℕ)(xs : ℕ ^ l) → ∈ y (suc l) (insert y l xs)
-    ins-∈ y zero xs = inj₁ (Eqn-refl y)
+    ins-∈ y zero xs = inj₁ (Eq-refl y)
     ins-∈ y (suc l) (x , xs) = ind⊎
       (λ w → ∈ y (suc (suc l)) (case w (λ _ → y , x , xs) (λ _ → x , insert y l xs)))
-      (λ y≤x → inj₁ (Eqn-refl y))
+      (λ y≤x → inj₁ (Eq-refl y))
       (λ x≤y → inj₂ (ins-∈ y l xs))
       (≤dec y x)
 
@@ -992,10 +1002,10 @@ Less or equal.
 ## Isomorphisms internally
 
     EqBool→ℕ : (Bool → ℕ) → (Bool → ℕ) → Set
-    EqBool→ℕ f₀ f₁ = (x : Bool) → Eqn (f₀ x) (f₁ x)
+    EqBool→ℕ f₀ f₁ = (x : Bool) → Eqℕ (f₀ x) (f₁ x)
 
     Eqℕ×ℕ : ℕ × ℕ → ℕ × ℕ → Set
-    Eqℕ×ℕ u v = Eqn (proj₁ u) (proj₁ v) × Eqn (proj₂ u) (proj₂ v)
+    Eqℕ×ℕ u v = Eqℕ (proj₁ u) (proj₁ v) × Eqℕ (proj₂ u) (proj₂ v)
 
     α : (Bool → ℕ) → ℕ × ℕ
     α f = f true , f false
@@ -1004,8 +1014,8 @@ Less or equal.
     β u = λ b → if b then proj₁ u else proj₂ u
 
     αβ : (u : ℕ × ℕ) → Eqℕ×ℕ (α (β u)) u
-    αβ (a , b) = Eqn-refl a , Eqn-refl b
+    αβ (a , b) = Eq-refl a , Eq-refl b
 
     βα : (f : Bool → ℕ) → EqBool→ℕ (β (α f)) f
-    βα f true  = Eqn-refl (f true)
-    βα f false = Eqn-refl (f false)
+    βα f true  = Eq-refl (f true)
+    βα f false = Eq-refl (f false)
