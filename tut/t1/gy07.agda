@@ -1,3 +1,5 @@
+{-# OPTIONS --allow-unsolved-metas #-}
+
 module tut.t1.gy07 where
 
 open import lib
@@ -50,10 +52,6 @@ trans-Eqb = {!!}
 
 notBoolFunction : ¬ ((f : Bool → Bool) → (x : Bool) → Eqb (f (f x)) x)
 notBoolFunction = {!!}
-
--- hard:
-boolFunction : (f : Bool → Bool)(x : Bool) → Eqb (f (f (f x))) (f x)
-boolFunction = {!!}
 
 -------------------------------------------------
 -- Natural numbers
@@ -171,11 +169,3 @@ _+_ = λ a b → rec b suc a
 
 +-idr : (x : ℕ) → Eqℕ x (x + zero)
 +-idr = {!!}
-
--- difficult
-Eqℕ-sym : (a b : ℕ) → Eqℕ a b → Eqℕ b a
-Eqℕ-sym = {!!}
-
--- use Eqℕ-sym!
-lem3 : (x : ℕ) → Eqℕ x (suc (suc zero)) → Eqℕ (suc (suc (suc zero))) (suc x)
-lem3 = {!!}

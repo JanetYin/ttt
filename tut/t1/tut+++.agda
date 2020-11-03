@@ -1,6 +1,7 @@
 module tut.t1.tut++ where
 
 open import lib
+open import tut.t1.gy07
 
 -- ha n < m, akkor legyen a Bool false
 dec_by_ : ℕ → ℕ → (ℕ × Bool)
@@ -23,3 +24,12 @@ e1 dm = {!!}
       , {!!}
 
 -- listákkal felvértezve, próbáljatok Eratoszthenészi szitát implementálni
+
+boolFunction : (f : Bool → Bool)(x : Bool) → Eqb (f (f (f x))) (f x)
+boolFunction = {!!}
+
+Eqℕ-sym : (a b : ℕ) → Eqℕ a b → Eqℕ b a
+Eqℕ-sym = {!!}
+
+lem3 : (x : ℕ) → Eqℕ x (suc (suc zero)) → Eqℕ (suc (suc (suc zero))) (suc x)
+lem3 = {!!}
