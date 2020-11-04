@@ -1,4 +1,4 @@
-module tut.t3.gy07 where
+module tut.t2.gy07 where
 
 open import lib
 
@@ -13,36 +13,44 @@ eqb : Bool → Bool → Bool
 eqb = λ a b → if a then b else not b
 
 Eqb : Bool → Bool → Set
-Eqb = {!!}
+Eqb true  true  = ⊤
+Eqb false false = ⊤
+Eqb _     _     = ⊥
 
 -- what is the difference of eqb and Eqb?
 
 -- unit tests
 
 nonottrue : Eqb (not (not true)) true
-nonottrue = {!!}
+nonottrue = tt
 
 noteq : ¬ Eqb false true
-noteq = {!!}
+noteq = λ b → b
 
 lem0 : Eqb true false → Eqb false true
-lem0 = {!!}
+lem0 = λ e → e
 
 -- dependent elimination of Bool
 refl-Eqb : (b : Bool) → Eqb b b
-refl-Eqb = {!!}
+refl-Eqb = λ b → indBool (λ x → Eqb x x) tt tt b
 
 lem1 : (x : Bool) → Eqb true x → ¬ Eqb x false
-lem1 = {!!}
+lem1 = λ x → indBool (λ b → Eqb true b → ¬ Eqb b false) (λ _ b → b) (λ b _ → b) x 
 
 notnot : (x : Bool) → Eqb (not (not x)) x
-notnot = {!!}
+notnot = λ x → indBool (λ b → Eqb (not (not b)) b) tt tt x
 
 sym-Eqb : (a b : Bool) → Eqb a b → Eqb b a
-sym-Eqb = {!!}
+sym-Eqb = λ a b → indBool (λ x → Eqb a x → Eqb x a)
+                  (indBool (λ x → Eqb x true → Eqb true x) (λ tt → tt) (λ b → b) a)
+                  (indBool (λ x → Eqb x false → Eqb false x) (λ b → b) (λ tt → tt) a)
+                  b
 
 transp-Eqb : (P : Bool → Set)(a b : Bool) → Eqb a b → P a → P b
-transp-Eqb = {!!}
+transp-Eqb = λ P a b → indBool (λ x → Eqb a x → P a → P x)
+                        (indBool (λ x → Eqb x true → P x → P true) (λ _ pt → pt) (λ b _ → exfalso b) a)
+                        {!!}
+                        b
 
 -- solve this using transp-Eqb! (without using indBool)
 trans-Eqb : (a b c : Bool) → Eqb a b → Eqb b c → Eqb a c
@@ -73,7 +81,9 @@ pred : ℕ → ℕ ⊎ ⊤
 pred = rec (inj₂ tt) (λ w → case w (λ n → inj₁ (suc n)) (λ _ → inj₁ zero))
 
 pred' : ℕ → ℕ ⊎ ⊤
-pred' = indℕ (λ _ → ℕ ⊎ ⊤) (inj₂ tt) (λ n _ → inj₁ n)
+pred' = λ x → indℕ (λ _ → ℕ ⊎ ⊤) (inj₂ tt) (λ n _ → inj₁ n) x
+--indℕ : (P : ℕ → Set) → P zero → ((n : ℕ) → P n → P (suc n)) → (t : ℕ) → P t
+
 
 -- What's the difference between pred and pred'?
 
@@ -117,39 +127,39 @@ Because `pred` returns a `ℕ ⊎ ⊤`, we have to handle the `inj₂ tt` case:
     ...                                  ...
 -}
 eqℕ : ℕ → ℕ → Bool
-eqℕ = {!!}
+eqℕ = rec eq0 (λ eqn-1 n → case (pred' n) eqn-1 λ _ → false)
 
 -- what is the difference between eqℕ a b and Eqℕ a b?
 Eqℕ : ℕ → ℕ → Set
-Eqℕ = {!!}
+Eqℕ = λ a b → if eqℕ a b then ⊤ else ⊥ 
 
 -- unit tests:
 
 10=10 : Eqℕ 10 10
-10=10 = {!!}
+10=10 = tt
 
 10≠7 : ¬ Eqℕ 10 7
-10≠7 = {!!}
+10≠7 = λ b → b
 
 7≠10 : ¬ Eqℕ 7 10
-7≠10 = {!!}
+7≠10 = λ b → b
 
 -- properties of equality (no need for induction)
 
 lem4 : ¬ Eqℕ zero zero → Eqℕ zero (suc zero)
-lem4 = {!!}
+lem4 = λ e → e tt
 
 eqzerozero : Eqℕ zero zero
-eqzerozero = {!!}
+eqzerozero = tt
 
 eqsuczero : (a : ℕ) → ¬ Eqℕ (suc a) zero
-eqsuczero = {!!}
+eqsuczero = λ _ b → b
 
 eqzerosuc : (a : ℕ) → ¬ Eqℕ zero (suc a)
-eqzerosuc = {!!}
+eqzerosuc = λ _ b → b
 
 lem5 : ¬ Eqℕ zero zero → Eqℕ zero (suc zero)
-lem5 = {!!}
+lem5 = λ e → e tt
 
 -- this only needs induction if pred is used in eqℕ and not pred'
 eqsucsuc : (a b : ℕ) → Eqℕ (suc a) (suc b) → Eqℕ a b
@@ -158,7 +168,7 @@ eqsucsuc = {!!}
 -- induction on ℕ
 
 Eqℕ-refl : (x : ℕ) → Eqℕ x x
-Eqℕ-refl = {!!}
+Eqℕ-refl = λ x → indℕ (λ n → Eqℕ n n) tt (λ n eqn → eqn) x
 
 _+_ : ℕ → ℕ → ℕ
 _+_ = λ a b → rec b suc a
