@@ -1,6 +1,4 @@
-{-# OPTIONS --allow-unsolved-metas #-}
-
-module tut.t1.gy07 where
+module tut.t2.gy07 where
 
 open import lib
 
@@ -15,63 +13,55 @@ eqb : Bool → Bool → Bool
 eqb = λ a b → if a then b else not b
 
 Eqb : Bool → Bool → Set
-Eqb = λ a b → if eqb a b then ⊤ else ⊥
+Eqb true  true  = ⊤
+Eqb false false = ⊤
+Eqb _     _     = ⊥
 
 -- what is the difference of eqb and Eqb?
 
 -- unit tests
 
-nonottrue : Eqb (not (not true)) true -- = Eqb true true = ⊤
+nonottrue : Eqb (not (not true)) true
 nonottrue = tt
 
-noteq : ¬ Eqb false true -- Eqb false true = ⊥
-noteq = λ t → t
+noteq : ¬ Eqb false true
+noteq = λ b → b
 
-lem0 : Eqb true false → Eqb false true -- Eqb true false = ⊥, Eqb false true = ⊥
-lem0 = λ t → t
-
-{-
-(P : Bool → Set) →
-      P true → P false → (t : Bool) → P t
--}
+lem0 : Eqb true false → Eqb false true
+lem0 = λ e → e
 
 -- dependent elimination of Bool
 refl-Eqb : (b : Bool) → Eqb b b
-refl-Eqb = λ b → indBool (λ b → Eqb b b) tt tt b
+refl-Eqb = λ b → indBool (λ x → Eqb x x) tt tt b
 
 lem1 : (x : Bool) → Eqb true x → ¬ Eqb x false
-lem1 = indBool _ (λ _ x → x) (λ x _ → x) 
+lem1 = λ x → indBool (λ b → Eqb true b → ¬ Eqb b false) (λ _ b → b) (λ b _ → b) x 
 
--- Eqb (not (not false)) = Eqb false false = ⊤
 notnot : (x : Bool) → Eqb (not (not x)) x
-notnot = indBool (λ b → Eqb (not (not b)) b) tt tt
+notnot = λ x → indBool (λ b → Eqb (not (not b)) b) tt tt x
 
 sym-Eqb : (a b : Bool) → Eqb a b → Eqb b a
-sym-Eqb = indBool
-          (λ a → (b : Bool) → Eqb a b → Eqb b a)
-          (indBool (λ b → Eqb true b → Eqb b true) (λ _ → tt) (λ x → x))
-          (indBool (λ b → Eqb false b → Eqb b false) (λ x → x) λ _ → tt)
+sym-Eqb = λ a b → indBool (λ x → Eqb a x → Eqb x a)
+                  (indBool (λ x → Eqb x true → Eqb true x) (λ tt → tt) (λ b → b) a)
+                  (indBool (λ x → Eqb x false → Eqb false x) (λ b → b) (λ tt → tt) a)
+                  b
 
 transp-Eqb : (P : Bool → Set)(a b : Bool) → Eqb a b → P a → P b
-transp-Eqb P = indBool
-               (λ a → (b : Bool) → Eqb a b → P a → P b )
-               (indBool _ (λ _ x → x) exfalso)
-               (indBool _ exfalso λ _ x → x )
+transp-Eqb = λ P a b → indBool (λ x → Eqb a x → P a → P x)
+                        (indBool (λ x → Eqb x true → P x → P true) (λ _ pt → pt) (λ b _ → exfalso b) a)
+                        {!!}
+                        b
 
 -- solve this using transp-Eqb! (without using indBool)
 trans-Eqb : (a b c : Bool) → Eqb a b → Eqb b c → Eqb a c
-trans-Eqb a b c u v = transp-Eqb (λ x → Eqb a x) b c v u
--- transp-Eqb (λ x → Eqb x c) b a (sym-Eqb a b u) v
-
--- P b = Eqb a c
--- x : Bool
-
--- solve this using transp-Eqb! (without using indBool)
-sym-Eqb' : (a b : Bool) → Eqb a b → Eqb b a
-sym-Eqb' a b e = transp-Eqb (λ x → Eqb x a) a b e (refl-Eqb a)
+trans-Eqb = {!!}
 
 notBoolFunction : ¬ ((f : Bool → Bool) → (x : Bool) → Eqb (f (f x)) x)
-notBoolFunction = λ t → t (λ _ → false) true
+notBoolFunction = {!!}
+
+-- hard:
+boolFunction : (f : Bool → Bool)(x : Bool) → Eqb (f (f (f x))) (f x)
+boolFunction = {!!}
 
 -------------------------------------------------
 -- Natural numbers
@@ -91,7 +81,9 @@ pred : ℕ → ℕ ⊎ ⊤
 pred = rec (inj₂ tt) (λ w → case w (λ n → inj₁ (suc n)) (λ _ → inj₁ zero))
 
 pred' : ℕ → ℕ ⊎ ⊤
-pred' = indℕ (λ _ → ℕ ⊎ ⊤) (inj₂ tt) (λ n _ → inj₁ n)
+pred' = λ x → indℕ (λ _ → ℕ ⊎ ⊤) (inj₂ tt) (λ n _ → inj₁ n) x
+--indℕ : (P : ℕ → Set) → P zero → ((n : ℕ) → P n → P (suc n)) → (t : ℕ) → P t
+
 
 -- What's the difference between pred and pred'?
 
@@ -135,11 +127,11 @@ Because `pred` returns a `ℕ ⊎ ⊤`, we have to handle the `inj₂ tt` case:
     ...                                  ...
 -}
 eqℕ : ℕ → ℕ → Bool
-eqℕ = rec eq0 (λ eqn m → case (pred' m) eqn (λ _ → false))
+eqℕ = rec eq0 (λ eqn-1 n → case (pred' n) eqn-1 λ _ → false)
 
 -- what is the difference between eqℕ a b and Eqℕ a b?
 Eqℕ : ℕ → ℕ → Set
-Eqℕ = λ a b → if eqℕ a b then ⊤ else ⊥
+Eqℕ = λ a b → if eqℕ a b then ⊤ else ⊥ 
 
 -- unit tests:
 
@@ -147,17 +139,13 @@ Eqℕ = λ a b → if eqℕ a b then ⊤ else ⊥
 10=10 = tt
 
 10≠7 : ¬ Eqℕ 10 7
-10≠7 = λ e → e
+10≠7 = λ b → b
 
 7≠10 : ¬ Eqℕ 7 10
-7≠10 = λ e → e
-{-
-(P : ℕ → Set) →
-      P zero → ({n : ℕ} → P n → P (suc n)) → (t : ℕ) → P t
--}
+7≠10 = λ b → b
+
 -- properties of equality (no need for induction)
 
--- Eqℕ zero zero = ⊤
 lem4 : ¬ Eqℕ zero zero → Eqℕ zero (suc zero)
 lem4 = λ e → e tt
 
@@ -165,46 +153,39 @@ eqzerozero : Eqℕ zero zero
 eqzerozero = tt
 
 eqsuczero : (a : ℕ) → ¬ Eqℕ (suc a) zero
-eqsuczero = λ _ e → e
+eqsuczero = λ _ b → b
 
 eqzerosuc : (a : ℕ) → ¬ Eqℕ zero (suc a)
-eqzerosuc = λ _ e → e
+eqzerosuc = λ _ b → b
 
 lem5 : ¬ Eqℕ zero zero → Eqℕ zero (suc zero)
 lem5 = λ e → e tt
 
 -- this only needs induction if pred is used in eqℕ and not pred'
 eqsucsuc : (a b : ℕ) → Eqℕ (suc a) (suc b) → Eqℕ a b
-eqsucsuc = λ a b e → e
+eqsucsuc = {!!}
 
 -- induction on ℕ
 
 Eqℕ-refl : (x : ℕ) → Eqℕ x x
-Eqℕ-refl = indℕ (λ x → Eqℕ x x) tt λ n e → e
+Eqℕ-refl = λ x → indℕ (λ n → Eqℕ n n) tt (λ n eqn → eqn) x
 
 _+_ : ℕ → ℕ → ℕ
 _+_ = λ a b → rec b suc a
 
 +-assoc : (x y z : ℕ) → Eqℕ ((x + y) + z) (x + (y + z))
-+-assoc x y z = indℕ (λ x → Eqℕ ((x + y) + z) (x + (y + z)))
-                (Eqℕ-refl (y + z))
-                (λ n e → e)
-                x
++-assoc = {!!}
 
--- zero + m = rec m suc zero = m
 +-idl : (x : ℕ) → Eqℕ (zero + x) x
-+-idl = Eqℕ-refl
++-idl = {!!}
 
--- suc n + zero = rec zero suc (suc n) = suc (rec zero suc n) = suc (n + zero)
 +-idr : (x : ℕ) → Eqℕ x (x + zero)
-+-idr = indℕ (λ x → Eqℕ x (x + zero)) tt λ n e → e
++-idr = {!!}
 
+-- difficult
+Eqℕ-sym : (a b : ℕ) → Eqℕ a b → Eqℕ b a
+Eqℕ-sym = {!!}
 
-transp-Eqℕ : (P : ℕ → Set)(a b : ℕ) → Eqℕ a b → P a → P b
-transp-Eqℕ P a = indℕ (λ n → (P' : ℕ → Set)(m : ℕ) → Eqℕ n m → P' n → P' m)
-                             (λ _ → indℕ _ (λ _ x → x ) λ _ _ → exfalso)
-                             (λ n h p → indℕ _
-                                             exfalso
-                                             λ m t → h (λ z → p (suc z)) m )
-                             a
-                             P                            
+-- use Eqℕ-sym!
+lem3 : (x : ℕ) → Eqℕ x (suc (suc zero)) → Eqℕ (suc (suc (suc zero))) (suc x)
+lem3 = {!!}

@@ -68,9 +68,9 @@ head' {n = suc n} xs = proj₁ xs
 head'' : {A : Set}{n : ℕ} → Vec' A (suc n) → A
 head'' = proj₁
 
-tail : {!!}
-tail = {!!}
+tail : {A : Set}{n : ℕ} → Vec' A (suc n) → Vec' A n
+tail = proj₂
 
 -- hogyan adjuk meg vektorra a rekurziót?
-foldr' : ∀{n}{A B : Set} → (A → B → B) → A → Vec' A n → B 
+foldr' : ∀{n}{A B : Set} → (A → B → B) → A → Vec' A n → B
 foldr' f u ls = {!!}
