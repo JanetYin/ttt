@@ -1,4 +1,4 @@
-module tut.t1.tut++ where
+module tut.t1.tut+++ where
 
 open import lib
 open import tut.t1.gy07
@@ -26,10 +26,20 @@ e1 dm = {!!}
 -- listákkal felvértezve, próbáljatok Eratoszthenészi szitát implementálni
 
 boolFunction : (f : Bool → Bool)(x : Bool) → Eqb (f (f (f x))) (f x)
-boolFunction = {!!}
+boolFunction f = {!!}
 
 Eqℕ-sym : (a b : ℕ) → Eqℕ a b → Eqℕ b a
 Eqℕ-sym = {!!}
 
 lem3 : (x : ℕ) → Eqℕ x (suc (suc zero)) → Eqℕ (suc (suc (suc zero))) (suc x)
 lem3 = {!!}
+
+_^_ : Set → ℕ → Set
+A ^ n = rec ⊤ (A ×_ ) n
+
+Vec : (A : Set)(n : ℕ) → Set
+Vec A n = A ^ n
+
+-- add meg indukcióval!
+foldr : ∀{A}{i}{B : Set i}{n} → B → (A → B → B) → Vec A n → B
+foldr = {!!}

@@ -21,41 +21,57 @@ Eqb = λ a b → if eqb a b then ⊤ else ⊥
 
 -- unit tests
 
-nonottrue : Eqb (not (not true)) true
-nonottrue = {!!}
+nonottrue : Eqb (not (not true)) true -- = Eqb true true = ⊤
+nonottrue = tt
 
-noteq : ¬ Eqb false true
-noteq = {!!}
+noteq : ¬ Eqb false true -- Eqb false true = ⊥
+noteq = λ t → t
 
-lem0 : Eqb true false → Eqb false true
-lem0 = {!!}
+lem0 : Eqb true false → Eqb false true -- Eqb true false = ⊥, Eqb false true = ⊥
+lem0 = λ t → t
+
+{-
+(P : Bool → Set) →
+      P true → P false → (t : Bool) → P t
+-}
 
 -- dependent elimination of Bool
 refl-Eqb : (b : Bool) → Eqb b b
-refl-Eqb = {!!}
+refl-Eqb = λ b → indBool (λ b → Eqb b b) tt tt b
 
 lem1 : (x : Bool) → Eqb true x → ¬ Eqb x false
-lem1 = {!!}
+lem1 = indBool _ (λ _ x → x) (λ x _ → x) 
 
+-- Eqb (not (not false)) = Eqb false false = ⊤
 notnot : (x : Bool) → Eqb (not (not x)) x
-notnot = {!!}
+notnot = indBool (λ b → Eqb (not (not b)) b) tt tt
 
 sym-Eqb : (a b : Bool) → Eqb a b → Eqb b a
-sym-Eqb = {!!}
+sym-Eqb = indBool
+          (λ a → (b : Bool) → Eqb a b → Eqb b a)
+          (indBool (λ b → Eqb true b → Eqb b true) (λ _ → tt) (λ x → x))
+          (indBool (λ b → Eqb false b → Eqb b false) (λ x → x) λ _ → tt)
 
 transp-Eqb : (P : Bool → Set)(a b : Bool) → Eqb a b → P a → P b
-transp-Eqb = {!!}
+transp-Eqb P = indBool
+               (λ a → (b : Bool) → Eqb a b → P a → P b )
+               (indBool _ (λ _ x → x) exfalso)
+               (indBool _ exfalso λ _ x → x )
 
 -- solve this using transp-Eqb! (without using indBool)
 trans-Eqb : (a b c : Bool) → Eqb a b → Eqb b c → Eqb a c
-trans-Eqb = {!!}
+trans-Eqb a b c u v = transp-Eqb (λ x → Eqb a x) b c v u
+-- transp-Eqb (λ x → Eqb x c) b a (sym-Eqb a b u) v
+
+-- P b = Eqb a c
+-- x : Bool
 
 -- solve this using transp-Eqb! (without using indBool)
 sym-Eqb' : (a b : Bool) → Eqb a b → Eqb b a
-sym-Eqb' = {!!}
+sym-Eqb' a b e = transp-Eqb (λ x → Eqb x a) a b e (refl-Eqb a)
 
 notBoolFunction : ¬ ((f : Bool → Bool) → (x : Bool) → Eqb (f (f x)) x)
-notBoolFunction = {!!}
+notBoolFunction = λ t → t (λ _ → false) true
 
 -------------------------------------------------
 -- Natural numbers
@@ -135,41 +151,60 @@ Eqℕ = λ a b → if eqℕ a b then ⊤ else ⊥
 
 7≠10 : ¬ Eqℕ 7 10
 7≠10 = λ e → e
-
+{-
+(P : ℕ → Set) →
+      P zero → ({n : ℕ} → P n → P (suc n)) → (t : ℕ) → P t
+-}
 -- properties of equality (no need for induction)
 
+-- Eqℕ zero zero = ⊤
 lem4 : ¬ Eqℕ zero zero → Eqℕ zero (suc zero)
-lem4 = {!!}
+lem4 = λ e → e tt
 
 eqzerozero : Eqℕ zero zero
-eqzerozero = {!!}
+eqzerozero = tt
 
 eqsuczero : (a : ℕ) → ¬ Eqℕ (suc a) zero
-eqsuczero = {!!}
+eqsuczero = λ _ e → e
 
 eqzerosuc : (a : ℕ) → ¬ Eqℕ zero (suc a)
-eqzerosuc = {!!}
+eqzerosuc = λ _ e → e
 
 lem5 : ¬ Eqℕ zero zero → Eqℕ zero (suc zero)
-lem5 = {!!}
+lem5 = λ e → e tt
 
 -- this only needs induction if pred is used in eqℕ and not pred'
 eqsucsuc : (a b : ℕ) → Eqℕ (suc a) (suc b) → Eqℕ a b
-eqsucsuc = {!!}
+eqsucsuc = λ a b e → e
 
 -- induction on ℕ
 
 Eqℕ-refl : (x : ℕ) → Eqℕ x x
-Eqℕ-refl = {!!}
+Eqℕ-refl = indℕ (λ x → Eqℕ x x) tt λ n e → e
 
 _+_ : ℕ → ℕ → ℕ
 _+_ = λ a b → rec b suc a
 
 +-assoc : (x y z : ℕ) → Eqℕ ((x + y) + z) (x + (y + z))
-+-assoc = {!!}
++-assoc x y z = indℕ (λ x → Eqℕ ((x + y) + z) (x + (y + z)))
+                (Eqℕ-refl (y + z))
+                (λ n e → e)
+                x
 
+-- zero + m = rec m suc zero = m
 +-idl : (x : ℕ) → Eqℕ (zero + x) x
-+-idl = {!!}
++-idl = Eqℕ-refl
 
+-- suc n + zero = rec zero suc (suc n) = suc (rec zero suc n) = suc (n + zero)
 +-idr : (x : ℕ) → Eqℕ x (x + zero)
-+-idr = {!!}
++-idr = indℕ (λ x → Eqℕ x (x + zero)) tt λ n e → e
+
+
+transp-Eqℕ : (P : ℕ → Set)(a b : ℕ) → Eqℕ a b → P a → P b
+transp-Eqℕ P a = indℕ (λ n → (P' : ℕ → Set)(m : ℕ) → Eqℕ n m → P' n → P' m)
+                             (λ _ → indℕ _ (λ _ x → x ) λ _ _ → exfalso)
+                             (λ n h p → indℕ _
+                                             exfalso
+                                             λ m t → h (λ z → p (suc z)) m )
+                             a
+                             P                            
