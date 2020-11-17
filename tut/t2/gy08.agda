@@ -37,7 +37,7 @@ transb a b c u v = transpb (λ c → Eqb a c) b c v u
 
 -- every function on booleans is a congruence; use transpb to prove it
 congb : (f : Bool → Bool) → (a b : Bool) → Eqb a b → Eqb (f a) (f b)
-congb = {!!}
+congb = λ f a b Eqab → transpb (λ w → Eqb (f a) (f w)) a b Eqab (reflb (f a))
 
 -- disjointness of different constructors of Bool
 disjb : ¬ Eqb true false
