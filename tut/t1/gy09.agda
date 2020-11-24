@@ -1,4 +1,4 @@
-module tut.t1.gy08 where
+module tut.t1.gy09 where
 
 open import lib
 
@@ -15,23 +15,10 @@ eqb = λ a b → if a then b else not b
 Eqb : Bool → Bool → Set
 Eqb = λ a b → if eqb a b then ⊤ else ⊥
 
-rail : (x y z w : Bool) → Eqb x z → Eqb y w → Eqb z w → Eqb x y
-rail = indBool _
-               (indBool _
-                        (λ _ _ _ _ _ → tt)
-                        (indBool _
-                                 (indBool _
-                                          (λ _ → exfalso)
-                                          (λ _ _ → exfalso))
-                                 (λ _ → exfalso)))
-               (indBool _
-                        {!!}
-                        {!!})
-
 -- properties of Eqb
 
 reflb : (b : Bool) → Eqb b b
-reflb = indBool _ tt tt
+reflb = {!!}
 
 transpb : (P : Bool → Set)(a b : Bool) → Eqb a b → P a → P b
 transpb = λ P a → indBool 
@@ -42,18 +29,15 @@ transpb = λ P a → indBool
 
 -- use transpb
 symb : (a b : Bool) → Eqb a b → Eqb b a
-symb a b e = transpb (λ b → Eqb b a) a b e (reflb a)
+symb = {!!}
 
 -- use transpb
 transb : (a b c : Bool) → Eqb a b → Eqb b c → Eqb a c
-transb a b c u v = transpb (λ c → Eqb a c) b c v u
+transb = {!!}
 
 -- every function on booleans is a congruence; use transpb to prove it
 congb : (f : Bool → Bool) → (a b : Bool) → Eqb a b → Eqb (f a) (f b)
-congb f a b e = transpb (λ x → Eqb (f a) (f x)) a b e (reflb (f a))
-
-congb' : (f : Bool → Bool) → {a b : Bool} → Eqb a b → Eqb (f a) (f b)
-congb' f {a}{b} e = congb f a b e
+congb = λ f a b e → transpb (λ b → Eqb (f a) (f b)) a b e (reflb (f a))
 
 -- disjointness of different constructors of Bool
 disjb : ¬ Eqb true false
@@ -72,38 +56,16 @@ infixl 5 _∨_
 -- properties of _∧_ and _∨_
 
 idl∧ : (a : Bool) → Eqb (true ∧ a)  a
-idl∧ = indBool _ tt tt
+idl∧ = {!!}
 
 idr∧ : (a : Bool) → Eqb (a ∧ true)  a
-idr∧ = indBool _ tt tt
-
-infixl 3 _◾_ -- \sq5
-_◾_ : {a b c : Bool} → Eqb a b → Eqb b c → Eqb a c
-_◾_ {a}{b}{c} = transb a b c
+idr∧ = {!!}
 
 ass∧ : (a b c : Bool) → Eqb ((a ∧ b) ∧ c) (a ∧ (b ∧ c))
-ass∧ = indBool _
-               (indBool _
-                        (indBool _
-                                 tt
-                                 tt)
-                        (indBool _
-                                 tt
-                                 tt))
-               ((indBool _
-                        (indBool _
-                                 tt
-                                 tt)
-                        (indBool _
-                                 tt
-                                 tt)))
--- (true ∧ b) ∧ c = b ∧ c = true ∧ (b ∧ c)
--- idl : true ∧ a = a
+ass∧ = {!!}
 
 comm∧ : (a b : Bool) → Eqb (a ∧ b) (b ∧ a)
-comm∧ = indBool _
-                (indBool _ tt tt)
-                (indBool _ tt tt)
+comm∧ = {!!}
 
 null∧ : (a : Bool) → Eqb (false ∧ a) false
 null∧ = {!!}
@@ -160,25 +122,32 @@ reflℕ = indℕ (λ x → Eqℕ x x) tt (λ _ e → e)
 
 -- transport
 transpℕ : (a b : ℕ) → Eqℕ a b → (P : ℕ → Set) → P a → P b
-transpℕ = indℕ _
-               (indℕ _ (λ _ _ e → e) λ _ _ → exfalso)
-               λ n h → indℕ _ exfalso λ n' h' e P → h n' e (λ x → P (suc x))
+transpℕ = indℕ
+  (λ a → (b : ℕ) → Eqℕ a b → (P : ℕ → Set) → P a → P b)
+  (indℕ
+    (λ b → Eqℕ zero b → (P : ℕ → Set) → P zero → P b)
+    (λ _ _ u → u)
+    (λ _ _ → exfalso))
+  (λ n ih → indℕ
+    (λ b → Eqℕ (suc n) b → (P : ℕ → Set) → P (suc n) → P b)
+    exfalso
+    (λ n' ih' e P → ih n' e (λ x → P (suc x))))
 
 -- commutativity of equality of ℕ: use transpℕ!
 sym : (a b : ℕ) → Eqℕ a b → Eqℕ b a
-sym a b e = transpℕ a b e (λ n → Eqℕ n a) (reflℕ a)
+sym a b e = transpℕ a b e (λ x → Eqℕ x a) (reflℕ a)
 
 -- transitivity of equality of ℕ: use transpℕ!
 trans : (a b c : ℕ) → Eqℕ a b → Eqℕ b c → Eqℕ a c
-trans a b c e e' = transpℕ b c e' (λ n → Eqℕ a n) e
+trans a b c e e' = transpℕ b c e' (λ x → Eqℕ a x) e
 
 -- congruence: use transpℕ!
 cong : (f : ℕ → ℕ) → (a b : ℕ) → Eqℕ a b → Eqℕ (f a) (f b)
-cong f a b e = transpℕ a b e (λ n → Eqℕ (f a) (f n)) (reflℕ (f a))
+cong f a b e = transpℕ a b e (λ b → Eqℕ (f a) (f b)) (reflℕ (f a))
 
 -- disjointness of different constructors of ℕ
 disj : (a : ℕ) → ¬ Eqℕ zero (suc a)
-disj = λ a → exfalso
+disj = λ _ e → e
 
 -- injectivity of suc
 inj : (a b : ℕ) → Eqℕ a b → Eqℕ (suc a) (suc b)
@@ -197,119 +166,203 @@ idl = reflℕ
 
 -- use indℕ
 idr : (a : ℕ) → Eqℕ (a + 0) a
-idr = indℕ _ tt λ _ e → e
+idr = indℕ (λ a → Eqℕ (a + 0) a) (reflℕ 0) (λ _ e → e)
 
 -- use indℕ
 ass : (a b c : ℕ) → Eqℕ ((a + b) + c) (a + (b + c))
-ass = indℕ _
-           (λ b c → trans (zero + b + c) (b + c) (zero + (b + c))
-                          (cong (λ x → x + c) (zero + b) b (idl b))
-                          (idl (b + c)))
-           λ n h → h
-
--- (suc n + b) + c = suc (n + b) + c = suc ((n + b) + c)
--- suc n + (b + c) = suc (n + (b + c))
--- kell: Eq (suc ((n + b) + c)) (suc (n + (b + c))) = Eq (n + (b + c)) (n + (b + c))
+ass = λ a b c → indℕ
+  (λ a → Eqℕ ((a + b) + c) (a + (b + c)))
+  (reflℕ (b + c))
+  (λ _ e → e)
+  a
 
 -- use indℕ
 suc+ : (a b : ℕ) → Eqℕ (suc a + b) (a + suc b)
-suc+ = λ a b → indℕ (λ a → Eqℕ (suc a + b) (a + suc b))
-                    (reflℕ (suc b))
-                    (λ _ h → h)
-                    a
--- suc 0 + b = suc (0 + b) = suc b  
+suc+ = λ a b → indℕ
+  (λ a → Eqℕ (suc a + b) (a + suc b))
+  (reflℕ (1 + b))
+  (λ _ e → e)
+  a
 
 -- use indℕ, trans, suc+
 comm : (a b : ℕ) → Eqℕ (a + b) (b + a)
-comm = λ a b → indℕ (λ a → Eqℕ (a + b) (b + a))
-                    (sym (b + zero) b (idr b))  -- Eqℕ b (b + zero)
-                    (λ n h → trans (suc n + b) (suc b + n) (b + suc n)
-                                   h
-                                   (suc+ b n))             
-                    a
+comm = λ a b → indℕ
+  (λ a → Eqℕ (a + b) (b + a))
+  (sym (b + 0) b (idr b))
+  (λ n e → trans (suc n + b) (suc b + n) (b + suc n) e (suc+ b n))
+  a
 
 _*_ : ℕ → ℕ → ℕ
 _*_ = λ a b → rec 0 (_+_ b) a
 infixl 7 _*_
 
-todo : (n m : ℕ) → Eqℕ (n + m + n) (m + n + n)
-todo = λ n m → cong (λ c → c + n) (n + m) (m + n) (comm n m)
-
 -- laws for muliplication
 
 -- use indℕ
 idl* : (a : ℕ) → Eqℕ (1 * a) a
-idl* = indℕ (λ a → Eqℕ (1 * a) a)
-            tt
-            λ n h → h
--- rec 0 (_+_ 0) (suc zero) = zero
-
+idl* = indℕ (λ a → Eqℕ (1 * a) a) (reflℕ 0) (λ _ e → e)
 
 -- use indℕ
 idr* : (a : ℕ) → Eqℕ (a * 1) a
-idr* = indℕ _ tt λ n h → h
--- suc n * 1 = rec 0 (1 +_ ) (suc n) = 1 + rec 0 (_+_ 1) n
--- rec u v (suc n) = v (rec u v n)
+idr* = indℕ (λ a → Eqℕ (a * 1) a) (reflℕ 0) (λ _ e → e)
 
 -- no need for indℕ
 nulll : (a : ℕ) → Eqℕ (0 * a) 0
-nulll = λ a → tt
--- λ a b → rec 0 (_+_ b) a
+nulll = λ _ → reflℕ 0
 
 -- use indℕ
 nullr : (a : ℕ) → Eqℕ (a * 0) 0
-nullr = indℕ _ tt λ n h → h
+nullr = indℕ (λ a → Eqℕ (a * 0) 0) (reflℕ 0) (λ _ e → e)
 
 -- use indℕ, trans, cong, sym, ass
 distr : (a b c : ℕ) → Eqℕ ((a + b) * c) (a * c + b * c)
 distr = λ a b c → indℕ
-          (λ a → Eqℕ ((a + b) * c) (a * c + b * c))
-          (reflℕ (b * c))
-          (λ n h → trans
-            ((suc n + b) * c)
-            (c + (n * c + b * c))
-            (suc n * c + b * c)
-            (cong (λ x → c + x) ((n + b) * c) (n * c + b * c) h)
-            (sym (suc n * c + b * c) (c + (n * c + b * c))
-                 (ass c (n * c) (b * c))))
-          a
--- (zero + b) * c = b * c
--- zero * c + b * c = zero + b * c = b * c
--- (suc n + b) * c = suc (n + b) * c = c + (n + b) * c
--- suc n * c + b * c = (c + n * c) + b * c
--- c + (n + b) * c            =Eqℕ= cong, ind. hip 
--- c + (n * c + b * c)        =Eqℕ= ass+, sym
--- (c + n * c) + b * c 
+  (λ a → Eqℕ ((a + b) * c) (a * c + b * c))
+  (reflℕ (b * c))
+  (λ n e → trans
+    ((suc n + b) * c)
+    (c + (n * c + b * c))
+    (suc n * c + b * c)
+    (cong (_+_ c) ((n + b) * c) (n * c + b * c) e)
+    (sym (suc n * c + b * c) (c + (n * c + b * c)) (ass c (n * c) (b * c))))
+  a
 
 -- use indℕ, trans, distr, cong
 ass* : (a b c : ℕ) → Eqℕ ((a * b) * c) (a * (b * c))
 ass* = λ a b c → indℕ
-         (λ a → Eqℕ ((a * b) * c) (a * (b * c)))
-         (reflℕ 0)
-         (λ n h → trans
-           (suc n * b * c)
-           (b * c + n * b * c)
-           (suc n * (b * c))
-           (distr b (n * b) c)
-           (cong (λ x → b * c + x) (n * b * c) (n * (b * c)) h))
-         a
--- (zero * b) * c = zero * c = zero
--- zero * (b * c) = zero
--- (suc n * b) * c = (b + n * b) * c
--- suc n * (b * c) = b * c + (n * (b * c))
-
--- (b + n * b) * c            =Eqℕ= distr
--- b * c + n * b * c          =Eqℕ= cong, ind. hip
--- b * c + n * (b * c)
+  (λ a → Eqℕ ((a * b) * c) (a * (b * c)))
+  tt
+  (λ n e → trans
+    (suc n * b * c)
+    (b * c + (n * b) * c)
+    (suc n * (b * c))
+    (distr b (n * b) c)
+    (cong (_+_ (b * c)) ((n * b) * c) (n * (b * c)) e))
+  a
 
 -- use indℕ, trans, sym, ass, cong, comm
 suc* : (a b : ℕ) → Eqℕ (a + a * b) (a * suc b)
-suc* = {!!}
+suc* = λ a b → indℕ
+  (λ a → Eqℕ (a + a * b) (a * suc b))
+  (reflℕ 0)
+  (λ n e → trans
+    (suc n + suc n * b)
+    (suc b + (n + n * b))
+    (suc n * suc b)
+    (trans
+      (n + (b + n * b))
+      ((n + b) + n * b)
+      (b + (n + n * b))
+      (sym (n + b + n * b) (n + (b + n * b)) (ass n b (n * b)))
+      (trans
+        ((n + b) + n * b)
+        ((b + n) + n * b)
+        (b + (n + n * b))
+        (cong (_+ (n * b)) (n + b) (b + n) (comm n b))
+        (ass b n (n * b))))
+    (cong (_+_ (suc b)) (n + n * b) (n * suc b) e))
+  a
 
 -- use indℕ, nullr, trans, suc*
 comm* : (a b : ℕ) → Eqℕ (a * b) (b * a)
-comm* = {!!}
+comm* = λ a b → indℕ
+  (λ a → Eqℕ (a * b) (b * a))
+  (sym (b * zero) zero (nullr b))
+  (λ n e → trans
+    (suc n * b)
+    (b + b * n)
+    (b * suc n)
+    (cong (_+_ b) (n * b) (b * n) e)
+    (suc* b n))
+  a
 
 -- left distributivity: use comm* and distr
 distl : (a b c : ℕ) → Eqℕ (a * (b + c)) (a * b + a * c)
 distl = {!!}
+
+-------------------------------------------------
+-- building on the above
+-------------------------------------------------
+
+p4 : (x y : ℕ) → Eqℕ ((x + (y + zero)) + x) (2 * x + y)
+p4 x y = {!!}
+
+p3 : (a b : ℕ) → Eqℕ (a + a + b + a * 0) (2 * a + b)
+p3 a b = {!!}
+
+p2 : (a b c : ℕ) → Eqℕ (c * (b + 1 + a)) (a * c + b * c + c)
+p2 a b c = {!!}
+
+_^_ : ℕ → ℕ → ℕ
+a ^ n = rec 1 (_* a) n
+infixl 9 _^_
+
+p1 : (a b : ℕ) → Eqℕ ((a + b) ^ 2) (a ^ 2 + 2 * a * b + b ^ 2)
+p1 = {!!}
+
+-------------------------------------------------
+-- laws about exponentiation
+-------------------------------------------------
+
+0^ : (n : ℕ) → Eqℕ (0 ^ (suc n)) 0
+0^ n = ?
+
+^0 : (a : ℕ) → Eqℕ (a ^ 0) 1
+^0 = {!!}
+
+1^ : (n : ℕ) → Eqℕ (1 ^ n) 1
+1^ = {!!}
+
+-- rec 1 (_* 1) n
+-- 1 ^ suc n = 1 ^ n * 1
+
+^1 : (a : ℕ) → Eqℕ (a ^ 1) a
+^1 = {!!}
+
+^+ : (a m n : ℕ) → Eqℕ (a ^ (m + n)) (a ^ m * a ^ n)
+^+ = {!!}
+
+^* : (a m n : ℕ) → Eqℕ (a ^ (m * n)) ((a ^ m) ^ n)
+^* = {!!}
+
+*^ : (a b n : ℕ) → Eqℕ ((a * b) ^ n) (a ^ n * b ^ n)
+*^ = {!!}
+
+-------------------------------------------------
+-- leq
+-------------------------------------------------
+
+_≤_ : ℕ → ℕ → Set
+zero  ≤ y     = ⊤
+suc x ≤ zero  = ⊥
+suc x ≤ suc y = x ≤ y
+
+ex : 3 ≤ 100
+ex = {!!}
+
+refl≤ : (x : ℕ) → x ≤ x
+refl≤ = {!!}
+
+trans≤ : (x y z : ℕ) → x ≤ y → y ≤ z → x ≤ z
+trans≤ = {!!}
+
+≤dec : (x y : ℕ) → x ≤ y ⊎ y ≤ x
+≤dec = {!!}
+
+_<_ : ℕ → ℕ → Set
+x < y = suc x ≤ y
+
+≤-antisym : (x y : ℕ) → x ≤ y → y ≤ x → Eqℕ x y
+≤-antisym = {!!}
+
+≤dec' : (x y : ℕ) → x < y ⊎ Eqℕ x y ⊎ y < x
+≤dec' = {!!}
+
++≤ : (x y a : ℕ) → (a + x) ≤ (a + y) ↔ x ≤ y
++≤ = {!!}
+
+1+*≤ : (x y a : ℕ) → (suc a * x) ≤ (suc a * y) ↔ x ≤ y
+1+*≤ = {!!}
+
+¬*≤ : ¬ ((x y a : ℕ) → (a * x) ≤ (a * y) ↔ x ≤ y)
+¬*≤ = {!!}
