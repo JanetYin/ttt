@@ -264,3 +264,91 @@ comm* = {!!}
 -- left distributivity: use comm* and distr
 distl : (a b c : ℕ) → Eqℕ (a * (b + c)) (a * b + a * c)
 distl = {!!}
+
+-------------------------------------------------
+-- building on the above
+-------------------------------------------------
+
+p4 : (x y : ℕ) → Eqℕ ((x + (y + zero)) + x) (2 * x + y)
+p4 = {!!}
+
+p3 : (a b : ℕ) → Eqℕ (a + a + b + a * 0) (2 * a + b)
+p3 = {!!}
+
+p2 : (a b c : ℕ) → Eqℕ (c * (b + 1 + a)) (a * c + b * c + c)
+p2 = {!!}
+
+_^_ : ℕ → ℕ → ℕ
+a ^ n = rec 1 (_* a) n
+infixl 9 _^_
+
+p1 : (a b : ℕ) → Eqℕ ((a + b) ^ 2) (a ^ 2 + 2 * a * b + b ^ 2)
+p1 = {!!}
+
+-------------------------------------------------
+-- laws about exponentiation
+-------------------------------------------------
+
+0^ : (n : ℕ) → Eqℕ (0 ^ n) 0
+0^ = {!!}
+
+^0 : (a : ℕ) → Eqℕ (a ^ 0) 1
+^0 = {!!}
+
+1^ : (n : ℕ) → Eqℕ (1 ^ n) 1
+1^ = {!!}
+
+^1 : (a : ℕ) → Eqℕ (a ^ 1) a
+^1 = {!!}
+
+^+ : (a m n : ℕ) → Eqℕ (a ^ (m + n)) (a ^ m * a ^ n)
+^+ = {!!}
+
+^* : (a m n : ℕ) → Eqℕ (a ^ (m * n)) ((a ^ m) ^ n)
+^* = {!!}
+
+*^ : (a b n : ℕ) → Eqℕ ((a * b) ^ n) (a ^ n * b ^ n)
+*^ = {!!}
+
+-------------------------------------------------
+-- leq
+-------------------------------------------------
+
+_≤_ : ℕ → ℕ → Set
+zero  ≤ y     = ⊤
+suc x ≤ zero  = ⊥
+suc x ≤ suc y = x ≤ y
+
+ex : 3 ≤ 100
+ex = tt
+
+refl≤ : (x : ℕ) → x ≤ x
+refl≤ zero = tt
+refl≤ (suc x) = refl≤ x
+
+trans≤ : (x y z : ℕ) → x ≤ y → y ≤ z → x ≤ z
+trans≤ zero    y       z       e e' = tt
+trans≤ (suc x) (suc y) (suc z) e e' = trans≤ x y z e e'
+
+≤dec : (x y : ℕ) → x ≤ y ⊎ y ≤ x
+≤dec zero y = inj₁ tt
+≤dec (suc x) zero = inj₂ tt
+≤dec (suc x) (suc y) = ≤dec x y
+
+_<_ : ℕ → ℕ → Set
+x < y = suc x ≤ y
+
+≤-antisym : (x y : ℕ) → x ≤ y → y ≤ x → Eqℕ x y
+≤-antisym = {!!}
+
+≤dec' : (x y : ℕ) → x < y ⊎ Eqℕ x y ⊎ y < x
+≤dec' = {!!}
+
++≤ : (x y a : ℕ) → (a + x) ≤ (a + y) ↔ x ≤ y
++≤ = {!!}
+
+1+*≤ : (x y a : ℕ) → (suc a * x) ≤ (suc a * y) ↔ x ≤ y
+1+*≤ = {!!}
+
+¬*≤ : ¬ ((x y a : ℕ) → (a * x) ≤ (a * y) ↔ x ≤ y)
+¬*≤ = {!!}
