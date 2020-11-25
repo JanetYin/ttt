@@ -252,6 +252,20 @@ ass* = {!!}
 suc* : (a b : ℕ) → Eqℕ (a + a * b) (a * suc b)
 suc* = {!!}
 
+{-
+Biz be teljes indukcioval:
+a = 0 esetre:
+  0 * b = b * 0      (nulll/def)
+  0     = b * 0      (nullr)
+  0     = 0
+a = n + 1 eseten tfh h ih: n * b = b * a
+  (n + 1) * b = b * (n + 1) mivel
+  (n + 1) * b =      (def)
+  b + n * b   =      (cong, ih)
+  b + b * n   =      (suc*)
+  b * (n + 1)
+-}
+
 -- use indℕ, nullr, trans, suc*
 comm* : (a b : ℕ) → Eqℕ (a * b) (b * a)
 comm* = {!!}
@@ -263,6 +277,12 @@ distl = {!!}
 -------------------------------------------------
 -- building on the above
 -------------------------------------------------
+
+x+x : (x : ℕ) → Eqℕ (x + x) (2 * x)
+x+x = {!!}
+
+ass-comm : (x y z : ℕ) → Eqℕ (x + y + z) (x + z + y)
+ass-comm = {!!}
 
 p4 : (x y : ℕ) → Eqℕ ((x + (y + zero)) + x) (2 * x + y)
 p4 = {!!}
@@ -284,7 +304,7 @@ p1 = {!!}
 -- laws about exponentiation
 -------------------------------------------------
 
-0^ : (n : ℕ) → Eqℕ (0 ^ n) 0
+0^ : (n : ℕ) → Eqℕ (0 ^ suc n) 0
 0^ = {!!}
 
 ^0 : (a : ℕ) → Eqℕ (a ^ 0) 1
@@ -347,3 +367,11 @@ x < y = suc x ≤ y
 
 ¬*≤ : ¬ ((x y a : ℕ) → (a * x) ≤ (a * y) ↔ x ≤ y)
 ¬*≤ = {!!}
+
+
+
+
+
+
+
+
