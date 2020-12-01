@@ -258,25 +258,66 @@ a = 0 esetre:
   0 * b = b * 0      (nulll/def)
   0     = b * 0      (nullr)
   0     = 0
-a = n + 1 eseten tfh h ih: n * b = b * a
+a = n + 1 eseten tfh h ih: n * b = b * n
   (n + 1) * b = b * (n + 1) mivel
   (n + 1) * b =      (def)
   b + n * b   =      (cong, ih)
   b + b * n   =      (suc*)
-  b * (n + 1)
+  b * (1 + n)
 -}
 
 -- use indℕ, nullr, trans, suc*
 comm* : (a b : ℕ) → Eqℕ (a * b) (b * a)
-comm* = {!!}
+comm* = λ a b → indℕ
+  (λ a → Eqℕ (a * b) (b * a))
+  (sym (b * zero) (zero * b) (nullr b))
+  (λ n ih → trans
+    (b + n * b)
+    (b + b * n)
+    (b * (1 + n))
+    (cong (λ w → b + w) (n * b) (b * n) ih)
+    (suc* b n))
+  a
+
+{-
+a * (b + c) = (comm)
+(b + c) * a = (distr)
+b * a + c * a = (comm)
+a * b + c * a = (comm)
+a * b + a * c
+-}
 
 -- left distributivity: use comm* and distr
 distl : (a b c : ℕ) → Eqℕ (a * (b + c)) (a * b + a * c)
-distl = {!!}
+distl = λ a b c → trans
+  (a * (b + c))
+  ((b + c) * a)
+  (a * b + a * c)
+  (comm* a (b + c))
+  (trans
+    ((b + c) * a)
+    (b * a + c * a)
+    (a * b + a * c)
+    (distr b c a)
+    (trans
+      (b * a + c * a)
+      (a * b + c * a)
+      (a * b + a * c)
+      (cong (λ x → x + c * a) (b * a) (a * b) (comm* b a))
+      (cong (λ x → a * b + x) (c * a) (a * c) (comm* c a))))
+
+
+  
 
 -------------------------------------------------
 -- building on the above
 -------------------------------------------------
+
+{-
+x + x     =   (idl*)
+x + 1 * x =   (def)
+2 * x
+-}
 
 x+x : (x : ℕ) → Eqℕ (x + x) (2 * x)
 x+x = {!!}

@@ -27,7 +27,7 @@ Requirements:
  * Canvas quiz for each lecture
  * At the beginning of each tutorial a small assignment in the bead
    system. Weekly homeworks in the same system help preparing.
- * Exam on the computer during the exam period.
+ * Exam on the computer during the exam period. [Example exam](https://bitbucket.org/akaposi/ttt/raw/master/exampleExam.agda)
 
 For the tutorial, you get the following marks according to how many
 assignments you completed (out of 10, for each assignment you can get
