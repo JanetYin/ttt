@@ -268,7 +268,7 @@ ex = tt
 
 refl≤ : (x : ℕ) → x ≤ x
 refl≤ zero = tt
-refl≤ (suc x) = refl≤ x
+refl≤ (suc n) = refl≤ n
 
 trans≤ : (x y z : ℕ) → x ≤ y → y ≤ z → x ≤ z
 trans≤ zero    y       z       e e' = tt
@@ -282,18 +282,33 @@ trans≤ (suc x) (suc y) (suc z) e e' = trans≤ x y z e e'
 _<_ : ℕ → ℕ → Set
 x < y = suc x ≤ y
 
+-- C-c, C-c
 ≤-antisym : (x y : ℕ) → x ≤ y → y ≤ x → Eqℕ x y
-≤-antisym = {!!}
+≤-antisym zero zero e e' = tt
+≤-antisym (suc x) (suc y) e e' = ≤-antisym x y e e'
 
 ≤dec' : (x y : ℕ) → x < y ⊎ Eqℕ x y ⊎ y < x
-≤dec' = {!!}
+≤dec' zero zero = inj₂ (inj₁ tt)
+≤dec' zero (suc y) = inj₁ tt
+≤dec' (suc x) zero = inj₂ (inj₂ tt)
+≤dec' (suc x) (suc y) = ≤dec' x y
 
 +≤ : (x y a : ℕ) → (a + x) ≤ (a + y) ↔ x ≤ y
-+≤ = {!!}
++≤ x y zero = (λ x → x) , λ x → x
++≤ x y (suc a) = +≤ x y a
+-- suc a + x = suc (a + x)
+-- suc (a + x) ≤ suc (a + y) = (a + x) ≤ (a + y)
 
 1+*≤ : (x y a : ℕ) → (suc a * x) ≤ (suc a * y) ↔ x ≤ y
-1+*≤ = {!!}
+1+*≤ x y zero = (λ e → transpℕ (1 * y) y (idl* y) (λ t → x ≤ t) (transpℕ (1 * x) x (idl* x) (λ t → t ≤ (1 * y)) e))
+                , {!!}
+1+*≤ x y (suc a) = {!!}
+-- (a b : ℕ) → Eqℕ a b → (P : ℕ → Set) → P a → P b
+
+--_*_ = λ a b → rec 0 (_+_ b) a
+-- 1 * x = rec 0 (x +_) 1 = x + 0
+-- 1 * y = y + 0
 
 ¬*≤ : ¬ ((x y a : ℕ) → (a * x) ≤ (a * y) ↔ x ≤ y)
-¬*≤ = {!!}               
+¬*≤ t = proj₁ (t 10 5 0) tt
 
