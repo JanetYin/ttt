@@ -3,103 +3,6 @@ module tut.t1.gy09 where
 open import lib
 
 -------------------------------------------------
--- Bool
--------------------------------------------------
-
-not : Bool → Bool
-not = λ a → if a then false else true
-
-eqb : Bool → Bool → Bool
-eqb = λ a b → if a then b else not b
-
-Eqb : Bool → Bool → Set
-Eqb = λ a b → if eqb a b then ⊤ else ⊥
-
--- properties of Eqb
-
-reflb : (b : Bool) → Eqb b b
-reflb = {!!}
-
-transpb : (P : Bool → Set)(a b : Bool) → Eqb a b → P a → P b
-transpb = λ P a → indBool 
-  (λ a → (b : Bool) → Eqb a b → P a → P b)
-  (λ b → indBool (λ b → Eqb true  b → P true  → P b) (λ _ w → w) exfalso     b)
-  (λ b → indBool (λ b → Eqb false b → P false → P b) exfalso     (λ _ w → w) b)
-  a
-
--- use transpb
-symb : (a b : Bool) → Eqb a b → Eqb b a
-symb = {!!}
-
--- use transpb
-transb : (a b c : Bool) → Eqb a b → Eqb b c → Eqb a c
-transb = {!!}
-
--- every function on booleans is a congruence; use transpb to prove it
-congb : (f : Bool → Bool) → (a b : Bool) → Eqb a b → Eqb (f a) (f b)
-congb = λ f a b e → transpb (λ b → Eqb (f a) (f b)) a b e (reflb (f a))
-
--- disjointness of different constructors of Bool
-disjb : ¬ Eqb true false
-disjb = λ e → e
-
--- conjunction an disjunction
-
-_∧_ : Bool → Bool → Bool
-_∧_ = λ x y → if x then y else false
-infixl 7 _∧_
-
-_∨_ : Bool → Bool → Bool
-_∨_ = λ x y → if x then true else y
-infixl 5 _∨_
-
--- properties of _∧_ and _∨_
-
-idl∧ : (a : Bool) → Eqb (true ∧ a)  a
-idl∧ = {!!}
-
-idr∧ : (a : Bool) → Eqb (a ∧ true)  a
-idr∧ = {!!}
-
-ass∧ : (a b c : Bool) → Eqb ((a ∧ b) ∧ c) (a ∧ (b ∧ c))
-ass∧ = {!!}
-
-comm∧ : (a b : Bool) → Eqb (a ∧ b) (b ∧ a)
-comm∧ = {!!}
-
-null∧ : (a : Bool) → Eqb (false ∧ a) false
-null∧ = {!!}
-
-idl∨ : (a : Bool) → Eqb (false ∨ a)  a
-idl∨ = {!!}
-
-idr∨ : (a : Bool) → Eqb (a ∨ false)  a
-idr∨ = {!!}
-
-ass∨ : (a b c : Bool) → Eqb ((a ∨ b) ∨ c) (a ∨ (b ∨ c))
-ass∨ = {!!}
-
-comm∨ : (a b : Bool) → Eqb (a ∨ b) (b ∨ a)
-comm∨ = {!!}
-
-null∨ : (a : Bool) → Eqb (true ∨ a) true
-null∨ = {!!}
-
-dist∧ : (a b c : Bool) → Eqb (a ∧ (b ∨ c)) (a ∧ b ∨ a ∧ c)
-dist∧ = {!!}
-
-dist∨ : (a b c : Bool) → Eqb (a ∨ (b ∧ c)) ((a ∨ b) ∧ (a ∨ c))
-dist∨ = {!!}
-
-abs∧ : (a b : Bool) → Eqb (a ∧ (a ∨ b)) a
-abs∧ = {!!}
-
-abs∨ : (a b : Bool) → Eqb (a ∨ (a ∧ b)) a
-abs∨ = {!!}
-
--- we could also prove laws for not, like De Morgan etc.
-
--------------------------------------------------
 -- Natural numbers
 -------------------------------------------------
 
@@ -112,7 +15,6 @@ eq0 = rec true (λ _ → false)
 eqℕ : ℕ → ℕ → Bool
 eqℕ = rec eq0 (λ eqn m → case (pred' m) eqn (λ _ → false))
 
--- what is the difference between eqℕ a b and Eqℕ a b?
 Eqℕ : ℕ → ℕ → Set
 Eqℕ = λ a b → if eqℕ a b then ⊤ else ⊥
 
@@ -285,13 +187,38 @@ distl = {!!}
 -------------------------------------------------
 
 p4 : (x y : ℕ) → Eqℕ ((x + (y + zero)) + x) (2 * x + y)
-p4 x y = {!!}
+p4 x y = trans (x + (y + zero) + x) (x + y + x) (2 * x + y)
+               (cong (λ t → x + t + x) _ _ (idr y))
+               (trans (x + y + x) (x + x + y) (x + (x + 0) + y)
+                      (trans (x + y + x) (x + (y + x)) _
+                             (ass x y x)
+                             (trans (x + (y + x)) (x + (x + y)) (x + x + y)
+                                    (cong (λ t → x + t) _ _ (comm y x))
+                                    (sym (x + x + y) _ (ass x x y))))
+                      (cong (λ t → x + t + y) _ _ (sym _ x (idr x) )))
 
 p3 : (a b : ℕ) → Eqℕ (a + a + b + a * 0) (2 * a + b)
-p3 a b = {!!}
+p3 a b = trans (a + a + b + a * 0) (a + a + b) (2 * a + b)
+               (trans (a + a + b + a * 0) (a + a + b + 0) (a + a + b)
+                      (cong (λ t → a + a + b + t) _ _ (nullr a))
+                      (idr (a + a + b)))
+               (cong (λ t → a + t + b) _ _ (sym (a + 0) a (idr a))) 
+
 
 p2 : (a b c : ℕ) → Eqℕ (c * (b + 1 + a)) (a * c + b * c + c)
-p2 a b c = {!!}
+p2 a b c = trans (c * (b + 1 + a)) (c * (b + 1) + c * a ) _
+                  (distl c (b + 1) a)
+                  (trans (c * (b + 1) + c * a) (c * b + c * 1 + c * a) (a * c + b * c + c)
+                         (cong (λ t → t + c * a) (c * (b + 1)) (c * b + c * 1) (distl c b 1) )
+                         (trans (c * b + c * 1 + c * a) (c * b + c * 1 + a * c) _
+                                (cong (λ t → c * b + c * 1 + t) _ _ (comm* c a))
+                                (trans (c * b + c * 1 + a * c) (c * b + c + a * c) _
+                                       (cong (λ t → c * b + t + a * c)  _ _ (idr* c))
+                                       (trans (c * b + c + a * c) (b * c + c + a * c) _
+                                              (cong (λ t → t + c + a * c) (c * b) (b * c) (comm* c b) )
+                                              (trans (b * c + c + a * c) (a * c + (b * c + c)) _
+                                                     (comm (b * c + c) _) (sym (a * c + b * c + c) _ (ass (a * c) (b * c) c)))))))
+
 
 _^_ : ℕ → ℕ → ℕ
 a ^ n = rec 1 (_* a) n
@@ -305,19 +232,18 @@ p1 = {!!}
 -------------------------------------------------
 
 0^ : (n : ℕ) → Eqℕ (0 ^ (suc n)) 0
-0^ n = ?
+0^ n = nullr (0 ^ n)
 
 ^0 : (a : ℕ) → Eqℕ (a ^ 0) 1
-^0 = {!!}
+^0 = λ _ → tt
 
 1^ : (n : ℕ) → Eqℕ (1 ^ n) 1
-1^ = {!!}
-
--- rec 1 (_* 1) n
--- 1 ^ suc n = 1 ^ n * 1
+1^ = indℕ _ tt λ n h → trans (1 ^ n * 1) (1 ^ n) 1
+                        (idr* (1 ^ n))
+                        h
 
 ^1 : (a : ℕ) → Eqℕ (a ^ 1) a
-^1 = {!!}
+^1 = idr*
 
 ^+ : (a m n : ℕ) → Eqℕ (a ^ (m + n)) (a ^ m * a ^ n)
 ^+ = {!!}
@@ -338,16 +264,20 @@ suc x ≤ zero  = ⊥
 suc x ≤ suc y = x ≤ y
 
 ex : 3 ≤ 100
-ex = {!!}
+ex = tt
 
 refl≤ : (x : ℕ) → x ≤ x
-refl≤ = {!!}
+refl≤ zero = tt
+refl≤ (suc x) = refl≤ x
 
 trans≤ : (x y z : ℕ) → x ≤ y → y ≤ z → x ≤ z
-trans≤ = {!!}
+trans≤ zero    y       z       e e' = tt
+trans≤ (suc x) (suc y) (suc z) e e' = trans≤ x y z e e'
 
 ≤dec : (x y : ℕ) → x ≤ y ⊎ y ≤ x
-≤dec = {!!}
+≤dec zero y = inj₁ tt
+≤dec (suc x) zero = inj₂ tt
+≤dec (suc x) (suc y) = ≤dec x y
 
 _<_ : ℕ → ℕ → Set
 x < y = suc x ≤ y
@@ -365,4 +295,5 @@ x < y = suc x ≤ y
 1+*≤ = {!!}
 
 ¬*≤ : ¬ ((x y a : ℕ) → (a * x) ≤ (a * y) ↔ x ≤ y)
-¬*≤ = {!!}
+¬*≤ = {!!}               
+

@@ -249,9 +249,50 @@ _◾_ {a}{b}{c} = trans a b c
 distr : (a b c : ℕ) → Eqℕ ((a + b) * c) (a * c + b * c)
 distr = {!!}
 
+{-
+Biz be teljes indukcioval:
+a = 0 esetre:
+  (0 * b) * c = 0 * (b * c)   (nulll/def)
+  0 * c       = 0 * (b * c)   (nulll/def)
+  0           = 0 * (b * c)   (nulll/def)
+  0           = 0
+a = n + 1 esetre tfh ih: (n * b) * c = n * (b * c) 
+  ((n + 1) * b) * c = (n + 1) * (b * c), mivel
+  ((n + 1) * b) * c     =     (def)
+  (b + n * b) * c       =     (distr) 
+  (b * c + (n * b) * c) =     (cong, ih)
+  (b * c + n * (b * c)) =     (def)
+  (n + 1) * (b * c)
+-}
+
+
+{-
+
+a + a       =  (idl*)
+a + (1 * a) =  (def)
+(1 + 1) * a
+
+-}
+
+a+a' : (a : ℕ) → Eqℕ (a + a) (2 * a)
+a+a' = λ a → trans
+  (a + a)
+  (a + (1 * a))
+  ((1 + 1) * a)
+  (cong (λ x → a + x) a (1 * a) (sym (1 * a) a (idl* a)))
+  (reflℕ (a + 1 * a))
+
 -- use indℕ, trans, distr, cong
 ass* : (a b c : ℕ) → Eqℕ ((a * b) * c) (a * (b * c))
-ass* = {!!}
+ass* = λ a b c → indℕ (λ a → Eqℕ ((a * b) * c) (a * (b * c)))
+  tt
+  (λ n ih → trans
+    ((b + n * b) * c)
+    (b * c + (n * b) * c)
+    (b * c + n * (b * c))
+    (distr b (n * b) c)
+    (cong (λ x → b * c + x) ((n * b) * c) (n * (b * c)) ih))
+  a
 
 -- use indℕ, trans, sym, ass, cong, comm
 suc* : (a b : ℕ) → Eqℕ (a + a * b) (a * suc b)
@@ -264,3 +305,113 @@ comm* = {!!}
 -- left distributivity: use comm* and distr
 distl : (a b c : ℕ) → Eqℕ (a * (b + c)) (a * b + a * c)
 distl = {!!}
+
+-------------------------------------------------
+-- building on the above
+-------------------------------------------------
+
+ass-com : (x y z : ℕ) → Eqℕ (x + y + x) (x + x + y)
+ass-com = λ x y z → trans
+  (x + y + x)
+  (x + (y + x))
+  (x + x + y)
+  (ass x y x)
+  (trans
+    (x + (y + x))
+    (x + (x + y))
+    (x + x + y)
+    (cong (λ w → x + w) (y + x) (x + y) (comm y x)) 
+    (sym (x + x + y) (x + (x + y)) (ass x x y)))
+
+p4 : (x y : ℕ) → Eqℕ ((x + (y + zero)) + x) (2 * x + y)
+p4 = λ x y → trans
+  ((x + (y + zero)) + x)
+  ((x + y) + x)
+  (2 * x + y)
+  (cong (λ w → x + w + x) (y + zero) y (idr y))
+  (trans (x + y + x)
+         (x + x + y)
+         (2 * x + y)
+         (ass-com x y x)
+         (cong (λ x → x + y) (x + x) (2 * x) (a+a' x)))
+
+p3 : (a b : ℕ) → Eqℕ (a + a + b + a * 0) (2 * a + b)
+p3 = {!!}
+
+p2 : (a b c : ℕ) → Eqℕ (c * (b + 1 + a)) (a * c + b * c + c)
+p2 = {!!}
+
+_^_ : ℕ → ℕ → ℕ
+a ^ n = rec 1 (_* a) n
+infixl 9 _^_
+
+p1 : (a b : ℕ) → Eqℕ ((a + b) ^ 2) (a ^ 2 + 2 * a * b + b ^ 2)
+p1 = {!!}
+
+-------------------------------------------------
+-- laws about exponentiation
+-------------------------------------------------
+
+0^ : (n : ℕ) → Eqℕ (0 ^ (suc n)) 0
+0^ = indℕ (λ n → Eqℕ (0 ^ (suc n)) 0) tt λ n ih → {!!}
+
+^0 : (a : ℕ) → Eqℕ (a ^ 0) 1
+^0 = {!!}
+
+1^ : (n : ℕ) → Eqℕ (1 ^ n) 1
+1^ = {!!}
+
+^1 : (a : ℕ) → Eqℕ (a ^ 1) a
+^1 = {!!}
+
+^+ : (a m n : ℕ) → Eqℕ (a ^ (m + n)) (a ^ m * a ^ n)
+^+ = {!!}
+
+^* : (a m n : ℕ) → Eqℕ (a ^ (m * n)) ((a ^ m) ^ n)
+^* = {!!}
+
+*^ : (a b n : ℕ) → Eqℕ ((a * b) ^ n) (a ^ n * b ^ n)
+*^ = {!!}
+
+-------------------------------------------------
+-- leq
+-------------------------------------------------
+
+_≤_ : ℕ → ℕ → Set
+zero  ≤ y     = ⊤
+suc x ≤ zero  = ⊥
+suc x ≤ suc y = x ≤ y
+
+ex : 3 ≤ 100
+ex = tt
+
+refl≤ : (x : ℕ) → x ≤ x
+refl≤ zero = tt
+refl≤ (suc x) = refl≤ x
+
+trans≤ : (x y z : ℕ) → x ≤ y → y ≤ z → x ≤ z
+trans≤ zero    y       z       e e' = tt
+trans≤ (suc x) (suc y) (suc z) e e' = trans≤ x y z e e'
+
+≤dec : (x y : ℕ) → x ≤ y ⊎ y ≤ x
+≤dec zero y = inj₁ tt
+≤dec (suc x) zero = inj₂ tt
+≤dec (suc x) (suc y) = ≤dec x y
+
+_<_ : ℕ → ℕ → Set
+x < y = suc x ≤ y
+
+≤-antisym : (x y : ℕ) → x ≤ y → y ≤ x → Eqℕ x y
+≤-antisym = {!!}
+
+≤dec' : (x y : ℕ) → x < y ⊎ Eqℕ x y ⊎ y < x
+≤dec' = {!!}
+
++≤ : (x y a : ℕ) → (a + x) ≤ (a + y) ↔ x ≤ y
++≤ = {!!}
+
+1+*≤ : (x y a : ℕ) → (suc a * x) ≤ (suc a * y) ↔ x ≤ y
+1+*≤ = {!!}
+
+¬*≤ : ¬ ((x y a : ℕ) → (a * x) ≤ (a * y) ↔ x ≤ y)
+¬*≤ = {!!}
