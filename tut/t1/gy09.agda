@@ -2,411 +2,206 @@ module tut.t1.gy09 where
 
 open import lib
 
--------------------------------------------------
--- Bool
--------------------------------------------------
-
 not : Bool → Bool
-not = λ a → if a then false else true
+not true = false
+not false = true
 
-eqb : Bool → Bool → Bool
-eqb = λ a b → if a then b else not b
+---------------------------------------------------------
+-- First order logic
+---------------------------------------------------------
 
-Eqb : Bool → Bool → Set
-Eqb = λ a b → if eqb a b then ⊤ else ⊥
+∀×-distr  :    (A : Set)(P : A → Set)(Q : A → Set) → ((a : A) → P a × Q a)  ↔ ((a : A) → P a) × ((a : A) → Q a)
+∀⊎-distr  :    (A : Set)(P : A → Set)(Q : A → Set) → ((a : A) → P a ⊎ Q a)  ← ((a : A) → P a) ⊎ ((a : A) → Q a)
+Σ×-distr  :    (A : Set)(P : A → Set)(Q : A → Set) → (Σ A λ a → P a × Q a)  → Σ A P × Σ A Q
+Σ⊎-distr  :    (A : Set)(P : A → Set)(Q : A → Set) → (Σ A λ a → P a ⊎ Q a)  ↔ Σ A P ⊎ Σ A Q
+¬∀        :    (A : Set)(P : A → Set)              → (Σ A λ a → ¬ P a)      → ¬ ((a : A) → P a)
+¬Σ        :    (A : Set)(P : A → Set)              → (¬ Σ A λ a → P a)      ↔ ((a : A) → ¬ P a)
+⊎↔ΣBool   :    (A B : Set)                         → (A ⊎ B)                ↔ Σ Bool (λ b → if b then A else B)
+¬¬∀-nat   :    (A : Set)(P : A → Set)              → ¬ ¬ ((x : A) → P x)    → (x : A) → ¬ ¬ (P x)
 
--- properties of Eqb
+∀⊎-distr' : ¬ ((A : Set)(P : A → Set)(Q : A → Set) → (((a : A) → P a ⊎ Q a) → ((a : A) → P a) ⊎ ((a : A) → Q a)))
+∀⊎-distr' t = {!!}
+  where
 
-reflb : (b : Bool) → Eqb b b
-reflb = {!!}
+Σ×-distr' : ¬ ((A : Set)(P : A → Set)(Q : A → Set) → ((Σ A λ a → P a × Q a) ← Σ A P × Σ A Q))
+Σ×-distr' t = {!!}
 
-transpb : (P : Bool → Set)(a b : Bool) → Eqb a b → P a → P b
-transpb = λ P a → indBool 
-  (λ a → (b : Bool) → Eqb a b → P a → P b)
-  (λ b → indBool (λ b → Eqb true  b → P true  → P b) (λ _ w → w) exfalso     b)
-  (λ b → indBool (λ b → Eqb false b → P false → P b) exfalso     (λ _ w → w) b)
-  a
+Σ∀       : (A B : Set)(R : A → B → Set)        → (Σ A λ x → (y : B) → R x y) → (y : B) → Σ A λ x → R x y
+AC       : (A B : Set)(R : A → B → Set)        → ((x : A) → Σ B λ y → R x y) → Σ (A → B) λ f → (x : A) → R x (f x)
 
--- use transpb
-symb : (a b : Bool) → Eqb a b → Eqb b a
-symb = {!!}
+---------------------------------------------------------
+-- Vectors
+---------------------------------------------------------
 
--- use transpb
-transb : (a b c : Bool) → Eqb a b → Eqb b c → Eqb a c
-transb = {!!}
+_^_ : Set → ℕ → Set
+A ^ zero  = ⊤
+A ^ suc x = A × A ^ x
 
--- every function on booleans is a congruence; use transpb to prove it
-congb : (f : Bool → Bool) → (a b : Bool) → Eqb a b → Eqb (f a) (f b)
-congb = λ f a b e → transpb (λ b → Eqb (f a) (f b)) a b e (reflb (f a))
+exVec : Bool ^ 3
+exVec = false , true , true , tt
 
--- disjointness of different constructors of Bool
-disjb : ¬ Eqb true false
-disjb = λ e → e
+nil : {A : Set} → A ^ 0
+nil = tt
 
--- conjunction an disjunction
+cons : {A : Set}{n : ℕ} → A → A ^ n → A ^ (suc n)
+cons = _,_
 
-_∧_ : Bool → Bool → Bool
-_∧_ = λ x y → if x then y else false
-infixl 7 _∧_
+head : {A : Set}{n : ℕ} → A ^ (suc n) → A
+head = proj₁
 
-_∨_ : Bool → Bool → Bool
-_∨_ = λ x y → if x then true else y
-infixl 5 _∨_
+tail : {A : Set}{n : ℕ} → A ^ (suc n) → A ^ n
+tail = proj₂
 
--- properties of _∧_ and _∨_
+⊤s : (n : ℕ) → ⊤ ^ n
+⊤s = λ n → indℕ (⊤ ^_) tt (λ n tts → tt , tts) n
 
-idl∧ : (a : Bool) → Eqb (true ∧ a)  a
-idl∧ = {!!}
-
-idr∧ : (a : Bool) → Eqb (a ∧ true)  a
-idr∧ = {!!}
-
-ass∧ : (a b c : Bool) → Eqb ((a ∧ b) ∧ c) (a ∧ (b ∧ c))
-ass∧ = {!!}
-
-comm∧ : (a b : Bool) → Eqb (a ∧ b) (b ∧ a)
-comm∧ = {!!}
-
-null∧ : (a : Bool) → Eqb (false ∧ a) false
-null∧ = {!!}
-
-idl∨ : (a : Bool) → Eqb (false ∨ a)  a
-idl∨ = {!!}
-
-idr∨ : (a : Bool) → Eqb (a ∨ false)  a
-idr∨ = {!!}
-
-ass∨ : (a b c : Bool) → Eqb ((a ∨ b) ∨ c) (a ∨ (b ∨ c))
-ass∨ = {!!}
-
-comm∨ : (a b : Bool) → Eqb (a ∨ b) (b ∨ a)
-comm∨ = {!!}
-
-null∨ : (a : Bool) → Eqb (true ∨ a) true
-null∨ = {!!}
-
-dist∧ : (a b c : Bool) → Eqb (a ∧ (b ∨ c)) (a ∧ b ∨ a ∧ c)
-dist∧ = {!!}
-
-dist∨ : (a b c : Bool) → Eqb (a ∨ (b ∧ c)) ((a ∨ b) ∧ (a ∨ c))
-dist∨ = {!!}
-
-abs∧ : (a b : Bool) → Eqb (a ∧ (a ∨ b)) a
-abs∧ = {!!}
-
-abs∨ : (a b : Bool) → Eqb (a ∨ (a ∧ b)) a
-abs∨ = {!!}
-
--- we could also prove laws for not, like De Morgan etc.
-
--------------------------------------------------
--- Natural numbers
--------------------------------------------------
-
-pred' : ℕ → ℕ ⊎ ⊤
-pred' = indℕ (λ _ → ℕ ⊎ ⊤) (inj₂ tt) (λ n _ → inj₁ n)
-
-eq0 : ℕ → Bool
-eq0 = rec true (λ _ → false)
-
-eqℕ : ℕ → ℕ → Bool
-eqℕ = rec eq0 (λ eqn m → case (pred' m) eqn (λ _ → false))
-
--- what is the difference between eqℕ a b and Eqℕ a b?
-Eqℕ : ℕ → ℕ → Set
-Eqℕ = λ a b → if eqℕ a b then ⊤ else ⊥
-
--- reflexivity
-reflℕ : (a : ℕ) → Eqℕ a a
-reflℕ = indℕ (λ x → Eqℕ x x) tt (λ _ e → e)
-
--- transport
-transpℕ : (a b : ℕ) → Eqℕ a b → (P : ℕ → Set) → P a → P b
-transpℕ = indℕ
-  (λ a → (b : ℕ) → Eqℕ a b → (P : ℕ → Set) → P a → P b)
-  (indℕ
-    (λ b → Eqℕ zero b → (P : ℕ → Set) → P zero → P b)
-    (λ _ _ u → u)
-    (λ _ _ → exfalso))
-  (λ n ih → indℕ
-    (λ b → Eqℕ (suc n) b → (P : ℕ → Set) → P (suc n) → P b)
-    exfalso
-    (λ n' ih' e P → ih n' e (λ x → P (suc x))))
-
--- commutativity of equality of ℕ: use transpℕ!
-sym : (a b : ℕ) → Eqℕ a b → Eqℕ b a
-sym a b e = transpℕ a b e (λ x → Eqℕ x a) (reflℕ a)
-
--- transitivity of equality of ℕ: use transpℕ!
-trans : (a b c : ℕ) → Eqℕ a b → Eqℕ b c → Eqℕ a c
-trans a b c e e' = transpℕ b c e' (λ x → Eqℕ a x) e
-
--- congruence: use transpℕ!
-cong : (f : ℕ → ℕ) → (a b : ℕ) → Eqℕ a b → Eqℕ (f a) (f b)
-cong f a b e = transpℕ a b e (λ b → Eqℕ (f a) (f b)) (reflℕ (f a))
-
--- disjointness of different constructors of ℕ
-disj : (a : ℕ) → ¬ Eqℕ zero (suc a)
-disj = λ _ e → e
-
--- injectivity of suc
-inj : (a b : ℕ) → Eqℕ a b → Eqℕ (suc a) (suc b)
-inj = λ a b e → e
-
--- addition
+-- ezt nem kell kiadni feladatnak:
 _+_ : ℕ → ℕ → ℕ
-_+_ = λ a b → rec b suc a
-infixl 5 _+_
+zero + b = b 
+suc a + b = suc (a + b)
 
--- properties of addition
+_++_ : {A : Set}{n m : ℕ} → A ^ n → A ^ m → A ^ (n + m)
+_++_ = {!!}
 
--- no need for indℕ
-idl : (a : ℕ) → Eqℕ (0 + a) a
-idl = reflℕ
+isEven = rec true not
 
--- use indℕ
-idr : (a : ℕ) → Eqℕ (a + 0) a
-idr = indℕ (λ a → Eqℕ (a + 0) a) (reflℕ 0) (λ _ e → e)
+filter[_] : {A : Set}(n : ℕ)(f : A → Bool) → A ^ n → Σ ℕ λ m → A ^ m
+filter[_] = {!!}
 
--- use indℕ
-ass : (a b c : ℕ) → Eqℕ ((a + b) + c) (a + (b + c))
-ass = λ a b c → indℕ
-  (λ a → Eqℕ ((a + b) + c) (a + (b + c)))
-  (reflℕ (b + c))
-  (λ _ e → e)
-  a
-
--- use indℕ
-suc+ : (a b : ℕ) → Eqℕ (suc a + b) (a + suc b)
-suc+ = λ a b → indℕ
-  (λ a → Eqℕ (suc a + b) (a + suc b))
-  (reflℕ (1 + b))
-  (λ _ e → e)
-  a
-
--- use indℕ, trans, suc+
-comm : (a b : ℕ) → Eqℕ (a + b) (b + a)
-comm = λ a b → indℕ
-  (λ a → Eqℕ (a + b) (b + a))
-  (sym (b + 0) b (idr b))
-  (λ n e → trans (suc n + b) (suc b + n) (b + suc n) e (suc+ b n))
-  a
-
-_*_ : ℕ → ℕ → ℕ
-_*_ = λ a b → rec 0 (_+_ b) a
-infixl 7 _*_
-
--- laws for muliplication
-
--- use indℕ
-idl* : (a : ℕ) → Eqℕ (1 * a) a
-idl* = indℕ (λ a → Eqℕ (1 * a) a) (reflℕ 0) (λ _ e → e)
-
--- use indℕ
-idr* : (a : ℕ) → Eqℕ (a * 1) a
-idr* = indℕ (λ a → Eqℕ (a * 1) a) (reflℕ 0) (λ _ e → e)
-
--- no need for indℕ
-nulll : (a : ℕ) → Eqℕ (0 * a) 0
-nulll = λ _ → reflℕ 0
-
--- use indℕ
-nullr : (a : ℕ) → Eqℕ (a * 0) 0
-nullr = indℕ (λ a → Eqℕ (a * 0) 0) (reflℕ 0) (λ _ e → e)
-
--- use indℕ, trans, cong, sym, ass
-distr : (a b c : ℕ) → Eqℕ ((a + b) * c) (a * c + b * c)
-distr = λ a b c → indℕ
-  (λ a → Eqℕ ((a + b) * c) (a * c + b * c))
-  (reflℕ (b * c))
-  (λ n e → trans
-    ((suc n + b) * c)
-    (c + (n * c + b * c))
-    (suc n * c + b * c)
-    (cong (_+_ c) ((n + b) * c) (n * c + b * c) e)
-    (sym (suc n * c + b * c) (c + (n * c + b * c)) (ass c (n * c) (b * c))))
-  a
-
--- use indℕ, trans, distr, cong
-ass* : (a b c : ℕ) → Eqℕ ((a * b) * c) (a * (b * c))
-ass* = λ a b c → indℕ
-  (λ a → Eqℕ ((a * b) * c) (a * (b * c)))
-  tt
-  (λ n e → trans
-    (suc n * b * c)
-    (b * c + (n * b) * c)
-    (suc n * (b * c))
-    (distr b (n * b) c)
-    (cong (_+_ (b * c)) ((n * b) * c) (n * (b * c)) e))
-  a
-
--- use indℕ, trans, sym, ass, cong, comm
-suc* : (a b : ℕ) → Eqℕ (a + a * b) (a * suc b)
-suc* = λ a b → indℕ
-  (λ a → Eqℕ (a + a * b) (a * suc b))
-  (reflℕ 0)
-  (λ n e → trans
-    (suc n + suc n * b)
-    (suc b + (n + n * b))
-    (suc n * suc b)
-    (trans
-      (n + (b + n * b))
-      ((n + b) + n * b)
-      (b + (n + n * b))
-      (sym (n + b + n * b) (n + (b + n * b)) (ass n b (n * b)))
-      (trans
-        ((n + b) + n * b)
-        ((b + n) + n * b)
-        (b + (n + n * b))
-        (cong (_+ (n * b)) (n + b) (b + n) (comm n b))
-        (ass b n (n * b))))
-    (cong (_+_ (suc b)) (n + n * b) (n * suc b) e))
-  a
-
--- use indℕ, nullr, trans, suc*
-comm* : (a b : ℕ) → Eqℕ (a * b) (b * a)
-comm* = λ a b → indℕ
-  (λ a → Eqℕ (a * b) (b * a))
-  (sym (b * zero) zero (nullr b))
-  (λ n e → trans
-    (suc n * b)
-    (b + b * n)
-    (b * suc n)
-    (cong (_+_ b) (n * b) (b * n) e)
-    (suc* b n))
-  a
-
--- left distributivity: use comm* and distr
-distl : (a b c : ℕ) → Eqℕ (a * (b + c)) (a * b + a * c)
-distl = {!!}
-
--------------------------------------------------
--- building on the above
--------------------------------------------------
-
-p4 : (x y : ℕ) → Eqℕ ((x + (y + zero)) + x) (2 * x + y)
-p4 x y = trans (x + (y + zero) + x) (x + y + x) (2 * x + y)
-               (cong (λ t → x + t + x) (y + zero ) y (idr y))
-               (trans (x + y + x) (x + x + y) (2 * x + y)
-                      (trans (x + y + x) (x + (y + x)) (x + x + y)
-                             (ass x y x)
-                             (trans (x + (y + x)) (x + (x + y)) (x + x + y)
-                                    (cong (λ t → x + t) (y + x) (x + y) (comm y x))
-                                    (sym (x + x + y) (x + (x + y)) (ass x x y))))
-                      (cong (λ t → x + t + y) x (x + 0) (sym (x + 0) x (idr x))))
--- 2 * x = rec 0 (x +_) 2 = x + (x + 0)
--- x + (x + 0) + y
-
-p3 : (a b : ℕ) → Eqℕ (a + a + b + a * 0) (2 * a + b)
-p3 a b = trans (a + a + b + a * 0) (a + a + b + 0) (2 * a + b)
-               (cong (λ t → a + a + b + t) (a * 0) 0 (nullr a))
-               (trans (a + a + b + 0) (a + a + b) (2 * a + b)
-                      (idr (a + a + b)  )
-                      (cong (λ t → a + t + b) a (a + 0) (sym (a + 0) a (idr a))))
--- 2 * a + b = a + (a + 0) + b
-
-p2 : (a b c : ℕ) → Eqℕ (c * (b + 1 + a)) (a * c + b * c + c)
-p2 a b c = trans (c * (b + 1 + a)) (c * (b + 1) + c * a)  _
-                 (distl c (b + 1) a)
-                 (trans (c * (b + 1) + c * a) (c * b + c * 1 + c * a) _
-                        (cong (λ t → t + c * a) (c * (b + 1)) (c * b + c * 1) (distl c b 1))
-                        (trans (c * b + c * 1 + c * a) (c * b + c + c * a) _
-                               (cong (λ t → c * b + t + c * a) (c * 1) c (idr* c))
-                               (trans (c * b + c + c * a) (c * a + (c * b + c)) _
-                                      (comm (c * b + c) (c * a))
-                                      (trans (c * a + (c * b + c)) (a * c + (c * b + c)) _
-                                             (cong (λ t → t + (c * b + c)) (c * a) (a * c) (comm* c a ))
-                                             (trans (a * c + (c * b + c)) (a * c + (b * c + c)) _
-                                                    (cong (λ t → a * c + (t + c)) (c * b) (b * c) (comm* c b))
-                                                    (sym (a * c + b * c + c) (a * c + (b * c + c)) (ass (a * c) (b * c) c)))))))
--- c * (b + 1 + a)            =Eqℕ= distl
--- c * (b + 1) + c * a        =Eqℕ= distl, cong      
--- c * b + c * 1 + c * a      =Eqℕ= cong, idr*
--- c * b + c + c * a          =Eqℕ= comm
--- c * a + (c * b + c)        =Eqℕ= comm*, cong
--- a * c + (c * b + c)        =Eqℕ= comm*, cong
--- a * c + (b * c + c)        =Eqℕ= ass, sym
--- a * c + b * c + c
-
-_^_ : ℕ → ℕ → ℕ
-a ^ n = rec 1 (_* a) n
-infixl 9 _^_
-
-pow : (a n : ℕ) → ¬ (Eqℕ 0 a) ⊎ ¬ (Eqℕ 0 n) → ℕ
-pow a n  _ = rec 1 (_* a) n
-
-p1 : (a b : ℕ) → Eqℕ ((a + b) ^ 2) (a ^ 2 + 2 * a * b + b ^ 2)
-p1 = {!!}
-
--------------------------------------------------
--- laws about exponentiation
--------------------------------------------------
-
-0^ : (n : ℕ) → Eqℕ (0 ^ (suc n)) 0
-0^ n = nullr (0 ^ n)
--- 0 ^ (suc n) = rec 1 (_* 0) (suc n) = (rec 1 (_* 0) n) * 0 = 0 ^ n
-
-^0 : (a : ℕ) → Eqℕ (a ^ 0) 1
-^0 = λ a → tt
--- a ^ 0 = rec 1 (_* a) 0 = 1
-
-1^ : (n : ℕ) → Eqℕ (1 ^ n) 1
-1^ = indℕ _
-          (^0 1)
-          λ n h → trans (1 ^ n * 1) (1 ^ n) 1
-                        (idr* (1 ^ n))
-                        h
--- 1 ^ n = rec 1 (_* 1) n = :(
--- 1 ^ suc n = 1 ^ n * 1
-
-^1 : (a : ℕ) → Eqℕ (a ^ 1) a
-^1 = idl*
--- a ^ 1 = rec 1 (_* a) 1 = 1 * a
-
-^+ : (a m n : ℕ) → Eqℕ (a ^ (m + n)) (a ^ m * a ^ n)
-^+ = {!!}
-
-^* : (a m n : ℕ) → Eqℕ (a ^ (m * n)) ((a ^ m) ^ n)
-^* = {!!}
-
-*^ : (a b n : ℕ) → Eqℕ ((a * b) ^ n) (a ^ n * b ^ n)
-*^ = {!!}
-
--------------------------------------------------
--- leq
--------------------------------------------------
-
+-- ezt nem kell kiadni feladatnak:
 _≤_ : ℕ → ℕ → Set
 zero  ≤ y     = ⊤
 suc x ≤ zero  = ⊥
 suc x ≤ suc y = x ≤ y
 
-ex : 3 ≤ 100
-ex = {!!}
-
-refl≤ : (x : ℕ) → x ≤ x
-refl≤ = {!!}
-
-trans≤ : (x y z : ℕ) → x ≤ y → y ≤ z → x ≤ z
-trans≤ = {!!}
-
-≤dec : (x y : ℕ) → x ≤ y ⊎ y ≤ x
-≤dec = {!!}
-
 _<_ : ℕ → ℕ → Set
-x < y = suc x ≤ y
+a < b = suc a ≤ b
 
-≤-antisym : (x y : ℕ) → x ≤ y → y ≤ x → Eqℕ x y
-≤-antisym = {!!}
+-- n-edik elem
+!! : {A : Set} (n : ℕ) → A ^ n → (m : ℕ) → m < n → A
+!! (suc n) (x , xs) zero e = x
+!! (suc n) (x , xs) (suc m) e = !! n xs m e
 
-≤dec' : (x y : ℕ) → x < y ⊎ Eqℕ x y ⊎ y < x
-≤dec' = {!!}
+eqn : ℕ → ℕ → Bool
+eqn zero zero = true
+eqn zero (suc m) = false
+eqn (suc n) zero = false
+eqn (suc n) (suc m) = eqn n m
 
-+≤ : (x y a : ℕ) → (a + x) ≤ (a + y) ↔ x ≤ y
-+≤ = {!!}
+-- inj₂-t ad vissza, ha xs-ben nincs benne x
+lookup'' : (n : ℕ)(x : ℕ)(xs : ℕ ^ n) → ℕ ⊎ ⊤
+lookup'' = {!!}
+  
+Decidable : Set → Set
+Decidable = λ A → A ⊎ ¬ A
 
-1+*≤ : (x y a : ℕ) → (suc a * x) ≤ (suc a * y) ↔ x ≤ y
-1+*≤ = {!!}
+lookup : (n : ℕ)(x : ℕ)(xs : ℕ ^ n) → Decidable (Σ ℕ λ i → Σ (i < n) λ p → Eq ℕ (!! n xs i p) x)
+lookup zero x xs = inj₂ λ t → {!!}
+lookup (suc n) x xs = {!!}
 
-¬*≤ : ¬ ((x y a : ℕ) → (a * x) ≤ (a * y) ↔ x ≤ y)
-¬*≤ = {!!}
+-- ezt nem kell kiadni feladatnak:
+≤dec : (x y : ℕ) → x ≤ y ⊎ y ≤ x
+≤dec zero y = inj₁ tt
+≤dec (suc x) zero = inj₂ tt
+≤dec (suc x) (suc y) = ≤dec x y
+
+-- ez lesz eloadason:
+insert : ℕ → {l : ℕ} → ℕ ^ l → ℕ ^ (suc l)
+insert y {zero}  xs       = y , tt
+insert y {suc l} (x , xs) = case (≤dec y x)
+  (λ _ → y , x , xs)
+  (λ _ → x , insert y xs)
+
+insert-test1 : Eq (ℕ ^ 5) (insert 3 (1 , 2 , 4 , 5 , tt)) (1 , 2 , 3 , 4 , 5 , tt)
+insert-test1 = refl
+
+insert-test2 : Eq (ℕ ^ 5) (insert 0 (1 , 2 , 4 , 5 , tt)) (0 , 1 , 2 , 4 , 5 , tt)
+insert-test2 = refl
+
+insert-test3 : Eq (ℕ ^ 5) (insert 1 (1 , 2 , 4 , 5 , tt)) (1 , 1 , 2 , 4 , 5 , tt)
+insert-test3 = refl
+
+insert-test4 : Eq (ℕ ^ 5) (insert 10 (1 , 2 , 4 , 5 , tt)) (1 , 2 , 4 , 5 , 10 , tt)
+insert-test4 = refl
+
+-- ez lesz eloadason:
+sort : {l : ℕ} → ℕ ^ l → ℕ ^ l
+sort {zero}   _       = tt
+sort {suc l} (x , xs) = insert x (sort xs)
+
+sort-test5 : Eq (ℕ ^ 5) (sort (3 , 2 , 1 , 5 , 4 , tt)) (1 , 2 , 3 , 4 , 5 , tt)
+sort-test5 = refl
+
+sort-test6 : Eq (ℕ ^ 5) (sort (2 , 2 , 1 , 4 , 4 , tt)) (1 , 2 , 2 , 4 , 4 , tt)
+sort-test6 = refl
+
+-- ezt nem kell kiadni feladatnak:
+Ordered : ℕ → (l : ℕ) → ℕ ^ l → Set
+Ordered b zero tt          = ⊤
+Ordered b (suc l) (x , xs) = b ≤ x × Ordered x l xs
+
+ord-test1 : Ordered 3 4 (4 , 7 , 9 , 10 , tt)
+ord-test1 = tt , tt , tt , tt , tt
+
+ord-test1a : Ordered 3 4 (4 , 4 , 9 , 10 , tt)
+ord-test1a = tt , tt , tt , tt , tt
+
+ord-test2 : ¬ Ordered 0 2 (2 , 1 , tt)
+ord-test2 = λ z → proj₁ (proj₂ z)
+
+ord-test3 : ¬ Ordered 1 2 (0 , 0 , tt)
+ord-test3 = proj₁
+
+-- ez lesz eloadason
+ins-ord : {l : ℕ}(xs : ℕ ^ l)(b : ℕ) → Ordered b l xs → (y : ℕ) → b ≤ y →
+  Ordered b (suc l) (insert y xs)
+ins-ord {zero}  xs       b tt               y b≤y = b≤y , tt
+ins-ord {suc l} (x , xs) b (b≤x , ord-x-xs) y b≤y = ind⊎
+  (λ w → Ordered b (2 + l) (case w (λ _ → y , x , xs) (λ _ → x , insert y xs)))
+  (λ y≤x → b≤y , y≤x , ord-x-xs)                -- Ordered b _ (y , x , xs)        = b ≤ y × Ordered y _ (x , xs)        = b ≤ y × y ≤ x × Ordered x _ xs
+  (λ x≤y → b≤x , ins-ord xs x ord-x-xs y x≤y) -- Ordered b _ (x , insert y xs) = b ≤ x × Ordered x _ (insert y xs)
+  (≤dec y x) 
+
+-- ez lesz eloadason
+sort-ord : (l : ℕ)(xs : ℕ ^ l) → Ordered 0 l (sort xs)
+sort-ord zero xs = tt
+sort-ord (suc l) (x , xs) = ins-ord (sort xs) 0 (sort-ord l xs) x tt
+
+∈ : (y : ℕ)(l : ℕ)(xs : ℕ ^ l) → Set
+∈ y zero    tt       = ⊥
+∈ y (suc l) (x , xs) = Eq ℕ y x ⊎ ∈ y l xs
+
+∈-test1 : ∈ 3 4 (6 , 4 , 3 , 2 , tt)
+∈-test1 = inj₂ (inj₂ (inj₁ refl))
+
+∈-test2a : ∈ 3 4 (6 , 4 , 3 , 3 , tt)
+∈-test2a = inj₂ (inj₂ (inj₁ refl))
+
+∈-test2b : ∈ 3 4 (6 , 4 , 3 , 3 , tt)
+∈-test2b = inj₂ (inj₂ (inj₂ (inj₁ refl)))
+
+∈-test3 : ¬ ∈ 3 4 (1 , 1 , 1 , 1 , tt)
+∈-test3 = {!!}
+
+-- ez lesz eloadason
+ins-∈ : (y : ℕ)(l : ℕ)(xs : ℕ ^ l) → ∈ y (suc l) (insert y xs)
+ins-∈ y zero xs = inj₁ refl
+ins-∈ y (suc l) (x , xs) = ind⊎
+  (λ w → ∈ y (suc (suc l)) (case w (λ _ → y , x , xs) (λ _ → x , insert y xs)))
+  (λ y≤x → inj₁ refl)
+  (λ x≤y → inj₂ (ins-∈ y l xs))
+  (≤dec y x)
+
+-- ez lesz eloadason
+ins-other : (y z l : ℕ)(xs : ℕ ^ l) → ∈ y l xs → ∈ y (suc l) (insert z xs)
+ins-other y z zero _ ()
+ins-other y z (suc l) (x , xs) y∈x,xs = ind⊎
+  (λ w → ∈ y (suc (suc l)) (case w (λ _ → z , x , xs) (λ _ → x , insert z xs)))
+  (λ z≤x → inj₂ y∈x,xs)
+  (λ x≤z → case y∈x,xs inj₁ λ y∈xs → inj₂ (ins-other y z l xs y∈xs))
+  (≤dec z x)
+
+-- ez lesz eloadason
+sort-∈ : (y : ℕ)(l : ℕ)(xs : ℕ ^ l) → ∈ y l xs → ∈ y l (sort xs)
+sort-∈ y (suc l) (x , xs) (inj₁ refl) = ins-∈ y l (sort xs)
+sort-∈ y (suc l) (x , xs) (inj₂ y∈xs) = ins-other y x l _ (sort-∈ y l xs y∈xs)
