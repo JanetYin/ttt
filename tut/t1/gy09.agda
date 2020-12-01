@@ -285,17 +285,55 @@ distl = {!!}
 -------------------------------------------------
 
 p4 : (x y : ℕ) → Eqℕ ((x + (y + zero)) + x) (2 * x + y)
-p4 x y = {!!}
+p4 x y = trans (x + (y + zero) + x) (x + y + x) (2 * x + y)
+               (cong (λ t → x + t + x) (y + zero ) y (idr y))
+               (trans (x + y + x) (x + x + y) (2 * x + y)
+                      (trans (x + y + x) (x + (y + x)) (x + x + y)
+                             (ass x y x)
+                             (trans (x + (y + x)) (x + (x + y)) (x + x + y)
+                                    (cong (λ t → x + t) (y + x) (x + y) (comm y x))
+                                    (sym (x + x + y) (x + (x + y)) (ass x x y))))
+                      (cong (λ t → x + t + y) x (x + 0) (sym (x + 0) x (idr x))))
+-- 2 * x = rec 0 (x +_) 2 = x + (x + 0)
+-- x + (x + 0) + y
 
 p3 : (a b : ℕ) → Eqℕ (a + a + b + a * 0) (2 * a + b)
-p3 a b = {!!}
+p3 a b = trans (a + a + b + a * 0) (a + a + b + 0) (2 * a + b)
+               (cong (λ t → a + a + b + t) (a * 0) 0 (nullr a))
+               (trans (a + a + b + 0) (a + a + b) (2 * a + b)
+                      (idr (a + a + b)  )
+                      (cong (λ t → a + t + b) a (a + 0) (sym (a + 0) a (idr a))))
+-- 2 * a + b = a + (a + 0) + b
 
 p2 : (a b c : ℕ) → Eqℕ (c * (b + 1 + a)) (a * c + b * c + c)
-p2 a b c = {!!}
+p2 a b c = trans (c * (b + 1 + a)) (c * (b + 1) + c * a)  _
+                 (distl c (b + 1) a)
+                 (trans (c * (b + 1) + c * a) (c * b + c * 1 + c * a) _
+                        (cong (λ t → t + c * a) (c * (b + 1)) (c * b + c * 1) (distl c b 1))
+                        (trans (c * b + c * 1 + c * a) (c * b + c + c * a) _
+                               (cong (λ t → c * b + t + c * a) (c * 1) c (idr* c))
+                               (trans (c * b + c + c * a) (c * a + (c * b + c)) _
+                                      (comm (c * b + c) (c * a))
+                                      (trans (c * a + (c * b + c)) (a * c + (c * b + c)) _
+                                             (cong (λ t → t + (c * b + c)) (c * a) (a * c) (comm* c a ))
+                                             (trans (a * c + (c * b + c)) (a * c + (b * c + c)) _
+                                                    (cong (λ t → a * c + (t + c)) (c * b) (b * c) (comm* c b))
+                                                    (sym (a * c + b * c + c) (a * c + (b * c + c)) (ass (a * c) (b * c) c)))))))
+-- c * (b + 1 + a)            =Eqℕ= distl
+-- c * (b + 1) + c * a        =Eqℕ= distl, cong      
+-- c * b + c * 1 + c * a      =Eqℕ= cong, idr*
+-- c * b + c + c * a          =Eqℕ= comm
+-- c * a + (c * b + c)        =Eqℕ= comm*, cong
+-- a * c + (c * b + c)        =Eqℕ= comm*, cong
+-- a * c + (b * c + c)        =Eqℕ= ass, sym
+-- a * c + b * c + c
 
 _^_ : ℕ → ℕ → ℕ
 a ^ n = rec 1 (_* a) n
 infixl 9 _^_
+
+pow : (a n : ℕ) → ¬ (Eqℕ 0 a) ⊎ ¬ (Eqℕ 0 n) → ℕ
+pow a n  _ = rec 1 (_* a) n
 
 p1 : (a b : ℕ) → Eqℕ ((a + b) ^ 2) (a ^ 2 + 2 * a * b + b ^ 2)
 p1 = {!!}
@@ -305,19 +343,25 @@ p1 = {!!}
 -------------------------------------------------
 
 0^ : (n : ℕ) → Eqℕ (0 ^ (suc n)) 0
-0^ n = ?
+0^ n = nullr (0 ^ n)
+-- 0 ^ (suc n) = rec 1 (_* 0) (suc n) = (rec 1 (_* 0) n) * 0 = 0 ^ n
 
 ^0 : (a : ℕ) → Eqℕ (a ^ 0) 1
-^0 = {!!}
+^0 = λ a → tt
+-- a ^ 0 = rec 1 (_* a) 0 = 1
 
 1^ : (n : ℕ) → Eqℕ (1 ^ n) 1
-1^ = {!!}
-
--- rec 1 (_* 1) n
+1^ = indℕ _
+          (^0 1)
+          λ n h → trans (1 ^ n * 1) (1 ^ n) 1
+                        (idr* (1 ^ n))
+                        h
+-- 1 ^ n = rec 1 (_* 1) n = :(
 -- 1 ^ suc n = 1 ^ n * 1
 
 ^1 : (a : ℕ) → Eqℕ (a ^ 1) a
-^1 = {!!}
+^1 = idl*
+-- a ^ 1 = rec 1 (_* a) 1 = 1 * a
 
 ^+ : (a m n : ℕ) → Eqℕ (a ^ (m + n)) (a ^ m * a ^ n)
 ^+ = {!!}
