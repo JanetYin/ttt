@@ -431,11 +431,11 @@ x < y = suc x ≤ y
 ∀⊎-distr' = λ f → case (f ℕ isEven isOdd everyℕisEvenOrOdd) (λ allEven → allEven 1) λ allOdd → allOdd 0
   where
     isEven : ℕ → Set
-    isEven = {!!}
+    isEven = λ x → if (rec true not x) then ⊤ else ⊥
     isOdd : ℕ → Set
-    isOdd = {!!}
+    isOdd = λ x → if (rec false not x) then ⊤ else ⊥
     everyℕisEvenOrOdd : (n : ℕ) → isEven n ⊎ isOdd n
-    everyℕisEvenOrOdd = {!!}
+    everyℕisEvenOrOdd = indℕ (λ n → isEven n ⊎ isOdd n) (inj₁ tt) λ n ih → case ih (λ even → inj₂ {!!}) {!!}  
 
 Σ×-distr  : (A : Set)(P : A → Set)(Q : A → Set) → (Σ A λ a → P a × Q a)  → Σ A P × Σ A Q
 Σ×-distr = {!!}
