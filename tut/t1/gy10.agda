@@ -23,15 +23,37 @@ not false = true
 ∀×-distr A P Q = (λ t → (λ a → proj₁ (t a)) , λ a → proj₂ (t a))
                , λ t a → proj₁ t a , proj₂ t a 
 
+-- ∀aP(a) ∨ ∀aQ(a) ⊃ ∀a(P(a) ∨ Q(a))
+∀⊎-distr A P Q = λ t a → case t (λ e → inj₁ (e a)) λ e → inj₂ (e a)
+
 ∀⊎-distr' : ¬ ((A : Set)(P : A → Set)(Q : A → Set) → (((a : A) → P a ⊎ Q a) → ((a : A) → P a) ⊎ ((a : A) → Q a)))
-∀⊎-distr' t = {!!}
+∀⊎-distr' t = case (t ℕ isEven isOdd everyℕisEvenOrOdd) (λ t → t 1) λ t → t 0
   where
+    isEven : ℕ → Set
+    isOdd : ℕ → Set
+    isEven zero = ⊤
+    isEven (suc n) = isOdd n
+    isOdd zero = ⊥
+    isOdd (suc n) = isEven n
+    everyℕisEvenOrOdd : (n : ℕ) → isEven n ⊎ isOdd n
+    everyℕisEvenOrOdd zero = inj₁ tt
+    everyℕisEvenOrOdd (suc n) = case (everyℕisEvenOrOdd n) inj₂ inj₁
+    -- isEven (suc n) ⊎ isOdd (suc n)
+
+--∃a(P(a) ∧ Q(a)) ⊃ ∃aP(a) ∧ ∃aQ(a)
+Σ×-distr A P Q = λ h → (proj₁ h , proj₁ (proj₂ h)) , proj₁ h , proj₂ (proj₂ h)
 
 Σ×-distr' : ¬ ((A : Set)(P : A → Set)(Q : A → Set) → ((Σ A λ a → P a × Q a) ← Σ A P × Σ A Q))
 Σ×-distr' t = {!!}
 
 Σ∀       : (A B : Set)(R : A → B → Set)        → (Σ A λ x → (y : B) → R x y) → (y : B) → Σ A λ x → R x y
 AC       : (A B : Set)(R : A → B → Set)        → ((x : A) → Σ B λ y → R x y) → Σ (A → B) λ f → (x : A) → R x (f x)
+
+--\GS = Σ
+-- ∃x∀yR(x,y) ⊃ ∀y∃xR(x,y)
+Σ∀ A B R = λ h y → proj₁ h , proj₂ h y
+
+AC A B R = λ h → (λ a → proj₁ (h a)) , (λ a → proj₂ (h a))
 
 ---------------------------------------------------------
 -- Vectors
@@ -100,8 +122,7 @@ Decidable : Set → Set
 Decidable = λ A → A ⊎ ¬ A
 
 lookup : (n : ℕ)(x : ℕ)(xs : ℕ ^ n) → Decidable (Σ ℕ λ i → Σ (i < n) λ p → Eq ℕ (!! n xs i p) x)
-lookup zero x xs = inj₂ λ t → {!!}
-lookup (suc n) x xs = {!!}
+lookup = {!!}
 
 -- ezt nem kell kiadni feladatnak:
 ≤dec : (x y : ℕ) → x ≤ y ⊎ y ≤ x
