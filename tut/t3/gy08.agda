@@ -325,8 +325,27 @@ x+x = {!!}
 ass-comm : (x y z : ℕ) → Eqℕ (x + y + z) (x + z + y)
 ass-comm = {!!}
 
+{-
+x + (y + 0) + x = 2 * x + y
+x + (y + 0) + x = (idr) 
+x + y + x       = (ass-comm)
+x + x + y       = (x+x)
+2 * x + y
+-}
+
 p4 : (x y : ℕ) → Eqℕ ((x + (y + zero)) + x) (2 * x + y)
-p4 = {!!}
+p4 = λ x y → trans
+  ((x + (y + zero)) + x)
+  (x + y + x)
+  (2 * x + y)
+  (cong (λ w → x + w + x) (y + zero) y (idr y))
+  (trans
+    (x + y + x)
+    (x + x + y)
+    (2 * x + y)
+    (ass-comm x y x)
+    (cong (λ w → w + y) (x + x) (2 * x) (x+x x) ))
+
 
 p3 : (a b : ℕ) → Eqℕ (a + a + b + a * 0) (2 * a + b)
 p3 = {!!}
@@ -337,6 +356,23 @@ p2 = {!!}
 _^_ : ℕ → ℕ → ℕ
 a ^ n = rec 1 (_* a) n
 infixl 9 _^_
+
+a*a : (a : ℕ) → Eqℕ (a * a) (a ^ 2)
+a*a = {!!}
+
+{-
+(a + b) ^ 2 =   (def)
+(a + b) * (a + b) ^ 1 = (^1)
+(a + b) * (a + b)  = (distl)
+(a + b) * a + (a + b) * b = (distr)
+a * a + b * a + (a + b) * b = (distr)
+a * a + b * a + (a * b + b * b) = (a*a)
+a ^ 2 +	b * a + (a * b + b * b) = (a*a)
+a ^ 2 + b * a + (a * b + b ^ 2) = (ass)
+a ^ 2 + b * a + a * b + b ^ 2 = (comm)
+a ^ 2 + a * b + a * b + b ^ 2  = (a+a)
+a ^ 2 + 2 * a * b + b ^ 2
+-}
 
 p1 : (a b : ℕ) → Eqℕ ((a + b) ^ 2) (a ^ 2 + 2 * a * b + b ^ 2)
 p1 = {!!}
@@ -410,9 +446,49 @@ x < y = suc x ≤ y
 ¬*≤ = {!!}
 
 
+---------------------------------------------------------
+-- First order logic
+---------------------------------------------------------
 
+∀×-distr  : (A : Set)(P : A → Set)(Q : A → Set) → ((a : A) → P a × Q a)  ↔ ((a : A) → P a) × ((a : A) → Q a)
+∀×-distr = {!!}
 
+∀⊎-distr  : (A : Set)(P : A → Set)(Q : A → Set) → ((a : A) → P a ⊎ Q a)  ← ((a : A) → P a) ⊎ ((a : A) → Q a)
+∀⊎-distr = {!!}
 
+∀⊎-distr' : ¬ ((A : Set)(P : A → Set)(Q : A → Set) → (((a : A) → P a ⊎ Q a) → ((a : A) → P a) ⊎ ((a : A) → Q a)))
+∀⊎-distr' = λ f → case (f ℕ isEven isOdd everyℕisEvenOrOdd) (λ allEven → allEven 1) λ allOdd → allOdd 0
+  where
+    isEven : ℕ → Set
+    isEven = {!!}
+    isOdd : ℕ → Set
+    isOdd = {!!}
+    everyℕisEvenOrOdd : (n : ℕ) → isEven n ⊎ isOdd n
+    everyℕisEvenOrOdd = {!!}
 
+Σ×-distr  : (A : Set)(P : A → Set)(Q : A → Set) → (Σ A λ a → P a × Q a)  → Σ A P × Σ A Q
+Σ×-distr = {!!}
 
+Σ×-distr' : ¬ ((A : Set)(P : A → Set)(Q : A → Set) → ((Σ A λ a → P a × Q a) ← Σ A P × Σ A Q))
+Σ×-distr' = {!!}
 
+Σ⊎-distr : (A : Set)(P : A → Set)(Q : A → Set) → (Σ A λ a → P a ⊎ Q a)  ↔ Σ A P ⊎ Σ A Q
+Σ⊎-distr = {!!}
+
+¬∀ : (A : Set)(P : A → Set) → (Σ A λ a → ¬ P a) → ¬ ((a : A) → P a)
+¬∀ = {!!}
+
+¬Σ : (A : Set)(P : A → Set) → (¬ Σ A λ a → P a) ↔ ((a : A) → ¬ P a)
+¬Σ = {!!}
+
+⊎↔ΣBool : (A B : Set) → (A ⊎ B) ↔ Σ Bool (λ b → if b then A else B)
+⊎↔ΣBool = {!!}
+
+¬¬∀-nat : (A : Set)(P : A → Set)  → ¬ ¬ ((x : A) → P x) → (x : A) → ¬ ¬ (P x)
+¬¬∀-nat = {!!}
+
+Σ∀ : (A B : Set)(R : A → B → Set) → (Σ A λ x → (y : B) → R x y) → (y : B) → Σ A λ x → R x y
+Σ∀ = {!!}
+
+AC : (A B : Set)(R : A → B → Set) → ((x : A) → Σ B λ y → R x y) → Σ (A → B) λ f → (x : A) → R x (f x)
+AC = {!!}
