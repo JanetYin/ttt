@@ -86,13 +86,20 @@ _+_ : ℕ → ℕ → ℕ
 zero + b = b 
 suc a + b = suc (a + b)
 
-_++_ : {A : Set}{n m : ℕ} → A ^ n → A ^ m → A ^ (n + m)
-_++_ = {!!}
+++ : {A : Set}(n m : ℕ) → A ^ n → A ^ m → A ^ (n + m)
+++ zero m xs ys = ys
+++ (suc n) m (x , xs) ys = cons x (++ n m xs ys)
+
+-- (1 , 2 , 3  , tt) ++ (2 , 3 , tt) =
+-- 1 , ((2 , 3  , tt) ++ (2 , 3 , tt))
 
 isEven = rec true not
 
 filter[_] : {A : Set}(n : ℕ)(f : A → Bool) → A ^ n → Σ ℕ λ m → A ^ m
-filter[_] = {!!}
+filter[ zero ] f tt        = zero , tt
+filter[ suc n ] f (x , xs) = let (m , ys) = filter[ n ] f xs
+                              in if f x then (suc m) , x , ys else (m , ys)
+
 
 -- ezt nem kell kiadni feladatnak:
 _≤_ : ℕ → ℕ → Set
@@ -105,8 +112,8 @@ a < b = suc a ≤ b
 
 -- n-edik elem
 !! : {A : Set} (n : ℕ) → A ^ n → (m : ℕ) → m < n → A
-!! (suc n) (x , xs) zero e = x
-!! (suc n) (x , xs) (suc m) e = !! n xs m e
+!! (suc n) (x , xs) zero p = x
+!! (suc n) (x , xs) (suc m) p = !! n xs m p
 
 eqn : ℕ → ℕ → Bool
 eqn zero zero = true
@@ -116,7 +123,11 @@ eqn (suc n) (suc m) = eqn n m
 
 -- inj₂-t ad vissza, ha xs-ben nincs benne x
 lookup'' : (n : ℕ)(x : ℕ)(xs : ℕ ^ n) → ℕ ⊎ ⊤
-lookup'' = {!!}
+lookup'' zero x' xs          = inj₂ tt
+lookup'' (suc n) x' (x , xs) = let t = lookup'' n x' xs ; b = eqn x x'
+                                in case t
+                                        (λ m → inj₁ (if b then zero else suc m))
+                                        λ _ → if b then inj₁ zero else inj₂ tt
   
 Decidable : Set → Set
 Decidable = λ A → A ⊎ ¬ A
