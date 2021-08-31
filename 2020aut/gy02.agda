@@ -1,6 +1,6 @@
 {-# OPTIONS --no-pattern-match #-}
 
-module tut.gy02 where
+module gy02 where
 
 open import lib
 

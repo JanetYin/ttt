@@ -1,4 +1,4 @@
-module tut.gy03 where
+module gy03 where
 
 open import lib
 

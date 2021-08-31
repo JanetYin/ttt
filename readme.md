@@ -67,11 +67,10 @@ run.
 
 Type theory is a game that we play with a finite set of rules. For
 each type former, there is a number of rules. In this section, we
-learn the rules for type formers `𝟚`, `→`, `ℕ`, `×`, abstract
-types, `⊥`, `⊤`, `⊎`. We also learn that equality of terms is
-decidable, the difference between equality and behaviour, the
-algebraic structure of types and how to translate propositional logic
-formulas to types.
+learn the rules for type formers `𝟚`, `→`, `ℕ`, `×`, `⊥`, `⊤`, `⊎`. We
+also learn that equality of terms is decidable, the difference between
+equality and behaviour, the algebraic structure of types and how to
+translate propositional logic formulas to types.
 
 ## Booleans: `𝟚`
 
