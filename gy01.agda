@@ -32,6 +32,20 @@ open import lib
 -- Booleans
 ---------------------------------------------------------
 
+{-
+Rules:
+
+* introduction:
+    tt : 𝟚
+    ff : 𝟚
+* elimination:
+    if t : 𝟚, u : A, v : A, then if t then u else v : A
+  this works for any A
+* computation:
+    if tt then u else v = u
+    if ff then u else v = v
+-}
+
 b1 b2 b3 b4 b5 : 𝟚
 b1 = tt
 b2 = ff
@@ -57,6 +71,19 @@ b5 = if (if (if tt then b2 else b1) then b1 else b1) then b2 else b3
 ---------------------------------------------------------
 -- Functions
 ---------------------------------------------------------
+
+{-
+Rules:
+* elimination:
+    if t : A → B and u : A, then t u : B
+* introduction:
+    if t : B assuming x : A then (λ x → t) : (A → B)
+  x is just a name (a variable), it is not an arbitrary term
+* computation:
+    (λ x → t) u = t[x↦u] where t[x↦u] means that all copies of x are replaced by u
+* uniqueness:
+    (λ x → t x) = t
+-}
 
 -- unicode: λ, Agda menu / "Information about the character at point"
 -- λ = \lambda
