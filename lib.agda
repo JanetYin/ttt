@@ -8,18 +8,18 @@ infixr 1 _⊎_
 infixr 0 _↔_
 infixr 0 _←_
 
-data Bool : Set where
-  true false : Bool
+data 𝟚 : Set where
+  tt ff : 𝟚
 
-if_then_else_ : ∀{i}{A : Set i}(t : Bool)(u v : A) → A
-if true then u else v = u
-if false then u else v = v
+if_then_else_ : ∀{i}{A : Set i}(t : 𝟚)(u v : A) → A
+if tt then u else v = u
+if ff then u else v = v
 
 record _×_ {i}{j}(A : Set i)(B : Set j) : Set (i ⊔ j) where
   constructor _,_
   field
-    proj₁ : A
-    proj₂ : B
+    π₁ : A
+    π₂ : B
 open _×_ public
 
 data ℕ : Set where
@@ -32,13 +32,13 @@ rec u v zero = u
 rec u v (suc t) = v (rec u v t)
 
 data _⊎_ {i}{j}(A : Set i)(B : Set j) : Set (i ⊔ j) where
-  inj₁ : A → A ⊎ B
-  inj₂ : B → A ⊎ B
+  ι₁ : A → A ⊎ B
+  ι₂ : B → A ⊎ B
 
 case : ∀ {i j k}{A : Set i}{B : Set j}{C : Set k}
        (t : A ⊎ B)(u : A → C)(v : B → C) → C
-case (inj₁ t) u v = u t
-case (inj₂ t) u v = v t
+case (ι₁ t) u v = u t
+case (ι₂ t) u v = v t
 
 _↔_ : ∀{i j}(A : Set i)(B : Set j) → Set (i ⊔ j)
 A ↔ B = (A → B) × (B → A)
@@ -55,26 +55,20 @@ open ⊤ public
 ¬_ : ∀{i}(A : Set i) → Set i
 ¬ A = A → ⊥
 
-_←_ : ∀{i j}(A : Set i)(B : Set j) → Set (i ⊔ j)
-A ← B = B → A
-
 indℕ : ∀{i}(P : ℕ → Set i) → P zero → ((n : ℕ) → P n → P (suc n)) → (t : ℕ) → P t
-indBool : ∀{i}(P : Bool → Set i) → P true → P false → (t : Bool) → P t
-ind⊎ : ∀{i j k}{A : Set i}{B : Set j}(P : A ⊎ B → Set k) → ((a : A) → P (inj₁ a)) → ((b : B) → P (inj₂ b)) → (t : A ⊎ B) → P t
+ind𝟚 : ∀{i}(P : 𝟚 → Set i) → P tt → P ff → (t : 𝟚) → P t
+ind⊎ : ∀{i j k}{A : Set i}{B : Set j}(P : A ⊎ B → Set k) → ((a : A) → P (ι₁ a)) → ((b : B) → P (ι₂ b)) → (t : A ⊎ B) → P t
 
 indℕ P u v zero = u
 indℕ P u v (suc t) = v t (indℕ P u v t)
-indBool P u v true = u
-indBool P u v false = v
-ind⊎ P u v (inj₁ t) = u t
-ind⊎ P u v (inj₂ t) = v t
+ind𝟚 P u v tt = u
+ind𝟚 P u v ff = v
+ind⊎ P u v (ι₁ t) = u t
+ind⊎ P u v (ι₂ t) = v t
 
 record Σ {i}{j}(A : Set i)(B : A → Set j) : Set (i ⊔ j) where
   constructor _,_
   field
-    proj₁ : A
-    proj₂ : B proj₁
+    π₁ : A
+    π₂ : B π₁
 open Σ public
-
-data Eq {i}(A : Set i)(a : A) : A → Set where
-  refl : Eq A a a

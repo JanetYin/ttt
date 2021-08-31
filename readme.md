@@ -10,23 +10,12 @@ You have to register with the correct code:
 
 Teacher of the lectures: Kaposi Ambrus
 
-Tutorials:
-
- 1. Széles Márk (Kedd 19:30-21:00)
- 2. Luksa Norbert (Szerda 17:45-19:15)
- 3. Luksa Norbert (Szerda 19:30-21:00)
+Tutorial teachers: Batta Zsolt, Lezsák Domonkos, Végh Tamás
  
-Contact:
-
-- Kaposi Ambrus, email: akaposi @ inf.elte.hu (szóköz nélkül).
-- Széles Márk, email: szelesmark @ caesar.elte.hu (szóköz nélkül).
-- Luksa Norbert, email: luksan @ inf.elte.hu (szóköz nélkül).
-
 Requirements:
 
  * Canvas quiz for each lecture
- * At the beginning of each tutorial a small assignment in the bead
-   system. Weekly homeworks in the same system help preparing.
+ * At the beginning of each tutorial a small Agda assignment. Weekly homeworks help preparation.
  * Exam on the computer during the exam period. [Example exam](https://bitbucket.org/akaposi/ttt/raw/master/exampleExam.agda)
 
 For the tutorial, you get the following marks according to how many
@@ -50,7 +39,7 @@ Recommended literature:
 
 t is a term (program), A is its type
 
-Examples: `(1 + 1) : ℕ`, `(λ b → if b then 1 else 3) : Bool → ℕ`.
+Examples: `(1 + 1) : ℕ`, `(λ b → if b then 1 else 3) : 𝟚 → ℕ`.
 
 Sometimes type theory means the study of type systems for programming
 languages. Here we study Martin-Löf's type theory. This is a
@@ -64,7 +53,7 @@ It can be used as a replacement for set theory. Differences:
    Python). In type theory, `1 + 1 = 2` is at a different level from
    `(1 + 1) : ℕ`, but in set theory `1 + 1 = 2` and `(1 + 1) ∈ ℕ` are
    both propositions. Representation independence in type theory, we
-   cannot ask `2 ∈ 3` or `Bool ∩ ℕ = ∅`.
+   cannot ask `2 ∈ 3` or `𝟚 ∩ ℕ = ∅`.
 
  * Proofs in type theory are constructive: GCD example. This is what
    we use to write functional programs.
@@ -78,41 +67,41 @@ run.
 
 Type theory is a game that we play with a finite set of rules. For
 each type former, there is a number of rules. In this section, we
-learn the rules for type formers `Bool`, `→`, `ℕ`, `×`, abstract
+learn the rules for type formers `𝟚`, `→`, `ℕ`, `×`, abstract
 types, `⊥`, `⊤`, `⊎`. We also learn that equality of terms is
 decidable, the difference between equality and behaviour, the
 algebraic structure of types and how to translate propositional logic
 formulas to types.
 
-## Booleans: `Bool`
+## Booleans: `𝟚`
 
 Rules:
 
  * introduction:
-    * `true : Bool`
-    * `false : Bool`
+    * `tt : 𝟚`
+    * `ff : 𝟚`
  * elimination:
-    * if `t : Bool`, `u : A`, `v : A`, then `if t then u else v : A`
+    * if `t : 𝟚`, `u : A`, `v : A`, then `if t then u else v : A`
        * this works for any `A`
  * computation:
-    * `if true then u else v = u`
-    * `if false then u else v = v`
+    * `if tt then u else v = u`
+    * `if ff then u else v = v`
 
 Examples.
 
-    b1 b2 b3 b4 : Bool
-    b1 = true
-    b2 = false
+    b1 b2 b3 b4 : 𝟚
+    b1 = tt
+    b2 = ff
     b3 = if b1 then b2 else b1
     b4 = if b3 then b1 else b2
 
 Let's compute:
 
-`b3 = if b1 then b2 else b1 = if true then b2 else b1 = b2 = false`
+`b3 = if b1 then b2 else b1 = if tt then b2 else b1 = b2 = ff`
 
-Question: how many terms of type `Bool` can you write with these
-rules? Answer: only two, everything is equal to either `true` or
-`false`.
+Question: how many terms of type `𝟚` can you write with these
+rules? Answer: only two, everything is equal to either `tt` or
+`ff`.
 
 ## Functions: `A → B` (for any two types `A`, `B`)
 
@@ -131,12 +120,12 @@ Rules:
 
 Examples.
 
-    id idy id1 id' id'' : Bool → Bool
+    id idy id1 id' id'' : 𝟚 → 𝟚
     id = λ x → x
     idy = λ y → y
     id1 = λ x → id x
-    id' = λ x → if x then true else false
-    id'' = λ x → if true then x else false
+    id' = λ x → if x then tt else ff
+    id'' = λ x → if tt then x else ff
 
 We have
 
@@ -154,13 +143,13 @@ We don't have `id = id'` but we do have `id = id''`.
 
 More examples.
 
-    not : Bool → Bool
-    not = λ x → if x then false else true
+    not : 𝟚 → 𝟚
+    not = λ x → if x then ff else tt
 
-    b5 : Bool
-    b5 = id true
+    b5 : 𝟚
+    b5 = id tt
 
-Question: how many elements of `Bool → Bool` are there? Answer:
+Question: how many elements of `𝟚 → 𝟚` are there? Answer:
 infinitely many, e.g. `λ x → not x`, `λ x → not (not x)`, `λ x → not
 (not (not x))`, `λ x → not (not (not (not x)))` etc.
 
@@ -170,8 +159,8 @@ Notation: `A → B → C` means `A → (B → C)`, `λ x y → t` means `λ x �
 y → t`, `t u v` means `(t u) v`. `λ` extends as far right as possible,
 so `λ x → t u = λ x → (t u)` instead of `(λ x → t) u`.
 
-    and : Bool → Bool → Bool
-    and = λ x y → if x then y else false
+    and : 𝟚 → 𝟚 → 𝟚
+    and = λ x y → if x then y else ff
 
 ## Equality checking in Agda
 
@@ -184,20 +173,20 @@ they are equal. If they don't, they are not equal.
 
 ## Equality and behaviour
 
-There are only 4 terms of type `Bool → Bool` if we only consider
+There are only 4 terms of type `𝟚 → 𝟚` if we only consider
 behaviour, but there are infinitely many up to equality.
 
 Question: if two terms have different behaviour, can they be still
 equal? Answer: no.
 
 Question: why are terms which have the same behaviour different? Can't
-we make behaviour and equality coincide? Answer: for `Bool`, we could
+we make behaviour and equality coincide? Answer: for `𝟚`, we could
 do this by adding the rule
 
- * if `t[x↦true] = t'[x↦true]` and `t[x↦false] = t'[x↦false]` then `t = t'`.
+ * if `t[x↦tt] = t'[x↦tt]` and `t[x↦ff] = t'[x↦ff]` then `t = t'`.
 
 But this wouldn't be very efficient. If we wanted to check if two
-terms `t`, `t'` each containing `n` `Bool`-variables are equal, then
+terms `t`, `t'` each containing `n` `𝟚`-variables are equal, then
 we would need to check `2ⁿ` cases.
 
 If we added the same kind of rules for `ℕ` (see below), we would need
@@ -229,11 +218,11 @@ Examples.
     plus3 : ℕ → ℕ
     plus3 = λ x → suc (suc (suc x))
 
-    eq0 : ℕ → Bool
-    eq0 = λ y → rec true (λ _ → false) y
+    eq0 : ℕ → 𝟚
+    eq0 = λ y → rec tt (λ _ → ff) y
 
-    even : ℕ → Bool
-    even = λ x → rec true (λ _ b → not b) x
+    even : ℕ → 𝟚
+    even = λ x → rec tt (λ _ b → not b) x
 
     times3plus2 : ℕ → ℕ
     times3plus2 = λ x → rec 2 (λ n → suc (suc (suc n))) x
@@ -270,10 +259,10 @@ Example `eq0`:
 
     x                                    eq0 x
     -----------------------------------------------------------------------------------------------
-    0 = zero                             true
-    1 = suc zero                         (λ _ → false) true = false
-    2 = suc (suc zero)                   (λ _ → false) ((λ _ → false) true) = false
-    3 = suc (suc (suc zero))             (λ _ → false) ((λ _ → false) ((λ _ → false) true)) = false
+    0 = zero                             tt
+    1 = suc zero                         (λ _ → ff) tt = ff
+    2 = suc (suc zero)                   (λ _ → ff) ((λ _ → ff) tt) = ff
+    3 = suc (suc (suc zero))             (λ _ → ff) ((λ _ → ff) ((λ _ → ff) tt)) = ff
     ...                                  ...
 
 
@@ -284,38 +273,38 @@ Rules:
  * introduction:
     * if `u : A` and `v : B`, then `(u , v) : A × B`
  * elimination:
-    * if `t : A × B` then `proj₁ t : A` and `proj₂ t : B`
+    * if `t : A × B` then `π₁ t : A` and `π₂ t : B`
  * computation:
-    * `proj₁ (u , v) = u`
-    * `proj₂ (u , v) = v`
+    * `π₁ (u , v) = u`
+    * `π₂ (u , v) = v`
  * uniqueness:
-    * `(proj₁ t , proj₂ t) = t`
+    * `(π₁ t , π₂ t) = t`
 
-Question: how many terms of type `Bool × Bool` are there? Answer:
+Question: how many terms of type `𝟚 × 𝟚` are there? Answer:
 four.
 
 Example.
 
-    uncurry : (Bool → ℕ → Bool) → Bool × ℕ → Bool
+    uncurry : (𝟚 → ℕ → 𝟚) → 𝟚 × ℕ → 𝟚
 
 Question: `A → B → C` represents `A × B → C`. Is there a way to
 represent `A → B × C` without `×`? Answer: yes, using two separate
 terms of types `A → B` and `A → C`, respectively.
 
-Without the uniqueness rule, the following two terms of type `Bool ×
-Bool → Bool × Bool` would be not equal:
+Without the uniqueness rule, the following two terms of type `𝟚 ×
+𝟚 → 𝟚 × 𝟚` would be not equal:
 
     λ x → x
 
-    λ x → (proj₁ x , proj₂ x)
+    λ x → (π₁ x , π₂ x)
 
 With the help of products, we can define more interesting `ℕ → ℕ`
 functions.
 
     fib : ℕ → ℕ
-    fib = λ x → proj₂ (rec (0 , 1) (λ w → (proj₂ w , proj₁ w + proj₂ w)) n)
+    fib = λ x → π₂ (rec (0 , 1) (λ w → (π₂ w , π₁ w + π₂ w)) n)
 
-    n                                    rec (0 , 1) (λ w → (proj₂ w , proj₁ w + proj₂ w)) n
+    n                                    rec (0 , 1) (λ w → (π₂ w , π₁ w + π₂ w)) n
     ----------------------------------------------------------------------------------------
     0 = zero                             (0 , 1)
     1 = suc zero                         (1 , 1)
@@ -342,8 +331,8 @@ Question: how many possible terms are of the following types?
 
 Agda can figure out concrete use cases. E.g.:
 
-    idBool : Bool → Bool
-    idBool = idX
+    id𝟚 : 𝟚 → 𝟚
+    id𝟚 = idX
 
 
 ## Empty type: `⊥`
@@ -376,13 +365,13 @@ Question: how many terms are there of the following types?
 Rules:
 
  * introduction:
-    * if `u : A` then `inj₁ u : A ⊎ B`
-    * if `v : B` then `inj₂ v : A ⊎ B`
+    * if `u : A` then `ι₁ u : A ⊎ B`
+    * if `v : B` then `ι₂ v : A ⊎ B`
  * elimination:
     * if `u : A → C`, `v : B → C` and `t : A ⊎ B` then `case t u v : C`
  * computation:
-    * `case (inj₁ t) u v = u t`
-    * `case (inj₂ t) u v = v t`
+    * `case (ι₁ t) u v = u t`
+    * `case (ι₂ t) u v = v t`
 
 Example.
 
@@ -392,16 +381,16 @@ The predecessor function `pred : ℕ → ℕ ⊎ ⊤`:
 
     n                                    pred n
     ----------------------------------------------------------------
-    0 = zero                             inj₂ tt
-    1 = suc zero                         inj₁ zero
-    2 = suc (suc zero)                   inj₁ (suc zero)
-    3 = suc (suc (suc zero))             inj₁ (suc (suc zero))
-    4 = suc (suc (suc (suc zero)))       inj₁ (suc (suc (suc zero)))
+    0 = zero                             ι₂ tt
+    1 = suc zero                         ι₁ zero
+    2 = suc (suc zero)                   ι₁ (suc zero)
+    3 = suc (suc (suc zero))             ι₁ (suc (suc zero))
+    4 = suc (suc (suc (suc zero)))       ι₁ (suc (suc (suc zero)))
     ...                                  ...
 
-    pred = λ n → rec (inj₂ tt) (λ w → case w (λ n → inj₁ (suc n)) (λ _ → inj₁ zero)) n
+    pred = λ n → rec (ι₂ tt) (λ w → case w (λ n → ι₁ (suc n)) (λ _ → ι₁ zero)) n
 
-Equality of natural numbers `eqℕ : ℕ → ℕ → Bool`
+Equality of natural numbers `eqℕ : ℕ → ℕ → 𝟚`
 
     n                                    eqℕ n
     -------------------------------------------------
@@ -412,18 +401,18 @@ Equality of natural numbers `eqℕ : ℕ → ℕ → Bool`
     4 = suc (suc (suc (suc zero)))       "eq3 ∘ pred"
     ...                                  ...
 
-Because `pred` returns a `ℕ ⊎ ⊤`, we have to handle the `inj₂ tt` case:
+Because `pred` returns a `ℕ ⊎ ⊤`, we have to handle the `ι₂ tt` case:
 
     n                                    eqℕ n
     --------------------------------------------------------------------------
     0 = zero                             eq0
-    1 = suc zero                         λ m → case (pred m) eq0 (λ _ → false)
-    2 = suc (suc zero)                   λ m → case (pred m) eq1 (λ _ → false)
-    3 = suc (suc (suc zero))             λ m → case (pred m) eq2 (λ _ → false)
-    4 = suc (suc (suc (suc zero)))       λ m → case (pred m) eq3 (λ _ → false)
+    1 = suc zero                         λ m → case (pred m) eq0 (λ _ → ff)
+    2 = suc (suc zero)                   λ m → case (pred m) eq1 (λ _ → ff)
+    3 = suc (suc (suc zero))             λ m → case (pred m) eq2 (λ _ → ff)
+    4 = suc (suc (suc (suc zero)))       λ m → case (pred m) eq3 (λ _ → ff)
     ...                                  ...
     
-    eqℕ = λ n → rec eq0 (λ eqn m → case (pred m) eqn (λ _ → false)) n
+    eqℕ = λ n → rec eq0 (λ eqn m → case (pred m) eqn (λ _ → ff)) n
 
 
 ## Logical equivalence `↔` and an algebraic structure on types
@@ -450,7 +439,7 @@ the number of terms of type `A` by |`A`|, we have:
  * |`A × B`| = |`A`| * |`B`|
 
  * |`A → B`| ≥ |`B`| ^ |`A`| (here we can have more elements as we saw
-   for `Bool → Bool`)
+   for `𝟚 → 𝟚`)
 
 The mathematical operations obey some laws, e.g. associativity of
 multiplication: $(x * y) * z = x * (y * z)$.  The same laws hold for
@@ -464,7 +453,7 @@ The law corresponding to associativity of multiplication given for
 abstract types `X`, `Y`, `Z`:
 
     ass× : (X × Y) × Z ↔ X × (Y × Z)
-    ass× = (λ w → (proj₁ (proj₁ w) , (proj₂ (proj₁ w) , proj₂ w)) , λ w → ((proj₁ w , proj₁ (proj₂ w)) , proj₂ (proj₂ w)))
+    ass× = (λ w → (π₁ (π₁ w) , (π₂ (π₁ w) , π₂ w)) , λ w → ((π₁ w , π₁ (π₂ w)) , π₂ (π₂ w)))
 
 We summarise the laws.
 
@@ -517,17 +506,17 @@ Example. `(X × Y) × Z ≅ X × (Y × Z)` by the above definition `(u , v)
 
     λ x → v (u x) = 
                                                                     by definition of u
-    λ x → v (proj₁ (proj₁ x) , (proj₂ (proj₁ x) , proj₂ x)) =
+    λ x → v (π₁ (π₁ x) , (π₂ (π₁ x) , π₂ x)) =
                                                                     by definition of v (we write _ for some long terms that won't matter)
-    λ x → ((proj₁ (proj₁ (proj₁ x) , _) ,
-            proj₁ (proj₂ (_ , (proj₂ (proj₁ x) , _)))) ,
-           proj₂ (proj₂ (_ , (_ , proj₂ x)))) =
+    λ x → ((π₁ (π₁ (π₁ x) , _) ,
+            π₁ (π₂ (_ , (π₂ (π₁ x) , _)))) ,
+           π₂ (π₂ (_ , (_ , π₂ x)))) =
                                                                     by the computation rules for ×
-    λ x → ((proj₁ (proj₁ x) ,
-            proj₂ (proj₁ x)) ,
-           proj₂ x) =
+    λ x → ((π₁ (π₁ x) ,
+            π₂ (π₁ x)) ,
+           π₂ x) =
                                                                     by the uniqueness rule for ×
-    λ x → (proj₁ x , proj₂ x)
+    λ x → (π₁ x , π₂ x)
                                                                     by the uniqueness rule for ×
     λ x → x
 
@@ -548,8 +537,8 @@ translated to.
 | propositional variables       | `⟦ V ⟧       := X`                | abstract type                                     |
 | implication                   | `⟦ P ⇒ Q ⟧   := ⟦ P ⟧ → ⟦ Q ⟧`    | function                                          |    
 | conjunction                   | `⟦ P ∧ Q ⟧   := ⟦ P ⟧ × ⟦ Q ⟧`    | record, multiple inputs                           |
-| true                          | `⟦ True ⟧    := ⊤`                | unit (in C, C++, Java: void)                      |
-| false                         | `⟦ False ⟧   := ⊥`                | empty type (uncommon)                             |
+| tt                            | `⟦ True ⟧    := ⊤`                | unit (in C, C++, Java: void)                      |
+| ff                            | `⟦ False ⟧   := ⊥`                | empty type (uncommon)                             |
 | disjunction                   | `⟦ P ∨ Q ⟧   := ⟦ P ⟧ ⊎ ⟦ Q ⟧`    | disjoint union, superclass of `⟦ P ⟧` and `⟦ Q ⟧` |
 | negation                      | `⟦ ¬ P ⟧     := ⟦ P ⟧ → ⊥`        | `⟦ P ⟧` has no elements (uncommon)                |
 | if and only if                | `⟦ P iff Q ⟧ := ⟦ P ⟧ ↔ ⟦ Q ⟧`    | functions in both direction                       |
@@ -582,7 +571,7 @@ Some laws of logic (in addition to the semiring laws above).
 
 # Universes
 
-We write the type of types as `Set`. For example, `Bool : Set`,
+We write the type of types as `Set`. For example, `𝟚 : Set`,
 `ℕ ⊎ ⊤ : Set` etc.
 
 We can write functions which create sets.
@@ -593,19 +582,19 @@ We can write functions which create sets.
     _^_ : Set → ℕ → Set
     _^_ = λ A n → rec ⊤ (λ As → A × As) n
 
-For example, we have `Bool ^ 3 = Bool × (Bool × (Bool × ⊤))`.
+For example, we have `𝟚 ^ 3 = 𝟚 × (𝟚 × (𝟚 × ⊤))`.
 
-    tff : Bool ^ 3
-    tff = true , (false , (false , tt))
+    tff : 𝟚 ^ 3
+    tff = tt , (ff , (ff , tt))
 
 We have `Set : Set₁`, `Set₁ : Set₂`, and so on.
 
-Two ways of defining equality on `Bool`:
+Two ways of defining equality on `𝟚`:
 
-    eqb : Bool → Bool → Bool
+    eqb : 𝟚 → 𝟚 → 𝟚
     eqb = λ x y → if x then y else not y
 
-    Eqb : Bool → Bool → Set
+    Eqb : 𝟚 → 𝟚 → Set
     Eqb = λ x y → if x then (if y then ⊤ else ⊥) else (if y then ⊥ else ⊤)
 
  * For any two booleans `x` and `y`, `eqb x y` is another boolean,
@@ -620,18 +609,18 @@ Two ways of defining equality on `Bool`:
 
 Examples:
 
-    true=true : Eqb true true
-    true=true = tt
+    tt=tt : Eqb tt tt
+    tt=tt = tt
 
-    notUnitTest : Eqb (not (not true)) true
+    notUnitTest : Eqb (not (not tt)) tt
     notUnitTest = tt
 
-    ¬true=false : ¬ Eqb true false
-    ¬true=false = λ e → e
+    ¬tt=ff : ¬ Eqb tt ff
+    ¬tt=ff = λ e → e
 
 Equality of natural numbers:
 
-    eqℕ : ℕ → ℕ → Bool -- see above
+    eqℕ : ℕ → ℕ → 𝟚 -- see above
     
     Eqℕ : ℕ → ℕ → Set
     Eqℕ a b = if eqℕ a b then ⊤ else ⊥
@@ -673,7 +662,7 @@ We don't need abstract types anymore.
     id = λ A x → x
 
     comm× : (A B : Set) → (A × B) ↔ (B × A)
-    comm× = λ A B → ((λ w → proj₂ w , proj₁ w) , (λ w → proj₂ w , proj₁ w))
+    comm× = λ A B → ((λ w → π₂ w , π₁ w) , (λ w → π₂ w , π₁ w))
 
 Abbreviations: `(x : A)(y : B) → C` abbreviates `(x : A) → (y : B) → C`.
 `(x y : A) → B` abbreviates `(x : A)(y : A) → B`.
@@ -688,11 +677,11 @@ Rules:
  * introduction:
     * if `u : A` and `v : B u`, then `u , v : Σ A B`
  * elimination:
-    * if `t : Σ A B` then `proj₁ t : A`
-    * if `t : Σ A B` then `proj₂ t : B (proj₁ t)`
+    * if `t : Σ A B` then `π₁ t : A`
+    * if `t : Σ A B` then `π₂ t : B (π₁ t)`
  * computation:
-    * `proj₁ (u , v) = u`
-    * `proj₂ (u , v) = v`
+    * `π₁ (u , v) = u`
+    * `π₂ (u , v) = v`
  * uniqueness:
     * `(λ x → t x) = t`
 
@@ -703,38 +692,38 @@ Example:
     w : Σ ℕ (λ n → Eqℕ (suc zero + n) (suc (suc (suc zero))))
     w = (suc (suc zero) , tt)
 
-## Dependent elimination for `Bool`, `ℕ` and `⊎`
+## Dependent elimination for `𝟚`, `ℕ` and `⊎`
 
 Rules:
 
  * elimination:
     * `indℕ    : (P : ℕ     → Set) → P zero → ((n : ℕ) → P n → P (suc n)) → (t : ℕ) → P t`
-    * `indBool : (P : Bool  → Set) → P true → P false → (t : Bool) → P t`
-    * `ind⊎    : (P : A ⊎ B → Set) → ((a : A) → P (inj₁ a)) → ((b : B) → P (inj₂ b)) → (t : A ⊎ B) → P t`
+    * `ind𝟚 : (P : 𝟚  → Set) → P tt → P ff → (t : 𝟚) → P t`
+    * `ind⊎    : (P : A ⊎ B → Set) → ((a : A) → P (ι₁ a)) → ((b : B) → P (ι₂ b)) → (t : A ⊎ B) → P t`
  * computation:
     * `indℕ P u v zero = u`
     * `indℕ P u v (suc t) = v t (indℕ P u v t)`
-    * `indBool P u v true  = u`
-    * `indBool P u v false = v`
-    * `ind⊎ P u v (inj₁ t) = u t`
-    * `ind⊎ P u v (inj₂ t) = v t`
+    * `ind𝟚 P u v tt  = u`
+    * `ind𝟚 P u v ff = v`
+    * `ind⊎ P u v (ι₁ t) = u t`
+    * `ind⊎ P u v (ι₂ t) = v t`
 
 `rec`, `if_then_else`, `case` can be defined using `indℕ`,
-`indBool`, `ind⊎`, respectively.
+`ind𝟚`, `ind⊎`, respectively.
 
 Examples:
 
     ⊤s : (n : ℕ) → ⊤ ^ n
     ⊤s = indℕ (λ n → ⊤ ^ n) tt (λ n tts → tt , tts)
 
-    notInvolutive : (x : Bool) → Eqb (not (not x)) x
-    notInvolutive = λ x → indBool (λ x → Eqb (not (not x)) x) tt tt x
+    notInvolutive : (x : 𝟚) → Eqb (not (not x)) x
+    notInvolutive = λ x → ind𝟚 (λ x → Eqb (not (not x)) x) tt tt x
 
-We want to prove `Eqb (not (not x)) x` for every `x : Bool`. We do
-this by induction, that is, for every constructor for `Bool` (`x =
-true` and `x = false`) we have to show `Eqb (not (not x)) x`. In the
-first case we need `Eqb (not (not true)) true = Eqb true true = ⊤`, in
-the second case we need `Eqb (not (not false)) false = Eqb false false
+We want to prove `Eqb (not (not x)) x` for every `x : 𝟚`. We do
+this by induction, that is, for every constructor for `𝟚` (`x =
+tt` and `x = ff`) we have to show `Eqb (not (not x)) x`. In the
+first case we need `Eqb (not (not tt)) tt = Eqb tt tt = ⊤`, in
+the second case we need `Eqb (not (not ff)) ff = Eqb ff ff
 = ⊤`. So we prove both cases simply be `tt`.
 
 We show that `zero` is a left and right identity of addition.
@@ -759,8 +748,8 @@ Universal and existential quantifiers can also be translated to types:
 |:-----------------------------:|:--------------------------------------:|
 | implication                   | `⟦ P ⇒ Q ⟧   	 := ⟦ P ⟧ → ⟦ Q ⟧`     	 |
 | conjunction                   | `⟦ P ∧ Q ⟧   	 := ⟦ P ⟧ × ⟦ Q ⟧`     	 |
-| true                          | `⟦ True ⟧    	 := ⊤`                 	 |
-| false                         | `⟦ False ⟧   	 := ⊥`                 	 |
+| tt                            | `⟦ Tt ⟧    	 := ⊤`                 	 |
+| ff                            | `⟦ Ff ⟧   	 := ⊥`                 	 |
 | disjunction                   | `⟦ P ∨ Q ⟧   	 := ⟦ P ⟧ ⊎ ⟦ Q ⟧`     	 |
 | negation                      | `⟦ ¬ P ⟧     	 := ⟦ P ⟧ → ⊥`         	 |
 | if and only if                | `⟦ P iff Q ⟧ 	 := ⟦ P ⟧ ↔ ⟦ Q ⟧`     	 |
@@ -775,7 +764,7 @@ Prove the following theorems (easy):
        (A : Set)(P : A → Set)(Q : A → Set) → (Σ A λ a → P a ⊎ Q a)  ↔ Σ A P ⊎ Σ A Q
        (A : Set)(P : A → Set)              → (Σ A λ a → ¬ P a)      → ¬ ((a : A) → P a)
        (A : Set)(P : A → Set)              → (¬ Σ A λ a → P a)      ↔ ((a : A) → ¬ P a)
-       (A B : Set)                         → (A ⊎ B)                ↔ Σ Bool (λ b → if b then A else B)
+       (A B : Set)                         → (A ⊎ B)                ↔ Σ 𝟚 (λ b → if b then A else B)
 
 We can also prove the following theorems.
 
@@ -820,15 +809,15 @@ Note that this contains the same amount of information as the
 `rec` variant and its behaviour is the same. Similarly, equality
 of natural numbers can be redefined this way:
 
-    eq : ℕ → ℕ → Bool
-    eq zero    zero    = true
-    eq (suc x) zero    = false
-    eq zero    (suc y) = false
+    eq : ℕ → ℕ → 𝟚
+    eq zero    zero    = tt
+    eq (suc x) zero    = ff
+    eq zero    (suc y) = ff
     eq (suc x) (suc y) = eq x y
 
-    toSet : Bool → Set
-    toSet true  = ⊤
-    toSet false = ⊥
+    toSet : 𝟚 → Set
+    toSet tt  = ⊤
+    toSet ff = ⊥
 
     Eqℕ : ℕ → ℕ → Set
     Eqℕ x y = toSet (eq x y)
@@ -863,8 +852,8 @@ Properties of this equality:
     zero≠suc : (x : ℕ) → ¬ Eqℕ zero (suc x)
     zero≠suc x e = e
 
-    suc-inj : (x y : ℕ) → Eqℕ (suc x) (suc y) → Eqℕ x y
-    suc-inj x y e = e
+    suc-ι : (x y : ℕ) → Eqℕ (suc x) (suc y) → Eqℕ x y
+    suc-ι x y e = e
 
 Natural numbers form a commutative monoid with `_+_` and `zero`.
 
@@ -913,8 +902,8 @@ Less or equal.
     trans≤ (suc x) (suc y) (suc z) e e' = trans≤ x y z e e'
 
     ≤dec : (x y : ℕ) → x ≤ y ⊎ y ≤ x
-    ≤dec zero y = inj₁ tt
-    ≤dec (suc x) zero = inj₂ tt
+    ≤dec zero y = ι₁ tt
+    ≤dec (suc x) zero = ι₂ tt
     ≤dec (suc x) (suc y) = ≤dec x y
 
 ## Functions on vectors
@@ -929,12 +918,12 @@ Less or equal.
     count zero = tt
     count (suc n) = n , count n
 
-    _∧_ : Bool → Bool → Bool
-    true  ∧ true = true
-    _     ∧ _    = false
+    _∧_ : 𝟚 → 𝟚 → 𝟚
+    tt  ∧ tt = tt
+    _     ∧ _    = ff
 
-    eq^ : (l : ℕ) → ℕ ^ l → ℕ ^ l → Bool
-    eq^ zero xs ys = true
+    eq^ : (l : ℕ) → ℕ ^ l → ℕ ^ l → 𝟚
+    eq^ zero xs ys = tt
     eq^ (suc l) (x , xs) (y , ys) = eq x y ∧ eq^ l xs ys
 
     Eq^ : (l : ℕ) → ℕ ^ l → ℕ ^ l → Set
@@ -981,41 +970,41 @@ Less or equal.
     ∈ y (suc l) (x , xs) = Eqℕ y x ⊎ ∈ y l xs
 
     ins-∈ : (y : ℕ)(l : ℕ)(xs : ℕ ^ l) → ∈ y (suc l) (insert y l xs)
-    ins-∈ y zero xs = inj₁ (Eq-refl y)
+    ins-∈ y zero xs = ι₁ (Eq-refl y)
     ins-∈ y (suc l) (x , xs) = ind⊎
       (λ w → ∈ y (suc (suc l)) (case w (λ _ → y , x , xs) (λ _ → x , insert y l xs)))
-      (λ y≤x → inj₁ (Eq-refl y))
-      (λ x≤y → inj₂ (ins-∈ y l xs))
+      (λ y≤x → ι₁ (Eq-refl y))
+      (λ x≤y → ι₂ (ins-∈ y l xs))
       (≤dec y x)
 
     ins-other : (y z l : ℕ)(xs : ℕ ^ l) → ∈ y l xs → ∈ y (suc l) (insert z l xs)
     ins-other y z (suc l) (x , xs) y∈x,xs = ind⊎
       (λ w → ∈ y (suc (suc l)) (case w (λ _ → z , x , xs) (λ _ → x , insert z l xs)))
-      (λ z≤x → inj₂ y∈x,xs)
-      (λ x≤z → case y∈x,xs inj₁ λ y∈xs → inj₂ (ins-other y z l xs y∈xs))
+      (λ z≤x → ι₂ y∈x,xs)
+      (λ x≤z → case y∈x,xs ι₁ λ y∈xs → ι₂ (ins-other y z l xs y∈xs))
       (≤dec z x)
 
     sort-∈ : (y : ℕ)(l : ℕ)(xs : ℕ ^ l) → ∈ y l xs → ∈ y l (sort l xs)
-    sort-∈ y (suc l) (x , xs) (inj₁ y=x)  = transport (λ x → ∈ y (suc l) (sort (suc l) (x , xs))) y x y=x (ins-∈ y l (sort l xs))
-    sort-∈ y (suc l) (x , xs) (inj₂ y∈xs) = ins-other y x l _ (sort-∈ y l xs y∈xs)
+    sort-∈ y (suc l) (x , xs) (ι₁ y=x)  = transport (λ x → ∈ y (suc l) (sort (suc l) (x , xs))) y x y=x (ins-∈ y l (sort l xs))
+    sort-∈ y (suc l) (x , xs) (ι₂ y∈xs) = ins-other y x l _ (sort-∈ y l xs y∈xs)
 
 ## Isomorphisms internally
 
-    EqBool→ℕ : (Bool → ℕ) → (Bool → ℕ) → Set
-    EqBool→ℕ f₀ f₁ = (x : Bool) → Eqℕ (f₀ x) (f₁ x)
+    Eq𝟚→ℕ : (𝟚 → ℕ) → (𝟚 → ℕ) → Set
+    Eq𝟚→ℕ f₀ f₁ = (x : 𝟚) → Eqℕ (f₀ x) (f₁ x)
 
     Eqℕ×ℕ : ℕ × ℕ → ℕ × ℕ → Set
-    Eqℕ×ℕ u v = Eqℕ (proj₁ u) (proj₁ v) × Eqℕ (proj₂ u) (proj₂ v)
+    Eqℕ×ℕ u v = Eqℕ (π₁ u) (π₁ v) × Eqℕ (π₂ u) (π₂ v)
 
-    α : (Bool → ℕ) → ℕ × ℕ
-    α f = f true , f false
+    α : (𝟚 → ℕ) → ℕ × ℕ
+    α f = f tt , f ff
 
-    β : ℕ × ℕ → (Bool → ℕ)
-    β u = λ b → if b then proj₁ u else proj₂ u
+    β : ℕ × ℕ → (𝟚 → ℕ)
+    β u = λ b → if b then π₁ u else π₂ u
 
     αβ : (u : ℕ × ℕ) → Eqℕ×ℕ (α (β u)) u
     αβ (a , b) = Eq-refl a , Eq-refl b
 
-    βα : (f : Bool → ℕ) → EqBool→ℕ (β (α f)) f
-    βα f true  = Eq-refl (f true)
-    βα f false = Eq-refl (f false)
+    βα : (f : 𝟚 → ℕ) → Eq𝟚→ℕ (β (α f)) f
+    βα f tt  = Eq-refl (f tt)
+    βα f ff = Eq-refl (f ff)
