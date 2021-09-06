@@ -8,10 +8,14 @@ You have to register with the correct code:
  * MSc: IPM-18sztKVTEE
  * MSc evening course: IPM-18EsztKVTEE
 
-Teacher of the lectures: Kaposi Ambrus
+Teacher of the lectures: Kaposi Ambrus (akaposi kukac inf.elte.hu).
 
-Tutorial teachers: Batta Zsolt, Lezsák Domonkos, Végh Tamás
- 
+Tutorial teachers: Batta Zsolt (afhbj7 kukac inf.elte.hu), Lezsák Domonkos (lijjo8 kukac inf.elte.hu), Végh Tamás (vetuaat kukac inf.elte.hu).
+
+Lectures and tutorials will be partly in Microsoft Teams, in the group [Típuselmélet 2021 ősz (IPM-18sztKVTE, P-18KVSZTM, IPM-18EsztKVTE)](https://teams.microsoft.com/l/team/19%3aNbccBrW8Os0asNOlMxx-IB27LNxT3EqjeU33KRcywLg1%40thread.tacv2/conversations?groupId=086976ce-4e7b-42e2-a7a5-4c0c3645f472&tenantId=0133bb48-f790-4560-a64d-ac46a472fbbc). If you are not a member, ask one of the teachers to add you.
+
+Language: Hungarian (English available upon request).
+
 Requirements:
 
  * Canvas quiz for each lecture
