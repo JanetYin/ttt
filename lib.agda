@@ -6,7 +6,6 @@ infixr 4 _,_
 infixr 2 _×_
 infixr 1 _⊎_
 infixr 0 _↔_
-infixr 0 _←_
 
 data 𝟚 : Set where
   tt ff : 𝟚

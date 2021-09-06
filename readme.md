@@ -264,6 +264,10 @@ Example `eq0`:
     3 = suc (suc (suc zero))             (λ _ → ff) ((λ _ → ff) ((λ _ → ff) tt)) = ff
     ...                                  ...
 
+Question: how is this addition function different from the previous one?
+
+    plus' = λ x y → rec x (λ n → suc n) y
+
 
 ## Products: `A × B` (for any two types `A`, `B`)
 
