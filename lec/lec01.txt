@@ -1,0 +1,79 @@
+1. META
+
+típuselmélet óra
+
+Kaposi Ambrus, akaposi@inf.elte.hu, Programozási Nyelvek és Fordítóprogramok docens
+
+ez kötelezően választható
+
+NEHÉZ
+
+INTERAKCIÓ
+
+számonkérés:
+  gyakorlat: mikrozh-kból, HF-ok a felkészüléshez
+  előadás: 1. canvas kvízekből min. 50%
+           2. gyakorlati jegy
+    lesz vizsga: Agda, számítógépen
+
+Neptunban megfelelő kóddal!!! Bsc, Msc, Msc esti
+honlap: https://bitbucket.org/akaposi/ttt
+  tananyag
+  angolul
+
+  Agda programozási nyelv
+    Ulf Norell: Agda tutorial
+
+
+   Martin-Löf típuselmélete (type theory): Agda, Coq, Idris, Lean, F*
+   System F, polymorph lambda calculus formális nyelv, erre épül: Haskell, ML, OCaml, F#
+
+mi ez?
+
+Agda: Curry-Howard izomorfizmus
+   program      :   típus
+   bizonyítás   :   matematikai állítás
+
+   if length "afh" > 2 then 3 else 4
+
+
+sort : List Int -> List Int
+sort xs = []
+sort : (n : Int) -> List Int n -> List Int n    FÜGGŐ TÍPUS
+sort : (xs : List Int) -> (ys : List Int) × (length xs = length ys)
+
+sort : List Int → List Int
+
+hosszhelyesseg : (xs : List Int) -> (lengh xs = length (sort xs))
+
+
+sort n xs = xs
+sort : (n : Int) -> List Int n -> OrderedList Int n
+sort : (n : Int) × (xs : List Int n) ->
+   (ys : OrderedList Int n) × ((x : Int) -> x ∈ xs -> x ∈ ys) ×
+                              ((y : Int) -> y ∈ ys -> y ∈ xs)
+
+[2,1,2] -> [1,1,2]
+
+
+  t  :  A            t ∈ A
+  term   tipus
+
+type theory
+
+2. TANANYAG
+
+szabalyok:
+  𝟚 egy tipus
+  bevezeto:
+    tt : 𝟚
+    ff : 𝟚
+  eliminacios:
+    ha b : 𝟚, u : A, v : A, akkor if b then u else v : A
+  szamitasi szabalyok:
+    if tt then u else v = u
+    if ff then u else v = v
+  
+  if tt then ff else tt = ff
+  if (if tt then ff else tt) then tt else ff = if ff then tt else ff = ff
+  van -e mas eleme 𝟚-nek, mint tt vagy ff?
