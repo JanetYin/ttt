@@ -106,6 +106,8 @@ Question: how many terms of type `𝟚` can you write with these
 rules? Answer: only two, everything is equal to either `tt` or
 `ff`.
 
+**** ITT TARTUNK ****
+
 ## Functions: `A → B` (for any two types `A`, `B`)
 
 Rules:
