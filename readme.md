@@ -360,9 +360,9 @@ Example.
 Rules:
 
  * introduction:
-    * `tt : ⊤`
+    * `triv : ⊤`
  * uniqueness:
-    * if `t : ⊤` then `t = tt`
+    * if `t : ⊤` then `t = triv`
 
 Question: how many terms are there of the following types?
 
@@ -390,14 +390,14 @@ The predecessor function `pred : ℕ → ℕ ⊎ ⊤`:
 
     n                                    pred n
     ----------------------------------------------------------------
-    0 = zero                             ι₂ tt
+    0 = zero                             ι₂ triv
     1 = suc zero                         ι₁ zero
     2 = suc (suc zero)                   ι₁ (suc zero)
     3 = suc (suc (suc zero))             ι₁ (suc (suc zero))
     4 = suc (suc (suc (suc zero)))       ι₁ (suc (suc (suc zero)))
     ...                                  ...
 
-    pred = λ n → rec (ι₂ tt) (λ w → case w (λ n → ι₁ (suc n)) (λ _ → ι₁ zero)) n
+    pred = λ n → rec (ι₂ triv) (λ w → case w (λ n → ι₁ (suc n)) (λ _ → ι₁ zero)) n
 
 Equality of natural numbers `eqℕ : ℕ → ℕ → 𝟚`
 
@@ -410,7 +410,7 @@ Equality of natural numbers `eqℕ : ℕ → ℕ → 𝟚`
     4 = suc (suc (suc (suc zero)))       "eq3 ∘ pred"
     ...                                  ...
 
-Because `pred` returns a `ℕ ⊎ ⊤`, we have to handle the `ι₂ tt` case:
+Because `pred` returns a `ℕ ⊎ ⊤`, we have to handle the `ι₂ triv` case:
 
     n                                    eqℕ n
     --------------------------------------------------------------------------
@@ -546,8 +546,8 @@ translated to.
 | propositional variables       | `⟦ V ⟧       := X`                | abstract type                                     |
 | implication                   | `⟦ P ⇒ Q ⟧   := ⟦ P ⟧ → ⟦ Q ⟧`    | function                                          |    
 | conjunction                   | `⟦ P ∧ Q ⟧   := ⟦ P ⟧ × ⟦ Q ⟧`    | record, multiple inputs                           |
-| tt                            | `⟦ True ⟧    := ⊤`                | unit (in C, C++, Java: void)                      |
-| ff                            | `⟦ False ⟧   := ⊥`                | empty type (uncommon)                             |
+| true                          | `⟦ True ⟧    := ⊤`                | unit (in C, C++, Java: void)                      |
+| false                         | `⟦ False ⟧   := ⊥`                | empty type (uncommon)                             |
 | disjunction                   | `⟦ P ∨ Q ⟧   := ⟦ P ⟧ ⊎ ⟦ Q ⟧`    | disjoint union, superclass of `⟦ P ⟧` and `⟦ Q ⟧` |
 | negation                      | `⟦ ¬ P ⟧     := ⟦ P ⟧ → ⊥`        | `⟦ P ⟧` has no elements (uncommon)                |
 | if and only if                | `⟦ P iff Q ⟧ := ⟦ P ⟧ ↔ ⟦ Q ⟧`    | functions in both direction                       |

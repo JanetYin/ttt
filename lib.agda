@@ -48,7 +48,7 @@ exfalso : ∀{i}{A : Set i} → ⊥ → A
 exfalso ()
 
 record ⊤ : Set where
-  constructor tt
+  constructor triv
 open ⊤ public
 
 ¬_ : ∀{i}(A : Set i) → Set i
