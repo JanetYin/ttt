@@ -71,3 +71,6 @@ record Σ {i}{j}(A : Set i)(B : A → Set j) : Set (i ⊔ j) where
     π₁ : A
     π₂ : B π₁
 open Σ public
+
+data Eq {i}(A : Set i)(a : A) : A → Set i where
+  refl : Eq A a a
