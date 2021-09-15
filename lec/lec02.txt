@@ -1,0 +1,82 @@
+
+open import lib
+
+t : 𝟚 → 𝟚
+t = λ x → if x then tt else ff
+
+t' : 𝟚 → 𝟚
+t' = λ x → x
+
+t'' : 𝟚 → 𝟚
+t'' = if tt then (λ x → x) else t
+-- t'' = t'
+-- t ≠ t'' = t'
+
+-- tetszoleges, t, t' : A -ra, ha
+-- if t[x↦tt] = t'[x↦tt] and t[x↦ff] = t'[x↦ff] then t = t'.
+
+if x then tt else ff         =?   x
+if tt then tt else ff = tt   =    tt
+if ff then tt else ff = ff   =    ff
+
+egyenlőség és viselkedés
+
+and : 𝟚 → 𝟚 → 𝟚
+and = λ x y → if x then y else ff
+and' = λ x y → if x then (if y then tt else ff)
+                    else (if y then ff else ff)
+
+and tt z = ((λ x y → if x then y else ff) tt) z =
+           (λ y → if tt then y else ff) z =        
+           if tt then z else ff =                         (λ y → y) z
+           z                                              y[y↦z] = z
+
+  A → B → C = A → (B → C)
+  f a b = (f a) b
+  λ x y → t = λ x → (λ y → t)
+
+and' tt z = if tt then (if z then tt else ff) else (if z then ff else ff) =
+            if z then tt else ff
+
+and z tt = if z then tt else ff
+
+and'' := λ x y → if y then x else ff
+
+and'' z tt = if tt then z else ff = z
+and'' tt z = if z then tt else ff
+
+---------------------------------------------
+
+ℕ tipus
+bev:  zero : ℕ
+      ha t : ℕ, akkor suc t : ℕ
+elim: u : A, v : A → A, es t : ℕ, akkor rec u v t : A
+rec u v t = t-ben a zero-t u-ra csereli, a suc-okat pedig v-re
+pl. rec u v (suc (suc (suc zero))) = v (v (v u))
+
+(1   rec u v zero = u
+(2   rec u v (suc t) = v (rec u v t)
+
+rec u v (suc (suc (suc zero))) =(2
+v (rec u v (suc (suc zero))) =(2
+v (v (rec u v (suc zero))) =(2
+v (v (v (rec u v zero)))) =(1
+v (v (v u)))
+
+v (v (v u))
+
+if b then u else v = b-ben tt-ket u-ra, ff-ket v-re csereli
+
+
+-- f x ↦ 3*x + 1
+f : ℕ → ℕ
+f = λ x → rec (suc zero) (λ n → suc (suc (suc n))) x
+
+g : ℕ → ℕ
+g = λ x → rec zero suc x
+h : 𝟚 → 𝟚
+h = λ x → if x then tt else ff
+
+g : ℕ → ℕ
+g = λ n → suc (suc (suc zero))
+g = λ x → rec (suc (suc (suc zero))) (λ n → n) x
