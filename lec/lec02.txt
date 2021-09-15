@@ -1,3 +1,75 @@
+Ha t : A és t : B, akkor A = B.
+Ha t : A, akkor nincs olyan B≠A, hogy t : B.
+
+injektiv: f a = f b → a = b
+          a≠b -> f a ≠ f b
+
+
+
+feljegyzes: pluszpont
+
+b : 𝟚
+b = tt
+
+
+𝟚: intro, elim, szamitas
+
+if tt then u else v = u
+if ff then u else v = v
+
+b : 𝟚
+b = tt
+b' = ff
+b'' = if tt then ff else tt = ff
+
+if (if ...) then ... else ...
+
+Függvények
+
+1. A típus és B típus, akkor A → B típus
+
+𝟚
+𝟚 → 𝟚
+(2 → 𝟚) → 𝟚
+((2 → 𝟚) → 𝟚) → ((2 → 𝟚) → 𝟚)
+....
+t : 𝟚 → 𝟚 → 𝟚
+  = 𝟚 → (𝟚 → 𝟚)
+
+2. eliminacios: t : A → B, u : A, akkor t u : B
+3. bevezeto: ha azt feltetelzve, hogy x:A, t:B, akkor (λ x → t) : A → B
+             ha azt feltetelzve, hogy x:𝟚, ?:𝟚, akkor (λ x → ?) : 𝟚 → 𝟚
+  not : 𝟚 → 𝟚
+  not = λ x → if x then ff else tt
+    ? : 𝟚, feltetelezve, hogy x : 𝟚
+         x:𝟚,   ff:𝟚    tt:𝟚
+         --------------------
+         if x then ff else : 𝟚
+
+4. szamitasi: β-redukcio
+   (λ x → t) u = t[x↦u]
+
+   (λ x → t                   ) u                       = t[x↦u]
+   (λ y → if y then ff else tt) (if tt then ff else tt) =
+   (if y then ff else tt)[y↦(if tt then ff else tt)] =
+   (if (if tt then ff else tt) then ff else tt) = 
+   (if ff then ff else tt) =
+   tt
+
+5. egyediseg: (λ x → (f x)) = f
+
+(λ x → tt) ff : 𝟚
+tt : 𝟚
+ff : 𝟚
+(λ x → tt) ff = tt[x↦ff] = tt : 𝟚
+(λ x → x) : 𝟚 → 𝟚
+
+(λ x → x) : (𝟚 → 𝟚)
+(λ x → tt)
+(λ x → ff)
+(λ x → if x then ff else tt)
+(λ x → if (if x then ff else x) then x else x)
+
 
 open import lib
 
