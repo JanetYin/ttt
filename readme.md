@@ -106,8 +106,6 @@ Question: how many terms of type `𝟚` can you write with these
 rules? Answer: only two, everything is equal to either `tt` or
 `ff`.
 
-**** ITT TARTUNK ****
-
 ## Functions: `A → B` (for any two types `A`, `B`)
 
 Rules:
@@ -222,6 +220,8 @@ Examples.
 
     plus3 : ℕ → ℕ
     plus3 = λ x → suc (suc (suc x))
+
+**** ITT TARTUNK ****
 
     eq0 : ℕ → 𝟚
     eq0 = λ y → rec tt (λ _ → ff) y
