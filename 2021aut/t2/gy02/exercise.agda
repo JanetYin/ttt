@@ -73,11 +73,11 @@ xor = {!!}
 
 test-xor-1 : "xor ff ff = ff" —⠀testing⠀for 𝟚 values: xor ff ff ≡ ff
 test-xor-1 = test
-test-xor-2 : "xor ff tt = ff" —⠀testing⠀for 𝟚 values: xor ff tt ≡ tt
+test-xor-2 : "xor ff tt = tt" —⠀testing⠀for 𝟚 values: xor ff tt ≡ tt
 test-xor-2 = test
-test-xor-3 : "xor tt ff = ff" —⠀testing⠀for 𝟚 values: xor tt ff ≡ tt
+test-xor-3 : "xor tt ff = tt" —⠀testing⠀for 𝟚 values: xor tt ff ≡ tt
 test-xor-3 = test
-test-xor-4 : "xor tt tt = tt" —⠀testing⠀for 𝟚 values: xor tt tt ≡ tt
+test-xor-4 : "xor tt tt = ff" —⠀testing⠀for 𝟚 values: xor tt tt ≡ ff
 test-xor-4 = test
 
 -- Now try a different approach: You can also return the arguments as-is, as seen in id,
@@ -112,11 +112,11 @@ xor' = {!!}
 
 test-xor'-1 : "xor' ff ff = ff" —⠀testing⠀for 𝟚 values: xor' ff ff ≡ ff
 test-xor'-1 = test
-test-xor'-2 : "xor' ff tt = ff" —⠀testing⠀for 𝟚 values: xor' ff tt ≡ tt
+test-xor'-2 : "xor' ff tt = tt" —⠀testing⠀for 𝟚 values: xor' ff tt ≡ tt
 test-xor'-2 = test
-test-xor'-3 : "xor' tt ff = ff" —⠀testing⠀for 𝟚 values: xor' tt ff ≡ tt
+test-xor'-3 : "xor' tt ff = tt" —⠀testing⠀for 𝟚 values: xor' tt ff ≡ tt
 test-xor'-3 = test
-test-xor'-4 : "xor' tt tt = tt" —⠀testing⠀for 𝟚 values: xor' tt tt ≡ tt
+test-xor'-4 : "xor' tt tt = ff" —⠀testing⠀for 𝟚 values: xor' tt tt ≡ ff
 test-xor'-4 = test
 
 -- Advanced: Function currying works here too
@@ -151,11 +151,11 @@ xor'' = {!!}
 
 test-xor''-1 : "xor'' ff ff = ff" —⠀testing⠀for 𝟚 values: xor'' ff ff ≡ ff
 test-xor''-1 = test
-test-xor''-2 : "xor'' ff tt = ff" —⠀testing⠀for 𝟚 values: xor'' ff tt ≡ tt
+test-xor''-2 : "xor'' ff tt = tt" —⠀testing⠀for 𝟚 values: xor'' ff tt ≡ tt
 test-xor''-2 = test
-test-xor''-3 : "xor'' tt ff = ff" —⠀testing⠀for 𝟚 values: xor'' tt ff ≡ tt
+test-xor''-3 : "xor'' tt ff = tt" —⠀testing⠀for 𝟚 values: xor'' tt ff ≡ tt
 test-xor''-3 = test
-test-xor''-4 : "xor'' tt tt = tt" —⠀testing⠀for 𝟚 values: xor'' tt tt ≡ tt
+test-xor''-4 : "xor'' tt tt = ff" —⠀testing⠀for 𝟚 values: xor'' tt tt ≡ ff
 test-xor''-4 = test
 
 -- Some more ideas for individual practice:
