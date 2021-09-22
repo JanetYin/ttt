@@ -221,8 +221,6 @@ Examples.
     plus3 : ℕ → ℕ
     plus3 = λ x → suc (suc (suc x))
 
-**** ITT TARTUNK ****
-
     eq0 : ℕ → 𝟚
     eq0 = λ y → rec tt (λ _ → ff) y
 
@@ -323,27 +321,6 @@ functions.
     ...                                  ...
 
 
-## Assumptions of types
-
-Using `{X Y : Set} → `, we assume that `X` and `Y` are arbitrary
-types. The term needs to work for any types `X` and `Y`.
-
-Question: how many possible terms are of the following types?
-
-                                                         Answer:
-    idX     : {X : Set} → X → X                          1
-    pick    : {X : Set} → X → X → X                      2
-    pick*   : {X : Set} → X → (X → X) → X                ∞
-    pick?   : {X : Set} → (X → X) → X                    0
-    
-    swap    : {X : Set} → X × Y → Y × X                  1
-
-Agda can figure out concrete use cases. E.g.:
-
-    id𝟚 : 𝟚 → 𝟚
-    id𝟚 = idX
-
-
 ## Empty type: `⊥`
 
 Rules:
@@ -351,9 +328,6 @@ Rules:
  * elimination:
     * if `t : ⊥` then `exfalso t : C` for any type `C`
 
-Example.
-
-    magicZ : {X : Set} → (X → ⊥) → X → Z
 
 ## Unit type: `⊤`
 
@@ -364,10 +338,6 @@ Rules:
  * uniqueness:
     * if `t : ⊤` then `t = triv`
 
-Question: how many terms are there of the following types?
-
-    interesting   : {X : Set} → ⊥ → X
-    uninteresting : {X : Set} → X → ⊤
 
 ## Coproducts: `A ⊎ B`
 
@@ -375,16 +345,14 @@ Rules:
 
  * introduction:
     * if `u : A` then `ι₁ u : A ⊎ B`
-    * if `v : B` then `ι₂ v : A ⊎ B`
+    * if `v : B` then `ι₂ v : A ⊎ B
  * elimination:
     * if `u : A → C`, `v : B → C` and `t : A ⊎ B` then `case t u v : C`
  * computation:
     * `case (ι₁ t) u v = u t`
     * `case (ι₂ t) u v = v t`
 
-Example.
-
-    undiag : {X : Set} → X ⊎ X → X
+**** ITT TARTUNK ****
 
 The predecessor function `pred : ℕ → ℕ ⊎ ⊤`:
 
@@ -422,6 +390,37 @@ Because `pred` returns a `ℕ ⊎ ⊤`, we have to handle the `ι₂ triv` case:
     ...                                  ...
     
     eqℕ = λ n → rec eq0 (λ eqn m → case (pred m) eqn (λ _ → ff)) n
+
+
+## Assumptions of types
+
+Using `{X Y : Set} → `, we assume that `X` and `Y` are arbitrary
+types. The term needs to work for any types `X` and `Y`.
+
+Question: how many possible terms are of the following types?
+
+                                                         Answer:
+    idX     : {X : Set} → X → X                          1
+    pick    : {X : Set} → X → X → X                      2
+    pick*   : {X : Set} → X → (X → X) → X                ∞
+    pick?   : {X : Set} → (X → X) → X                    0
+    
+    swap    : {X : Set} → X × Y → Y × X                  1
+
+Agda can figure out concrete use cases. E.g.:
+
+    id𝟚 : 𝟚 → 𝟚
+    id𝟚 = idX
+
+Question: how many terms are there of the following types?
+
+    interesting   : {X : Set} → ⊥ → X
+    uninteresting : {X : Set} → X → ⊤
+
+Examples.
+
+    magicZ : {X : Set} → (X → ⊥) → X → Z
+    undiag : {X : Set} → X ⊎ X → X
 
 
 ## Logical equivalence `↔` and an algebraic structure on types
