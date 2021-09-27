@@ -56,7 +56,7 @@ test-and-4 = test
 
 -- logical or - try it yourself
 or : 𝟚 → 𝟚 → 𝟚
-or = {!!}
+or = λ x y → if x then tt else {!!}
 
 test-or-1 : "or ff ff = ff" —⠀testing⠀for 𝟚 values: or ff ff ≡ ff
 test-or-1 = test
