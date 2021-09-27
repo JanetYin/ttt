@@ -1,0 +1,15 @@
+diff --git a/lib.agda b/lib.agda
+index 3c0532b..59d4a01 100644
+--- a/lib.agda
++++ b/lib.agda
+@@ -27,8 +27,8 @@ data ℕ : Set where
+ {-# BUILTIN NATURAL ℕ #-}
+ 
+ rec : ∀{i}{A : Set i}(u : A)(v : A → A)(t : ℕ) → A
+-rec u v zero = u
+-rec u v (suc t) = v (rec u v t)
++rec x f zero = x
++rec x f (suc n) = f (rec x f n)
+ 
+ data _⊎_ {i}{j}(A : Set i)(B : Set j) : Set (i ⊔ j) where
+   ι₁ : A → A ⊎ B
