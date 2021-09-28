@@ -428,6 +428,7 @@ Examples.
 We have all finite types now:
 
     type       	    	 number of elements
+    ⊥                    0
     ⊤          	    	 1
     ⊤ ⊎ ⊤      	    	 2
     ⊤ ⊎ ⊤ ⊎ ⊤  	    	 3
