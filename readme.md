@@ -352,8 +352,6 @@ Rules:
     * `case (ι₁ t) u v = u t`
     * `case (ι₂ t) u v = v t`
 
-**** ITT TARTUNK ****
-
 The predecessor function `pred : ℕ → ℕ ⊎ ⊤`:
 
     n                                    pred n
@@ -504,6 +502,8 @@ For exponentiation we have:
  * `⊤ → X ↔ X` ($x^1=x$)
 
  * `X → ⊤ ↔ ⊤` ($1^x=1$)
+
+**** ITT TARTUNK ****
 
 We say that `A` and `B` are isomorphic if there is a logical
 equivalence `(u , v) : A ↔ B` such that `λ x → v (u x) = λ x → x` and
