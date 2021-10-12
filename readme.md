@@ -751,6 +751,8 @@ so we can direcly reuse the induction hypothesis to prove the case for
 
 ## Predicate logic
 
+A predicate (unary relation) on a type `A` has type `A → Set`. A binary relation written `R ⊂ A × B` in set theory is `R : A → B → Set` in Agda. `R a b` is the type of witnesses of the relation for `a : A` and `b : B`.
+
 Universal and existential quantifiers can also be translated to types:
 
 | logic                         | translation                            |
@@ -797,6 +799,24 @@ So, the proof is
 
 where `everyℕisEvenOrOdd` is a proof that `(a : ℕ) → isEven a ⊎ isOdd
 a`.
+
+Exercises (source: Thorsten Altenkirch). Assume:
+
+    People : Set
+    Ann    : People
+    Kate   : People
+    Peter  : People
+    Child  : People → People → Set
+
+Then:
+
+ * Define the HasChild predicate.
+ * Formalise: Ann is not a child of Kate.
+ * Formalise: there is someone with exactly one child.
+ * Define the relation Parent.
+ * Formalise: No one is the parent of everyone.
+ * Prove that if Ann has no children then Kate is not the child of Ann.
+
 
 ## Properties of `ℕ` and pattern matching
 
