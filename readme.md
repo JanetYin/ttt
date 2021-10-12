@@ -503,8 +503,6 @@ For exponentiation we have:
 
  * `X → ⊤ ↔ ⊤` ($1^x=1$)
 
-**** ITT TARTUNK ****
-
 We say that `A` and `B` are isomorphic if there is a logical
 equivalence `(u , v) : A ↔ B` such that `λ x → v (u x) = λ x → x` and
 `λ y → u (v y) = λ y → y`. We denote this by `A ≅ B` (this is not a
@@ -577,6 +575,8 @@ Some laws of logic (in addition to the semiring laws above).
  * `¬¬` is involutive: `¬ ¬ ¬ ¬ X ↔ ¬ ¬ X`
 
  * Classical logic: `¬ ¬ (¬ ¬ X → X)`
+
+**** ITT TARTUNK ****
 
 # Universes
 
