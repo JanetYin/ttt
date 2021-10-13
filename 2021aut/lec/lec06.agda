@@ -1,3 +1,5 @@
+module 2021aut.lec.lec06 where
+
 open import lib
 
 f : {X : Set} → X → X ⊎ (X ⊎ X)
