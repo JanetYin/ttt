@@ -576,8 +576,6 @@ Some laws of logic (in addition to the semiring laws above).
 
  * Classical logic: `¬ ¬ (¬ ¬ X → X)`
 
-**** ITT TARTUNK ****
-
 # Universes
 
 We write the type of types as `Set`. For example, `𝟚 : Set`,
@@ -600,31 +598,31 @@ We have `Set : Set₁`, `Set₁ : Set₂`, and so on.
 
 Two ways of defining equality on `𝟚`:
 
-    eqb : 𝟚 → 𝟚 → 𝟚
-    eqb = λ x y → if x then y else not y
+    eq𝟚 : 𝟚 → 𝟚 → 𝟚
+    eq𝟚 = λ x y → if x then y else not y
 
-    Eqb : 𝟚 → 𝟚 → Set
-    Eqb = λ x y → if x then (if y then ⊤ else ⊥) else (if y then ⊥ else ⊤)
+    Eq𝟚 : 𝟚 → 𝟚 → Set
+    Eq𝟚 = λ x y → if x then (if y then ⊤ else ⊥) else (if y then ⊥ else ⊤)
 
- * For any two booleans `x` and `y`, `eqb x y` is another boolean,
-   while `Eqb x y` is a type.
+ * For any two booleans `x` and `y`, `eq𝟚 x y` is another boolean,
+   while `Eq𝟚 x y` is a type.
 
- * `Eqb x y` has an element if and only if `x` and `y` are the same booleans.
+ * `Eq𝟚 x y` has an element if and only if `x` and `y` are the same booleans.
 
- * `Eqb x y` is the proposition saying that `x` is equal to `y`.
+ * `Eq𝟚 x y` is the proposition saying that `x` is equal to `y`.
 
  * `x = y` is a metatheoretic statement saying that the terms `x` and
    `y` are the same. It is not a type in Agda.
 
 Examples:
 
-    tt=tt : Eqb tt tt
+    tt=tt : Eq𝟚 tt tt
     tt=tt = tt
 
-    notUnitTest : Eqb (not (not tt)) tt
+    notUnitTest : Eq𝟚 (not (not tt)) tt
     notUnitTest = tt
 
-    ¬tt=ff : ¬ Eqb tt ff
+    ¬tt=ff : ¬ Eq𝟚 tt ff
     ¬tt=ff = λ e → e
 
 Equality of natural numbers:
@@ -643,6 +641,7 @@ Equality of natural numbers:
     7≠10 : ¬ Eqℕ 7 10
     7≠10 = λ e → e
 
+**** ITT TARTUNK ****
 
 # Dependent types
 
@@ -699,16 +698,16 @@ Rules:
 Example:
 
     w : Σ ℕ (λ n → Eqℕ (suc zero + n) (suc (suc (suc zero))))
-    w = (suc (suc zero) , tt)
+    w = (suc (suc zero) , triv)
 
 ## Dependent elimination for `𝟚`, `ℕ` and `⊎`
 
 Rules:
 
  * elimination:
-    * `indℕ    : (P : ℕ     → Set) → P zero → ((n : ℕ) → P n → P (suc n)) → (t : ℕ) → P t`
-    * `ind𝟚 : (P : 𝟚  → Set) → P tt → P ff → (t : 𝟚) → P t`
-    * `ind⊎    : (P : A ⊎ B → Set) → ((a : A) → P (ι₁ a)) → ((b : B) → P (ι₂ b)) → (t : A ⊎ B) → P t`
+    * `indℕ : (P : ℕ     → Set) → P zero → ((n : ℕ) → P n → P (suc n)) → (t : ℕ) → P t`
+    * `ind𝟚 : (P : 𝟚    → Set) → P tt → P ff → (t : 𝟚) → P t`
+    * `ind⊎ : (P : A ⊎ B → Set) → ((a : A) → P (ι₁ a)) → ((b : B) → P (ι₂ b)) → (t : A ⊎ B) → P t`
  * computation:
     * `indℕ P u v zero = u`
     * `indℕ P u v (suc t) = v t (indℕ P u v t)`
@@ -723,17 +722,17 @@ Rules:
 Examples:
 
     ⊤s : (n : ℕ) → ⊤ ^ n
-    ⊤s = indℕ (λ n → ⊤ ^ n) tt (λ n tts → tt , tts)
+    ⊤s = indℕ (λ n → ⊤ ^ n) triv (λ n trivs → triv , trivs)
 
-    notInvolutive : (x : 𝟚) → Eqb (not (not x)) x
-    notInvolutive = λ x → ind𝟚 (λ x → Eqb (not (not x)) x) tt tt x
+    notInvolutive : (x : 𝟚) → Eq𝟚 (not (not x)) x
+    notInvolutive = λ x → ind𝟚 (λ x → Eq𝟚 (not (not x)) x) triv triv x
 
-We want to prove `Eqb (not (not x)) x` for every `x : 𝟚`. We do
+We want to prove `Eq𝟚 (not (not x)) x` for every `x : 𝟚`. We do
 this by induction, that is, for every constructor for `𝟚` (`x =
-tt` and `x = ff`) we have to show `Eqb (not (not x)) x`. In the
-first case we need `Eqb (not (not tt)) tt = Eqb tt tt = ⊤`, in
-the second case we need `Eqb (not (not ff)) ff = Eqb ff ff
-= ⊤`. So we prove both cases simply be `tt`.
+tt` and `x = ff`) we have to show `Eq𝟚 (not (not x)) x`. In the
+first case we need `Eq𝟚 (not (not tt)) tt = Eq𝟚 tt tt = ⊤`, in
+the second case we need `Eq𝟚 (not (not ff)) ff = Eq𝟚 ff ff
+= ⊤`. So we prove both cases simply be `triv`.
 
 We show that `zero` is a left and right identity of addition.
 
@@ -743,8 +742,8 @@ We show that `zero` is a left and right identity of addition.
 First we note that `Eqℕ (plus zero x) x = Eqℕ x x`. So we only have to
 prove `Eqℕ x x` for every `x : ℕ`. Induction says that we have to
 prove this first for `x = zero`, that is `Eqℕ zero zero = ⊤`, this is
-easy: `tt`. Then, for any `n : ℕ`, given `e : Eqℕ n n`, we have to
-show `Eqℕ (suc n) (suc n)`. `e` is called the inductive
+easy: `triv`. Then, for any `n : ℕ`, given `e : Eqℕ n n`, we have to
+show `Eqℕ (suc n) (suc n)`. `e` is called the induction
 hypothesis. But as we remarked above, `Eqℕ (suc n) (suc n) = Eqℕ n n`,
 so we can direcly reuse the induction hypothesis to prove the case for
 `x = suc n`.
@@ -800,24 +799,26 @@ So, the proof is
 where `everyℕisEvenOrOdd` is a proof that `(a : ℕ) → isEven a ⊎ isOdd
 a`.
 
-Exercises (source: Thorsten Altenkirch). Assume:
+Exercises (source: T. Altenkirch). Assume:
 
-    People : Set
-    Ann    : People
-    Kate   : People
-    Peter  : People
-    Child  : People → People → Set
+    Person    : Set
+    Ann       : Person
+    Kate      : Person
+    Peter     : Person
+    _childOf_ : Person → Person → Set
+    _sameAs_  : Person → Person → Set
 
 Then:
 
- * Define the HasChild predicate.
+ * Define the _hasChild predicate.
  * Formalise: Ann is not a child of Kate.
  * Formalise: there is someone with exactly one child.
- * Define the relation Parent.
+ * Define the relation _parentOf_.
  * Formalise: No one is the parent of everyone.
  * Prove that if Ann has no children then Kate is not the child of Ann.
+ * Prove that if there is no person who is his own parent than no one is the parent of everyone.
 
-
+ 
 ## Properties of `ℕ` and pattern matching
 
 Addition:
