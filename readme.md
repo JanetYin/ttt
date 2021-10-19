@@ -799,25 +799,6 @@ So, the proof is
 where `everyℕisEvenOrOdd` is a proof that `(a : ℕ) → isEven a ⊎ isOdd
 a`.
 
-Exercises (source: T. Altenkirch). Assume:
-
-    Person    : Set
-    Ann       : Person
-    Kate      : Person
-    Peter     : Person
-    _childOf_ : Person → Person → Set
-    _sameAs_  : Person → Person → Set
-
-Then:
-
- * Define the _hasChild predicate.
- * Formalise: Ann is not a child of Kate.
- * Formalise: there is someone with exactly one child.
- * Define the relation _parentOf_.
- * Formalise: No one is the parent of everyone.
- * Prove that if Ann has no children then Kate is not the child of Ann.
- * Prove that if there is no person who is his own parent than no one is the parent of everyone.
-
  
 ## Properties of `ℕ` and pattern matching
 
