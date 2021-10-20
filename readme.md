@@ -641,8 +641,6 @@ Equality of natural numbers:
     7≠10 : ¬ Eqℕ 7 10
     7≠10 = λ e → e
 
-**** ITT TARTUNK ****
-
 # Dependent types
 
 ## Dependent functions: `(x : A) → B`
@@ -765,6 +763,8 @@ Universal and existential quantifiers can also be translated to types:
 | if and only if                | `⟦ P iff Q ⟧ 	 := ⟦ P ⟧ ↔ ⟦ Q ⟧`     	 |
 | forall                        | `⟦ ∀x∈ℕ, P x ⟧ := (x : ℕ) → ⟦ P x ⟧` 	 |
 | exists                        | `⟦ ∃x∈ℕ, P x ⟧ := (Σ ℕ λ x → ⟦ P x ⟧)` |
+
+**** ITT TARTUNK ****
 
 Prove the following theorems (easy):
 
