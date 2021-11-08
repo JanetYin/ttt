@@ -2,8 +2,8 @@ module 2021aut.t2.lib where
 
 open import lib using (𝟚 ; tt ; ff)
 
-open import Agda.Builtin.Bool
-open import Agda.Builtin.List
+--open import Agda.Builtin.Bool
+--open import Agda.Builtin.List
 --open import Agda.Builtin.Char
 --open import Agda.Builtin.Nat using (Nat)
 

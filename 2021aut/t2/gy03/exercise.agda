@@ -117,6 +117,9 @@ plus = {!!}
 fac : ℕ → ℕ
 fac = {!!}
 
+fac'' : ℕ → ℕ
+fac'' n = π₁ (rec {Agda.Primitive.lzero} {ℕ × ℕ} (1 , 1) (λ p → ((π₁ p) * (π₂ p) , suc (π₂ p)) ) n)
+
 testfac1 : Eq ℕ (fac 0) 1
 testfac1 = {!!}
 testfac2 : Eq ℕ (fac 3) 6
