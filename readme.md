@@ -797,8 +797,6 @@ So, the proof is
 where `everyℕisEvenOrOdd` is a proof that `(a : ℕ) → isEven a ⊎ isOdd
 a`.
 
-**** ITT TARTUNK ****
-
 ## Properties of `ℕ` and pattern matching
 
 Addition:
@@ -840,6 +838,8 @@ Properties of this equality:
     refl : (x : ℕ) → Eqℕ x x
     refl zero = tt
     refl (suc x) = refl x
+
+**** ITT TARTUNK ****
 
     transport : (P : ℕ → Set)(x y : ℕ) → Eqℕ x y → P x → P y
     transport P zero    zero    e u = u
