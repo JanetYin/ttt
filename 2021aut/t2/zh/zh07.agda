@@ -1,7 +1,10 @@
 module zh07 where
 open import lib
 
-¬¬invol₂ : {X : Set} → ¬ ¬ ¬ X ↔ ¬ X
-¬¬invol₂ = ?
-
-task1 = ¬¬invol₂
+task1 : {X : Set} → ¬ ¬ ¬ X ↔ ¬ X
+task1 = _,_
+  (λ nnnx → λ x → let
+    nnx = λ nx → nx x
+    bot = nnnx nnx
+    in bot)
+  λ nx → λ nnx → nnx nx
