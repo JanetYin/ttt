@@ -764,8 +764,6 @@ Universal and existential quantifiers can also be translated to types:
 | forall                        | `⟦ ∀x∈ℕ, P x ⟧ := (x : ℕ) → ⟦ P x ⟧` 	 |
 | exists                        | `⟦ ∃x∈ℕ, P x ⟧ := (Σ ℕ λ x → ⟦ P x ⟧)` |
 
-**** ITT TARTUNK ****
-
 Prove the following theorems (easy):
 
        (A : Set)(P : A → Set)(Q : A → Set) → ((a : A) → P a × Q a)  ↔ ((a : A) → P a) × ((a : A) → Q a)
@@ -799,7 +797,6 @@ So, the proof is
 where `everyℕisEvenOrOdd` is a proof that `(a : ℕ) → isEven a ⊎ isOdd
 a`.
 
- 
 ## Properties of `ℕ` and pattern matching
 
 Addition:
@@ -834,14 +831,15 @@ of natural numbers can be redefined this way:
     Eqℕ x y = toSet (eq x y)
 
 Every such pattern matching definition can be rewritten into a
-definition using `rec` or `indℕ`. Hardcore people only use the
-eliminators, lazy people use pattern matching.
+definition using `rec` or `indℕ`.
 
 Properties of this equality:
 
     refl : (x : ℕ) → Eqℕ x x
     refl zero = tt
     refl (suc x) = refl x
+
+**** ITT TARTUNK ****
 
     transport : (P : ℕ → Set)(x y : ℕ) → Eqℕ x y → P x → P y
     transport P zero    zero    e u = u
