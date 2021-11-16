@@ -31,11 +31,11 @@ fun {X} {Y} nx⊎y x = case nx⊎y (λ nx → anything {X} {Y} nx x) (λ y → y
 dm1 dm1' : {X Y : Set} →  ¬ (X ⊎ Y) ↔ ¬ X × ¬ Y
 dm1 = _,_
   ((λ xy → (λ x → xy (ι₁ x)) , λ y → xy (ι₂ y)))
-  λ (nx , ny) → λ xy → case xy (λ x → nx x) λ y → ny y
+  λ { (nx , ny) → λ xy → case xy (λ x → nx x) λ y → ny y }
 dm1' = {!!}
 
 dm2 dm2' : {X Y : Set} → ¬ X ⊎ ¬ Y → ¬ (X × Y)
-dm2 = λ nxny → λ (x , y) → case nxny (λ nx → nx x) (λ ny → ny y)
+dm2 = λ nxny → λ { (x , y) → case nxny (λ nx → nx x) (λ ny → ny y) }
 dm2' = {!!}
 
 dm2b dm2b' : {X Y : Set} → ¬ ¬ (¬ (X × Y) → ¬ X ⊎ ¬ Y)
@@ -66,12 +66,13 @@ dm2b' = {!!}
 -- stuff
 
 nocontra nocontra' : {X : Set} → ¬ (X ↔ ¬ X)
-nocontra {X} = λ (x→nx , nx→x) → let
+nocontra {X} = λ { (x→nx , nx→x) → let
   nx = λ x → let
     nx' = x→nx x
     in nx' x
   x = nx→x nx
   in nx x
+  }
 -- Idea: When defining nx (and got an x), you can also define nx as `x→nx x`, and apply x on that
 nocontra' = {!!}
 
@@ -94,7 +95,7 @@ nocontra' = {!!}
     in bot)
   λ nx → λ nnx → nnx nx
 -- simple
-¬¬invol₂' = ?
+¬¬invol₂' = {!!}
 
 nnlem nnlem' : {X : Set} → ¬ ¬ (X ⊎ ¬ X)
 nnlem {X} = λ n[lem] → let
