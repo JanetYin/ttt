@@ -23,11 +23,16 @@ id x = x
 ∀⊎-distr  :    (A : Set)(P : A → Set)(Q : A → Set) → ((a : A) → P a) ⊎ ((a : A) → Q a) → ((a : A) → P a ⊎ Q a)
 ∀⊎-distr A P Q = {!!}
 Σ×-distr  :    (A : Set)(P : A → Set)(Q : A → Set) → (Σ A λ a → P a × Q a)  → Σ A P × Σ A Q
-Σ×-distr A P Q = {!!}
+Σ×-distr A P Q fv = (a , π₁ t) , a , (π₂ t)
+  where
+  a : A
+  a = π₁ fv
+  t : P a × Q a
+  t = π₂ fv
 Σ⊎-distr  :    (A : Set)(P : A → Set)(Q : A → Set) → (Σ A λ a → P a ⊎ Q a)  ↔ Σ A P ⊎ Σ A Q
 Σ⊎-distr A P Q = _,_
-  {!!}
-  {!!}
+  (λ t → case (π₂ t) (λ P$π₁$t → ι₁ ((π₁ t) , P$π₁$t)) λ Q$π₁$t → ι₂ ((π₁ t) , Q$π₁$t))
+  (λ t → case t (λ ΣAP → (π₁ ΣAP) , (ι₁ $ π₂ ΣAP)) λ ΣAQ → (π₁ ΣAQ) , (ι₂ (π₂ ΣAQ)))
 ¬∀        :    (A : Set)(P : A → Set)              → (Σ A λ a → ¬ P a)      → ¬ ((a : A) → P a)
 ¬∀ A P lem1 = {!!}
 ¬Σ        :    (A : Set)(P : A → Set)              → (¬ Σ A λ a → P a)      ↔ ((a : A) → ¬ P a)
@@ -40,7 +45,12 @@ t = ff , 1
 ⊎↔ΣBool   :    (A B : Set)                         → (A ⊎ B)                ↔ Σ 𝟚 (λ b → if b then A else B)
 ⊎↔ΣBool A B = _,_
   {!!}
-  {!!}
+  λ t → let
+    b = π₁ t
+    in ind𝟚 (λ b → if b then A else B → (A ⊎ B))
+      ι₁ -- A
+      ι₂
+      b (π₂ t)
 ¬¬∀-nat   :    (A : Set)(P : A → Set)              → ¬ ¬ ((x : A) → P x)    → (x : A) → ¬ ¬ (P x)
 ¬¬∀-nat A P nnlem x = {!!}
 
