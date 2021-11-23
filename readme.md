@@ -890,8 +890,6 @@ In the tutorials, show that natural numbers form a commutative
 semiring with `+` and `*`. You can follow the [discrete math
 textbook](https://bitbucket.org/akaposi/ttt/raw/master/muveletek_termeszetes_szamokkal.pdf).
 
-**** ITT TARTUNK ****
-
 Less or equal.
 
     _≤_ : ℕ → ℕ → Set
@@ -900,19 +898,19 @@ Less or equal.
     suc x ≤ suc y = x ≤ y
 
     ex : 3 ≤ 100
-    ex = tt
+    ex = triv
     
     refl≤ : (x : ℕ) → x ≤ x
-    refl≤ zero = tt
+    refl≤ zero = triv
     refl≤ (suc x) = refl≤ x
 
     trans≤ : (x y z : ℕ) → x ≤ y → y ≤ z → x ≤ z
-    trans≤ zero    y       z       e e' = tt
+    trans≤ zero    y       z       e e' = triv
     trans≤ (suc x) (suc y) (suc z) e e' = trans≤ x y z e e'
 
     ≤dec : (x y : ℕ) → x ≤ y ⊎ y ≤ x
-    ≤dec zero y = ι₁ tt
-    ≤dec (suc x) zero = ι₂ tt
+    ≤dec zero y = ι₁ triv
+    ≤dec (suc x) zero = ι₂ triv
     ≤dec (suc x) (suc y) = ≤dec x y
 
 ## Functions on vectors
@@ -924,7 +922,7 @@ Less or equal.
 `nil`, `cons`, `head`, `tail`, `++`
 
     count : (n : ℕ) → ℕ ^ n
-    count zero = tt
+    count zero = triv
     count (suc n) = n , count n
 
     _∧_ : 𝟚 → 𝟚 → 𝟚
@@ -932,38 +930,40 @@ Less or equal.
     _     ∧ _    = ff
 
     eq^ : (l : ℕ) → ℕ ^ l → ℕ ^ l → 𝟚
-    eq^ zero xs ys = tt
+    eq^ zero xs ys = triv
     eq^ (suc l) (x , xs) (y , ys) = eq x y ∧ eq^ l xs ys
 
     Eq^ : (l : ℕ) → ℕ ^ l → ℕ ^ l → Set
     Eq^ l xs ys = toSet (eq^ l xs ys)
 
-    test-count : Eq^ 3 (count 3) (2 , 1 , 0 , tt)
-    test-count = tt
+    test-count : Eq^ 3 (count 3) (2 , 1 , 0 , triv)
+    test-count = triv
 
     insert : ℕ → (l : ℕ) → ℕ ^ l → ℕ ^ (suc l)
-    insert y zero    xs       = y , tt
+    insert y zero    xs       = y , triv
     insert y (suc l) (x , xs) = case (≤dec y x)
       (λ _ → y , x , xs)
       (λ _ → x , insert y l xs)
 
-    test-insert : Eq^ 5 (insert 3 4 (1 , 2 , 4 , 5 , tt)) (1 , 2 , 3 , 4 , 5 , tt)
-    test-insert = tt
+    test-insert : Eq^ 5 (insert 3 4 (1 , 2 , 4 , 5 , triv)) (1 , 2 , 3 , 4 , 5 , triv)
+    test-insert = triv
 
     sort : (l : ℕ) → ℕ ^ l → ℕ ^ l
-    sort zero _ = tt
+    sort zero _ = triv
     sort (suc l) (x , xs) = insert x l (sort l xs)
 
-    test-sort : Eq^ 5 (sort 5 (3 , 2 , 1 , 5 , 4 , tt)) (1 , 2 , 3 , 4 , 5 , tt)
-    test-sort = tt
+    test-sort : Eq^ 5 (sort 5 (3 , 2 , 1 , 5 , 4 , triv)) (1 , 2 , 3 , 4 , 5 , triv)
+    test-sort = triv
+
+**** ITT TARTUNK ****
 
     Ordered : ℕ → (l : ℕ) → ℕ ^ l → Set
-    Ordered b zero tt          = ⊤
+    Ordered b zero triv        = ⊤
     Ordered b (suc l) (x , xs) = b ≤ x × Ordered x l xs
 
     ins-ord : (l : ℕ)(xs : ℕ ^ l)(b : ℕ) → Ordered b l xs → (y : ℕ) → b ≤ y →
       Ordered b (suc l) (insert y l xs)
-    ins-ord zero    xs       b tt               y b≤y = b≤y , tt
+    ins-ord zero    xs       b triv             y b≤y = b≤y , triv
     ins-ord (suc l) (x , xs) b (b≤x , ord-x-xs) y b≤y = ind⊎
       (λ w → Ordered b (2 + l) (case w (λ _ → y , x , xs) (λ _ → x , insert y l xs)))
       (λ y≤x → b≤y , y≤x , ord-x-xs)
@@ -971,11 +971,11 @@ Less or equal.
       (≤dec y x) 
 
     sort-ord : (l : ℕ)(xs : ℕ ^ l) → Ordered 0 l (sort l xs)
-    sort-ord zero xs = tt
-    sort-ord (suc l) (x , xs) = ins-ord l (sort l xs) 0 (sort-ord l xs) x tt
+    sort-ord zero xs = triv
+    sort-ord (suc l) (x , xs) = ins-ord l (sort l xs) 0 (sort-ord l xs) x triv
 
     ∈ : (y : ℕ)(l : ℕ)(xs : ℕ ^ l) → Set
-    ∈ y zero    tt       = ⊥
+    ∈ y zero    triv     = ⊥
     ∈ y (suc l) (x , xs) = Eqℕ y x ⊎ ∈ y l xs
 
     ins-∈ : (y : ℕ)(l : ℕ)(xs : ℕ ^ l) → ∈ y (suc l) (insert y l xs)
