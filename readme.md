@@ -839,8 +839,6 @@ Properties of this equality:
     refl zero = tt
     refl (suc x) = refl x
 
-**** ITT TARTUNK ****
-
     transport : (P : ℕ → Set)(x y : ℕ) → Eqℕ x y → P x → P y
     transport P zero    zero    e u = u
     transport P (suc x) zero    e u = exfalso e
@@ -891,6 +889,8 @@ algebraic laws, `cong` and `trans`.
 In the tutorials, show that natural numbers form a commutative
 semiring with `+` and `*`. You can follow the [discrete math
 textbook](https://bitbucket.org/akaposi/ttt/raw/master/muveletek_termeszetes_szamokkal.pdf).
+
+**** ITT TARTUNK ****
 
 Less or equal.
 
