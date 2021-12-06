@@ -187,17 +187,34 @@ join = {!!}
 -- random isomorphisms
 ---------------------------------------------------------
 
+--          42         43      a , b , c , d
 forward : (𝟚 → ℕ) × (𝟚 → 𝟚) → ℕ × 𝟚 × ℕ × 𝟚
-forward = {!!}
+--              a         b         c         d  
+forward = λ t → π₁ t tt , π₂ t tt , π₁ t ff , π₂ t ff
 
 backward : ℕ × 𝟚 × ℕ × 𝟚 → (𝟚 → ℕ) × (𝟚 → 𝟚)
-backward = {!!}
+backward = λ { (a , b , c , d) →
+  (λ x → if x then a else c)
+  ,
+  (λ x → if x then b else d)
+  }
 
 testforward : {w : ℕ × 𝟚 × ℕ × 𝟚} → Eq _ (forward (backward w)) w
-testforward = {!!}
+testforward = refl
 
 iso1 : {A B : Set} → (𝟚 → (A ⊎ B)) ↔ ((𝟚 → A) ⊎ 𝟚 × A × B ⊎ (𝟚 → B))
-iso1 = {!!}
+iso1 = _,_
+  --                    a₁       a₂  b₁       b₂
+  -- (𝟚 → A ⊎ B) → (𝟚 → A) ⊎ 𝟚 × A × B ⊎ (𝟚 → B)
+  (λ f → case (f {!π₂ iso1!}) (λ a → ι₁ (λ x → a)) (λ b → ι₂ (ι₂ (λ x → b))))
+  λ t → λ x → case t
+    --        a₁
+    (λ f → ι₁ (f x))
+     λ t' → case t'
+     --          a₂  b₁
+      (λ { t'' → π₂ iso1 ({!!}) x})
+      --        b₂
+       λ f → ι₂ (f x)
 
 iso2 : {A B : Set} → ((A ⊎ B) → ⊥) ↔ ((A → ⊥) × (B → ⊥))
 iso2 = {!!}
@@ -206,11 +223,11 @@ iso3 : (⊤ ⊎ ⊤ ⊎ ⊤) ↔ 𝟚 ⊎ ⊤
 iso3 = {!!}
 
 testiso3 : Eq _ (π₂ iso3 (π₁ iso3 (ι₁ triv))) (ι₁ triv)
-testiso3 = {!!}
+testiso3 = refl
 testiso3' : Eq _ (π₂ iso3 (π₁ iso3 (ι₂ (ι₁ triv)))) (ι₂ (ι₁ triv))
-testiso3' = {!!}
+testiso3' = refl
 testiso3'' : Eq _ (π₂ iso3 (π₁ iso3 (ι₂ (ι₂ triv)))) (ι₂ (ι₂ triv))
-testiso3'' = {!!}
+testiso3'' = refl
 
 iso4 : (⊤ → ⊤ ⊎ ⊥ ⊎ ⊤) ↔ ⊤ ⊎ ⊤
 iso4 = {!!}
