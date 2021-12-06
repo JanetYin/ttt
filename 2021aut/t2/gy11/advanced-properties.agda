@@ -10,6 +10,7 @@ comm = λ a b → indℕ
   (λ n e → {! e , suc+ b n!})
   a
 
+-- FONTOS
 _*_ : ℕ → ℕ → ℕ
 _*_ = λ a b → rec 0 (_+_ b) a
 infixl 7 _*_
@@ -32,6 +33,7 @@ nulll = λ _ → reflℕ 0
 nullr : (a : ℕ) → Eqℕ (a * 0) 0
 nullr = indℕ (λ a → Eqℕ (a * 0) 0) (reflℕ 0) (λ _ e → e)
 
+-- FONTOS
 -- use indℕ, trans, cong, sym, ass
 distr : (a b c : ℕ) → Eqℕ ((a + b) * c) (a * c + b * c)
 distr = λ a b c → indℕ
@@ -39,13 +41,19 @@ distr = λ a b c → indℕ
   {!!}
   {-
    suc n + b * c      =  suc n * c + b * c
+      hole11
   suc (n + b) * c     =  suc n * c + b * c
   c + (n + b) * c     =  c + n * c + b * c  
   c + (n * c + b * c) = c + (n * c + b * c)
   -}
-  {!!}
+  (λ n eq → trans ((suc n + b) * c)  (suc (n + b) * c) (suc n * c + b * c)
+    {!!}
+    (trans (suc (n + b) * c) (c + (n + b) * c) (suc n * c + b * c)
+      {!!}
+      {!!}))
   a
 
+-- FONTOS
 -- use indℕ, trans, distr, cong
 ass* : (a b c : ℕ) → Eqℕ ((a * b) * c) (a * (b * c))
 ass* = λ a b c → indℕ
@@ -120,6 +128,7 @@ suc* = λ a b → indℕ
     (cong (_+_ (suc b)) (n + n * b) (n * suc b) e))
   a
 
+-- FONTOS
 -- use indℕ, nullr, trans, suc*
 comm* : (a b : ℕ) → Eqℕ (a * b) (b * a)
 comm* = λ a b → indℕ
@@ -133,6 +142,7 @@ comm* = λ a b → indℕ
     (suc* b n))
   a
 
+-- FONTOS
 -- left distributivity: use comm* and distr
 distl : (a b c : ℕ) → Eqℕ (a * (b + c)) (a * b + a * c)
 distl = {!!}
