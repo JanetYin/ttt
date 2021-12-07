@@ -955,8 +955,6 @@ Less or equal.
     test-sort : Eq^ 5 (sort 5 (3 , 2 , 1 , 5 , 4 , triv)) (1 , 2 , 3 , 4 , 5 , triv)
     test-sort = triv
 
-**** ITT TARTUNK ****
-
     Ordered : ℕ → (l : ℕ) → ℕ ^ l → Set
     Ordered b zero triv        = ⊤
     Ordered b (suc l) (x , xs) = b ≤ x × Ordered x l xs
@@ -977,6 +975,8 @@ Less or equal.
     ∈ : (y : ℕ)(l : ℕ)(xs : ℕ ^ l) → Set
     ∈ y zero    triv     = ⊥
     ∈ y (suc l) (x , xs) = Eqℕ y x ⊎ ∈ y l xs
+
+**** ITT TARTUNK ****
 
     ins-∈ : (y : ℕ)(l : ℕ)(xs : ℕ ^ l) → ∈ y (suc l) (insert y l xs)
     ins-∈ y zero xs = ι₁ (Eq-refl y)
