@@ -35,6 +35,7 @@ Recommended literature:
  * [Homotopy Type Theory book](http://saunders.phil.cmu.edu/book/hott-online.pdf) (especially Chapter 1 Type theory)
  * [Kaposi Ambrus. Bevezetés a homotópia-típuselméletbe](https://akaposi.github.io/hott_bevezeto.pdf) (magyar)
  * [Martin Hofmann. Syntax and Semantics of Dependent Types](https://www.tcs.ifi.lmu.de/mitarbeiter/martin-hofmann/pdfs/syntaxandsemanticsof-dependenttypes.pdf)
+ * [Ambrus Kaposi. Type systems course notes](https://bitbucket.org/akaposi/typesystems/raw/master/src/main.pdf)
 
 
 # Intro
