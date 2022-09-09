@@ -1,0 +1,5 @@
+150 percet ledolgoztunk
+meg 30 perc kell
+
+
+TODO: prop as bool-al is belatni a szoveges pelda erveleseket
