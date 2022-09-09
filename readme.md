@@ -1,4 +1,4 @@
-# Meta
+# Típuselmélet (type theory) course
 
 You can take semi-compulsory courses in later semesters.
 
@@ -10,11 +10,11 @@ You have to register with the correct code:
 
 Teacher of the lectures: Kaposi Ambrus (akaposi kukac inf.elte.hu).
 
-Tutorial teachers: Batta Zsolt (afhbj7 kukac inf.elte.hu), Lezsák Domonkos (lijjo8 kukac inf.elte.hu), Végh Tamás (vetuaat kukac inf.elte.hu).
+Tutorial teachers: Viktor Csimma (midffj at inf.elte.hu), Rafaël Bocquet (bocquet at inf.elte.hu), Végh Tamás (vetuaat at inf.elte.hu).
 
-Lectures and tutorials will be partly in Microsoft Teams, in the group [Típuselmélet 2021 ősz (IPM-18sztKVTE, P-18KVSZTM, IPM-18EsztKVTE)](https://teams.microsoft.com/l/team/19%3aNbccBrW8Os0asNOlMxx-IB27LNxT3EqjeU33KRcywLg1%40thread.tacv2/conversations?groupId=086976ce-4e7b-42e2-a7a5-4c0c3645f472&tenantId=0133bb48-f790-4560-a64d-ac46a472fbbc). If you are not a member, ask one of the teachers to add you.
+There is a team [Típuselmélet 2022 ősz](https://teams.microsoft.com/l/team/19%3a0Tov01N1E2P2XyoH0NqqEl0cc65vsRTX96nfOVr6hyM1%40thread.tacv2/conversations?groupId=20f566d0-3575-4f00-a0ca-144f767dd654&tenantId=0133bb48-f790-4560-a64d-ac46a472fbbc) in Microsoft Teams to discuss type theory. You can ask any of the teachers to add you.
 
-Language: Hungarian (English available upon request).
+The lectures are in Hungarian, Rafaël's tutorials are in English, the tutorials of Viktor and Tamás are in Hungarian.
 
 Requirements:
 
@@ -31,7 +31,7 @@ for the tutorial.
 
 Recommended literature:
 
- * [Thorsten Altenkirch. Naive Type Theory](http://www.cs.nott.ac.uk/~psztxa/publ/fomus19.pdf)
+ * [Thorsten Altenkirch. Tao of types](http://www.cs.nott.ac.uk/~psztxa/mgs.2021) (we mainly follow this book)
  * [Homotopy Type Theory book](http://saunders.phil.cmu.edu/book/hott-online.pdf) (especially Chapter 1 Type theory)
  * [Kaposi Ambrus. Bevezetés a homotópia-típuselméletbe](https://akaposi.github.io/hott_bevezeto.pdf) (magyar)
  * [Martin Hofmann. Syntax and Semantics of Dependent Types](https://www.tcs.ifi.lmu.de/mitarbeiter/martin-hofmann/pdfs/syntaxandsemanticsof-dependenttypes.pdf)
