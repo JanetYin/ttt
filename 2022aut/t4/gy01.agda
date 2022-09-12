@@ -105,3 +105,36 @@ f1 = {!!}
 f2 f3 : (ℕ → ℕ) → ℕ
 f2 = {!!}
 f3 = {!!}
+
+-- Polymorphic functions
+
+-- {A : Set} is an implicit argument
+id : {A : Set} → A → A
+id x = x
+
+idℕ : ℕ → ℕ
+idℕ = id {ℕ}
+
+three : ℕ
+three = idℕ 3
+
+three' : ℕ
+three' = id 3 {- The implicit argument A is inferred and solved with  A = ℕ  -}
+
+const : {A B : Set} → A → B → A
+const = {!!}
+
+-- Define function composition
+-- \circ
+_∘_ : {A B C : Set} → (B → C) → (A → B) → (A → C)
+_∘_ = {!!}
+infixl 5 _∘_ -- (f ∘ g ∘ h) = ((f ∘ g) ∘ h)
+
+-- How can you test your definition of _∘_ ?
+
+-- write a function twice that applies the given function twice.
+twice : {A : Set} → (A → A) → A → A
+twice = {!!}
+
+-- what is the result of  twice add3 1 ?
+-- what about             twice twice add3 1 ?
