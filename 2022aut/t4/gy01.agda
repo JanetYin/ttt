@@ -30,10 +30,17 @@ open import Agda.Builtin.Nat
 --  C-c C-SPC : Fill goal
 --  C-c C-x = : Describe character at point
 
+-- List of unicode symbols:
+--    →       \to
+--            \rightarrow
+--    ℕ       \bN           'b'lackboard 'N', there is also \bZ for ℤ, etc
+--    λ       \Gl           'G'reek 'l', there is also \GG for Γ, etc
+--    ∘       \circ
+
 -- add3
 
 add3 : ℕ → ℕ -- \bN \to \bN
-add3 x = x + 3
+add3 x = x + {!!}
 
 -- try add3 x = x+3, spaces matter!
 
@@ -125,7 +132,6 @@ const : {A B : Set} → A → B → A
 const = {!!}
 
 -- Define function composition
--- \circ
 _∘_ : {A B C : Set} → (B → C) → (A → B) → (A → C)
 _∘_ = {!!}
 infixl 5 _∘_ -- (f ∘ g ∘ h) = ((f ∘ g) ∘ h)
