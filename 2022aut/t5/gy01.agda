@@ -33,7 +33,11 @@ open import Agda.Builtin.Nat
 --            \rightarrow
 --    ℕ       \bN           'b'lackboard 'N', there is also \bZ for ℤ, etc
 --    λ       \Gl           'G'reek 'l', there is also \GG for Γ, etc
---    ∘       \circ
+
+-- TODAY:
+--  base type ℕ for natural numbers
+--  function types   A → B
+--   where A and B are any types
 
 -- add3
 
@@ -46,6 +50,10 @@ add3 x = x + 3
 
 aNum : ℕ
 aNum = add3 4
+
+-- aNum = add3 4
+--      = 4 + 3
+--      = 7
 
 -- no need to write brackets in "add3(4)"
 
@@ -62,21 +70,37 @@ bNum = add3 (add3 (add3 2))
 
 add3' : ℕ → ℕ
 add3' = λ x → x + 3
+-- add3 x = x + 3
+
+-- add3' 4 = (λ x → x + 3) 4
+--         = (x + 3)[x := 4]
+--         = (4 + 3)
+--         = 7
 
 -- test it with C-c C-n!
 
 add4 : ℕ → ℕ
-add4 = {!!}
+add4 x = x + 4
+
+-- Goal type and context:             C-c C-,
+-- Goal type, context, inferred type: C-c C-.
+-- Fill the hole                    : C-c C-space  ,  C-c C-r
+-- Creating a hole: enter '?'
 
 -- functions with multiple arguments
 
-add : ℕ → (ℕ → ℕ)
-add = λ x → (λ y → x + y)
+add : ℕ → ℕ → ℕ
+add = λ x y → x + y
 
+-- ℕ → (ℕ → ℕ) = ℕ → ℕ → ℕ
+--             ≠ (ℕ → ℕ) → ℕ
 -- bracketing of λ
 
 -- same as λ x → λ y → x + y
 -- same as λ x y → x + y
+
+add3'' : ℕ → ℕ
+add3'' = add 3
 
 num1 : ℕ
 num1 = add 3 4
@@ -91,21 +115,44 @@ num1' = (add 3) 4
 -- num2 : ℕ
 -- num2 = add (3 4)
 
+-- application of the function 'add' to (the application of the function '3' to the number '4')
+--                    ?A → ?B                                    ?C → ?D
+--                    ?A = ℕ
+--                    ?B = ℕ → ℕ
+
+-- num3 : ℕ
+-- num3 = add 3 (add 4)
+
+ -- add 4 : ℕ → ℕ
+ -- add 3 : ℕ → ℕ
+
+ --  but       ℕ                       !=         ℕ → ℕ
+ --        (type of arg of 'add 3')             (type of 'add 4')
+
+
 -- num3 : ℕ
 -- num3 = add 3 (add 4)
 
 num4 : ℕ
 num4 = add 3 (add 4 2)
 
+-- Higher-order functions: functions with functions as arguments
+-- e.g. in Haskell:   map :: (a -> b) -> [a] -> [b]
+
 -- write a function of the following type:
 
 f1 : (ℕ → ℕ) → ℕ
-f1 = {!!}
+f1 = λ x → 0
 
 -- test it with f1 add3, f1 add4. is the result the same?
 
--- write two different functions which use their inputs, i.e. f2 add3 ≠ f2 add4 ≠ f3 add4 ≠ f3 add3
+-- write two different functions which use their inputs, i.e.
+--   f2 add3 ≠ f2 add4 ≠ f3 add4 ≠ f3 add3
 
 f2 f3 : (ℕ → ℕ) → ℕ
-f2 = {!!}
-f3 = {!!}
+f2 g = g (g 0) + 10
+f3 = λ g → g 1 + g 2
+
+-- Simplest solution:
+--  f2 g = g 0
+--  f3 g = g 2
