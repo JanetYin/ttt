@@ -1,0 +1,47 @@
+hw is not compulsory
+it can be sent out in Teams if Canvas does not work until then
+ikadminnál lehet kérni, hogy adjanak hozzá a gyakhoz
+
+ttt-s repóba rakjuk fel a gyakanyagainkat (2022 autumn)
+t2 a saját
+lehet a sajátodban módosítani a gy01-et, meg általában ami felkerül
+és a többieket is megnézheted, hogy hogy állnak meg mit tartanak
+
+ttt_private: ott vannak feladatok
+a feladatokat ide rakjuk
+és a tavalyiakat is megnézhetjük
+a házi lehet a publikusban
+
+valami nagyon egyszerű legyen a röpi
+pl. írj függvényt, ami megszoroz egy dolgot
+
+az a baj, hogy hivatalosan nem kényszerítjük őket az Emacsre
+de visszaszívja, mégis lehet valami kis billentyűkombinációt kérdezni
+_[Viktor közben: lehetne azt mondani, hogy ilyen is lehet, aztán nem azt kérdezni]_
+
+Rafaelnél van már polimorfos dolog
+
+lehet ilyet is, ha idáig eljutottunk, hogy ((N -> N) -> N) -> N-ra írjanak függvényt
+
+van az exam mappa a ttt_private-ban
+ezeket fogjuk használni
+lehetőleg ne pont ugyanazokat használd, de innen is lehet inspirálódni
+
+most még csak természetes számokat elég használni
+következő héten lesznek már polimorf függvények (Haskellhez hasonló dolgok)
+aztán product, sum, top, bottom
+ezek lesznek az elkövetkező pár hétben
+
+lesz egy gy02.agda hétfőn
+
+még telepítéshez: Windowson ha non-ASCII karakter van a mappanevekben, lehet, hogy a GHC nem működik
+
+van állítólag egy pre-compiled Agda Windowsra
+meg a VS Code Agda-kiegészítője tudja szimulálni az Agdát
+
+lehetne erről indítani beszélgetést
+szóval hogy kérdezzenek, ha technikai probléma van
+
+és lehet egyből commitolni, nem kell pull request
+
+az előadások Thorsten könyvéből vannak, szóval nem kell megnézni az előadást

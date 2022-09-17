@@ -1,0 +1,10 @@
+0:00-0:10: kvíz
+0:10-0:15: megbeszélés (a kvízt, meg ha a házik közül valamelyikkel gond volt)
+0:15-0:40: gy01.agdából a maradék; a lyukasokon kívül (a what is wrongra kérdezzünk rá, azt ők mondják meg)
+0:40-0:48: a lyukakat önállóan
+0:48-0:53: megbeszélés
+0:53-0:55: kérdések
+0:55-1:25: gy02.agda?
+1:25-1:30:
+	kérdések
+	miből lesz a röpi
