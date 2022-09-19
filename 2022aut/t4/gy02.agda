@@ -35,6 +35,16 @@ open import lib
 --    λ       \Gl           'G'reek 'l', there is also \GG for Γ, etc
 --            \lambda
 
+
+-- Tests:
+add3 : ℕ → ℕ
+add3 n = n + 3
+
+-- There will be automated tests in the homework and assignments, with the following format:
+--  (The equality type _≡_ will be explained later in the semester)
+add3_test1 : add3 5 ≡ 8 ; add3_test1 = refl
+add3_test2 : add3 0 ≡ 3 ; add3_test2 = refl
+
 -- Booleans
 
 -- Type:           𝔹
@@ -122,9 +132,6 @@ once = {!!}
 
 twice : {A : Type} → (A → A) → A → A
 twice = {!!}
-
-add3 : ℕ → ℕ
-add3 n = n + 3
 
 ex1 = twice add3 1
 -- What is the type of ex1 ?

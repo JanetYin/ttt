@@ -4,6 +4,8 @@ open import Agda.Builtin.Nat
 open Agda.Primitive
   renaming (Set to Type)
   public
+open import Agda.Builtin.Equality
+  public
 
 infixr 4 _,_
 infixr 2 _×_
