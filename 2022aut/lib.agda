@@ -1,9 +1,8 @@
 open import Agda.Builtin.Nat
   renaming (Nat to ℕ)
   public
-open Agda.Primitive
-  renaming (Set to Type)
-  public
+open import Agda.Primitive
+Type = Set
 open import Agda.Builtin.Equality
   public
 
@@ -15,12 +14,12 @@ infixr 1 _⊎_
 data 𝔹 : Set where
   true false : 𝔹
 
-if_then_else_ : ∀{i}{A : Type i}(t : 𝔹)(u v : A) → A
+if_then_else_ : ∀{i}{A : Set i}(t : 𝔹)(u v : A) → A
 if true  then u else v = u
 if false then u else v = v
 
 -- Product types
-record _×_ {i}{j}(A : Type i)(B : Type j) : Type (i ⊔ j) where
+record _×_ {i}{j}(A : Set i)(B : Set j) : Set (i ⊔ j) where
   constructor _,_
   field
     π₁ : A
@@ -28,11 +27,11 @@ record _×_ {i}{j}(A : Type i)(B : Type j) : Type (i ⊔ j) where
 open _×_ public
 
 -- Sum types
-data _⊎_ {i}{j}(A : Type i)(B : Type j) : Type (i ⊔ j) where
+data _⊎_ {i}{j}(A : Set i)(B : Set j) : Set (i ⊔ j) where
   ι₁ : A → A ⊎ B
   ι₂ : B → A ⊎ B
 
-case : ∀ {i j k}{A : Type i}{B : Type j}{C : Type k}
+case : ∀ {i j k}{A : Set i}{B : Set j}{C : Set k}
          (t : A ⊎ B)(u : A → C)(v : B → C) → C
 case (ι₁ t) u v = u t
 case (ι₂ t) u v = v t
