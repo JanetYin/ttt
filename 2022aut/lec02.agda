@@ -105,8 +105,8 @@ id = λ a → a
 idℕ : ℕ → ℕ
 idℕ n = n
 
-id𝔹 : 𝔹 → 𝔹
-id𝔹 b = b
+idBool : Bool → Bool
+idBool b = b
 
 harom : ℕ
 -- harom = id 3 -- id 3 = (λ a → a) 3 = a[a↦3] = 3
