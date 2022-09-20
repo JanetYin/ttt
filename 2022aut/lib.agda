@@ -11,10 +11,10 @@ infixr 2 _×_
 infixr 1 _⊎_
 
 -- Booleans
-data 𝔹 : Set where
-  true false : 𝔹
+data Bool : Set where
+  true false : Bool
 
-if_then_else_ : ∀{i}{A : Set i}(t : 𝔹)(u v : A) → A
+if_then_else_ : ∀{i}{A : Set i}(t : Bool)(u v : A) → A
 if true  then u else v = u
 if false then u else v = v
 

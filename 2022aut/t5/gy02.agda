@@ -31,10 +31,8 @@ open import lib
 --    →       \to
 --            \rightarrow
 --    ℕ       \bN           'b'lackboard 'N', there is also \bZ for ℤ, etc
---    𝔹       \bB
 --    λ       \Gl           'G'reek 'l', there is also \GG for Γ, etc
 --            \lambda
-
 
 -- Tests:
 add3 : ℕ → ℕ
@@ -47,11 +45,11 @@ add3_test2 : add3 0 ≡ 3 ; add3_test2 = refl
 
 -- Booleans
 
--- Type:           𝔹
--- "Constructors"  true : 𝔹
+-- Type:           Bool
+-- "Constructors"  true : Bool  false : Bool   (introduction)
 -- "Eliminator"    if_then_else_
 
-              --       b : 𝔹      u : A      v : A
+              --       b : Bool      u : A      v : A
               -------------------------------------------
               --         if b then u else v : A
 
@@ -59,49 +57,49 @@ add3_test2 : add3 0 ≡ 3 ; add3_test2 = refl
 --   if true  then u else v = u
 --   if false then u else v = v
 
-aBool : 𝔹
+aBool : Bool
 aBool = true
 
-bBool : 𝔹
+bBool : Bool
 bBool = false
 
-cBool : 𝔹
+cBool : Bool
 cBool = if aBool then true else false
 
-not : 𝔹 → 𝔹
-not = {!!}
+not : Bool → Bool
+not = λ b → if b then false else true
 
 -- Define the functions 'and' and 'or' using if_then_else_:
-and : 𝔹 → 𝔹 → 𝔹
+and : Bool → Bool → Bool
 and = {!!}
 
-or : 𝔹 → 𝔹 → 𝔹
+or : Bool → Bool → Bool
 or = {!!}
 
--- Define a function  add-or-mult : 𝔹 → ℕ → ℕ → ℕ
+-- Define a function  add-or-mult : Bool → ℕ → ℕ → ℕ
 --  such that  add-or-mult true n m = n + m
 --       and   add-or-mult false n m = n * m  for every n, m : ℕ
-add-or-mult : 𝔹 → ℕ → ℕ → ℕ
+add-or-mult : Bool → ℕ → ℕ → ℕ
 add-or-mult = {!!}
 
--- Define as many different functions of type  𝔹 → 𝔹  as you can:
-f1 f2 f3 f4 f5 : 𝔹 → 𝔹
+-- Define as many different functions of type  Bool → Bool  as you can:
+f1 f2 f3 f4 f5 : Bool → Bool
 f1 = {!!}
 f2 = {!!}
 f3 = {!!}
 f4 = {!!}
 f5 = {!!}
 
--- Define as many different functions of type  𝔹 → 𝔹 → 𝔹  as you can:
-g1 g2 g3 g4 g5 : 𝔹 → 𝔹 → 𝔹
+-- Define as many different functions of type  Bool → Bool → Bool  as you can:
+g1 g2 g3 g4 g5 : Bool → Bool → Bool
 g1 = {!!}
 g2 = {!!}
 g3 = {!!}
 g4 = {!!}
 g5 = {!!}
 
--- Define as many different functions of type  (𝔹 → 𝔹) → 𝔹  as you can:
-h1 h2 h3 h4 h5 : (𝔹 → 𝔹) → 𝔹
+-- Define as many different functions of type  (Bool → Bool) → Bool  as you can:
+h1 h2 h3 h4 h5 : (Bool → Bool) → Bool
 h1 = {!!}
 h2 = {!!}
 h3 = {!!}
@@ -116,8 +114,8 @@ id x = x
 idℕ : ℕ → ℕ
 idℕ = {!!}
 
-id𝔹 : 𝔹 → 𝔹
-id𝔹 = {!!}
+idBool : Bool → Bool
+idBool = {!!}
 
 idℕ→ℕ : (ℕ → ℕ) → (ℕ → ℕ)
 idℕ→ℕ = {!!}
