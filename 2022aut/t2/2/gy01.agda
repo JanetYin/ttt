@@ -77,12 +77,18 @@ add3' = λ x → x + 3
 
 -- kis ismétlés:
 add4 : ℕ → ℕ
-add4 = {!!}
+add4 = λ x → x + 4
 
 -- functions with multiple arguments
 
 add : ℕ → (ℕ → ℕ)           -- ugyanaz, mint ℕ → ℕ → ℕ (lásd hf.)
 add = λ x → (λ y → x + y)
+
+-- add 3 4
+{-
+add 3
+(λ x → (λ y → x + y)) 3   = (λ y → 3 + y) 
+-}
 
 -- bracketing of λ
 
@@ -95,7 +101,7 @@ add' x y = x + y
 
 -- de így is:
 add'' : ℕ → ℕ → ℕ
-add'' = _+_
+add'' = _+_              -- (+) in Haskell
 
 num1 : ℕ
 num1 = add 3 4
@@ -107,24 +113,40 @@ num1' = (add 3) 4           -- try C-c C-d with add 3
 
 -- what is wrong with the following?
 
--- num2 : ℕ
--- num2 = add (3 4)
+a b : ℕ
+a = 3
+b = 4
 
--- num3 : ℕ
--- num3 = add 3 (add 4)
+{-
+num2 : ℕ
+num2 = add (a b)
+
+(a    b)
+ |    |
+ ℕ   ℕ
+-}
+
+-- ℕ → (ℕ → ℕ)   ≡ ℕ → ℕ → ℕ
+
+{-
+num3 : ℕ
+num3 = add 3 (add 4)
+-}
 
 num4 : ℕ
 num4 = add 3 (add 4 2)
 
 -- write a function of the following type:
 
+-- C-c C-g  - quit
+
 f1 : (ℕ → ℕ) → ℕ   -- itt már kell a zárójel
-f1 = {!!}
+--f1 f = f 5
+f1 = λ f → f 5
 
 -- test it with f1 add3, f1 add4. is the result the same?
 
--- write two different functions which use their inputs, i.e. f2 add3 ≠ f2 add4 ≠ f3 add4 ≠ f3 add3
+-- write 
 
-f2 f3 : (ℕ → ℕ) → ℕ
-f2 = {!!}
-f3 = {!!}
+f2 : (ℕ → ℕ) → ℕ
+f2 f = {!f (f 5)!}
