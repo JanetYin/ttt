@@ -9,6 +9,7 @@ open import Agda.Builtin.Equality
 infixr 4 _,_
 infixr 2 _×_
 infixr 1 _⊎_
+infixr 0 _↔_
 
 -- Booleans
 data Bool : Set where
@@ -22,19 +23,19 @@ if false then u else v = v
 record _×_ {i}{j}(A : Set i)(B : Set j) : Set (i ⊔ j) where
   constructor _,_
   field
-    π₁ : A
-    π₂ : B
+    fst : A
+    snd : B
 open _×_ public
 
 -- Sum types
 data _⊎_ {i}{j}(A : Set i)(B : Set j) : Set (i ⊔ j) where
-  ι₁ : A → A ⊎ B
-  ι₂ : B → A ⊎ B
+  inl : A → A ⊎ B
+  inr : B → A ⊎ B
 
 case : ∀ {i j k}{A : Set i}{B : Set j}{C : Set k}
          (t : A ⊎ B)(u : A → C)(v : B → C) → C
-case (ι₁ t) u v = u t
-case (ι₂ t) u v = v t
+case (inl t) u v = u t
+case (inr t) u v = v t
 
 -- Empty type
 data ⊥ : Set where
@@ -46,3 +47,6 @@ exfalso ()
 record ⊤ : Set where
   constructor tt
 open ⊤ public
+
+_↔_ : ∀{i j} → Set i → Set j → Set (i ⊔ j)
+A ↔ B = (A → B) × (B → A)
