@@ -22,23 +22,25 @@ idℕ→ℕ = id
 const : {A B : Type} → A → B → A
 const = {!!}
 
--- infixl 5 _∘_ -- Function composition associates to the left
--- _∘_ : {A B C : Type} → (B → C) → (A → B) → (A → C)
--- _∘_ = {!!}
+infixl 5 _∘_ -- Function composition associates to the left
+_∘_ : {A B C : Type} → (B → C) → (A → B) → (A → C)
+_∘_ = {!!}
 
--- once : {A : Type} → (A → A) → A → A
--- once = {!!}
+once : {A : Type} → (A → A) → A → A
+once = {!!}
 
--- twice : {A : Type} → (A → A) → A → A
--- twice = {!!}
+twice : {A : Type} → (A → A) → A → A
+twice = {!!}
 
--- ex1 = twice add3 1
--- -- What is the type of ex1 ?
--- -- What is the value of ex1 ?
+add3 = λ n → n + 3
 
--- ex2 = twice twice add3 1
--- -- What is the type of ex2 ?
--- -- What is the value of ex2 ? why ?
+ex1 = twice add3 1
+-- What is the type of ex1 ?
+-- What is the value of ex1 ?
+
+ex2 = twice twice add3 1
+-- What is the type of ex2 ?
+-- What is the value of ex2 ? why ?
 
 -- Product types
 
