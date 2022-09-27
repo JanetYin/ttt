@@ -55,88 +55,122 @@ add3_test2 : add3 0 ≡ 3 ; add3_test2 = refl
                   -------------------------------------------
                   --         if b then u else v : A
 
-aBool : 𝔹
+aBool : Bool
 aBool = true
 
-bBool : 𝔹
+bBool : Bool
 bBool = false
 
-cBool : 𝔹
+cBool : Bool
 cBool = if aBool then true else false
 
-not : 𝔹 → 𝔹
-not = {!!}
+not : Bool → Bool
+not = λ b → if b then false else true
 
 -- Define the functions 'and' and 'or' using if_then_else_:
-and : 𝔹 → 𝔹 → 𝔹
-and = {!!}
+and : Bool → Bool → Bool
+-- and x y = if x then y else false
+-- and x = if x then (λ y → y) else (λ y → false)
+and x y = if y then x else false
 
-or : 𝔹 → 𝔹 → 𝔹
-or = {!!}
+or : Bool → Bool → Bool
+or x y = if x then true else y
+-- or x y = not (and (not x) (not y))
 
--- Define a function  add-or-mult : 𝔹 → ℕ → ℕ
---  such that  add-or-mult true n m = n + m   and   add-or-mult false n m = n * m  for every n, m : ℕ
-add-or-mult : 𝔹 → ℕ → ℕ
-add-or-mult = {!!}
+-- pattern matching:
+--  or true  y = y
+--  or false _ = false
 
--- Define as many different functions of type  𝔹 → 𝔹  as you can:
-f1 f2 f3 f4 f5 : 𝔹 → 𝔹
+-- Define a function  add-or-mult : Bool → ℕ → ℕ → ℕ
+--  such that  add-or-mult true n m = n + m
+--       and   add-or-mult false n m = n * m  for every n, m : ℕ
+add-or-mult : Bool → ℕ → ℕ → ℕ
+-- add-or-mult b = if b then _+_ else _*_
+add-or-mult b n m = if b then n + m else n * m
+
+-- Define as many different functions of type  Bool → Bool  as you can:
+f1 f2 f3 f4 f5 : Bool → Bool
 f1 = not
-f2 = {!!}
-f3 = {!!}
-f4 = {!!}
-f5 = {!!}
+f2 = λ x → x
+f3 = λ _ → true
+f4 = λ _ → false
+f5 = λ x → not (not (not (not x)))
+-- f2 ≡ f5
+-- Only 4 functions of type Bool → Bool
+--  A function f : Bool → Bool is determined by  f true  and  f false
 
--- Define as many different functions of type  𝔹 → 𝔹 → 𝔹  as you can:
-g1 g2 g3 g4 g5 : 𝔹 → 𝔹 → 𝔹
+-- Define as many different functions of type  Bool → Bool → Bool  as you can:
+g1 g2 g3 g4 g5 : Bool → Bool → Bool
 g1 = and
 g2 = or
-g3 = {!!}
-g4 = {!!}
-g5 = {!!}
 
+-- g3 x y = if x then (if y then true else false) else (if y then true else false)
+g3 x y = y
 
--- Define as many different functions of type  (𝔹 → 𝔹) → 𝔹  as you can:
-h1 h2 h3 h4 h5 : 𝔹 → 𝔹 → 𝔹
-h1 = {!!}
-h2 = {!!}
-h3 = {!!}
-h4 = {!!}
-h5 = {!!}
--- ...
+g4 = λ x y → x
+g5 = λ x y → false
 
--- How many different functions are there of type  ((𝔹 → 𝔹) → 𝔹) → 𝔹 ?
+-- 16 possible functions Bool → Bool → Bool
+
+-- Define as many different functions of type  (Bool → Bool) → Bool  as you can:
+h1 h2 h3 h4 h5 : (Bool → Bool) → Bool
+h1 f = true
+h2 f = f true
+h3 f = f false
+h4 f = and (f true) (f false)
+h5 f = f (f (f false))
+
+-- h6 f = if f true then (if f false then {!!} else {!!})
+--                  else (if f false then {!!} else {!!})
+       -- only depends on   f true and f false
+
+-- 16 possible functions of type (Bool → Bool) → Bool
+
+-- If A has na elements and B has nb elements
+--   then (A → B) has (nb ^ na) (nb to the power na) elements.
+
+-- How many different functions are there of type  ((Bool → Bool) → Bool) → Bool ?
+--  2 ^ 16 functions.
+
+--  next week: Product types and Sum types.
+--    A × B will have na * nb elements
+--    A + B will have na + nb elements
 
 -- Polymorphism
+
+-- In Haskell:
+--       id :: a -> a
+--       id :: forall a. a -> a
+
 id : {A : Type} → A → A
-id = {!!}
+id x = x
 
 idℕ : ℕ → ℕ
-idℕ = id {ℕ}
+idℕ = id {A = ℕ}
 
-id𝔹 : 𝔹 → 𝔹
-id𝔹 = id
+idBool : Bool → Bool
+idBool = id
 
 idℕ→ℕ : (ℕ → ℕ) → (ℕ → ℕ)
 idℕ→ℕ = id
 
 const : {A B : Type} → A → B → A
-const = {!!}
+const x y = x
 
-infixl 5 _∘_ -- Function composition associates to the left
-_∘_ : {A B C : Type} → (B → C) → (A → B) → (A → C)
-_∘_ = {!!}
+-- infixl 5 _∘_ -- Function composition associates to the left
+-- _∘_ : {A B C : Type} → (B → C) → (A → B) → (A → C)
+-- _∘_ = {!!}
 
-once : {A : Type} → (A → A) → A → A
-once = {!!}
+-- once : {A : Type} → (A → A) → A → A
+-- once = {!!}
 
-twice : {A : Type} → (A → A) → A → A
-twice = {!!}
+-- twice : {A : Type} → (A → A) → A → A
+-- twice = {!!}
 
-ex1 = twice add3 1
--- What is the type of ex1 ?
--- What is the value of ex1 ?
+-- ex1 = twice add3 1
+-- -- What is the type of ex1 ?
+-- -- What is the value of ex1 ?
 
-ex2 = twice twice add3 1
--- What is the type of ex2 ?
--- What is the value of ex2 ? why ?
+-- ex2 = twice twice add3 1
+-- -- What is the type of ex2 ?
+-- -- What is the value of ex2 ? why ?
