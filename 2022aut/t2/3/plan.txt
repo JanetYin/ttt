@@ -1,0 +1,5 @@
+0:00-0:15: assignment
+0:15-0:20: questions
+0:20-0:45: the rest of gy02.agda (const, _\o_, once and twice should be own work)
+0:45-1:25: gy03.agda
+1:25-1:30: what to learn for next assignment
