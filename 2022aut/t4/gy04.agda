@@ -18,6 +18,15 @@ open import lib
 
 -- Sum types
 
+-- in Haskell : Either A B, Left, Right
+
+--   A ⊎ B
+
+-- inl : A → A ⊎ B
+-- inr : B → A ⊎ B
+
+-- elimination by pattern matching
+
 exSum₁ exSum₂ : ℕ ⊎ Bool
 exSum₁ = inl 42
 exSum₂ = inr false
@@ -30,10 +39,13 @@ getSum (inr y) = if y then 1 else 0
 -- getSum exSum₂ = ?
 
 select : {A B : Type} → Bool → A → B → A ⊎ B
-select = {!!}
+select x a b = if x then inl a else inr b
+
+-- select true a b = inl a
 
 flipSum : {A B : Type} → A ⊎ B → B ⊎ A
-flipSum = {!!}
+flipSum (inl a) = inr a
+flipSum (inr b) = inl b
 
 -- Both  Bool × Bool  and  Bool ⊎ Bool  have 4 elements.
 
@@ -58,22 +70,45 @@ Bool⊎Bool→Bool×Bool = {!!}
 
 -- ⊤ and ⊥
 
--- ⊤ : type with 1 element
+-- ⊤ \top
+-- ⊥ \bot
+
+--  Empty tuple () in Haskell
+-- ⊤ : type with 1 element tt
 --  _×_ : binary product
 --  ⊤   : nullary product
 
+-- ↔  \lr
+
+-- (A ↔ B) = (A → B) × (B → A)
+
+example : ∀ {A : Type} → A ↔ (⊤ → A)
+example = (λ a _ → a)
+        , λ f → f _
+
 -- Define an isomorphism between  Bool  and  ⊤ ⊎ ⊤
+
+--  true       false    : Bool
+--  inl tt     inr tt   : ⊤ ⊎ ⊤
+
 from-Bool : Bool → ⊤ ⊎ ⊤
-from-Bool = {!!}
+from-Bool true = inl tt
+from-Bool false = inr tt
 
 to-Bool : ⊤ ⊎ ⊤ → Bool
-to-Bool = {!!}
+to-Bool (inl _) = true
+to-Bool (inr _) = {!false!}
 
 -- ⊥ : type with 0 elements
 --  _⊎_ : binary sum
 --  ⊥   : nullary sum
 
 -- elimination  :  exfalso
+
+-- for every  x : ⊥
+--            A : Type
+--------------------------------------------------------------------------------
+--            exfalso x : A
 
 exfalso-Bool : ⊥ → Bool
 exfalso-Bool x = exfalso x
