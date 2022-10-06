@@ -50,3 +50,6 @@ open ⊤ public
 
 _↔_ : ∀{i j} → Set i → Set j → Set (i ⊔ j)
 A ↔ B = (A → B) × (B → A)
+
+¬_ : ∀{i} → Set i → Set i
+¬ A = A → ⊥
