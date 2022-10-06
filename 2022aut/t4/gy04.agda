@@ -97,7 +97,7 @@ from-Bool false = inr tt
 
 to-Bool : ⊤ ⊎ ⊤ → Bool
 to-Bool (inl _) = true
-to-Bool (inr _) = {!false!}
+to-Bool (inr _) = false
 
 -- ⊥ : type with 0 elements
 --  _⊎_ : binary sum
@@ -115,58 +115,58 @@ exfalso-Bool x = exfalso x
 
 -- Define an element with the following type
 example-⊥ : (⊤ → ⊥) ⊎ (⊥ → ⊤)
-example-⊥ = {!!}
+example-⊥ = inr (λ x → tt)
 
 -- A ↔ B = (A → B) × (B → A)
 
--- (⊎, ⊥) form a commutative monoid (kommutativ egysegelemes felcsoport)
+-- -- (⊎, ⊥) form a commutative monoid (kommutativ egysegelemes felcsoport)
 
-assoc⊎ : {A B C : Set} → (A ⊎ B) ⊎ C ↔ A ⊎ (B ⊎ C)
-assoc⊎ = {!!}
+-- assoc⊎ : {A B C : Set} → (A ⊎ B) ⊎ C ↔ A ⊎ (B ⊎ C)
+-- assoc⊎ = {!!}
 
-idl⊎ : {A : Set} → ⊥ ⊎ A ↔ A
-idl⊎ = {!!}
+-- idl⊎ : {A : Set} → ⊥ ⊎ A ↔ A
+-- idl⊎ = {!!}
 
-idr⊎ : {A : Set} → A ⊎ ⊥ ↔ A
-idr⊎ = {!!}
+-- idr⊎ : {A : Set} → A ⊎ ⊥ ↔ A
+-- idr⊎ = {!!}
 
-comm⊎ : {A B : Set} → A ⊎ B ↔ B ⊎ A
-comm⊎ = {!!}
+-- comm⊎ : {A B : Set} → A ⊎ B ↔ B ⊎ A
+-- comm⊎ = {!!}
 
--- (×, ⊤) form a commutative monoid (kommutativ egysegelemes felcsoport)
+-- -- (×, ⊤) form a commutative monoid (kommutativ egysegelemes felcsoport)
 
-assoc× : {A B C : Set} → (A × B) × C ↔ A × (B × C)
-assoc× = {!!}
+-- assoc× : {A B C : Set} → (A × B) × C ↔ A × (B × C)
+-- assoc× = {!!}
 
-idl× : {A : Set} → ⊤ × A ↔ A
-idl× = {!!}
+-- idl× : {A : Set} → ⊤ × A ↔ A
+-- idl× = {!!}
 
-idr× : {A : Set} → A × ⊤ ↔ A
-idr× = {!!}
+-- idr× : {A : Set} → A × ⊤ ↔ A
+-- idr× = {!!}
 
--- ⊥ is a null element
+-- -- ⊥ is a null element
 
-null× : {A : Set} → A × ⊥ ↔ ⊥
-null× = {!!}
+-- null× : {A : Set} → A × ⊥ ↔ ⊥
+-- null× = {!!}
 
--- distributivity of × and ⊎
+-- -- distributivity of × and ⊎
 
-dist : {A B C : Set} → A × (B ⊎ C) ↔ (A × B) ⊎ (A × C)
-dist = {!!}
+-- dist : {A B C : Set} → A × (B ⊎ C) ↔ (A × B) ⊎ (A × C)
+-- dist = {!!}
 
--- exponentiation laws
+-- -- exponentiation laws
 
-curry : ∀{A B C : Set} → (A × B → C) ↔ (A → B → C)
-curry = {!!}
+-- curry : ∀{A B C : Set} → (A × B → C) ↔ (A → B → C)
+-- curry = {!!}
 
-⊎×→ : {A B C D : Set} → ((A ⊎ B) → C) ↔ (A → C) × (B → C)
-⊎×→ = {!!}
+-- ⊎×→ : {A B C D : Set} → ((A ⊎ B) → C) ↔ (A → C) × (B → C)
+-- ⊎×→ = {!!}
 
-law^0 : {A : Set} → (⊥ → A) ↔ ⊤
-law^0 = {!!}
+-- law^0 : {A : Set} → (⊥ → A) ↔ ⊤
+-- law^0 = {!!}
 
-law^1 : {A : Set} → (⊤ → A) ↔ A
-law^1 = {!!}
+-- law^1 : {A : Set} → (⊤ → A) ↔ A
+-- law^1 = {!!}
 
-law1^ : {A : Set} → (A → ⊤) ↔ ⊤
-law1^ = {!!}
+-- law1^ : {A : Set} → (A → ⊤) ↔ ⊤
+-- law1^ = {!!}
