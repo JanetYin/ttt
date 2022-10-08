@@ -1,0 +1,8 @@
+0:00: kérdés, hogy beszéljünk-e meg házikat előtte
+0:00-0:15: röpi
+0:15-0:20: ha kell még megbeszélni, akkor az
+0:20-0:55: gy03.agda
+0:55-1:05: Curry–Howard
+1:05-1:07: töltsék le a libet (kicsit meg is mutogatom)
+1:07-1:28: gy04.agda (ami a repón volt a gy03)
+1:28-1:30: miből lesz a röpi
