@@ -113,16 +113,3 @@ data ℤ : Type where
   presuc : pred (suc n) ≡ n
   sucpred : suc (pred n) ≡ n
 -}
-
--- ℕ
--- pred
--- pred with Maybe/⊤⊎_
--- zerosuc, inverse of pred
--- double, example of calculating its value
--- _+_, _*_, _^_
--- Ackermann
-
--- MAJD: szorzat tipust data-val
--- MAJD: nezzuk meg a tipusosztalyok implementaciojat Agdaban
-
--- kovetkezo ora egy perccel rovidebb
