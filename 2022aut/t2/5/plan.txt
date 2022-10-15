@@ -1,0 +1,6 @@
+0:00           any questions?
+0:00 - 0:06    assignment
+0:06 - 0:08    upload new files (gy04.agda, gy05.agda, lib.agda)
+0:08 - 0:43    gy04.agda
+0:43 - 1:28    gy05.agda
+1:28 - 1:30    topic of next assignment
