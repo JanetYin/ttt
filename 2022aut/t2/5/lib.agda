@@ -9,7 +9,7 @@ open import Agda.Builtin.Equality
 infixr 4 _,_
 infixr 2 _×_
 infixr 1 _⊎_
-infix 0 _↔_
+infixr 0 _↔_
 
 -- Booleans
 data Bool : Set where
