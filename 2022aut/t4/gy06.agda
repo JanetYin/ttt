@@ -20,15 +20,34 @@ open import lib hiding (_+_; _*_; _-_; _<_)
 -- natural numbers
 ---------------------------------------------------------
 
-double : ℕ → ℕ
-double = {!!}
+-- data ℕ : Type where
+--   zero : ℕ       -- nullary constructor
+--   suc  : ℕ → ℕ   -- unary constructor
+--                     suc n  =  n+1
 
--- double-test1 : double 2 ≡ 4
--- double-test1 = refl
--- double-test2 : double 0 ≡ 0
--- double-test2 = refl
--- double-test3 : double 10 ≡ 20
--- double-test3 = refl
+three : ℕ
+three = suc (suc (suc zero))
+
+-- elimination of ℕ  ~~~  recursion / induction on natural numbers
+--  pattern matching
+
+-- later: define "recursor" and "eliminator" as functions.
+
+double : ℕ → ℕ
+double zero    = zero
+double (suc x) = suc (suc (double x))
+
+double-test1 : double 2 ≡ 4
+double-test1 = refl
+double-test2 : double 0 ≡ 0
+double-test2 = refl
+double-test3 : double 10 ≡ 20
+double-test3 = refl
+
+-- Non-terminating functions:
+-- bad : ℕ → ℕ
+-- bad zero    = zero
+-- bad (suc x) = suc (bad (suc x))
 
 half : ℕ → ℕ
 half = {!!}

@@ -100,9 +100,25 @@ curry' : ∀{A B C : Type} → (A × B → C) ↔ (A → B → C)
 curry' = (λ f a b → f (a , b))
        , (λ f p → f (fst p) (snd p))
 
+-- (A ⊎ B) → C
+--   Functions that take  either a:A or b:B
+--                  return an element of C
+
+-- (A → C) × (B → C)
+--   Pair of  functions
+--    first function goes from A to C
+--    second function goes from B to C
+
 ⊎×→ : {A B C D : Type} → ((A ⊎ B) → C) ↔ (A → C) × (B → C)
-⊎×→ = (λ f → (λ a → f (inl a)) , (λ b → f (inr b)))
-    , (λ (fa , fb) aorb → case aorb fa fb)
+
+⊎×→ .fst f = (λ a → f (inl a))
+           , (λ b → f (inr b))
+
+⊎×→ .snd (fa , fb) (inl a) = fa a
+⊎×→ .snd (fa , fb) (inr b) = fb b
+
+-- ⊎×→ = (λ f → (λ a → f (inl a)) , (λ b → f (inr b)))
+--     , (λ (fa , fb) aorb → case aorb fa fb)
 
 law^0 : {A : Type} → (⊥ → A) ↔ ⊤
 law^0 = (λ _ → tt) , (λ _ → exfalso)
