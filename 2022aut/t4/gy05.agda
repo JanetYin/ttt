@@ -20,55 +20,114 @@ open import lib hiding (_<_)
 
 -- (⊎, ⊥) form a commutative monoid (kommutativ egysegelemes felcsoport)
 
-assoc⊎ : {A B C : Set} → (A ⊎ B) ⊎ C ↔ A ⊎ (B ⊎ C)
-assoc⊎ = {!!}
+assoc⊎₁ : {A B C : Type} → (A ⊎ B) ⊎ C → A ⊎ (B ⊎ C)
+assoc⊎₁ (inl (inl a)) = inl a
+assoc⊎₁ (inl (inr b)) = inr (inl b)
+assoc⊎₁ (inr c) = inr (inr c)
 
-idl⊎ : {A : Set} → ⊥ ⊎ A ↔ A
-idl⊎ = {!!}
+assoc⊎₂ : {A B C : Type} → A ⊎ (B ⊎ C) → (A ⊎ B) ⊎ C
+assoc⊎₂ (inl a) = inl (inl a)
+assoc⊎₂ (inr (inl b)) = inl (inr b)
+assoc⊎₂ (inr (inr c)) = inr c
 
-idr⊎ : {A : Set} → A ⊎ ⊥ ↔ A
-idr⊎ = {!!}
+assoc⊎ : {A B C : Type} → (A ⊎ B) ⊎ C ↔ A ⊎ (B ⊎ C)
+assoc⊎ = assoc⊎₁ , assoc⊎₂
 
-comm⊎ : {A B : Set} → A ⊎ B ↔ B ⊎ A
-comm⊎ = {!!}
+idl⊎₁ : {A : Type} → ⊥ ⊎ A → A
+idl⊎₁ (inl x) = exfalso x
+idl⊎₁ (inr x) = x
+
+idl⊎₂ : {A : Type} → A → ⊥ ⊎ A
+idl⊎₂ = inr
+
+idl⊎ : {A : Type} → ⊥ ⊎ A ↔ A
+idl⊎ = idl⊎₁ , idl⊎₂
+
+-- Corresponds to   n + 0 = n
+idr⊎₁ : {A : Type} → A ⊎ ⊥ → A
+idr⊎₁ (inl a)  = a
+idr⊎₁ (inr e⊥) = exfalso e⊥
+-- idr⊎₁ (inr ())
+--                 or pattern match on e⊥
+
+idr⊎₂ : {A : Type} → A → A ⊎ ⊥
+idr⊎₂ a = inl a
+
+idr⊎ : {A : Type} → A ⊎ ⊥ ↔ A
+idr⊎ = idr⊎₁ , idr⊎₂
+
+-- Alternative:
+-- idr⊎' : {A : Type} → A ⊎ ⊥ ↔ A
+-- idr⊎' .fst = {!!}
+-- idr⊎' .snd = {!!}
+
+comm⊎ : {A B : Type} → A ⊎ B ↔ B ⊎ A
+comm⊎ = (λ x → case x inr inl) , (λ x → case x inr inl)
 
 -- (×, ⊤) form a commutative monoid (kommutativ egysegelemes felcsoport)
 
-assoc× : {A B C : Set} → (A × B) × C ↔ A × (B × C)
-assoc× = {!!}
+assoc× : {A B C : Type} → (A × B) × C ↔ A × (B × C)
+assoc× = (λ ((a , b) , c) → (a , (b , c)))
+       , (λ p → ((fst p , fst (snd p)) , snd (snd p)))
 
-idl× : {A : Set} → ⊤ × A ↔ A
-idl× = {!!}
+idl× : {A : Type} → ⊤ × A ↔ A
+idl× = snd , (λ a → tt , a)
 
-idr× : {A : Set} → A × ⊤ ↔ A
-idr× = {!!}
+idr× : {A : Type} → A × ⊤ ↔ A
+idr× = fst , (λ a → a , tt)
 
 -- ⊥ is a null element
 
-null× : {A : Set} → A × ⊥ ↔ ⊥
-null× = {!!}
+-- null× : {A : Type} → A × ⊥ ↔ ⊥
+-- null× = {!!}
 
 -- distributivity of × and ⊎
 
-dist : {A B C : Set} → A × (B ⊎ C) ↔ (A × B) ⊎ (A × C)
-dist = {!!}
+dist₁ : {A B C : Type} → A × (B ⊎ C) → (A × B) ⊎ (A × C)
+dist₁ (a , inl b) = inl (a , b)
+dist₁ (a , inr c) = inr (a , c)
+
+dist₂ : {A B C : Type} → (A × B) ⊎ (A × C) → A × (B ⊎ C)
+dist₂ (inl (a , b)) = a , inl b
+dist₂ (inr (a , c)) = a , inr c
+
+dist : {A B C : Type} → A × (B ⊎ C) ↔ (A × B) ⊎ (A × C)
+dist = dist₁ , dist₂
 
 -- exponentiation laws
 
-curry : ∀{A B C : Set} → (A × B → C) ↔ (A → B → C)
-curry = {!!}
+curry' : ∀{A B C : Type} → (A × B → C) ↔ (A → B → C)
+curry' = (λ f a b → f (a , b))
+       , (λ f p → f (fst p) (snd p))
 
-⊎×→ : {A B C D : Set} → ((A ⊎ B) → C) ↔ (A → C) × (B → C)
-⊎×→ = {!!}
+-- (A ⊎ B) → C
+--   Functions that take  either a:A or b:B
+--                  return an element of C
 
-law^0 : {A : Set} → (⊥ → A) ↔ ⊤
-law^0 = {!!}
+-- (A → C) × (B → C)
+--   Pair of  functions
+--    first function goes from A to C
+--    second function goes from B to C
 
-law^1 : {A : Set} → (⊤ → A) ↔ A
-law^1 = {!!}
+⊎×→ : {A B C D : Type} → ((A ⊎ B) → C) ↔ (A → C) × (B → C)
 
-law1^ : {A : Set} → (A → ⊤) ↔ ⊤
-law1^ = {!!}
+⊎×→ .fst f = (λ a → f (inl a))
+           , (λ b → f (inr b))
+
+⊎×→ .snd (fa , fb) (inl a) = fa a
+⊎×→ .snd (fa , fb) (inr b) = fb b
+
+-- ⊎×→ = (λ f → (λ a → f (inl a)) , (λ b → f (inr b)))
+--     , (λ (fa , fb) aorb → case aorb fa fb)
+
+law^0 : {A : Type} → (⊥ → A) ↔ ⊤
+law^0 = (λ _ → tt) , (λ _ → exfalso)
+
+law^1 : {A : Type} → (⊤ → A) ↔ A
+law^1 = (λ f → f tt) , (λ a _ → a)
+
+law1^ : {A : Type} → (A → ⊤) ↔ ⊤
+law1^ = (λ _ → tt) , (λ _ _ → tt)
 
 --- Definitions by recursion on natural numbers
 
