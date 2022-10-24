@@ -21,7 +21,7 @@ open import lib
 ---------------------------------------------------------
 
 data List (A : Type) : Type where
-  [] : List A
+  []  : List A
   _∷_ : A → List A → List A
 infixr 6 _∷_
 
@@ -57,6 +57,12 @@ iteList n c [] = n
 iteList n c (a ∷ as) = c a (iteList n c as)
 
 -- Redefine some of the above functions (length, ...) using iteList.
+
+length' : {A : Type} → List A → List A
+length' = {!!}
+
+_++'_ : {A : Type} → List A → List A → List A
+_++'_ = {!!}
 
 ---------------------------------------------------------
 -- trees
@@ -231,3 +237,5 @@ node ts ! n = ts n
 -- test-tI'3 = refl
 -- test-tI'4 : tI' ! 5 ≡ node λ _ → node λ _ → node λ _ → node λ _ → node λ _ → leaf
 -- test-tI'4 = refl
+
+---------------------------------------------------------
