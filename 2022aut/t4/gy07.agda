@@ -20,217 +20,271 @@ open import lib hiding (_+_; _*_; _-_; _<_)
 -- natural numbers
 ---------------------------------------------------------
 
-double : ℕ → ℕ
-double = {!!}
+-- data ℕ : Type where
+--   zero : ℕ
+--   suc  : ℕ → ℕ    --   suc n  ＝  n+1
 
--- double-test1 : double 2 ≡ 4
--- double-test1 = refl
--- double-test2 : double 0 ≡ 0
--- double-test2 = refl
--- double-test3 : double 10 ≡ 20
--- double-test3 = refl
+three : ℕ
+three = suc (suc (suc zero))
+
+three-test : three ≡ 3
+three-test = refl
+
+double : ℕ → ℕ
+double zero    = zero
+double (suc n) = suc (suc (double n))
+                          -- 2* (n +1) = (2* n) +2
+                          -- double (suc n) = suc (suc (double n))
+
+-- bad : ℕ → ℕ
+-- bad zero = zero
+-- bad (suc n) = suc (bad (suc (suc n)))
+  -- not allowed: suc (suc n) is not smaller than suc n
+
+double-test1 : double 2 ≡ 4
+double-test1 = refl
+double-test2 : double 0 ≡ 0
+double-test2 = refl
+double-test3 : double 10 ≡ 20
+double-test3 = refl
 
 half : ℕ → ℕ
-half = {!!}
+half zero = 0
+half (suc zero) = 0
+half (suc (suc n)) = suc (half n)
 
--- half-test1 : half 10 ≡ 5
--- half-test1 = refl
--- half-test2 : half 11 ≡ 5
--- half-test2 = refl
--- half-test3 : half 12 ≡ 6
--- half-test3 = refl
+half-test1 : half 10 ≡ 5
+half-test1 = refl
+half-test2 : half 11 ≡ 5
+half-test2 = refl
+half-test3 : half 12 ≡ 6
+half-test3 = refl
+
+
+-- + is the iteration of suc
+
+-- a + b   =   suc (suc (suc ... b
+--             \ a times   /
 
 _+_ : ℕ → ℕ → ℕ
-_+_ = {!!}
+zero  + b = b
+suc a + b = suc (a + b)
 infixl 6 _+_
 
--- +-test1 : 3 + 5 ≡ 8
--- +-test1 = refl
--- +-test2 : 0 + 5 ≡ 5
--- +-test2 = refl
--- +-test3 : 5 + 0 ≡ 5
--- +-test3 = refl
++-test1 : 3 + 5 ≡ 8
++-test1 = refl
++-test2 : 0 + 5 ≡ 5
++-test2 = refl
++-test3 : 5 + 0 ≡ 5
++-test3 = refl
 
 _*_ : ℕ → ℕ → ℕ
-_*_ = {!!}
+zero  * b = zero
+suc a * b = a * b + b
 infixl 7 _*_
 
--- *-test1 : 3 * 4 ≡ 12
--- *-test1 = refl
--- *-test2 : 3 * 1 ≡ 3
--- *-test2 = refl
--- *-test3 : 3 * 0 ≡ 0
--- *-test3 = refl
--- *-test4 : 0 * 10 ≡ 0
--- *-test4 = refl
+*-test1 : 3 * 4 ≡ 12
+*-test1 = refl
+*-test2 : 3 * 1 ≡ 3
+*-test2 = refl
+*-test3 : 3 * 0 ≡ 0
+*-test3 = refl
+*-test4 : 0 * 10 ≡ 0
+*-test4 = refl
 
 _^_ : ℕ → ℕ → ℕ
-_^_ = {!!}
+a ^ 0 = 1
+a ^ suc b = a * a ^ b
 infixl 8 _^_
 
--- ^-test1 : 3 ^ 4 ≡ 81
--- ^-test1 = refl
--- ^-test2 : 3 ^ 0 ≡ 1
--- ^-test2 = refl
--- ^-test3 : 0 ^ 3 ≡ 0
--- ^-test3 = refl
--- ^-test4 : 1 ^ 3 ≡ 1
--- ^-test4 = refl
--- ^-test5 : 0 ^ 0 ≡ 1
--- ^-test5 = refl
+^-test1 : 3 ^ 4 ≡ 81
+^-test1 = refl
+^-test2 : 3 ^ 0 ≡ 1
+^-test2 = refl
+^-test3 : 0 ^ 3 ≡ 0
+^-test3 = refl
+^-test4 : 1 ^ 3 ≡ 1
+^-test4 = refl
+^-test5 : 0 ^ 0 ≡ 1
+^-test5 = refl
 
 _! : ℕ → ℕ
-_! = {!!}
+zero !  = 1
+suc n ! = suc n * n !
 
--- !-test1 : 3 ! ≡ 6
--- !-test1 = refl
--- !-test2 : 1 ! ≡ 1
--- !-test2 = refl
--- !-test3 : 6 ! ≡ 720
--- !-test3 = refl
+!-test1 : 3 ! ≡ 6
+!-test1 = refl
+!-test2 : 1 ! ≡ 1
+!-test2 = refl
+!-test3 : 6 ! ≡ 720
+!-test3 = refl
 
--- Negation of natural numbers
+-- Subtraction of natural numbers
 --  /!\  n - m = 0  when m > 0
 
 _-_ : ℕ → ℕ → ℕ
-_-_ = {!!}
+zero - zero = zero
+zero - suc m = zero
+suc n - zero = suc n
+suc n - suc m = n - m
 infixl 6 _-_
 
--- -test1 : 3 - 2 ≡ 1
--- -test1 = refl
--- -test2 : 3 - 3 ≡ 0
--- -test2 = refl
--- -test3 : 3 - 4 ≡ 0
--- -test3 = refl
+-test1 : 3 - 2 ≡ 1
+-test1 = refl
+-test2 : 3 - 3 ≡ 0
+-test2 = refl
+-test3 : 3 - 4 ≡ 0
+-test3 = refl
 
 -- Comparison functions
 _≥_ : ℕ → ℕ → Bool
-_≥_ = {!!}
+zero ≥ zero = true
+zero ≥ suc m = false
+suc n ≥ zero = true
+suc n ≥ suc m = n ≥ m
 
--- ≥test1 : 3 ≥ 2 ≡ true
--- ≥test1 = refl
--- ≥test2 : 3 ≥ 3 ≡ true
--- ≥test2 = refl
--- ≥test3 : 3 ≥ 4 ≡ false
--- ≥test3 = refl
+≥test1 : 3 ≥ 2 ≡ true
+≥test1 = refl
+≥test2 : 3 ≥ 3 ≡ true
+≥test2 = refl
+≥test3 : 3 ≥ 4 ≡ false
+≥test3 = refl
 
 _>_ : ℕ → ℕ → Bool
-_>_ = {!!}
+n > m = n ≥ suc m
 
--- >test1 : 3 > 2 ≡ true
--- >test1 = refl
--- >test2 : 3 > 3 ≡ false
--- >test2 = refl
--- >test3 : 3 > 4 ≡ false
--- >test3 = refl
+>test1 : 3 > 2 ≡ true
+>test1 = refl
+>test2 : 3 > 3 ≡ false
+>test2 = refl
+>test3 : 3 > 4 ≡ false
+>test3 = refl
 
 _<_ : ℕ → ℕ → Bool
-_<_ = {!!}
+n < m = m > n
 
--- <test1 : 3 < 2 ≡ false
--- <test1 = refl
--- <test2 : 3 < 3 ≡ false
--- <test2 = refl
--- <test3 : 3 < 4 ≡ true
--- <test3 = refl
+<test1 : 3 < 2 ≡ false
+<test1 = refl
+<test2 : 3 < 3 ≡ false
+<test2 = refl
+<test3 : 3 < 4 ≡ true
+<test3 = refl
 
 min : ℕ → ℕ → ℕ
-min = {!!}
+min zero zero = zero
+min zero (suc m) = zero
+min (suc n) zero = zero
+min (suc n) (suc m) = suc (min n m)
 
--- min-test1 : min 3 2 ≡ 2
--- min-test1 = refl
--- min-test2 : min 2 3 ≡ 2
--- min-test2 = refl
--- min-test3 : min 3 3 ≡ 3
--- min-test3 = refl
+min-test1 : min 3 2 ≡ 2
+min-test1 = refl
+min-test2 : min 2 3 ≡ 2
+min-test2 = refl
+min-test3 : min 3 3 ≡ 3
+min-test3 = refl
 
 -- We can use the TERMINATING pragma to disable the termination checker.
 gcd : ℕ → ℕ → ℕ
 {-# TERMINATING #-}
-gcd n m = {!!}
+gcd 0 m = m
+gcd (suc n) 0 = suc n
+gcd (suc n) (suc m) = if n ≥ m then gcd (n - m) (suc m) else gcd (suc n) (m - n)
 
--- gcd-test1 : gcd 6 9 ≡ 3
--- gcd-test1 = refl
--- gcd-test2 : gcd 100 150 ≡ 50
--- gcd-test2 = refl
--- gcd-test3 : gcd 17 19 ≡ 1
--- gcd-test3 = refl
--- gcd-test4 : gcd 12 24 ≡ 12
--- gcd-test4 = refl
--- gcd-test5 : gcd 19 17 ≡ 1
--- gcd-test5 = refl
+gcd-test1 : gcd 6 9 ≡ 3
+gcd-test1 = refl
+gcd-test2 : gcd 100 150 ≡ 50
+gcd-test2 = refl
+gcd-test3 : gcd 17 19 ≡ 1
+gcd-test3 = refl
+gcd-test4 : gcd 12 24 ≡ 12
+gcd-test4 = refl
+gcd-test5 : gcd 19 17 ≡ 1
+gcd-test5 = refl
 
 -- Use the same definition as for `gcd`, but with recursion on the first parameter.
 --   gcd-helper fuel n m  should be equal to  gcd n m  when fuel is large enough.
 gcd-helper : ℕ → ℕ → ℕ → ℕ
 gcd-helper zero       n m = 42
-gcd-helper (suc fuel) n m = {!!}
+gcd-helper (suc fuel) 0 m = m
+gcd-helper (suc fuel) (suc n) 0 = suc n
+gcd-helper (suc fuel) (suc n) (suc m) = if n ≥ m then gcd-helper fuel (n - m) (suc m) else gcd-helper fuel (suc n) (m - n)
 
 gcd' : ℕ → ℕ → ℕ
 gcd' n m = gcd-helper (m + n + 1) n m
 
--- gcd'-test1 : gcd' 6 9 ≡ 3
--- gcd'-test1 = refl
--- gcd'-test2 : gcd' 100 150 ≡ 50
--- gcd'-test2 = refl
--- gcd'-test3 : gcd' 17 19 ≡ 1
--- gcd'-test3 = refl
--- gcd'-test4 : gcd' 12 24 ≡ 12
--- gcd'-test4 = refl
--- gcd'-test5 : gcd' 19 17 ≡ 1
--- gcd'-test5 = refl
+gcd'-test1 : gcd' 6 9 ≡ 3
+gcd'-test1 = refl
+gcd'-test2 : gcd' 100 150 ≡ 50
+gcd'-test2 = refl
+gcd'-test3 : gcd' 17 19 ≡ 1
+gcd'-test3 = refl
+gcd'-test4 : gcd' 12 24 ≡ 12
+gcd'-test4 = refl
+gcd'-test5 : gcd' 19 17 ≡ 1
+gcd'-test5 = refl
 
 not : Bool → Bool
 not true = false
 not false = true
 
 even? : ℕ → Bool
-even? = {!!}
+even? zero = true
+even? (suc n) = not (even? n)
 
--- even?-test1 : even? 3 ≡ false
--- even?-test1 = refl
--- even?-test2 : even? 200 ≡ true
--- even?-test2 = refl
+even?-test1 : even? 3 ≡ false
+even?-test1 = refl
+even?-test2 : even? 200 ≡ true
+even?-test2 = refl
 
 fib : ℕ → ℕ
-fib = {!!}
+fib zero = 1
+fib (suc zero) = 1
+fib (suc (suc n)) = fib (suc n) + fib n
 
--- fib-test1 : fib 6 ≡ 13
--- fib-test1 = refl
--- fib-test2 : fib 3 ≡ 3
--- fib-test2 = refl
+fib-test1 : fib 6 ≡ 13
+fib-test1 = refl
+fib-test2 : fib 3 ≡ 3
+fib-test2 = refl
 
 -- divrem2 a should be a pair (q , r) where q and r are the quotient and remainder of the division of a by 2.
 --  The remainder r is encoded as a boolean: 0 corresponds to false and 1 corresponds to true.
 divrem2 : ℕ → ℕ × Bool
-divrem2 = {!!}
+divrem2 zero = 0 , false
+divrem2 (suc n) = let q , r = divrem2 n in (if r then suc q else q) , not r
 
--- divrem2-test1 : divrem2 5  ≡ 2 , true
--- divrem2-test1 = refl
--- divrem2-test2 : divrem2 10 ≡ 5 , false
--- divrem2-test2 = refl
+divrem2-test1 : divrem2 5 ≡ (2 , true)
+divrem2-test1 = refl
+divrem2-test2 : divrem2 10 ≡ (5 , false)
+divrem2-test2 = refl
 
 -- Try to define rem and div without {-# TERMINATING #-} ! You may need some helper functions.
 -- rem a b = remainder of the division of a by (suc b).
 --  /!\ Since division by zero is not possible, the second argument is shifted by 1 (see the examples).
 
 rem : ℕ → ℕ → ℕ
-rem a b = {!!}
+rem zero b = zero
+rem (suc a) b = let r = rem a b
+                in if r ≥ b then zero else suc r
 
--- rem-test1 : rem 5 1 ≡ 1
--- rem-test1 = refl
--- rem-test2 : rem 11 2 ≡ 2
--- rem-test2 = refl
+rem-test1 : rem 5 1 ≡ 1
+rem-test1 = refl
+rem-test2 : rem 11 2 ≡ 2
+rem-test2 = refl
 
 -- div a b = quotient of the division of a by (suc b)
 
-div : ℕ → ℕ → ℕ
-div a b = {!!}
+divrem : ℕ → ℕ → ℕ × ℕ
+divrem zero b = zero , zero
+divrem (suc a) b = let q , r = divrem a b
+                   in if r ≥ b then (suc q , zero) else (q , suc r)
 
--- div-test1 : div 5 1 ≡ 2
--- div-test1 = refl
--- div-test2 : div 11 2 ≡ 3
--- div-test2 = refl
+div : ℕ → ℕ → ℕ
+div a b = divrem a b .fst
+
+div-test1 : div 5 1 ≡ 2
+div-test1 = refl
+div-test2 : div 11 2 ≡ 3
+div-test2 = refl
 
 -- Iterator (iteNat) and recursor (recNat):
 
@@ -238,34 +292,67 @@ iteNat : {A : Type} → A → (A → A) → ℕ → A
 iteNat z s zero = z
 iteNat z s (suc n) = s (iteNat z s n)
 
+-- n = suc (suc (suc zero))
+-- iteNat z s n    =    s (s (s z))
+
 recNat : {A : Type} → A → (ℕ → A → A) → ℕ → A
 recNat z s zero = z
 recNat z s (suc n) = s n (recNat z s n)
 
--- Redefine iteNat using recNat:
-iteNat' : {A : Type} → A → (A → A) → ℕ → A
-iteNat' = {!!}
+-- n = suc (suc (suc zero))
+-- recNat z s n = s (suc (suc zero)) (s (suc zero) (s zero z))
 
--- iteNat'-test1 : {A : Type}{z : A}{s : A → A} → iteNat' z s zero ≡ z
--- iteNat'-test1 = refl
--- iteNat'-test2 : {A : Type}{z : A}{s : A → A}{n : ℕ} → iteNat' z s (suc n) ≡ s (iteNat' z s n)
--- iteNat'-test2 = refl
+-- double : ℕ → ℕ
+-- double zero    = zero
+-- double (suc n) = suc (suc (double n))
 
--- Redefine recNat using iteNat:
-recNat' : {A : Type} → A → (ℕ → A → A) → ℕ → A
-recNat' = {!!}
+double' : ℕ → ℕ
+double' n = iteNat
+            zero
+            (λ doublen → suc (suc doublen))
+            n
 
--- recNat'-test1 : {A : Type}{z : A}{s : ℕ → A → A} → recNat' z s zero ≡ z
--- recNat'-test1 = refl
--- recNat'-test2 : {A : Type}{z : A}{s : ℕ → A → A} → recNat' z s 3 ≡ s 2 (s 1 (s 0 z))
--- recNat'-test2 = refl
+-- _+_ : ℕ → ℕ → ℕ
+-- zero  + b = b
+-- suc a + b = suc (a + b)
+-- infixl 6 _+_
+
 
 -- Redefine _+_ and fib using recNat or iteNat:
 _+'_ : ℕ → ℕ → ℕ
-_+'_ = {!!}
+-- a +' b = iteNat b (λ a+b → suc (a+b)) a
+a +' b = iteNat b (λ x → suc x) a
 
 fib' : ℕ → ℕ
-fib' = {!!}
+fib' n = let result = iteNat {ℕ × ℕ}
+                      (1 , 1)
+                   -- (λ (fibn , fibn+1) → fibn+1 , fibn + fibn+1)
+                      (λ (x , y) → y , x + y)
+                      n in
+             -- (fib n , fib (n + 1))
+         result .fst
+
+
+-- Redefine iteNat using recNat:
+iteNat' : {A : Type} → A → (A → A) → ℕ → A
+iteNat' z s n = recNat z (λ _ → s) n
+
+iteNat'-test1 : {A : Type}{z : A}{s : A → A} → iteNat' z s zero ≡ z
+iteNat'-test1 = refl
+iteNat'-test2 : {A : Type}{z : A}{s : A → A}{n : ℕ} → iteNat' z s (suc n) ≡ s (iteNat' z s n)
+iteNat'-test2 = refl
+
+-- Redefine recNat using iteNat:
+recNat' : {A : Type} → A → (ℕ → A → A) → ℕ → A
+recNat' {A} z s n
+  = let result = iteNat {A × ℕ} (z , zero) (λ (x , n) → s n x , suc n) n
+    in result .fst
+
+recNat'-test1 : {A : Type}{z : A}{s : ℕ → A → A} → recNat' z s zero ≡ z
+recNat'-test1 = refl
+recNat'-test2 : {A : Type}{z : A}{s : ℕ → A → A} → recNat' z s 3 ≡ s 2 (s 1 (s 0 z))
+recNat'-test2 = refl
+
 
 
 ---------------------------------------------------------
@@ -343,7 +430,6 @@ height = {!!}
 
 -- height-test : height e ≡ 2
 -- height-test = refl
-
 
 -- http://www.cs.nott.ac.uk/~psztxa/mgs.2021/datatypes.pdf -ben a 3. feladat (74. oldal):
 

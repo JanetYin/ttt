@@ -1,5 +1,5 @@
-module t5.gy06 where
-open import lib hiding (_+_; _*_; _-_; _<_)
+module t4.gy08 where
+open import lib
 
 -- List of unicode symbols:
 --    →       \to
@@ -16,173 +16,38 @@ open import lib hiding (_+_; _*_; _-_; _<_)
 --    ₐ       \_a
 --    ¹       \^1
 
-double : ℕ → ℕ
-double zero = zero
-double (suc x) = suc (suc (double x))
-
-_+_ : ℕ → ℕ → ℕ
-zero  + m = m
-suc n + m = suc (n + m)
-
-fib : ℕ → ℕ
-fib zero = 1
-fib (suc zero) = 1
-fib (suc (suc n)) = fib n + fib (suc n)
-
--- Iterator (iteNat) and recursor (recNat):
-
-iteNat : {A : Type} → A → (A → A) → ℕ → A
-iteNat z s zero    = z
-iteNat z s (suc n) = s (iteNat z s n)
-
--- if  n = suc (suc (suc zero))
---   iteNat z s n    =    s (s (s z))
-
-recNat : {A : Type} → A → (ℕ → A → A) → ℕ → A
-recNat z s zero    = z
-recNat z s (suc n) = s n (recNat z s n)
-
--- n = suc (suc (suc zero))
--- recNat z s n = s (suc (suc zero)) (s (suc zero) (s zero z))
-
--- Redefine double, _+_ and fib using recNat or iteNat:
-
--- double : ℕ → ℕ
--- double zero    = zero
--- double (suc x) = suc (suc (double x))
-
-double' : ℕ → ℕ
-double' n = iteNat
-            zero
-            (λ doublex → suc (suc doublex))
-            n
-
-double'-test1 : double' 4 ≡ double 4
-double'-test1 = refl
-double'-test2 : double' 11 ≡ double 11
-double'-test2 = refl
-
--- half : ℕ → ℕ
--- half zero          = 0
--- half (suc zero)    = 0
--- half (suc (suc n)) = suc (half n)
-
-half'' : ℕ → ℕ × ℕ
-half'' zero    = 0 , 0
-half'' (suc n) = let hn , hsn = half'' n
-                 in hsn , suc hn
-
--- half'' n ≡ half n , half (suc n)
-
-half = λ n → half'' n .fst
-
-half' : ℕ → ℕ
-half' n =
-  let result
-       = iteNat {ℕ × ℕ}
-         (0 , 0)
-         -- (λ (halfn , halfsucn) → halfsucn , suc halfn)
-         (λ { (x , y) → y , suc x })
-         n
-  -- result ≡ (half n, half (suc n))
-  in result .fst
-
--- _+_ : ℕ → ℕ → ℕ
--- zero  + b = b
--- suc a + b = suc (a + b)
-
-_+'_ : ℕ → ℕ → ℕ
-a +' b = iteNat
-         b                              -- zero  + b = b
-         -- (λ { aplusb → suc aplusb }) -- suc a + b = suc (a + b)
-         suc
-         a
-
-+'-test1 : 3 +' 4 ≡ 3 + 4
-+'-test1 = refl
-+'-test2 : 12 +' 7 ≡ 12 + 7
-+'-test2 = refl
-
--- fib : ℕ → ℕ
--- fib zero = 1
--- fib (suc zero) = 1
--- fib (suc (suc n)) = fib n + fib (suc n)
-
--- fib'' n ≡ (fib n , fib (suc n))
-fib'' : ℕ → ℕ × ℕ
-fib'' zero    = 1 , 1
-fib'' (suc n) = let fibn , fibsucn = fib'' n
-                in fibsucn , fibn + fibsucn -- fib n + fib (suc n)
-
-fib' : ℕ → ℕ
-fib' n =
-  iteNat -- {ℕ × ℕ}
-  (1 , 1)
-  (λ { (fibn , fibsucn) → fibsucn , fibn + fibsucn })
-  n
-  .fst
-
-fib'-test1 : fib' 3 ≡ fib 3
-fib'-test1 = refl
-fib'-test2 : fib' 8 ≡ fib 8
-fib'-test2 = refl
-
---
--- Accumulator passing definition  ->  iterator
---   iteNat { Acc → Result }
---
-
-plus-acc : ℕ → ℕ → ℕ
-plus-acc zero    acc = acc
-plus-acc (suc a) acc = plus-acc a (suc acc)
-
-plus-acc' : ℕ → ℕ → ℕ
-plus-acc' a acc
-  = iteNat {ℕ → ℕ}
-    (λ acc → acc)
-    (λ f acc → f (suc acc))
-    a acc
-
 ---------------------------------------------------------
 -- lists
 ---------------------------------------------------------
 
 data List (A : Type) : Type where
-  []  : List A
-  _∷_ : A → List A → List A   -- \::
+  [] : List A
+  _∷_ : A → List A → List A
 infixr 6 _∷_
 
 length : {A : Type} → List A → ℕ
-length []       = 0
-length (x ∷ xs) = suc (length xs)
+length = {!!}
 
-length-test1 : length (1 ∷ 2 ∷ 3 ∷ []) ≡ 3
-length-test1 = refl
-length-test2 : length (1 ∷ []) ≡ 1
-length-test2 = refl
+-- length-test1 : length (1 ∷ 2 ∷ 3 ∷ []) ≡ 3
+-- length-test1 = refl
+-- length-test2 : length (1 ∷ []) ≡ 1
+-- length-test2 = refl
 
 sumList : List ℕ → ℕ
-sumList [] = 0
-sumList (x ∷ xs) = x + sumList xs
+sumList = {!!}
 
 -- sumList-test : sumList (1 ∷ 2 ∷ 3 ∷ []) ≡ 6
 -- sumList-test = refl
 
--- _+_ : ℕ → ℕ → ℕ
--- zero  + m = m
--- suc n + m = suc (n + m)
-
 _++_ : {A : Type} → List A → List A → List A
-[]     ++ ys = ys
-x ∷ xs ++ ys = x ∷ (xs ++ ys)
+_++_ = {!!}
 infixr 5 _++_
 
 -- ++-test : 3 ∷ 2 ∷ [] ++ 1 ∷ 4 ∷ [] ≡ 3 ∷ 2 ∷ 1 ∷ 4 ∷ []
 -- ++-test = refl
 
 map : {A B : Type} → (A → B) → List A → List B
-map f [] = []
-map f (x ∷ xs) = f x ∷ map f xs
+map = {!!}
 
 -- map-test : map (_+ 2) (3 ∷ 9 ∷ []) ≡ (5 ∷ 11 ∷ [])
 -- map-test = refl
@@ -226,7 +91,6 @@ height = {!!}
 
 -- height-test : height e ≡ 2
 -- height-test = refl
-
 
 -- http://www.cs.nott.ac.uk/~psztxa/mgs.2021/datatypes.pdf -ben a 3. feladat (74. oldal):
 
