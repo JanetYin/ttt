@@ -50,6 +50,9 @@ iteList n c (a ∷ as) = c a (iteList n c as)
 -- trees
 ---------------------------------------------------------
 
+-- exercises related to negation ¬ :
+--   https://bitbucket.org/akaposi/ttt/src/master/2022aut/gy05-propositional-logic.agda
+
 -- a datatype of expressions
 
 data Expr : Set where
@@ -68,18 +71,28 @@ e = const 2 [*] (const 3 [+] const 4)
   3   4
 -}
 
-eval : Expr → ℕ
-eval = {!!}
-
--- eval-test : eval e ≡ 14
--- eval-test = refl
+-- maximum of two numbers
+max : ℕ → ℕ → ℕ
+max zero zero = zero
+max zero (suc m) = suc m
+max (suc n) zero = suc n
+max (suc n) (suc m) = suc (max n m)
 
 height : Expr → ℕ
-height = {!!}
+height (const x)   = 0
+height (el [+] er) = 1 + max (height el) (height er)
+height (el [*] er) = 1 + max (height el) (height er)
 
 -- height-test : height e ≡ 2
 -- height-test = refl
 
+eval : Expr → ℕ
+eval (const x)   = x
+eval (el [+] er) = eval el + eval er
+eval (el [*] er) = eval el * eval er
+
+-- eval-test : eval e ≡ 14
+-- eval-test = refl
 
 -- http://www.cs.nott.ac.uk/~psztxa/mgs.2021/datatypes.pdf -ben a 3. feladat (74. oldal):
 
@@ -100,7 +113,8 @@ t = node (node leaf 1 (node leaf 2 leaf)) 5 leaf
 
 
 tree2List : {A : Type} → Tree A → List A
-tree2List = {!!}
+tree2List leaf = []
+tree2List (node tl x tr) = tree2List tl ++ x ∷ tree2List tr
 
 -- tree2List-test : tree2List t ≡ 1 ∷ 2 ∷ 5 ∷ []
 -- tree2List-test = refl
@@ -115,7 +129,11 @@ suc n ≤? suc m = n ≤? m
 -- ez a fuggveny egy rendezett faba illeszt be egy uj erteket ugy,
 -- hogy a fa rendezett maradjon
 insert : ℕ → Tree ℕ → Tree ℕ
-insert = {!!}
+insert x leaf = node leaf x leaf
+insert x (node tl y tr)
+  = if x ≤? y
+    then node (insert x tl) y tr
+    else node tl y (insert x tr)
 
 t' : Tree ℕ
 t' = node (node (node leaf 0 leaf) 1 (node leaf 2 leaf)) 5 leaf
@@ -133,16 +151,17 @@ t' = node (node (node leaf 0 leaf) 1 (node leaf 2 leaf)) 5 leaf
 
 -- egy listat egy rendezett fara alakit.
 list2tree : List ℕ → Tree ℕ
-list2tree = λ _ → leaf
+list2tree [] = leaf
+list2tree (x ∷ xs) = insert x (list2tree xs)
 
 tree-sort : List ℕ → List ℕ
-tree-sort = {!!}
+tree-sort xs = tree2List (list2tree xs)
 
--- tree-sort-test1 : tree-sort (10 ∷ 2 ∷ 1 ∷ 5 ∷ []) ≡ 1 ∷ 2 ∷ 5 ∷ 10 ∷ []
--- tree-sort-test1 = refl
+tree-sort-test1 : tree-sort (10 ∷ 2 ∷ 1 ∷ 5 ∷ []) ≡ 1 ∷ 2 ∷ 5 ∷ 10 ∷ []
+tree-sort-test1 = refl
 
--- tree-sort-test2 : tree-sort (1 ∷ 2 ∷ 1 ∷ 5 ∷ []) ≡ 1 ∷ 1 ∷ 2 ∷ 5 ∷ []
--- tree-sort-test2 = refl
+tree-sort-test2 : tree-sort (1 ∷ 2 ∷ 1 ∷ 5 ∷ []) ≡ 1 ∷ 1 ∷ 2 ∷ 5 ∷ []
+tree-sort-test2 = refl
 
 -- nested types
 
@@ -158,32 +177,23 @@ tR = node (node (node [] ∷ []) ∷ node [] ∷ node (node [] ∷ node [] ∷ [
 
 countNodes     : RoseTree → ℕ
 countNodesList : List RoseTree → ℕ
-countNodes = {!!}
-countNodesList = {!!}
+countNodes (node x) = 1 + countNodesList x
+countNodesList [] = 0
+countNodesList (x ∷ xs) = countNodes x + countNodesList xs
 
 -- countNodes-test : countNodes tR ≡ 7
 -- countNodes-test = refl
 
--- maximum of two numbers
-max : ℕ → ℕ → ℕ
-max = {!!}
-
--- max-test1 : max 3 2 ≡ 3
--- max-test1 = refl
--- max-test2 : max 20 30 ≡ 30
--- max-test2 = refl
--- max-test3 : max 20 20 ≡ 20
--- max-test3 = refl
-
 heightRoseTree : RoseTree → ℕ
 heightRoseTreeList : List RoseTree → ℕ
-heightRoseTree = {!!}
-heightRoseTreeList = {!!}
+heightRoseTree (node x) = heightRoseTreeList x
+heightRoseTreeList [] = 0
+heightRoseTreeList (x ∷ xs) = max (1 + heightRoseTree x) (heightRoseTreeList xs)
 
--- heightRoseTree-test1 : heightRoseTree tR ≡ 2
--- heightRoseTree-test1 = refl
--- heightRoseTree-test2 : heightRoseTree (node (node (node (node [] ∷ []) ∷ []) ∷ [])) ≡ 3
--- heightRoseTree-test2 = refl
+heightRoseTree-test1 : heightRoseTree tR ≡ 2
+heightRoseTree-test1 = refl
+heightRoseTree-test2 : heightRoseTree (node (node (node (node [] ∷ []) ∷ []) ∷ [])) ≡ 3
+heightRoseTree-test2 = refl
 
 -- vegtelenul elagazodo fak (infinitely branching trees)
 
@@ -197,7 +207,8 @@ t2 = node (λ _ → node (λ _ → leaf))
 
 -- tI n should be a complete tree of height n (all branches should have height n-1, and so on)
 tI : ℕ → TreeInf
-tI = {!!}
+tI zero = leaf
+tI (suc n) = node (λ _ → tI n)
 
 -- tI-test1 : tI 3 ≡ node λ _ → node λ _ → node λ _ → leaf
 -- tI-test1 = refl
@@ -206,17 +217,17 @@ tI = {!!}
 
 -- a tree where the height of the n^th branch is n (all branches have finite length, but there is no upper bound)
 tI' : TreeInf
-tI' = {!!}
+tI' = node tI
 
 _!_ : TreeInf → ℕ → TreeInf
 leaf ! n = leaf
 node ts ! n = ts n
 
--- test-tI'1 : tI' ! 0 ≡ leaf
--- test-tI'1 = refl
--- test-tI'2 : tI' ! 1 ≡ node λ _ → leaf
--- test-tI'2 = refl
--- test-tI'3 : tI' ! 3 ≡ node λ _ → node λ _ → node λ _ → leaf
--- test-tI'3 = refl
--- test-tI'4 : tI' ! 5 ≡ node λ _ → node λ _ → node λ _ → node λ _ → node λ _ → leaf
--- test-tI'4 = refl
+test-tI'1 : tI' ! 0 ≡ leaf
+test-tI'1 = refl
+test-tI'2 : tI' ! 1 ≡ node λ _ → leaf
+test-tI'2 = refl
+test-tI'3 : tI' ! 3 ≡ node λ _ → node λ _ → node λ _ → leaf
+test-tI'3 = refl
+test-tI'4 : tI' ! 5 ≡ node λ _ → node λ _ → node λ _ → node λ _ → node λ _ → leaf
+test-tI'4 = refl
