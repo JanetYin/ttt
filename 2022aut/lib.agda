@@ -5,15 +5,13 @@ open import Agda.Primitive
 Type = Set
 open import Agda.Builtin.Equality
   public
+open import Agda.Builtin.Bool
+  public
 
 infixr 4 _,_
 infixr 2 _×_
 infixr 1 _⊎_
 infix 0 _↔_
-
--- Booleans
-data Bool : Set where
-  true false : Bool
 
 if_then_else_ : ∀{i}{A : Set i}(t : Bool)(u v : A) → A
 if true  then u else v = u
