@@ -1,3 +1,5 @@
+{-# OPTIONS --guardedness #-}
+
 open import lib hiding (_+_; _*_; _-_; _<_)
 
 ---------------------------------------------------------
@@ -444,7 +446,7 @@ t2 = node (λ _ → node (λ _ → leaf))
 
 -- tI n should be a complete tree of height n (all branches should have height n-1, and so on)
 tI : ℕ → TreeInf
-tI = ?
+tI = {!!}
 
 tI-test1 : tI 3 ≡ node λ _ → node λ _ → node λ _ → leaf
 tI-test1 = refl
@@ -453,7 +455,7 @@ tI-test2 = refl
 
 -- a tree where the height of the n^th branch is n (all branches have finite length, but there is no upper bound)
 tI' : TreeInf
-tI' = ?
+tI' = {!!}
 
 _!_ : TreeInf → ℕ → TreeInf
 leaf ! n = leaf
@@ -470,3 +472,89 @@ test-tI'4 = refl
 ---------------------------------------------------------
 -- coinductive types
 ---------------------------------------------------------
+
+record Stream (A : Type) : Type where
+  coinductive
+  field
+    head : A
+    tail : Stream A
+open Stream
+
+-- check that the type of head : Stream A → A
+--                        tail : Stream A → Stream A
+
+zeroes : Stream ℕ
+head zeroes = 0
+tail zeroes = zeroes
+
+-- by pattern match on n
+countDownFrom : ℕ → List ℕ
+countDownFrom n = {!!}
+
+-- from n is not by pattern match on n
+from : ℕ → Stream ℕ
+head (from n) = n
+tail (from n) = from (1 + n)
+
+-- pointwise addition
+zipWith : {A B C : Type} → (A → B → C) → Stream A → Stream B → Stream C
+zipWith = {!!}
+
+filterL : {A : Type} → (A → Bool) → List A → List A
+filterL = {!!}
+
+-- this cannot be defined:
+-- filterS : {A : Type} → (A → Bool) → Stream A → Stream A
+-- filterS P xs = ?
+
+-- one element from the first stream, then from the second stream, then from the first, and so on
+interleave : {A : Type} → Stream A → Stream A → Stream A
+interleave = {!!}
+
+-- get the n^th element of the stream
+get : {A : Type} → ℕ → Stream A → A
+get = {!!}
+
+-- byIndices [0,2,3,2,...] [1,2,3,4,5,...] = [1,3,4,2,...]
+byIndices : {A : Type} → Stream ℕ → Stream A → Stream A
+byIndices = {!!}
+
+-- iteℕ : (A : Type) → A → (A → A)  → ℕ → A
+--        \______________________/
+--         ℕ - algebra
+
+coiteStream : {A : Type} (B : Type) → (B → A) → (B → B) → B → Stream A
+--                       \____________________________/
+--                        Stream A - coalgebra
+head (coiteStream B h t b) = h b
+tail (coiteStream B h t b) = coiteStream B h t (t b)
+
+-- ex: redefine the above functions using coiteStream
+
+-- ex: look at conatural numbers in Thorsten's book and do the exercises about them
+
+-- simple calculator (internally a number, you can ask for the number, add to that number, multiply that number, make it zero (reset))
+record Machine : Type where
+  coinductive
+  field
+    getNumber : ℕ
+    add       : ℕ → Machine
+    mul       : ℕ → Machine
+    reset     : Machine
+open Machine
+
+calculatorFrom : ℕ → Machine
+getNumber (calculatorFrom n) = n
+add (calculatorFrom n) m = calculatorFrom (m + n)
+mul (calculatorFrom n) m = calculatorFrom (m * n)
+reset (calculatorFrom n) = calculatorFrom 0
+
+c0 c1 c2 c3 c4 c5 : Machine
+c0 = calculatorFrom 0
+c1 = add c0 3
+c2 = add c1 5
+c3 = mul c2 2
+c4 = reset c3
+c5 = add c4 2
+
+-- TODO, further exercises: network protocols, simple machines: chocolate machine (input: coin, getChocolate, getBackCoins, output: error, chocolate, money back), some Turing machines, animations, IO, repl, shell
