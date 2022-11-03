@@ -89,7 +89,7 @@ open Σ public
 filter : {A : Type}{n : ℕ}(f : A → Bool) → Vec A n → Σ ℕ (Vec A)
 filter = {!!}
 
-test-filter : filter (_< 3) (4 ∷ 3 ∷ 2 ∷ 5 ∷ []) ≡ 2 , 4 ∷ 5 ∷ []
+test-filter : filter (3 <_) (4 ∷ 3 ∷ 2 ∷ 5 ∷ []) ≡ 2 , 4 ∷ 5 ∷ []
 test-filter = refl
 
 Σ=⊎ : {A B : Type} → Σ Bool (if_then A else B) ↔ A ⊎ B
@@ -152,6 +152,10 @@ test-casef'' = refl
 -- use inj₁f,inj₂f in one direction and "casef inj₁ inj₂" in the other direction
 Fin+ : {m n : ℕ} → Fin (m + n) ↔ Fin m ⊎ Fin n
 Fin+ = {!!}
+
+-- this might be hard
+Fin* : {m n : ℕ} → Fin (m * n) ↔ Fin m × Fin n
+Fin* = {!!}
 
 -- n-1
 --  Σ  a i = a 0 + a 1 + ... + a (n-1)
