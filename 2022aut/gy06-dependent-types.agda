@@ -120,15 +120,13 @@ Fin1+3=Fin4 = {!!}
 -- relating Fin m ⊎ Fin n and Fin (m + n)
 
 inj₁f : {m n : ℕ} → Fin m → Fin (m + n)
-inj₁f zero = zero
-inj₁f (suc i) = suc (inj₁f i)
+inj₁f i = ?
 
 test-inj₁f : inj₁f {3}{4} (suc (suc zero)) ≡ suc (suc zero)
 test-inj₁f = refl
 
 inj₂f : {m n : ℕ} → Fin n → Fin (m + n)
-inj₂f {zero}  i = i
-inj₂f {suc m} i = suc (inj₂f {m} i)
+inj₂f {m}  i = ?
 
 test-inj₂f : inj₂f {3}{4} (suc (suc zero)) ≡ suc (suc (suc (suc (suc zero))))
 test-inj₂f = refl
@@ -138,9 +136,7 @@ f (inl i) = inj₁f i
 f (inr i) = inj₂f i
 
 casef : {m n : ℕ}{C : Type} → (Fin m → C) → (Fin n → C) → Fin (m + n) → C
-casef {zero}  f g i       = g i
-casef {suc m} f g zero    = f zero
-casef {suc m} f g (suc i) = casef {m} (λ i → f (suc i)) g i
+casef {m}  f g i       = ?
 
 test-casef : casef {3}{3} (λ i → i) (λ i → i) (suc (suc zero)) ≡ suc (suc zero)
 test-casef = refl
