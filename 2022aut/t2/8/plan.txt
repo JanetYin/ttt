@@ -1,0 +1,8 @@
+0:00-0:10	assignment
+0:10-0:15	questions
+0:15-0:35	quickly through gy07.agda:
+			RoseTree and TreeInf
+			and maybe iterators and recursors, if they want to
+0:35-1:05	coinductive (also in gy07.agda)
+1:05-1:28	dependent types
+1:28-1:30	topic of next assignment

@@ -1,0 +1,5 @@
+0:00-0:10	assignment, questions
+0:10-0:15	questions
+0:15-1:15	gy06.agda
+1:15-1:28	gy07.agda (actually, are these clear from the lecture? if yes, we can skip some parts)
+1:28-1:30	questions, topic of assignment
