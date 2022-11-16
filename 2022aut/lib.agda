@@ -7,6 +7,8 @@ open import Agda.Builtin.Equality
   public
 open import Agda.Builtin.Bool
   public
+open import Agda.Builtin.Sigma
+  public
 
 infixr 4 _,_
 infixr 2 _×_
