@@ -1,0 +1,9 @@
+0:00-0:15	assignment
+0:15-0:20	solution
+0:20-0:25	about extra assignments
+0:25-0:30	data sytax: https://agda.readthedocs.io/en/v2.5.2/language/data-types.html;
+		fromℕ: actually inj1f is the generalised form
+		the official is fromℕ< (https://agda.github.io/agda-stdlib/Data.Fin.Base.html)
+0:30-1:00	the remainder from gy08.agda (maybe skipping the hard parts)
+1:00-1:28	gy09.agda (a large part can be skipped!)
+1:28-1:30	topic of assignments
