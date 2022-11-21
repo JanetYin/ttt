@@ -54,7 +54,7 @@ data Fin : ℕ → Type where
 -- (Ignore the universe levels i, j)
 
 infixr 5 _,_
-record Σ {i j} (A : Set i)(B : A → Set j) : Set (i ⊔ j) where
+record Σ {i j} (A : Set i) (B : A → Set j) : Set (i ⊔ j) where
   constructor _,_
   field
     fst : A
@@ -69,44 +69,92 @@ infix 0 _↔_
 _↔_ : ∀{i j} → Set i → Set j → Set (i ⊔ j)
 A ↔ B = (A → B) × (B → A)
 
+
+fst' : ∀ {A : Type} {B : A → Type} → Σ A B → A
+fst' p = p .fst
+
+snd' : ∀ {A : Type} {B : A → Type} → (p : Σ A B) → B (fst' p)
+snd' p = p .snd
+
+pair : ∀ {A : Type} {B : A → Type} (a : A) (b : B a) → Σ A B
+pair a b = (a , b)
+
+ΣFin : Type
+ΣFin = Σ ℕ λ n → Fin n
+-- type whose elements are pairs (n , i)
+--  n : ℕ
+--  i : Fin n  /  i < n
+
+p0 : ΣFin
+p0 = 4 , suc (suc zero) -- 4 , 2
+
+-- p1 : ΣFin
+-- p1 = 0 , zero
+
 -- Filter can be defined as a function that returns the filtered vector along with its length.
+
+filter-list : {A : Type} (f : A → Bool) → List A → List A
+filter-list f []
+  = []
+filter-list f (x ∷ xs)
+  = if f x then x ∷ filter-list f xs else filter-list f xs
+
+cons-ΣVec : {A : Type} → A → Σ ℕ (λ n → Vec A n) → Σ ℕ (λ n → Vec A n)
+cons-ΣVec x (n , xs) = suc n , x ∷ xs
+--                     ^ C-c C-s to fill the hole with the unique solution
+
 filter : {A : Type} {n : ℕ} (f : A → Bool) → Vec A n → Σ ℕ (λ n → Vec A n)
-filter = {!!}
+filter f []
+  = 0 , []
+filter f (x ∷ xs)
+  = if f x
+    then cons-ΣVec x (filter f xs)
+    else filter f xs
 
 test-filter : filter (3 <_) (4 ∷ 3 ∷ 2 ∷ 5 ∷ []) ≡ 2 , 4 ∷ 5 ∷ []
 test-filter = refl
 
 -- The sigma type Σ ℕ (λ n → Vec A n) is isomorphic to List A
 vec→list : {A : Type} → Σ ℕ (λ n → Vec A n) → List A
-vec→list = {!!}
+vec→list (0 , []) = []
+vec→list (suc n , x ∷ xs) = x ∷ vec→list (n , xs)
 
 list→vec : {A : Type} → List A → Σ ℕ (λ n → Vec A n)
-list→vec = {!!}
+list→vec [] = 0 , []
+list→vec (x ∷ xs) = cons-ΣVec x (list→vec xs)
 
 -- Σ- and Π- types satisfy some of the same isomorphisms as × and →
 Σ-assoc : {A : Type} {B : A → Type} {C : (a : A) (b : B a) → Type}
-        → (Σ A λ a → Σ (B a) λ b → C a b) ↔ (Σ (Σ A λ a → B a) λ (a , b) → C a b)
-Σ-assoc = {!!}
+        → (Σ A λ a → Σ (B a) λ b → C a b) ↔ (Σ (Σ A λ a → B a) λ { (a , b) → C a b })
+Σ-assoc .fst (a , (b , c)) = (a , b) , c
+Σ-assoc .snd ((a , b) , c) = a , (b , c)
 
 curry : {A : Type} {B : A → Type} {C : (a : A) (b : B a) → Type}
       → ((p : Σ A B) → C (p .fst) (p .snd)) ↔ ((a : A) → (b : B a) → C a b)
-curry = {!!}
+curry .fst f a b = f (a , b)
+curry .snd f (a , b) = f a b
 
 -- Sigma-types indexed by Bool are binary sum types
 -- Non-dependent Sigma-types are binary product types
 Σ=⊎ : {A B : Type} → Σ Bool (if_then A else B) ↔ A ⊎ B
-Σ=⊎ = {!!}
+Σ=⊎ .fst (true , x) = inl x
+Σ=⊎ .fst (false , x) = inr x
+Σ=⊎ .snd (inl x) = true , x
+Σ=⊎ .snd (inr x) = false , x
 
 Σ=× : {A B : Type} → Σ A (λ _ → B) ↔ A × B
-Σ=× = {!!}
+Σ=× .fst x = x
+Σ=× .snd x = x
 
 -- Pi-types indexed by Bool are binary product types
 -- Non-dependent Pi-types are function types
 →=× : {A B : Type} → ((b : Bool) → if b then A else B) ↔ A × B
-→=× = {!!}
+→=× .fst f = f true , f false
+→=× .snd (a , b) true = a
+→=× .snd (a , b) false = b
 
 Π=→ : {A B : Type} → ((a : A) → (λ _ → B) a) ≡ (A → B)
-Π=→ = {!!}
+Π=→ = refl
 
 --------------------------------------------------------------------------------
 --- Equality types
@@ -126,36 +174,55 @@ EqBool false false  = ⊤
 
 -- Reflexivity
 refl-Bool : {b : Bool} → EqBool b b
-refl-Bool {b} = {!!}
+refl-Bool {false} = tt
+refl-Bool {true} = tt
 
 -- Symmetry
 sym-Bool : {x y : Bool} → EqBool x y → EqBool y x
-sym-Bool {x} {y} = {!!}
-
--- Transitivity
-trans-Bool : {x y z : Bool} → EqBool x y → EqBool y z → EqBool x z
-trans-Bool {x} {y} {z} = {!!}
+sym-Bool {false} {false} = λ _ → tt
+sym-Bool {false} {true} = λ z → z
+sym-Bool {true} {false} = λ z → z
+sym-Bool {true} {true} = λ _ → tt
 
 -- Transport: if x = y, then P x is equivalent to P y for any P : Bool → Type
 -- Elements of P x can be "transported" to P y
 transport-Bool : (P : Bool → Type) → (x y : Bool) → EqBool x y → P x → P y
-transport-Bool = {!!}
+transport-Bool P false false _ d = d
+transport-Bool P true true _ d = d
+
+-- Transitivity
+trans-Bool : {x y z : Bool} → EqBool x y → EqBool y z → EqBool x z
+trans-Bool {x} {y} {z} p q = transport-Bool (λ z → EqBool x z) _ _ q p
+
 
 not = λ b → if b then false else true
 
 not-not : (b : Bool) → EqBool (not (not b)) b
-not-not = {!!}
+not-not false = tt
+not-not true = tt
 
 not-injective : (x y : Bool) → EqBool (not x) (not y) → EqBool x y
-not-injective = {!!}
+not-injective false false = λ _ → tt
+not-injective false true = λ z → z
+not-injective true false = λ z → z
+not-injective true true = λ _ → tt
 
 -- Boolean equality is decidable
 dec-EqBool : (x y : Bool) → EqBool x y ⊎ (¬ EqBool x y)
-dec-EqBool = {!!}
+dec-EqBool false false = inl tt
+dec-EqBool false true = inr (λ x → x)
+dec-EqBool true false = inr (λ x → x)
+dec-EqBool true true = inl tt
 
+-- Every function Bool → Bool is a congruence
+cong-Bool : ∀ {x y} → (f : Bool → Bool) → EqBool x y → EqBool (f x) (f y)
+cong-Bool {x} f p = transport-Bool (λ y → EqBool (f x) (f y)) x _ p refl-Bool
+
+
+-- harder bonus exercise:
 -- proof: f is either not, id, const true or const false.
-f3 : (f : Bool → Bool) (b : Bool) → EqBool (f (f (f b))) (f b)
-f3 f b = {!!}
-  where
-    f3-helper : (x y : Bool) → EqBool x (f true) → EqBool y (f false) → ∀ b → EqBool (f (f (f b))) (f b)
-    f3-helper x y pt pf b = {!!}
+-- hint: use the pigeonhole principle for Bool:
+--  pigeonhole : ∀ {x y z : Bool} → EqBool x y ⊎ EqBool y z ⊎ EqBool x z
+--
+-- f3 : (f : Bool → Bool) (b : Bool) → EqBool (f (f (f b))) (f b)
+-- f3 f b = {!!}
