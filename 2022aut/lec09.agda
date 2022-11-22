@@ -1,12 +1,12 @@
 open import lib
-
+{-
 record Σ (A : Type)(B : A → Type) : Type where
   constructor _,_
   field
     fst : A
     snd : B fst
 open Σ public
-
+-}
 -- klasszikus logika
 {-
 prop = Bool  -- proposition, logikai allitas
@@ -107,13 +107,3 @@ lemnna : {A : Type} → ((A → ⊥) → ⊥) ↔ (A ∨ (¬ A))
 lemnna = {!!}
 
 --    {A : Type} → ((A → ⊥) → ⊥) → A
-
-
--- predicates, examples: Even, _≤_, _≡_mod_, _≟_
--- examples: (∀ x → P x ∧ Q x) ↔ (∀ x → P x) ∧ (∀ x → Q x), same with ∨, ∀ with ∃, both
-
--- inductive Id type, sym, trans, cong, uncong(cannot pattern match), subst
--- propositional vs definitional equality
-
-
--- kov. eloadas 1 perccel rovidebb
