@@ -23,6 +23,11 @@ open import Agda.Primitive
 --- Equality types
 --------------------------------------------------------------------------------
 
+-- (2 + 2) = 4
+-- (suc n + m) = (suc (n + m))
+
+-- Agda doesn't know: (suc n + m) = (n + suc m)
+
 -- data _≡_ {A : Type} (x : A) : A → Type where
 --   refl : x ≡ x
 
@@ -62,22 +67,35 @@ ex1 : {A : Type} {a b c d : A}
     → c ≡ b
     → c ≡ d
     → a ≡ d
-ex1 = {!!}
+ex1 {A} {a} {b} {c} {d} eab ecb ecd
+  = trans {y = b} eab
+    (trans {y = c} (sym ecb)
+    ecd)
 
 ex2 : {A : Type} (f : A → A) {x y : A}
     → x ≡ y
     → f y ≡ f x
-ex2 = {!!}
+-- ex2 f p = cong f (sym p)
+ex2 f p = sym (cong f p)
+
+
+
+-- cong f p : f x ≡ f y
+-- sym (cong f p) : f y ≡ f x
 
 ex3 : {A : Type} (f : A → A) (g : A → A)
-    → (∀ x → f (g x) ≡ g (f x))
-    → (∀ a → f (f (g a)) ≡ g (f (f a)))
-ex3 = {!!}
+    → ((x : A) → f (g x) ≡ g (f x))
+    → ((a : A) → f (f (g a)) ≡ g (f (f a)))
+ex3 f g hp a
+  = trans {y = f (g (f a))}
+    (cong f (hp a))
+    (hp (f a))
 
 --------------------------------------------------------------------------------
 
 -- True is not equal to false:
 ¬true≡false : ¬ (true ≡ false)
+-- ¬true≡false : (true ≡ false) → ⊥
 ¬true≡false p = subst (λ b → f b) p tt
   where
     f : Bool → Type
@@ -87,18 +105,24 @@ ex3 = {!!}
 
 -- Boolean equality is decidable
 dec-≡-Bool : ∀ {x y : Bool} → (x ≡ y) ⊎ (¬ (x ≡ y))
-dec-≡-Bool = {!!}
+dec-≡-Bool {false} {false} = inl refl
+dec-≡-Bool {true}  {false} = inr ¬true≡false -- ¬true≡false
+dec-≡-Bool {false} {true}  = inr λ p → ¬true≡false (sym p) -- ¬true≡false + sym
+dec-≡-Bool {true}  {true}  = inl refl
 
 -- Definition of _==_ (imported from lib.agda)
---   _==_ : Bool → Bool → Bool
---   false == false = true
---   false == true  = false
---   true  == false = false
---   true  == true  = true
+_==b_ : Bool → Bool → Bool
+false ==b false = true
+false ==b true  = false
+true  ==b false = false
+true  ==b true  = true
 
--- Booleans x,y are equal iff (x == y) is true.
-==-correct : ∀ {x y} → (x ≡ y) ↔ ((x == y) ≡ true)
-==-correct = {!!}
+-- Booleans x,y are equal iff (x ==b y) is true.
+==b-correct : ∀ {x y : Bool} → (x ≡ y) ↔ ((x ==b y) ≡ true)
+==b-correct {false} {false} = (λ x → refl) , (λ x → refl)
+==b-correct {false} {true} = (λ x → x) , (λ x → x)
+==b-correct {true} {false} = sym , sym
+==b-correct {true} {true} = (λ x → refl) , (λ x → refl)
 
 -- If x,y : Bool and ¬ (¬ (x ≡ y)), then x ≡ y
 ¬¬-≡-Bool : ∀ {x y : Bool} → ¬ (¬ (x ≡ y)) → (x ≡ y)

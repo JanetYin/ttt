@@ -23,7 +23,9 @@ open import Agda.Primitive
 --- Equality types
 --------------------------------------------------------------------------------
 
--- data _≡_ {A : Type} (x : A) : A → Type where
+-- ≡
+
+-- data _≡_ {A : Type} (x : A) : (y : A) → Type where
 --   refl : x ≡ x
 
 -- Equality is reflexive
@@ -35,7 +37,10 @@ sym : {A : Type} {x y : A} → x ≡ y → y ≡ x
 sym refl = refl
 
 -- Equality is transitive
-trans : {A : Type} {x y z : A} → x ≡ y → y ≡ z → x ≡ z
+trans : {A : Type} {x y z : A}
+      → x ≡ y
+      → y ≡ z
+      → x ≡ z
 trans refl p = p
 
 -- Equality is "substitutive"
@@ -62,17 +67,28 @@ ex1 : {A : Type} {a b c d : A}
     → c ≡ b
     → c ≡ d
     → a ≡ d
-ex1 = {!!}
+ex1 {A} {a} {b} {c} {d} eab ecb ecd
+  = trans {y = b}
+    eab
+    (trans {y = c}
+    (sym ecb)
+    ecd)
 
 ex2 : {A : Type} (f : A → A) {x y : A}
     → x ≡ y
     → f y ≡ f x
-ex2 = {!!}
+-- ex2 f exy = sym (cong f exy)
+ex2 f exy = cong f (sym exy)
+
+-- sym (cong f p) ≡ cong f (sym p)
 
 ex3 : {A : Type} (f : A → A) (g : A → A)
     → (∀ x → f (g x) ≡ g (f x))
     → (∀ a → f (f (g a)) ≡ g (f (f a)))
-ex3 = {!!}
+ex3 f g pfg a
+  = trans {y = f (g (f a))}
+    (cong f (pfg a))
+    (pfg (f a))
 
 --------------------------------------------------------------------------------
 
@@ -85,9 +101,15 @@ ex3 = {!!}
     f false = ⊥
     -- If true ≡ false, then by subst we have f true → f false
 
+sym≠ : {A : Type} {x y : A} → ¬ (x ≡ y) → ¬ (y ≡ x)
+sym≠ p q = p (sym q)
+
 -- Boolean equality is decidable
 dec-≡-Bool : ∀ {x y : Bool} → (x ≡ y) ⊎ (¬ (x ≡ y))
-dec-≡-Bool = {!!}
+dec-≡-Bool {false} {false} = inl refl
+dec-≡-Bool {false} {true}  = inr (λ p → ¬true≡false (sym p))
+dec-≡-Bool {true} {false}  = inr (λ p → ¬true≡false p)
+dec-≡-Bool {true} {true}   = inl refl
 
 _≟_ : Bool → Bool → Bool
 false ≟ false = true
@@ -97,7 +119,10 @@ true  ≟ true  = true
 
 -- Booleans x,y are equal iff (x ≟ y) is true.
 ≟-correct : ∀ {x y} → (x ≡ y) ↔ ((x ≟ y) ≡ true)
-≟-correct = {!!}
+≟-correct {false} {false} = (λ _ → refl) , (λ _ → refl)
+≟-correct {false} {true}  = (λ x → x) , (λ x → x)
+≟-correct {true} {false}  = sym , sym
+≟-correct {true} {true}   = (λ _ → refl) , (λ _ → refl)
 
 -- If x,y : Bool and ¬ (¬ (x ≡ y)), then x ≡ y
 ¬¬-≡-Bool : ∀ {x y : Bool} → ¬ (¬ (x ≡ y)) → (x ≡ y)
