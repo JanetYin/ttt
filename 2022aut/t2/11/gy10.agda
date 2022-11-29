@@ -1,4 +1,4 @@
-module t4.gy11 where
+module gy10 where
 open import lib
 open import Agda.Primitive
 
@@ -23,28 +23,28 @@ open import Agda.Primitive
 --- Equality types
 --------------------------------------------------------------------------------
 
--- ≡
+-- (2 + 2) = 4
+-- (suc n + m) = (suc (n + m))
 
--- data _≡_ {A : Type} (x : A) : (y : A) → Type where
+-- Agda doesn't know: (suc n + m) = (n + suc m)
+-- this will come later
+-- data _≡_ {A : Set} (x : A) : A → Set where
 --   refl : x ≡ x
 
 -- Equality is reflexive
-refl' : {A : Type} {x : A} → x ≡ x
+refl' : {A : Set} {x : A} → x ≡ x
 refl' = refl
 
 -- Equality is symmetric
-sym : {A : Type} {x y : A} → x ≡ y → y ≡ x
+sym : {A : Set} {x y : A} → x ≡ y → y ≡ x
 sym refl = refl
 
 -- Equality is transitive
-trans : {A : Type} {x y z : A}
-      → x ≡ y
-      → y ≡ z
-      → x ≡ z
+trans : {A : Set} {x y z : A} → x ≡ y → y ≡ z → x ≡ z
 trans refl p = p
 
 -- Equality is "substitutive"
-subst : {A : Type} {x y : A} (P : A → Type)
+subst : {A : Set} {x y : A} (P : A → Set)
       → x ≡ y
       → P x → P y
 subst P refl d = d
@@ -52,7 +52,7 @@ subst P refl d = d
 -- This is also called "transport":
 transport = subst
 
--- Equality satisfies congruence
+-- Equality satisfies congruence (this comes with any A → B instead of just A → Set)
 cong : ∀ {i j} {A : Set i} {B : Set j} {x y : A} (f : A → B)
      → x ≡ y
      → f x ≡ f y
@@ -62,67 +62,67 @@ cong f refl = refl
 ap = cong
 
 -- Prove the following equalities using refl, sym, trans and/or cong !
-ex1 : {A : Type} {a b c d : A}
+ex1 : {A : Set} {a b c d : A}
     → a ≡ b
     → c ≡ b
     → c ≡ d
     → a ≡ d
-ex1 {A} {a} {b} {c} {d} eab ecb ecd
-  = trans {y = b}
-    eab
-    (trans {y = c}
-    (sym ecb)
-    ecd)
+ex1 = {!!}
 
-ex2 : {A : Type} (f : A → A) {x y : A}
+ex2 : {A : Set} (f : A → A) {x y : A}
     → x ≡ y
     → f y ≡ f x
--- ex2 f exy = sym (cong f exy)
-ex2 f exy = cong f (sym exy)
+-- there are actually two solutions
+ex2 f p = {!!}
 
--- sym (cong f p) ≡ cong f (sym p)
 
-ex3 : {A : Type} (f : A → A) (g : A → A)
-    → (∀ x → f (g x) ≡ g (f x))
-    → (∀ a → f (f (g a)) ≡ g (f (f a)))
-ex3 f g pfg a
-  = trans {y = f (g (f a))}
-    (cong f (pfg a))
-    (pfg (f a))
+
+-- cong f p : f x ≡ f y
+-- sym (cong f p) : f y ≡ f x
+
+ex3 : {A : Set} (f : A → A) (g : A → A)
+    → ((x : A) → f (g x) ≡ g (f x))
+    → ((a : A) → f (f (g a)) ≡ g (f (f a)))
+ex3 f g hp a
+  = {!!}
 
 --------------------------------------------------------------------------------
 
 -- True is not equal to false:
 ¬true≡false : ¬ (true ≡ false)
+-- ¬true≡false : (true ≡ false) → ⊥
 ¬true≡false p = subst (λ b → f b) p tt
   where
-    f : Bool → Type
+    f : Bool → Set
     f true  = ⊤
     f false = ⊥
     -- If true ≡ false, then by subst we have f true → f false
 
-sym≠ : {A : Type} {x y : A} → ¬ (x ≡ y) → ¬ (y ≡ x)
-sym≠ p q = p (sym q)
+-- or as we have learned:
+¬true≡false' : ¬ (true ≡ false)
+¬true≡false' ()
 
 -- Boolean equality is decidable
 dec-≡-Bool : ∀ {x y : Bool} → (x ≡ y) ⊎ (¬ (x ≡ y))
 dec-≡-Bool {false} {false} = inl refl
-dec-≡-Bool {false} {true}  = inr (λ p → ¬true≡false (sym p))
-dec-≡-Bool {true} {false}  = inr (λ p → ¬true≡false p)
-dec-≡-Bool {true} {true}   = inl refl
+dec-≡-Bool {true}  {false} = inr ¬true≡false -- ¬true≡false
+dec-≡-Bool {false} {true}  = inr λ p → ¬true≡false (sym p) -- ¬true≡false + sym
+dec-≡-Bool {true}  {true}  = inl refl
 
-_≟_ : Bool → Bool → Bool
-false ≟ false = true
-false ≟ true  = false
-true  ≟ false = false
-true  ≟ true  = true
+-- Definition of _==_ (imported from lib.agda)
+_==b_ : Bool → Bool → Bool
+false ==b false = true
+false ==b true  = false
+true  ==b false = false
+true  ==b true  = true
 
--- Booleans x,y are equal iff (x ≟ y) is true.
-≟-correct : ∀ {x y} → (x ≡ y) ↔ ((x ≟ y) ≡ true)
-≟-correct {false} {false} = (λ _ → refl) , (λ _ → refl)
-≟-correct {false} {true}  = (λ x → x) , (λ x → x)
-≟-correct {true} {false}  = sym , sym
-≟-correct {true} {true}   = (λ _ → refl) , (λ _ → refl)
+-- Booleans x,y are equal iff (x ==b y) is true.
+-- (this means the _==b_ operation has in some sense a similar meaning to ≡)
+==b-correct : ∀ {x y : Bool} → (x ≡ y) ↔ ((x ==b y) ≡ true)
+==b-correct {false} {false} = (λ x → refl) , (λ x → refl)
+==b-correct {false} {true} = (λ x → x) , (λ x → x)
+==b-correct {true} {false} = sym , sym
+==b-correct {true} {true} = (λ x → refl) , (λ x → refl)
 
 -- If x,y : Bool and ¬ (¬ (x ≡ y)), then x ≡ y
 ¬¬-≡-Bool : ∀ {x y : Bool} → ¬ (¬ (x ≡ y)) → (x ≡ y)
@@ -160,19 +160,20 @@ suc+ = {!!}
 +assoc : ∀ n m k → (n + m) + k ≡ n + (m + k)
 +assoc = {!!}
 
+--prove it first mathematically
 +comm : ∀ n m → n + m ≡ m + n
-+comm = {!!}
++comm zero m = ?
 
 --------------------------------------------------------------------------------
 
 -- Hard bonus exercise: prove the general pigeonhole principle.
 
 infixr 6 _∷_
-data Vec (A : Type) : ℕ → Type where
+data Vec (A : Set) : ℕ → Set where
   []  : Vec A 0
   _∷_ : {n : ℕ} → A → Vec A n → Vec A (suc n)
 
-data Fin : ℕ → Type where
+data Fin : ℕ → Set where
   zero : {n : ℕ} → Fin (suc n)
   suc  : {n : ℕ} → Fin n → Fin (suc n)
 
@@ -182,7 +183,7 @@ _!!_ : ∀ {n A} → Vec A n → Fin n → A
 (x ∷ xs) !! suc i = xs !! i
 
 -- The function f(i,j) = if j>i then j-1 else j
-punchOut : ∀ {n} {i j : Fin (suc n)} → ¬ (i ≡ j) → Fin n
+punchOut : ∀ {n} (i j : Fin (suc n)) → ¬ (i ≡ j) → Fin n
 punchOut = {!!}
 
 -- Use induction on n

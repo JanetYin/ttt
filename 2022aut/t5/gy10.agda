@@ -1,4 +1,4 @@
-module t4.gy11 where
+module t5.gy10 where
 open import lib
 open import Agda.Primitive
 
@@ -23,9 +23,12 @@ open import Agda.Primitive
 --- Equality types
 --------------------------------------------------------------------------------
 
--- ≡
+-- (2 + 2) = 4
+-- (suc n + m) = (suc (n + m))
 
--- data _≡_ {A : Type} (x : A) : (y : A) → Type where
+-- Agda doesn't know: (suc n + m) = (n + suc m)
+
+-- data _≡_ {A : Type} (x : A) : A → Type where
 --   refl : x ≡ x
 
 -- Equality is reflexive
@@ -37,10 +40,7 @@ sym : {A : Type} {x y : A} → x ≡ y → y ≡ x
 sym refl = refl
 
 -- Equality is transitive
-trans : {A : Type} {x y z : A}
-      → x ≡ y
-      → y ≡ z
-      → x ≡ z
+trans : {A : Type} {x y z : A} → x ≡ y → y ≡ z → x ≡ z
 trans refl p = p
 
 -- Equality is "substitutive"
@@ -68,32 +68,34 @@ ex1 : {A : Type} {a b c d : A}
     → c ≡ d
     → a ≡ d
 ex1 {A} {a} {b} {c} {d} eab ecb ecd
-  = trans {y = b}
-    eab
-    (trans {y = c}
-    (sym ecb)
+  = trans {y = b} eab
+    (trans {y = c} (sym ecb)
     ecd)
 
 ex2 : {A : Type} (f : A → A) {x y : A}
     → x ≡ y
     → f y ≡ f x
--- ex2 f exy = sym (cong f exy)
-ex2 f exy = cong f (sym exy)
+-- ex2 f p = cong f (sym p)
+ex2 f p = sym (cong f p)
 
--- sym (cong f p) ≡ cong f (sym p)
+
+
+-- cong f p : f x ≡ f y
+-- sym (cong f p) : f y ≡ f x
 
 ex3 : {A : Type} (f : A → A) (g : A → A)
-    → (∀ x → f (g x) ≡ g (f x))
-    → (∀ a → f (f (g a)) ≡ g (f (f a)))
-ex3 f g pfg a
+    → ((x : A) → f (g x) ≡ g (f x))
+    → ((a : A) → f (f (g a)) ≡ g (f (f a)))
+ex3 f g hp a
   = trans {y = f (g (f a))}
-    (cong f (pfg a))
-    (pfg (f a))
+    (cong f (hp a))
+    (hp (f a))
 
 --------------------------------------------------------------------------------
 
 -- True is not equal to false:
 ¬true≡false : ¬ (true ≡ false)
+-- ¬true≡false : (true ≡ false) → ⊥
 ¬true≡false p = subst (λ b → f b) p tt
   where
     f : Bool → Type
@@ -101,28 +103,26 @@ ex3 f g pfg a
     f false = ⊥
     -- If true ≡ false, then by subst we have f true → f false
 
-sym≠ : {A : Type} {x y : A} → ¬ (x ≡ y) → ¬ (y ≡ x)
-sym≠ p q = p (sym q)
-
 -- Boolean equality is decidable
 dec-≡-Bool : ∀ {x y : Bool} → (x ≡ y) ⊎ (¬ (x ≡ y))
 dec-≡-Bool {false} {false} = inl refl
-dec-≡-Bool {false} {true}  = inr (λ p → ¬true≡false (sym p))
-dec-≡-Bool {true} {false}  = inr (λ p → ¬true≡false p)
-dec-≡-Bool {true} {true}   = inl refl
+dec-≡-Bool {true}  {false} = inr ¬true≡false -- ¬true≡false
+dec-≡-Bool {false} {true}  = inr λ p → ¬true≡false (sym p) -- ¬true≡false + sym
+dec-≡-Bool {true}  {true}  = inl refl
 
-_≟_ : Bool → Bool → Bool
-false ≟ false = true
-false ≟ true  = false
-true  ≟ false = false
-true  ≟ true  = true
+-- Definition of _==_ (imported from lib.agda)
+_==b_ : Bool → Bool → Bool
+false ==b false = true
+false ==b true  = false
+true  ==b false = false
+true  ==b true  = true
 
--- Booleans x,y are equal iff (x ≟ y) is true.
-≟-correct : ∀ {x y} → (x ≡ y) ↔ ((x ≟ y) ≡ true)
-≟-correct {false} {false} = (λ _ → refl) , (λ _ → refl)
-≟-correct {false} {true}  = (λ x → x) , (λ x → x)
-≟-correct {true} {false}  = sym , sym
-≟-correct {true} {true}   = (λ _ → refl) , (λ _ → refl)
+-- Booleans x,y are equal iff (x ==b y) is true.
+==b-correct : ∀ {x y : Bool} → (x ≡ y) ↔ ((x ==b y) ≡ true)
+==b-correct {false} {false} = (λ x → refl) , (λ x → refl)
+==b-correct {false} {true} = (λ x → x) , (λ x → x)
+==b-correct {true} {false} = sym , sym
+==b-correct {true} {true} = (λ x → refl) , (λ x → refl)
 
 -- If x,y : Bool and ¬ (¬ (x ≡ y)), then x ≡ y
 ¬¬-≡-Bool : ∀ {x y : Bool} → ¬ (¬ (x ≡ y)) → (x ≡ y)
@@ -182,7 +182,7 @@ _!!_ : ∀ {n A} → Vec A n → Fin n → A
 (x ∷ xs) !! suc i = xs !! i
 
 -- The function f(i,j) = if j>i then j-1 else j
-punchOut : ∀ {n} {i j : Fin (suc n)} → ¬ (i ≡ j) → Fin n
+punchOut : ∀ {n} (i j : Fin (suc n)) → ¬ (i ≡ j) → Fin n
 punchOut = {!!}
 
 -- Use induction on n

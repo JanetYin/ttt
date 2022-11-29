@@ -1,0 +1,4 @@
+0:00-0:30	all assignments
+0:30-0:40	solutions
+0:40-1:10	gy09.agda (the end for homework)
+1:10-1:30	gy10.agda

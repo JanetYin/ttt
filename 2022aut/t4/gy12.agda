@@ -1,4 +1,4 @@
-module t4.gy11 where
+module t4.gy12 where
 open import lib
 open import Agda.Primitive
 
@@ -60,35 +60,6 @@ cong f refl = refl
 
 -- This is also called "ap" (Action on Paths)
 ap = cong
-
--- Prove the following equalities using refl, sym, trans and/or cong !
-ex1 : {A : Type} {a b c d : A}
-    → a ≡ b
-    → c ≡ b
-    → c ≡ d
-    → a ≡ d
-ex1 {A} {a} {b} {c} {d} eab ecb ecd
-  = trans {y = b}
-    eab
-    (trans {y = c}
-    (sym ecb)
-    ecd)
-
-ex2 : {A : Type} (f : A → A) {x y : A}
-    → x ≡ y
-    → f y ≡ f x
--- ex2 f exy = sym (cong f exy)
-ex2 f exy = cong f (sym exy)
-
--- sym (cong f p) ≡ cong f (sym p)
-
-ex3 : {A : Type} (f : A → A) (g : A → A)
-    → (∀ x → f (g x) ≡ g (f x))
-    → (∀ a → f (f (g a)) ≡ g (f (f a)))
-ex3 f g pfg a
-  = trans {y = f (g (f a))}
-    (cong f (pfg a))
-    (pfg (f a))
 
 --------------------------------------------------------------------------------
 
@@ -162,6 +133,31 @@ suc+ = {!!}
 
 +comm : ∀ n m → n + m ≡ m + n
 +comm = {!!}
+
+ex1 : ∀ n m → (1 * n + 2 * m) ≡ (2 * m + 1 * n)
+ex1 n m = {!!}
+
+zero* : ∀ n → 0 * n ≡ 0
+zero* = {!!}
+
+*zero : ∀ n → n * 0 ≡ 0
+*zero = {!!}
+
+suc* : ∀ n m → (suc n) * m ≡ m + n * m
+suc* = {!!}
+
+*suc : ∀ n m → n * (suc m) ≡ n + n * m
+*suc = {!!}
+
+*comm : ∀ n m → n * m ≡ m * n
+*comm = {!!}
+
++*dist : ∀ n m k → (n + m) * k ≡ n * k + m * k
++*dist = {!!}
+
+*assoc : ∀ n m k → (n * m) * k ≡ n * (m * k)
+*assoc zero m k = refl
+*assoc (suc n) m k = trans (+*dist m (n * m) k) {!!}
 
 --------------------------------------------------------------------------------
 
