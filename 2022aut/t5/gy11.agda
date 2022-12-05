@@ -156,8 +156,7 @@ suc* = {!!}
 +*dist = {!!}
 
 *assoc : ∀ n m k → (n * m) * k ≡ n * (m * k)
-*assoc zero m k = refl
-*assoc (suc n) m k = trans (+*dist m (n * m) k) {!!}
+*assoc n m k = {!!}
 
 --------------------------------------------------------------------------------
 

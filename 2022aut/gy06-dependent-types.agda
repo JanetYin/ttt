@@ -78,18 +78,10 @@ tabulate = {!!}
 
 -- Sigma types
 
-infixr 5 _,_
-record Σ (A : Type)(B : A → Type) : Type where
-  constructor _,_
-  field
-    fst : A
-    snd : B fst
-open Σ public
-
 filter : {A : Type}{n : ℕ}(f : A → Bool) → Vec A n → Σ ℕ (Vec A)
 filter = {!!}
 
-test-filter : filter (3 <_) (4 ∷ 3 ∷ 2 ∷ 5 ∷ []) ≡ 2 , 4 ∷ 5 ∷ []
+test-filter : filter (3 <_) (4 ∷ 3 ∷ 2 ∷ 5 ∷ []) ≡ (2 , 4 ∷ 5 ∷ [])
 test-filter = refl
 
 Σ=⊎ : {A B : Type} → Σ Bool (if_then A else B) ↔ A ⊎ B
@@ -120,13 +112,13 @@ Fin1+3=Fin4 = {!!}
 -- relating Fin m ⊎ Fin n and Fin (m + n)
 
 inj₁f : {m n : ℕ} → Fin m → Fin (m + n)
-inj₁f i = ?
+inj₁f i = {!!}
 
 test-inj₁f : inj₁f {3}{4} (suc (suc zero)) ≡ suc (suc zero)
 test-inj₁f = refl
 
 inj₂f : {m n : ℕ} → Fin n → Fin (m + n)
-inj₂f {m}  i = ?
+inj₂f {m}  i = {!!}
 
 test-inj₂f : inj₂f {3}{4} (suc (suc zero)) ≡ suc (suc (suc (suc (suc zero))))
 test-inj₂f = refl
@@ -136,7 +128,7 @@ f (inl i) = inj₁f i
 f (inr i) = inj₂f i
 
 casef : {m n : ℕ}{C : Type} → (Fin m → C) → (Fin n → C) → Fin (m + n) → C
-casef {m}  f g i       = ?
+casef {m}  f g i       = {!!}
 
 test-casef : casef {3}{3} (λ i → i) (λ i → i) (suc (suc zero)) ≡ suc (suc zero)
 test-casef = refl
