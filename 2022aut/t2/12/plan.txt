@@ -1,0 +1,12 @@
+0:00-0:45	gy10.agda
+0:45-0:55	task types in an exam:
+     definitional equality (give two definitionally not equal objects with a given type)
+     isomorphisms (I have to ask whether bijection is checked if there are no tests)
+     		  strange things might be there, but sometimes there are shortcuts (e. g. a ⊤ -> A does not mean much more than an A)
+     same with dependent types (but not too hard ones here, if you understand sigma and other basics)
+     laws of logic (with dependent types too!)
+     proofs for naturals
+     negative proofs for naturals (with a counterexample; this can be a function or a relation too!)
+     building simple relations (no proof, only definition)
+     Fin and Vec (coming soon)
+0:55-1:30    	either questions or exampleExam.agda
