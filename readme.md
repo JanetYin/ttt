@@ -20,7 +20,7 @@ Requirements:
 
  * Canvas quiz for each lecture
  * At the beginning of each tutorial a small Agda assignment. Weekly homeworks help preparation.
- * Exam on the computer during the exam period. [Example exam](https://bitbucket.org/akaposi/ttt/raw/master/exampleExam.agda)
+ * Exam on the computer during the exam period. [Example exam](https://bitbucket.org/akaposi/ttt/raw/master/2022aut/exampleExam.agda)
 
 For the tutorial, you get the following marks according to how many
 assignments you completed (out of 10, for each assignment you can get
