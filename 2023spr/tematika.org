@@ -1,0 +1,51 @@
+|    | eloadas                                                           | gyakorlat                        |      |
+|----+-------------------------------------------------------------------+----------------------------------+------|
+|  1 | bevezeto, fuggvenyek (beepitett ℕ peldaval)                       | Emacs, Agda hasznalat,           |      |
+|    | 2.2. identity, composition, polymorphism                          | egyszeru fgv-ek beepitett Nat-on |      |
+|----+-------------------------------------------------------------------+----------------------------------+------|
+|  2 | λ-kalkulus es veges tipusok, Bool=⊤+⊤ mint alkalmazas             | finite type iso                  |      |
+|    | 2.3. λ-calculus                                                   | Bool beepitettkent               |      |
+|    | 2.4 combinatory logic                                             |                                  |      |
+|    | 2.5 products, sums, finite types                                  |                                  |      |
+|----+-------------------------------------------------------------------+----------------------------------+------|
+|  3 | induktiv tipusok data-val megadva, Bool-t is elmondani            | induktiv tipusok                 |      |
+|    | 4.1-4.2 inductive types: Nat, Maybe, Ackermann, iterator-recursor |                                  |      |
+|    | 4.3 List, Expr, RoseTree, (Ord)                                   |                                  |      |
+|----+-------------------------------------------------------------------+----------------------------------+------|
+|  4 | induktiv tipusok ertelmessegenek kriteriuma, koinduktiv tipusok   | pozitivitas, koinduktiv tipusok  |      |
+|    | 4.4 positivity, Λ                                                 |                                  |      |
+|    | 4.5 coinductive types: stream, conat                              |                                  |      |
+|    | (4.6 functorial semantics)                                        |                                  |      |
+|----+-------------------------------------------------------------------+----------------------------------+------|
+|  5 | fuggo tipusok                                                     | vec, fin                         |      |
+|    | 5.1 Vec                                                           |                                  |      |
+|    | 5.2 Fin, Vec indexelese                                           |                                  |      |
+|    | 5.3 Π es Σ                                                        |                                  |      |
+|----+-------------------------------------------------------------------+----------------------------------+------|
+|  6 | fuggo tipusok                                                     | fin                              |      |
+|    | 5.4 relating simple and dependent type formers                    |                                  |      |
+|    | 5.5 arithmetic of types (Fin (m+n) ≅ Fin m ⊎ Fin n)               |                                  |      |
+|----+-------------------------------------------------------------------+----------------------------------+------|
+|  7 | klasszikus logika, predikutumok, relaciok, elsorendu logika       | propositional logic              |      |
+|    | 3.1 Boolean logic                                                 |                                  |      |
+|    | 3.2 prop as types                                                 |                                  |      |
+|    | 6.1 predicates and quantifiers                                    |                                  |      |
+|----+-------------------------------------------------------------------+----------------------------------+------|
+|  8 | meg predikatumok es relaciok                                      | predicate logic                  |      |
+|    | 6.2 first order logical equivalences                              |                                  |      |
+|    | 6.3 equality                                                      |                                  |      |
+|----+-------------------------------------------------------------------+----------------------------------+------|
+|  9 | indukcio ℕ-en                                                     | properties of +,*                |      |
+|    | 6.4 properties of addition                                        |                                  |      |
+|----+-------------------------------------------------------------------+----------------------------------+------|
+| 10 | equational reasoning                                              | equational reasoning             |      |
+|----+-------------------------------------------------------------------+----------------------------------+------|
+| 11 | induktiv tipusok tovabbi tulajdonsagai: konstruktorok             | data konstruktorok inj, diszj    |      |
+|    | injektivitasa, diszjunktsaga, egyenloseg eldonthetosege           | eldontheto egyenlosegek          |      |
+|----+-------------------------------------------------------------------+----------------------------------+------|
+|    | klasszikus vs. konstruktiv logika (sqrt(2) irrac)                 |                                  | TODO |
+|    | parametricitas                                                    |                                  |      |
+|    |                                                                   | f:Bool→Bool-ra f∘f∘f=f           |      |
+|    | ellenpelda relaciok                                               | ellenpelda relaciok, fuggvenyek  |      |
+|    |                                                                   | pigeonhole principle             |      |
+|    | delay monad                                                       | delay monad                      |      |
