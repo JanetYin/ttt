@@ -1,0 +1,27 @@
+Kedves Hallgatók!
+
+A Típuselmélet nevű tárgy keretei között az Agda programozási nyelvet fogjuk használni. A gyakorlatokon a géptermi gépeken ugyan van Agda telepítve, azonban az eléggé régi (4 éves), így előfordul, hogy nem minden fog megfelelően működni a gépteremben lévő gépeken az általunk használt kódot illetően. Lehetőség szerint meg szeretnék kérni minden hallgatót, hogy saját géppel jöjjenek az első gyakorlatra, amelyre már legyen telepítve az Agda 2.6.3-as (2023.01.30. időpont szerinti legfrissebb kiadott) verziója.
+
+Telepítés menete:
+Az Agda működéséhez szükséges a GHC (legalább 9.2.5) és Cabal (legalább 3.6.2.0) megléte a számítógépen. Ha van a számítógépen ilyen, akkor ezen üzenet [2]-es lépéséhez szükséges menni. A telepítés menete remélhetőleg OS X-en, Linuxon és Windowson is egyaránt megy. Ha valamiért mégsem, akkor Teams-en keresztül akár a csoportban lehet nyugodtan írni és ilyeneket megbeszélni, lehet kérdezni, megpróbálok válaszolni a felmerülő kérdésekre.
+
+[1] GHC és Cabal telepítése:
+Mindenkire rábízom, hogy milyen módon telepíti ezeket, azonban javaslom a ghcup (https://www.haskell.org/ghcup/) telepítését, ez egy kezelő környezet, amin keresztül egyszerű feltelepíteni mind a GHC-t, mind a Cabal-t. A fenti linken (angol nyelven) található információ, hogy hogyan kell telepíteni és használni. Ha a ghcup telepítése megvan az alapértelmezett beállításokkal, akkor GHC és Cabal is kell legyen telepítve. Ezt ellenőrizni a "ghcup list" paranccsal lehet, a parancs sok piros X-et, néhol zöld IS feliratot kell írjon; ha található IS egy GHC verzió mellett (alapértelmezetten 9.2.5-nél), illetve egy Cabal verzió mellett (alapértelmezetten 3.6.2.0-nál), akkor a telepítés rendben ment és lehet folytatni a [2]-es lépéssel. Győződjünk meg róla, hogy a "cabal" és a "ghc" programok a PATH környezeti változóban szerepelnek! (Különböző rendszereken az annak a rendszernek megfelelő módon.)
+
+[2] Előkövetelmények: alex, happy
+Agda telepítéséhez szükségesek az "alex" (ez egy lexikális elemző) és a "happy" (parser generátor) programok meglétei, amelyeket cabal-ból lehet telepíteni. Először szükséges frissíteni az elérhető Cabal package-ek listáját a "cabal update" parancs futtatásával. Ha ez rendben ment, akkor az említett programok a "cabal install alex happy" parancs futtatásával telepíthetők.
+
+[3] Agda telepítése:
+Ha van fent GHC és Cabal, akkor egy terminálban vagy konzolban a "cabal install Agda" paranccsal lehet az Agda nyelv fordítóját telepíteni. Ez a telepítés bő 10-20 percig fog futni, ezt türelmesen szükséges végig várni. Ha minden jól végig ment, akkor lesz Agda a gépen, a futtatható állomány a telepített Cabal helyének bin mappájában lesz. Ez legyen benne a PATH-ban az egyszerűség kedvéért.
+
+[4] agda-mode:
+Agda interaktív bizonyító is, így az agda-mode (az Agda telepítésével jön) is szükséges. Az agda-mode használatához különböző editorokban különböző plugin-ek szükségesek.
+
+[Emacs] : Magát az agda-mode-ot kell futtatni: "agda-mode setup", még opcionálisan lehet még futtatni az "agda-mode compile"-t, ettől a kiértékelés gyorsabb lesz, azonban Windows-on ez problémás lehet.
+[VSCode] : Van agda-mode nevű kiegészítő, ezt lehet telepíteni, a beállításokban a szükséges az agda elérési útvonalát beállítani. Ez Windows-on ajánlottabb, jobban működik.
+[Vim] : Ebben sajnos nem tudok segíteni, biztos van valami, de nem tudok segíteni a telepítésében.
+[NeoVim] : Ebben szintén nem tudok segíteni, de az alábbi helyről (https://github.com/ashinkarov/nvim-agda) elérhető egy plugin hozzá.
+
+Előfordulhat, hogy saját rendszeren az Agdát sikerül közvetlen telepíteni a rendszer csomagkezelőjéből, akár "apt install Agda", akár "brew install Agda"; csomagkezelőkön keresztül nem feltétlen a legfrissebb Agda települ fel (ez az apt-re különösen igaz), 2.6.3-as verzió alatt nem tudjuk garantálni, hogy a kód, amit használni fogunk a gyakorlatokon, működni fog, így ha valaki ilyen módon telepíti az Agdát, kérem, ellenőrizze, hogy 2.6.3-as verziójú Agda települt-e.
+
+Köszönöm mindenkinek az együttműködését!
