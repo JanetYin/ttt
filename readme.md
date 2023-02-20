@@ -1,38 +1,53 @@
-# Típuselmélet (type theory) course
+# Típuselmélet (Agda) tantárgy
 
-You can take semi-compulsory courses in later semesters.
-
-You have to register with the correct code:
+Fontos, hogy megfelelő kóddal vedd fel a tárgyat:
 
  * BSc: IP-18KVSZTME
  * MSc: IPM-18sztKVTEE
- * MSc evening course: IPM-18EsztKVTEE
+ * MSc esti: IPM-18EsztKVTEE
 
-Teacher of the lectures: Kaposi Ambrus (akaposi kukac inf.elte.hu).
+Előadás oktatója: Kaposi Ambrus (akaposi kukac inf.elte.hu).
 
-Tutorial teachers: Viktor Csimma (midffj at inf.elte.hu), Rafaël Bocquet (bocquet at inf.elte.hu), Végh Tamás (vetuaat at inf.elte.hu).
+Gyakorlatok oktatói (a 4-es csoportba csak eötvös kollégisták mehetnek):
 
-There is a team [Típuselmélet 2022 ősz](https://teams.microsoft.com/l/team/19%3a0Tov01N1E2P2XyoH0NqqEl0cc65vsRTX96nfOVr6hyM1%40thread.tacv2/conversations?groupId=20f566d0-3575-4f00-a0ca-144f767dd654&tenantId=0133bb48-f790-4560-a64d-ac46a472fbbc) in Microsoft Teams to discuss type theory. You can ask any of the teachers to add you.
+| kurzus kód     | időpont               | helyszín                 | gyakorlatvezető név | ______@inf.elte.hu |
+|----------------|-----------------------|--------------------------|---------------------|--------------------|
+| 1              | Szerda 17:45-19:15    | Északi Tömb 7.16 (PC 12) | Bense Viktor        | qils07             |
+| 2              | Kedd 17:45-19:15      | Déli Tömb 00-411 (PC 7)  | Merth Borbála       | f6tnix             |
+| 3              | Csütörtök 16:00-17:30 | Déli Tömb 2-709 (PC 9)   | Petes Márton        | tx0lwm             |
+| 4 EC-s csoport | egyeztetés alatt      | egyeztetés alatt         | Csimma Viktor       | midffj             |
+| 5              | Csütörtök 17:45-19:15 | Északi Tömb 7.16 (PC 12) | Merth Borbála       | f6tnix             |
 
-The lectures are in Hungarian, Rafaël's tutorials are in English, the tutorials of Viktor and Tamás are in Hungarian.
+Nagyon fontos, hogy azt a gyakorlatot vedd fel a Neptunban, amelyikbe ténylegesen jársz, mert a Canvas automatikusan veszi át az infót a Neptunból.
 
-Requirements:
+Létezik egy [Típuselmélet 2023 tavasz](https://teams.microsoft.com/l/team/19%3ayjbZGERT-taiD-d93LrHeYsVpnjz3yCsIPRn-b2B7RE1%40thread.tacv2/conversations?groupId=8959a9ae-5b08-4acf-9cd5-aa0d1341df0e&tenantId=0133bb48-f790-4560-a64d-ac46a472fbbc) MS Teams csoport, ahol érdemes a típuselméletről beszélgetni. Kérj meg egy gyakorlatvezetőt, hogy adjon hozzá!
 
- * Canvas quiz for each lecture
- * At the beginning of each tutorial a small Agda assignment. Weekly homeworks help preparation.
- * Exam on the computer during the exam period. [Example exam](https://bitbucket.org/akaposi/ttt/raw/master/2022aut/exampleExam.agda)
+Követelmények:
 
-For the tutorial, you get the following marks according to how many
-assignments you completed (out of 10, for each assignment you can get
-0 or 1 points): 5-6: 2, 7: 3, 8: 4, 9-10: 5.
+ * Előadásokra Canvas kvíz.
+ * Gyakorlatok elején mikrozh Agdában, a házi feladatok a felkészülést segítik.
+ * SZámítógépes vizsga a vizsgaidőszakban. [Példa vizsga](https://bitbucket.org/akaposi/ttt/raw/master/2022aut/exampleExam.agda)
 
-To enter the exam, you need in average minimum 50% in the Canvas quizzes and a minimum 2 mark
-for the tutorial.
+A gyakorlati jegy a mikrozh-kból áll össze, mindegyikre 0 vagy 1 pontot lehet kapni. Ponthatárok:
 
-Recommended literature:
+| pontszám  | jegy |
+|-----------|------|
+| 0-4.999   | 1    |
+| 5-6.249   | 2    |
+| 6.25-7.49 | 3    |
+| 7.5-8.249 | 4    |
+| 8.25-     | 5    |
 
- * [Thorsten Altenkirch. Tao of types](http://www.cs.nott.ac.uk/~psztxa/mgs.2021) (we mainly follow this book)
+Vizsgázni az jöhet, akinek a Canvas kvízek átlaga 50% fölött van és van gyakorlati jegye.
+
+Kötelező irodalom:
+
+ * [Thorsten Altenkirch. Tao of types](http://www.cs.nott.ac.uk/~psztxa/mgs.2021)
+
+Ajánlott irodalom:
+
  * [Homotopy Type Theory book](http://saunders.phil.cmu.edu/book/hott-online.pdf) (especially Chapter 1 Type theory)
+ * [Egbert Rijke. Introduction to homotopy type theory](https://arxiv.org/pdf/2212.11082)
  * [Daniel P. Friedman and David Thrane Christiansen. The little typer](https://thelittletyper.com)
  * [Edwin Brady. Type-driven development with Idris](https://www.manning.com/books/type-driven-development-with-idris)
  * [Kaposi Ambrus. Bevezetés a homotópia-típuselméletbe](https://akaposi.github.io/hott_bevezeto.pdf) (magyar)
