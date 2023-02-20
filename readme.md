@@ -18,7 +18,7 @@ Gyakorlatok oktatói (a 4-es csoportba csak eötvös kollégisták mehetnek):
 | 4 EC-s csoport | egyeztetés alatt      | egyeztetés alatt         | Csimma Viktor       | midffj             |
 | 5              | Csütörtök 17:45-19:15 | Északi Tömb 7.16 (PC 12) | Merth Borbála       | f6tnix             |
 
-Nagyon fontos, hogy azt a gyakorlatot vedd fel a Neptunban, amelyikbe ténylegesen jársz, mert a Canvas automatikusan veszi át az infót a Neptunból.
+Nagyon fontos, hogy azt a gyakorlatot vedd fel a Neptunban, amelyikre ténylegesen jársz, mert a Canvas automatikusan veszi át az infót a Neptunból.
 
 Létezik egy [Típuselmélet 2023 tavasz](https://teams.microsoft.com/l/team/19%3ayjbZGERT-taiD-d93LrHeYsVpnjz3yCsIPRn-b2B7RE1%40thread.tacv2/conversations?groupId=8959a9ae-5b08-4acf-9cd5-aa0d1341df0e&tenantId=0133bb48-f790-4560-a64d-ac46a472fbbc) MS Teams csoport, ahol érdemes a típuselméletről beszélgetni. Kérj meg egy gyakorlatvezetőt, hogy adjon hozzá!
 
