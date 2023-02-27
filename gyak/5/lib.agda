@@ -44,7 +44,7 @@ exfalso ()
 
 -- Unit type
 record ⊤ : Set where
-  instance constructor tt
+  constructor tt
 open ⊤ public
 
 _↔_ : ∀{i j} → Set i → Set j → Set (i ⊔ j)
@@ -52,8 +52,3 @@ A ↔ B = (A → B) × (B → A)
 
 ¬_ : ∀{i} → Set i → Set i
 ¬ A = A → ⊥
-
-infix 4 _≢_
-
-_≢_ : ∀{i}{A : Set i}(x y : A) → Set i
-x ≢ y = ¬ (x ≡ y)
