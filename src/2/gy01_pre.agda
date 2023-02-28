@@ -1,4 +1,3 @@
-module 2.gy01_pre where
 open import lib
 
 -- 1. git clone https://bitbucket.org/akaposi/ttt
