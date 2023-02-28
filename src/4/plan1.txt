@@ -1,0 +1,43 @@
+0:00-0:05:
+	picit a tárgyról mesélés:
+		régen egy kis speci volt Agda néven
+		aztán lett egy teljes kötvál
+		most picit gyakorlatiasabb lesz; inkább az agdázás a cél
+	honnan lehet tanulni:
+		Bitbucketen lesz a használt forráskód
+		részletesebb magyarázatért meg a könyv (angolul)
+	követelmények:
+		jelenlét az kell
+		gyakorlaton lesz 10 kvíz órák elején Canvasben
+		lesz házi; az tudtommal csak erősen ajánlott (mert kvízben is hasonlóak lesznek)
+0:05-0:10:
+	az Agdáról:
+		1999 óta van, de 2007-ben volt egy full rewrite
+		Haskellben írták
+		és nagyon hasonlít a Haskellre (az elején kvázi haskellezni fogunk)
+		miért más mégis?
+			az Agdában minden függvény teljes: egy Agda-program garantáltan ad eredményt (elvileg)
+				nincs olyan, hogy futási hiba
+			tud egy olyat, hogy függő típusok; emiatt lehet majd bizonyításokat írni benne (de ez később)
+				ezt nagyon kevés nyelv tudja (a Haskell sem)
+			elméleti háttér: Martin-Löf-típuselmélet
+				ez kvázi a matematika egy másik oldalról vett felépítése
+				Haskellben ez nem szempont
+		az Emacs nevű szövegszerkesztőben él, ami egy picit fura lesz elsőre, de ezt is látjátok
+0:10-0:30:
+	segítünk, akinek nem megy
+	addig kövessék az elején a lépéseket, és akkor jó, ha checked
+0:30-0:35
+	picit elszórakozni az Emacsszel
+0:35-0:45
+	Agda-specifikus dolgok (a goalok is, hogy azt se később kelljen; meg a speckarakterek is)
+0:45-1:10
+	fájl elmutogatása
+1:10-1:20
+	fájl végi feladatok önállóan
+1:20-1:25
+	azoknak a megbeszélése
+1:25-1:30
+	jövő órán legyen kvíz?
+	házi (hol legyen? Canvasen, repóban, Teamsen?)
+	(és jövő héten ha volt vele probléma, megbeszéljük)
