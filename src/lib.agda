@@ -5,6 +5,7 @@ open import Agda.Primitive
 open import Agda.Builtin.Equality
   public
 open import Agda.Builtin.Bool
+  renaming (Bool to 𝟚)
   public
 open import Agda.Builtin.Sigma
   public
@@ -14,7 +15,7 @@ infixr 2 _×_
 infixr 1 _⊎_
 infix 0 _↔_
 
-if_then_else_ : ∀{i}{A : Set i}(t : Bool)(u v : A) → A
+if_then_else_ : ∀{i}{A : Set i}(t : 𝟚)(u v : A) → A
 if true  then u else v = u
 if false then u else v = v
 
