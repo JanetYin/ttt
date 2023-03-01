@@ -66,7 +66,7 @@ bNum = add3 (add3 (add3 2))
 -- lambda notation
 
 add3' : ℕ → ℕ
-add3' = λ x → x + 3
+add3' = {!!}
 -- add3 x = x + 3
 
 -- add3' 4 = (λ x → x + 3) 4
