@@ -154,3 +154,5 @@ first = {!!}
 second : {A : Set} → A → A → A
 second = {!!}
 
+recℕ : {A : Set} → (A → A) → A → ℕ → A
+recℕ = {!!}
