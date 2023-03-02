@@ -99,3 +99,4 @@ A Tao könyv fejezetei vannak hivatkozva.
 |      | ellenpelda relaciok                                               | ellenpelda relaciok, fuggvenyek  |
 |      |                                                                   | pigeonhole principle             |
 |      | delay monad                                                       | delay monad                      |
+|      | oszthatosag, ha d|x es d|y, akkor d|x+y                           |                                  |
