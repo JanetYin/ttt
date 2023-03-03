@@ -1,19 +1,4 @@
-module gy01 where
-
-open import lib-gy01
-
-{-
-Követelmények:
-∀ óra elején +/- (0/1 pont), 10 db, 5-10 perces.
-NINCS ZH!!! mindenki örömére
-Gyakorlásként házi feladatok lesznek (nem kötelező)
-
-Vizsga: Kódolós, 10 feladat, 10 pont
-2: 5-től
-3: 7-től
-4: 8-tól
-5: 9-től
--}
+open import lib
 
 -- 1. git clone https://bitbucket.org/akaposi/ttt
 -- 2. Open this file (PATH) in emacs. (On the lab computers: Alt-F2 "emacs")
@@ -53,7 +38,7 @@ Vizsga: Kódolós, 10 feladat, 10 pont
 --   where A and B are any types
 
 add3 : ℕ → ℕ
-add3 n = n + 3
+add3 x = x + 3
 
 -- try add3 x = x+3, spaces matter!
 
@@ -79,7 +64,6 @@ bNum = add3 (add3 (add3 2))
 -- C-c C-n bNum
 
 -- lambda notation
-
 add3' : ℕ → ℕ
 add3' = λ x → x + 3
 -- add3 x = x + 3
@@ -92,21 +76,21 @@ add3' = λ x → x + 3
 -- test it with C-c C-n!
 
 add4 : ℕ → ℕ
-add4 x = x + 4
+-- add4 x = x + 4
+add4 = λ x → x + 4
 
 -- Goal type and context:             C-c C-,
 -- Goal type, context, inferred type: C-c C-.
--- Fill the hole                    : C-c C-space
--- Refine hole                      : C-c C-r
+-- Fill the hole                    : C-c C-space  ,  C-c C-r
 -- Creating a hole: enter '?'
 
 -- functions with multiple arguments
 
-add : ℕ → (ℕ → ℕ)
-add = λ x y → x + y
-
-add' : ℕ → ℕ → ℕ
-add' x = λ y → x + y
+add : ℕ → ℕ → ℕ
+-- add x y = x + y
+-- add = λ x y → x + y
+-- add = λ x → λ y → x + y
+add = _+_
 
 -- ℕ → (ℕ → ℕ) = ℕ → ℕ → ℕ
 --             ≠ (ℕ → ℕ) → ℕ
@@ -117,9 +101,6 @@ add' x = λ y → x + y
 
 add3'' : ℕ → ℕ
 add3'' = add 3
-
-add4'' : ℕ → ℕ
-add4'' = add 4
 
 num1 : ℕ
 num1 = add 3 4
@@ -144,28 +125,13 @@ num1' = (add 3) 4
 num4 : ℕ
 num4 = add 3 (add 4 2)
 
-{-
-add : ℕ → (ℕ → ℕ)
-add = λ x y → x + y
-
-add 3 (add 4 2) = (add def)
-add 3 ((λ x y → x + y) 4 2) = → β-redukció
-add 3 ((x + y)[x := 4][y := 2]) = ([] def)
-add 3 ((4 + y)[y := 2]) = ([] def)
-add 3 (4 + 2) = (ált. isk.) (+ def)
-add 3 6 = (add def)
-(λ x y → x + y) 3 6 = → β-redukció
-(x + y)[x := 3][y := 6]) = ([] def ×2)
-3 + 6 = (ált. isk.) (+ def)
-9
--}
 -- Higher-order functions: functions with functions as arguments
 -- e.g. in Haskell:   map :: (a -> b) -> [a] -> [b]
 
 -- write a function of the following type:
 
 f1 : (ℕ → ℕ) → ℕ
-f1 _ = 42
+f1 = λ x → x 4
 
 -- test it with f1 add3, f1 add4. is the result the same?
 
@@ -173,37 +139,24 @@ f1 _ = 42
 --   f2 add3 ≠ f2 add4 ≠ f3 add4 ≠ f3 add3
 
 f2 f3 : (ℕ → ℕ) → ℕ
-f2 f = f 42
-f3 f = f 100
+f2 = λ x → x 3
+f3 = λ x → x (x 3)
+
+-- test : f2 add3 ≢ f2 add4
+-- test ()
 
 tw : {A : Set} → (A → A) → A → A
 tw f n = f (f n)
 
 -- consider
 
-t : ℕ
-t = (tw tw add3) 1
-
+t = tw (tw add3) 1
 -- what is the type of this and why? ask Agda too (C-c C-d).
 -- what is its value?  guess, and ask Agda too (C-c C-n).
-{-
-(tw  tw add3 ) 1 = tw def
-(tw (tw add3)) 1 = tw def (külső)
-(tw add3) (tw add3 1) = tw def (utolsó)
-(tw add3) (add3 (add3 1)) = add3 def ×2 + ált. isk.
-tw add3 7 = tw def
-add3 (add3 7) = add3 def ×2 + ált. isk.
-13
--}
--- Hány darab A → A típusú függvény létezik?
 
-id' : {A : Set} → A → A
-id' = λ z → z
+first : {A : Set} → A → A → A
+first = λ x y → x
 
--- Hány darab A → A → A típusú függvény létezik?
+second : {A : Set} → A → A → A
+second = λ x y → y
 
-
-
--- Alkalmazzuk n-szer a függvényt egy értékre.
-recℕ : {A : Set} → (A → A) → A → ℕ → A
-recℕ = {!!}
