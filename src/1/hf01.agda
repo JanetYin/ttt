@@ -98,7 +98,7 @@ Ha ezt a lyukat sikerül kitölteni a C-c C-r-rel, akkor megtudjuk, hogy
 a két identitás függvény valójában teljesen egyenlők.
 -}
 id= : ∀{i}{A : Set i} → _≡_ {i} {A → A} (λ x → x) (λ y → y)
-id= = {!   !}
+id= = ?
 
 {-
 Függvények esetén a nem egyenlőséget jóval nehezebb bizonyítani,
@@ -111,8 +111,8 @@ subst : ∀{i j}{A : Set i}(B : A → Set j){a a' : A} → a ≡ a' → B a → 
 subst B refl b = b
 
 x+1 : (λ x → x + 1) ≢ (λ y → y)
-x+1 eq = subst T eq tt where
-  T : (ℕ → ℕ) → Set
-  T f with f 0
-  ...| 0 = ⊥
-  ...| suc _ = ⊤
+x+1 eq = subst ♥ eq tt where
+  ♥ : (ℕ → ℕ) → Set
+  ♥ f with f 0
+  ... | zero  = ⊥
+  ... | suc _ = ⊤
