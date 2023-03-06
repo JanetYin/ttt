@@ -162,6 +162,11 @@ t = tw tw add3 1
 -- what is the type of this and why? ask Agda too (C-c C-d).
 -- what is its value?  guess, and ask Agda too (C-c C-n).
 
+{-
+an equational reasoning:
+t = tw tw add3 1 = ...
+-}
+
 first : {A : Set} → A → A → A
 first = {!!}
 

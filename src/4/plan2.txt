@@ -1,0 +1,7 @@
+0:00-0:03	kérdések?
+0:03-0:13	röpi
+0:13-0:15	ehhez kérdések?
+0:15-1:00	gy01.agda
+1:00-1:10	az előadáson voltak már ×, ⊎, ⊤ etc.? vagy van kérdés hozzájuk?
+1:10-1:28	gy02.agda
+1:28-1:30	miből legyen a röpi/mi legyen a házi
