@@ -62,7 +62,7 @@ A Tao könyv fejezetei vannak hivatkozva.
 |------|-------------------------------------------------------------------|----------------------------------|
 |    1 | bevezeto, fuggvenyek (beepitett ℕ peldaval)                       | Emacs, Agda hasznalat,           |
 |      | 2.2. identity, composition, polymorphism                          | egyszeru fgv-ek beepitett Nat-on |
-|    2 | λ-kalkulus es veges tipusok, Bool=⊤|⊤ mint alkalmazas             | finite type iso                  |
+|    2 | λ-kalkulus es veges tipusok, Bool=⊤+⊤ mint alkalmazas             | finite type iso                  |
 |      | 2.3. λ-calculus                                                   | Bool beepitettkent               |
 |      | 2.4 combinatory logic                                             |                                  |
 |      | 2.5 products, sums, finite types                                  |                                  |
