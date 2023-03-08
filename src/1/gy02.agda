@@ -3,33 +3,44 @@ open import lib
 ------------------------------------------------------
 -- simple finite types
 ------------------------------------------------------
+{-
+data Bool : Set where
+  false : Bool
+  true  : Bool
+-}
+
+the : (A : Set) → A → A
+the A x = x
+
+_! : ℕ → ℕ
+n ! = {!   !}
 
 flip : ℕ × Bool → Bool × ℕ
-flip = {!!}
+flip (x , y) = y , x
 
 flipback : Bool × ℕ → ℕ × Bool
-flipback = {!!}
+flipback = λ {(y , x) → x , y}
 
 comm× : {A B : Set} → A × B → B × A
-comm× = {!!}
+comm× (a , b) = b , a
 
 comm×back : {A B : Set} → B × A → A × B
 comm×back = comm×
 
+-- \x = ×
+-- \top = ⊤
 b1 b2 : Bool × ⊤
-b1 = false , tt
-b2 = true , tt
+b1 = true , tt
+b2 = false , tt
 b1≠b2 : b1 ≢ b2
-b1≠b2 = {!!}
+b1≠b2 ()
 
-ft : {!!} ≢ {!!} -- Bool × ⊤
-ft = {!!}
-
+-- \u+ = ⊎
 t1 t2 : ⊤ ⊎ ⊤
-t1 = {!!}
-t2 = {!!}
+t1 = inr tt
+t2 = inl tt
 t1≠t2 : t1 ≢ t2
-t1≠t2 = {!!}
+t1≠t2 ()
 
 bb1 bb2 bb3 : Bool ⊎ ⊤
 bb1 = {!!}
@@ -42,16 +53,20 @@ bb1≠bb3 = {!!}
 bb2≠bb3 : bb2 ≢ bb3
 bb2≠bb3 = {!!}
 
+-- \bot = ⊥
 ee : (⊤ → ⊥) ⊎ (⊥ → ⊤)
-ee = {!!}
+ee = inr λ x → tt
 
 d : (⊤ ⊎ (⊤ × ⊥)) × (⊤ ⊎ ⊥)
-d = {!!}
+d = inl tt , inl tt
 
 from : {A : Set} → A × A → (Bool → A)
-from = {!!}
+from (x , y) false = x
+from (x , y) true = y
+
 to : {A : Set} → (Bool → A) → A × A
-to = {!!}
+to f = (f false) , (f true)
+
 testfromto1 : {A : Set}{a b : A} → fst (to (from (a , b))) ≡ a
 testfromto1 = refl
 testfromto2 : {A : Set}{a b : A} → snd (to (from (a , b))) ≡ b
@@ -67,8 +82,18 @@ testfromto4 = refl
 
 -- (⊎, ⊥) form a commutative monoid (kommutativ egysegelemes felcsoport)
 
+-- \<-> = ↔
 assoc⊎ : {A B C : Set} → (A ⊎ B) ⊎ C ↔ A ⊎ (B ⊎ C)
-assoc⊎ = {!!}
+assoc⊎ = to' , from' where
+  to' : {A B C : Set} → (A ⊎ B) ⊎ C → A ⊎ (B ⊎ C)
+  to' (inl (inl x)) = inl x
+  to' (inl (inr x)) = inr (inl x)
+  to' (inr x) = inr (inr x)
+
+  from' : {A B C : Set} → A ⊎ (B ⊎ C) → (A ⊎ B) ⊎ C
+  from' (inl x) = inl (inl x)
+  from' (inr (inl x)) = inl (inr x)
+  from' (inr (inr x)) = inr x
 
 idl⊎ : {A : Set} → ⊥ ⊎ A ↔ A
 idl⊎ = {!!}
