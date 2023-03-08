@@ -19,24 +19,24 @@ comm×back = comm×
 b1 b2 : Bool × ⊤
 b1 = {!!}
 b2 = {!!}
-b1≠b2 : b1 ≡ b2 → ⊥
+b1≠b2 : b1 ≢ b2
 b1≠b2 ()
 
 t1 t2 : ⊤ ⊎ ⊤
 t1 = {!!}
 t2 = {!!}
-t1≠t2 : t1 ≡ t2 → ⊥
+t1≠t2 : t1 ≢ t2
 t1≠t2 ()
 
 bb1 bb2 bb3 : Bool ⊎ ⊤
 bb1 = {!!}
 bb2 = {!!}
 bb3 = {!!}
-bb1≠bb2 : bb1 ≡ bb2 → ⊥
+bb1≠bb2 : bb1 ≢ bb2
 bb1≠bb2 ()
-bb1≠bb3 : bb1 ≡ bb3 → ⊥
+bb1≠bb3 : bb1 ≢ bb3
 bb1≠bb3 ()
-bb2≠bb3 : bb2 ≡ bb3 → ⊥
+bb2≠bb3 : bb2 ≢ bb3
 bb2≠bb3 ()
 
 ee : (⊤ → ⊥) ⊎ (⊥ → ⊤)
@@ -48,7 +48,7 @@ d = {!!}
 from : {A : Set} → A × A → (Bool → A)
 from = {!!}
 to : {A : Set} → (Bool → A) → A × A
-to = λ f → f true , f false
+to = {!!}
 testfromto1 : {A : Set}{a b : A} → fst (to (from (a , b))) ≡ a
 testfromto1 = refl
 testfromto2 : {A : Set}{a b : A} → snd (to (from (a , b))) ≡ b
@@ -126,16 +126,16 @@ iso2 = {!!}
 
 iso3 : (⊤ ⊎ ⊤ ⊎ ⊤) ↔ Bool ⊎ ⊤
 iso3 = {!!}
-testiso3 : fst iso3 (inl tt) ≡ fst iso3 (inr (inl tt)) → ⊥
+testiso3 : fst iso3 (inl tt) ≢ fst iso3 (inr (inl tt))
 testiso3 ()
-testiso3' : fst iso3 (inl tt) ≡ fst iso3 (inr (inr tt)) → ⊥
+testiso3' : fst iso3 (inl tt) ≢ fst iso3 (inr (inr tt))
 testiso3' ()
-testiso3'' : fst iso3 (inr (inl tt)) ≡ fst iso3 (inr (inr tt)) → ⊥
+testiso3'' : fst iso3 (inr (inl tt)) ≢ fst iso3 (inr (inr tt))
 testiso3'' ()
 
 iso4 : (⊤ → ⊤ ⊎ ⊥ ⊎ ⊤) ↔ (⊤ ⊎ ⊤)
 iso4 = {!!}
-testiso4 : fst iso4 (λ _ → inl tt) ≡ fst iso4 (λ _ → inr (inr tt)) → ⊥
+testiso4 : fst iso4 (λ _ → inl tt) ≢ fst iso4 (λ _ → inr (inr tt))
 testiso4 ()
-testiso4' : snd iso4 (inl tt) tt ≡ snd iso4 (inr tt) tt → ⊥
+testiso4' : snd iso4 (inl tt) tt ≢ snd iso4 (inr tt) tt
 testiso4' ()
