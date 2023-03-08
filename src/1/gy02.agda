@@ -17,27 +17,30 @@ comm×back : {A B : Set} → B × A → A × B
 comm×back = comm×
 
 b1 b2 : Bool × ⊤
-b1 = {!!}
-b2 = {!!}
+b1 = false , tt
+b2 = true , tt
 b1≠b2 : b1 ≢ b2
-b1≠b2 ()
+b1≠b2 = {!!}
+
+ft : {!!} ≢ {!!} -- Bool × ⊤
+ft = {!!}
 
 t1 t2 : ⊤ ⊎ ⊤
 t1 = {!!}
 t2 = {!!}
 t1≠t2 : t1 ≢ t2
-t1≠t2 ()
+t1≠t2 = {!!}
 
 bb1 bb2 bb3 : Bool ⊎ ⊤
 bb1 = {!!}
 bb2 = {!!}
 bb3 = {!!}
 bb1≠bb2 : bb1 ≢ bb2
-bb1≠bb2 ()
+bb1≠bb2 = {!!}
 bb1≠bb3 : bb1 ≢ bb3
-bb1≠bb3 ()
+bb1≠bb3 = {!!}
 bb2≠bb3 : bb2 ≢ bb3
-bb2≠bb3 ()
+bb2≠bb3 = {!!}
 
 ee : (⊤ → ⊥) ⊎ (⊥ → ⊤)
 ee = {!!}
