@@ -60,6 +60,7 @@ ee = inr λ x → tt
 d : (⊤ ⊎ (⊤ × ⊥)) × (⊤ ⊎ ⊥)
 d = inl tt , inl tt
 
+-- Ez lényegében azt jelenti, hogy  A² = A × A
 from : {A : Set} → A × A → (Bool → A)
 from (x , y) false = x
 from (x , y) true = y
