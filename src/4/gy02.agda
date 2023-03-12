@@ -1,5 +1,27 @@
 open import lib
 
+-- about _×_ (\x) and _⊎_ (\u+)
+
+rec : ℕ × Bool
+-- fst rec = 5
+-- snd rec = true
+rec = 5 , true
+
+-- 5 , 4 != 4 , 5
+
+un1 un2 : ℕ ⊎ Bool
+un1 = inl 5
+un2 = inr true
+
+un3 : ℕ ⊎ ℕ
+un3 = inr 5
+
+-- inl 5 =? inr 5
+
+-- Maybe is actually ℕ ⊎ ⊤
+
+-- NOTE: until here (and case in lib)
+
 ------------------------------------------------------
 -- simple finite types
 ------------------------------------------------------
