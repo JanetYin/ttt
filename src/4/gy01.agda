@@ -42,7 +42,7 @@ open import Agda.Builtin.Nat renaming (Nat to ℕ)
 -- write ? and press C-c C-l to make a hole
 
 add3 : ℕ → ℕ
-add3 = {!!}
+add3 x = x + 3
 
 -- try add3 x = x+3, spaces matter!
 
@@ -61,7 +61,7 @@ aNum = add3 4
 -- C-c C-n aNum
 
 bNum : ℕ
-bNum = add3 (add3 (add3 2))
+bNum = (add3 (add3 (add3 2)))
 
 -- "add3 add3 add3 2" is wrong (try with C-c C-n)
 -- why?
@@ -76,13 +76,12 @@ add3' = λ x → x + 3
 
 -- add3' 4 = (λ x → x + 3) 4
 --         = (x + 3)[x := 4]
---         = (4 + 3)
---         = 7
+--         = 4 + 3 = 7
 
 -- test it with C-c C-n!
 
 add4 : ℕ → ℕ
-add4 = {!!}
+add4 = 4 +_ --vagy _+ 4
 
 -- Goal type and context:                  C-c C-,
 -- Goal type, context, inferred type:      C-c C-.
@@ -93,21 +92,34 @@ add4 = {!!}
 -- functions with multiple arguments
 
 add : ℕ → ℕ → ℕ
-add = {!!}
+add = _+_
+-- add = λ x → λ y → x + y
+-- add x y = x + y
 
 -- ℕ → (ℕ → ℕ) = ℕ → ℕ → ℕ
 --             ≠ (ℕ → ℕ) → ℕ
 -- bracketing of λ
 
+add3''' : ℕ → ℕ
+add3''' = add 3
+
+{-
+add3''' 5 = (add 3) 5 = add 3 5 = 3 + 5 = 8
+-}
+
+{-
+f : ℕ → ℕ; x = ℕ
+akkor
+f f f x = (f f f) x; ami nem értelmes
+
+ℕ → ℕ → ℕ = ℕ → (ℕ → ℕ)
+-}
+
 -- same as λ x → λ y → x + y (which means λ x → (λ y → x + y))
 -- same as λ x y → x + y
 
--- currying
-add3'' : ℕ → ℕ
-add3'' = add 3
-
 {-
-add3'' = add 3 = (λ x → (λ y → x + y)) 3
+add3''' = add 3 = (λ x → (λ y → x + y)) 3
                = (λ y → x + y)[ x := 3]
                = (λ y → 3 + y)
 -}
@@ -135,13 +147,17 @@ num1' = (add 3) 4
 num4 : ℕ
 num4 = add 3 (add 4 2)
 
+{-
+add 3 (add 4 2) = add 3 (4 + 2) = add 3 6 = 3 + 6 = 9
+-}
+
 -- Higher-order functions: functions with functions as arguments
 -- e.g. in Haskell:   map :: (a -> b) -> [a] -> [b]
 
 -- write a function of the following type:
 
 f1 : (ℕ → ℕ) → ℕ
-f1 = {!!}
+f1 = λ f → 3
 
 -- test it with f1 add3, f1 add4. is the result the same?
 
@@ -149,12 +165,15 @@ f1 = {!!}
 --   f2 add3 ≠ f2 add4 ≠ f3 add4 ≠ f3 add3
 
 f2 f3 : (ℕ → ℕ) → ℕ
-f2 = {!!}
-f3 = {!!}
+f2 f = f 0
+f3 f = f 100
 
 -- a polymorphic function
 tw : {A : Set} → (A → A) → A → A  --apply a function twice
 tw f n = f (f n)
+
+twexample : ℕ
+twexample = tw add3 5
 
 -- consider
 
@@ -163,13 +182,20 @@ t = tw tw add3 1
 -- what is its value?  guess, and ask Agda too (C-c C-n).
 
 {-
+t = tw tw add3 1 = (tw {ℕ → ℕ} tw add3) 1 = (tw (tw add3)) 1 =
+                 = tw {ℕ} (tw add3) 1 = (tw add3) ((tw add3) 1) =
+                 = add3 (add3 (tw add3 1)) = add3 (add3 (add3 (add3 1))) =
+                 = 3 + (add3 (add3 (add3 1)))
+-}
+
+{-
 an equational reasoning:
 t = tw tw add3 1 = ...
 -}
 
 first : {A : Set} → A → A → A
-first = {!!}
+first = λ x y → x
 
 second : {A : Set} → A → A → A
-second = {!!}
+second = λ x y → y
 
