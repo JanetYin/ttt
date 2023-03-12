@@ -172,13 +172,17 @@ a másik legyen True, amely legyen az (inr tt) a tesztek miatt.
 (Nyilván nagybetűkkel, mert a kisbetűsök már foglaltak.)
 -}
 
+pattern False = inl tt
+pattern True = inr tt
+
 -- Definiáld az if_then_else'_ függvényt, amely a ⊤ ⊎ ⊤
 -- típussal definiálja a Bool típust.
 -- Add meg a függvény típusát is úgy, hogy a Bool'-t használja!
 -- A második és harmadik paraméterek tetszőlegesek, de azonos
 -- típusúaknak kell lenniük.
-if_then_else'_ : {!   !}
-if b then x else' y = {!   !}
+if_then_else'_ : {A : Set} → Bool' → A → A → A
+if False then x else' y = y
+if True then x else' y = x
 
 if-then-else-test1 : {A : Set}{x y : A} → if (inr tt) then x else' y ≡ x
 if-then-else-test1 = refl
@@ -190,11 +194,14 @@ if-then-else-test2 = refl
 -- Add meg a függvények típusait is!
 -- Ha a második paraméter változó, a megfelelő módon akkor is legyenek definícionális egyenlőségek.
 -- Tehát a második paraméter mindig maradjon változó és úgy legyenek definiálva a függvények.
-¬'_ : {!   !}
-_∧'_ _∨'_ _⊃'_ : {!   !}
+¬'_ : Bool' → Bool'
+_∧'_ _∨'_ _⊃'_ : Bool' → Bool' → Bool'
 
-¬' a = {!   !}
-a ∧' b = {!   !}
+¬' False = True
+¬' True = False
+
+True ∧' b = b
+False ∧' b = False
 a ∨' b = {!   !}
 a ⊃' b = {!   !}
 
@@ -204,8 +211,12 @@ a ⊃' b = {!   !}
 ∧-test-1 : (λ a → inr tt ∧' a) ≡ (λ a → a)
 ∧-test-1 = refl
 
-∧-test-2 : (λ a → a ∧' inl tt) ≢ (λ a → inl tt)
-∧-test-2 ()
+postulate
+  funExt : ∀{i j} {A : Set i} {B : A → Set j} {f g : (x : A) → B x} → (∀ x → f x ≡ g x) → f ≡ g
+
+∧-test-2 : (λ a → a ∧' inl tt) ≡ (λ a → inl tt)
+∧-test-2 = funExt λ { (inl tt) → refl
+                    ; (inr tt) → refl}
 
 ∧-test-3 : (λ a → inl tt ∧' a) ≡ (λ a → inl tt)
 ∧-test-3 = refl
