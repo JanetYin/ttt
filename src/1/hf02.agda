@@ -180,16 +180,16 @@ a másik legyen True, amely legyen az (inr tt) a tesztek miatt.
 if_then_else'_ : {!   !}
 if b then x else' y = {!   !}
 
-if-then-else-test1 : {A : Set}{x y : A} → if (inl tt) then x else' y ≡ x
+if-then-else-test1 : {A : Set}{x y : A} → if (inr tt) then x else' y ≡ x
 if-then-else-test1 = refl
 
-if-then-else-test2 : {A : Set}{x y : A} → if (inr tt) then x else' y ≡ y
+if-then-else-test2 : {A : Set}{x y : A} → if (inl tt) then x else' y ≡ y
 if-then-else-test2 = refl
 
 -- Definiáld az alábbi logikai függvényeket, amelyek szintén Bool'-t használnak:
 -- Add meg a függvények típusait is!
--- Ha a második paraméter változó, a megfelelő módon akkor is legyenek definícionális egyenlőségek
--- a megfelelő módon.
+-- Ha a második paraméter változó, a megfelelő módon akkor is legyenek definícionális egyenlőségek.
+-- Tehát a második paraméter mindig maradjon változó és úgy legyenek definiálva a függvények.
 ¬'_ : {!   !}
 _∧'_ _∨'_ _⊃'_ : {!   !}
 
