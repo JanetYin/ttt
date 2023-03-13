@@ -1,4 +1,5 @@
 open import lib hiding (_+_; _*_; _-_; _<_)
+-- mi itt a hiding?
 
 ---------------------------------------------------------
 -- natural numbers
@@ -7,11 +8,14 @@ open import lib hiding (_+_; _*_; _-_; _<_)
 data Maybe A : Set where
   Nothing : Maybe A
   Just    : A → Maybe A
+-- kvázi hozzárak egy extremális értéket
+-- de: ugyanaz-e a Just zero, mint a zero?
 
 pred : ℕ → Maybe ℕ
 pred zero = Nothing
 pred (suc n) = Just n
 
+-- az előző inverze
 zerosuc : Maybe ℕ → ℕ
 zerosuc = {!!}
 
@@ -42,7 +46,6 @@ half-test3 = refl
 
 _+_ : ℕ → ℕ → ℕ
 _+_ = {!!}
-infixl 6 _+_
 
 +-test1 : 3 + 5 ≡ 8
 +-test1 = refl
@@ -65,7 +68,8 @@ infixl 7 _*_
 *-test4 = refl
 
 _^_ : ℕ → ℕ → ℕ
-_^_ = {!!}
+n ^ zero = 1
+n ^ suc m = n * (n ^ m)
 infixr 8 _^_
 
 ^-test1 : 3 ^ 4 ≡ 81
@@ -153,8 +157,9 @@ comp-test3 = refl
 
 -- hasznald comp-ot!
 gcd : ℕ → ℕ → ℕ
-{-# TERMINATING #-}
-gcd m n = {!!}
+-- {-# TERMINATING #-}  -- feketemágia, kac-kac
+gcd m zero = m
+gcd = {!!}
 
 gcd-test1 : gcd 6 9 ≡ 3
 gcd-test1 = refl
@@ -172,7 +177,7 @@ gcd-helper : ℕ → ℕ → ℕ → ℕ
 gcd-helper zero m n = 42
 gcd-helper (suc fuel) m n = {!!}
 gcd' : ℕ → ℕ → ℕ
-gcd' m n = gcd-helper (m + n) m n
+gcd' m n = gcd-helper (m + n) m n  --at most (m + n) steps are enough
 
 gcd'-test1 : gcd' 6 9 ≡ 3
 gcd'-test1 = refl

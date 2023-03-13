@@ -1,1 +1,7 @@
-lib.agda
+*~
+*.log
+*.nav
+*.aux
+*.snm
+*.out
+*.toc

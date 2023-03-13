@@ -76,8 +76,11 @@ d = {!!}
 from : {A : Set} → A × A → (Bool → A)
 from = {!!}
 to : {A : Set} → (Bool → A) → A × A
-to = λ f → f true , f false
---testing that this is essantially a bijection
+to = {!!}
+bij : {A : Set} → A × A ↔ (Bool → A)
+bij = from , to
+-- ez igazából annak tesztelése, hogy ez bijekció
+-- és miért kell ezt tesztelni? mert amúgy tudnál ⊤ ↔ Bool-t is csinálni
 testfromto1 : {A : Set}{a b : A} → fst (to (from (a , b))) ≡ a
 testfromto1 = refl
 testfromto2 : {A : Set}{a b : A} → snd (to (from (a , b))) ≡ b
@@ -87,16 +90,11 @@ testfromto3 = refl
 testfromto4 : {A : Set}{a b : A} → from (to (λ x → if x then a else b)) false ≡ b
 testfromto4 = refl
 
-{-
-why do we need these tests now?
-consider ⊤ ↔ Bool
--}
-
 ------------------------------------------------------
 -- all algebraic laws systematically
 ------------------------------------------------------
 
--- Curry–Howard correspondance
+-- Curry–Howard correspondence
 
 -- (⊎, ⊥) form a commutative monoid (kommutativ egysegelemes felcsoport)
 
@@ -106,6 +104,7 @@ assoc⊎ = {!!}
 idl⊎ : {A : Set} → ⊥ ⊎ A ↔ A
 idl⊎ = {!!}
 
+-- homework
 idr⊎ : {A : Set} → A ⊎ ⊥ ↔ A
 idr⊎ = {!!}
 
@@ -120,7 +119,8 @@ assoc× = {!!}
 idl× : {A : Set} → ⊤ × A ↔ A
 idl× = {!!}
 
-idr× : {A : Set} → A × ⊤ ↔ A -- hw
+-- homework
+idr× : {A : Set} → A × ⊤ ↔ A
 idr× = {!!}
 
 -- ⊥ is a null element
@@ -137,9 +137,12 @@ dist = {!!}
 
 curry : ∀{A B C : Set} → (A × B → C) ↔ (A → B → C)
 curry = {!!}
+-- think of it another way: C^(A×B)=(C^B)^A
 
+-- homework
 ⊎×→ : {A B C D : Set} → ((A ⊎ B) → C) ↔ (A → C) × (B → C)
 ⊎×→ = {!!}
+-- C^(A+B)=(C^A)×(C^B)
 
 law^0 : {A : Set} → (⊥ → A) ↔ ⊤
 law^0 = {!!}
