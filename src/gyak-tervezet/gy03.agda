@@ -66,7 +66,7 @@ infixl 7 _*_
 
 _^_ : ℕ → ℕ → ℕ
 _^_ = {!!}
-infixl 8 _^_
+infixr 8 _^_
 
 ^-test1 : 3 ^ 4 ≡ 81
 ^-test1 = refl
