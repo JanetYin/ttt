@@ -125,14 +125,36 @@ law1^ = {!!}
 -- random isomorphisms
 ------------------------------------------------------
 
+-- |Bool| = 2
+-- |⊤| = 1
+-- |Bool × ⊤| = |Bool| * |⊤|
+-- |Bool → ⊤| = |⊤| ^ |Bool| 
+-- f : Bool → ⊤
+-- f _ = tt
+
 iso1 : {A B : Set} → (Bool → (A ⊎ B)) ↔ ((Bool → A) ⊎ Bool × A × B ⊎ (Bool → B))
-iso1 = {!!}
+iso1 {A} {B} = to' , from' where
+  to' : (Bool → (A ⊎ B)) → ((Bool → A) ⊎ Bool × A × B ⊎ (Bool → B))
+  to' f with f false
+  ...| inl a = inl (λ _ → a)
+  ...| inr b = inr (inr (λ _ → b))
+  -- to' f = case (f false) (λ a → inl λ _ → a) (λ b → inr (inr λ _ → b))
+  -- Ezzel nem egészen bizonyítható izomorfan a dolog.
+  -- Mindenképpen kéne hozzá az `f true` is, hogy "jól" lehessen bizonyítani.
+
+  from' : ((Bool → A) ⊎ Bool × A × B ⊎ (Bool → B)) → (Bool → (A ⊎ B))
+  from' x = {!   !}
 
 iso2 : {A B : Set} → ((A ⊎ B) → ⊥) ↔ ((A → ⊥) × (B → ⊥))
 iso2 = {!!}
 
 iso3 : (⊤ ⊎ ⊤ ⊎ ⊤) ↔ Bool ⊎ ⊤
-iso3 = {!!}
+iso3 = (λ where (inl tt) → inl true
+                (inr (inl tt)) → inl false
+                (inr (inr tt)) → inr tt )
+      , 
+       (λ x → {!   !}) -- visszafelé "megfordítjuk a felső lambda nyilait"
+
 testiso3 : fst iso3 (inl tt) ≡ fst iso3 (inr (inl tt)) → ⊥
 testiso3 ()
 testiso3' : fst iso3 (inl tt) ≡ fst iso3 (inr (inr tt)) → ⊥
