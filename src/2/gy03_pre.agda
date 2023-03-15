@@ -43,17 +43,6 @@ law1^ = {!!}
 ---------------------------------------------------------
 -- natural numbers
 ---------------------------------------------------------
-{-
-data ℕ : Set where
-  zero : ℕ
-  suc  : ℕ → ℕ
--}
-
-n : ℕ
-n = 3
--- ez valójában suc (suc (suc zero)), csak agdáék voltak olyan rendesek,
--- hogy beépítettek egy ilyen átalakítót, ha megmondom, hogy melyik típus
--- a természetes számom.
 
 data Maybe A : Set where
   Nothing : Maybe A
@@ -64,8 +53,7 @@ pred zero = Nothing
 pred (suc n) = Just n
 
 zerosuc : Maybe ℕ → ℕ
-zerosuc Nothing = 0
-zerosuc (Just n) = suc n
+zerosuc = {!!}
 
 pred↔zerosuc-test1 : pred (zerosuc Nothing) ≡ Nothing
 pred↔zerosuc-test1 = refl
@@ -73,14 +61,7 @@ pred↔zerosuc-test2 : {n : ℕ} → pred (zerosuc (Just n)) ≡ Just n
 pred↔zerosuc-test2 = refl
 
 double : ℕ → ℕ
-double zero = 0
-double (suc n) = suc (suc (double n))
-
-{-
-alma : {A : Set} → A → A
-alma = alma
--- Ez nem működik, végtelen rekurziót agda nem enged.
--}
+double = {!!}
 
 double-test1 : double 2 ≡ 4
 double-test1 = refl
@@ -90,9 +71,7 @@ double-test3 : double 10 ≡ 20
 double-test3 = refl
 
 half : ℕ → ℕ
-half zero = 0
-half (suc zero) = 0
-half (suc (suc n)) = suc (half n)
+half = {!!}
 
 half-test1 : half 10 ≡ 5
 half-test1 = refl
@@ -102,8 +81,7 @@ half-test3 : half 12 ≡ 6
 half-test3 = refl
 
 _+_ : ℕ → ℕ → ℕ
-zero + b = b
-suc a + b = suc (a + b)
+_+_ = {!!}
 infixl 6 _+_
 
 +-test1 : 3 + 5 ≡ 8
@@ -114,10 +92,7 @@ infixl 6 _+_
 +-test3 = refl
 
 _*_ : ℕ → ℕ → ℕ
-zero * b = 0
-suc a * b = a * b + b
--- Lehetne b + a * b is, de akkor ha definíció szerint kibontjuk a kifejezést,
--- akkor az összeg jobb oldalán lenne egy 0, amit a definíció szerint nem lehet egyszerűsíteni.
+_*_ = {!!}
 infixl 7 _*_
 
 *-test1 : 3 * 4 ≡ 12
@@ -166,9 +141,7 @@ infixl 6 _-_
 -test3 = refl
 
 _≥_ : ℕ → ℕ → Bool
-a ≥ zero = true
-zero ≥ suc b = false
-suc a ≥ suc b = a ≥ b
+_≥_ = {!!}
 
 ≥test1 : 3 ≥ 2 ≡ true
 ≥test1 = refl
@@ -179,7 +152,7 @@ suc a ≥ suc b = a ≥ b
 
 -- ne hasznalj rekurziot, hanem hasznald _≥_-t!
 _>_ : ℕ → ℕ → Bool
-a > b = a ≥ suc b
+_>_ = {!!}
 
 >test1 : 3 > 2 ≡ true
 >test1 = refl
@@ -220,6 +193,7 @@ comp-test3 = refl
 
 -- hasznald comp-ot!
 gcd : ℕ → ℕ → ℕ
+{-# TERMINATING #-}
 gcd m n = {!!}
 
 gcd-test1 : gcd 6 9 ≡ 3
