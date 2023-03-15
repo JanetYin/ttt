@@ -66,6 +66,7 @@ A Tao könyv fejezetei vannak hivatkozva.
 |      | 2.3. λ-calculus                                                   | Bool beepitettkent               |
 |      | 2.4 combinatory logic                                             |                                  |
 |      | 2.5 products, sums, finite types                                  |                                  |
+|      | tipuslevezetes szabalyok alapjan                                  |                                  |
 |    3 | induktiv tipusok data-val megadva, Bool-t is elmondani            | induktiv tipusok                 |
 |      | 4.1-4.2 inductive types: Nat, Maybe, Ackermann, iterator-recursor |                                  |
 |      | 4.3 List, Expr, RoseTree, (Ord)                                   |                                  |
