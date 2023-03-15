@@ -29,36 +29,41 @@ un3 = inr 5
 -- look at the definition with M-.
 -- pattern matching: C-c C-c
 flip : ℕ × Bool → Bool × ℕ
-flip = {!!}
+flip (n , b) = b , n
 
+-- same scheme
 flipback : Bool × ℕ → ℕ × Bool
 flipback = {!!}
 
 -- in general:
 comm× : {A B : Set} → A × B → B × A
-comm× = {!!}
+comm× (a , b) = b , a
 -- basically, this is the only way it can be defined
 
 comm×back : {A B : Set} → B × A → A × B
 comm×back = comm×
 
+--        2  × 1
 b1 b2 : Bool × ⊤
-b1 = {!!}
-b2 = {!!}
+b1 = true , tt
+b2 = false , tt
 b1≠b2 : b1 ≡ b2 → ⊥  --what is this?
 b1≠b2 ()
+-- b1≠b2 = λ {()}
+-- λ { true → ? ; false → ? }
 
+--      1  + 1
 t1 t2 : ⊤ ⊎ ⊤
-t1 = {!!}
-t2 = {!!}
+
+t1 = inl tt
+t2 = inr tt
 t1≠t2 : t1 ≡ t2 → ⊥
 t1≠t2 ()
 
--- why 3?
 bb1 bb2 bb3 : Bool ⊎ ⊤
-bb1 = {!!}
-bb2 = {!!}
-bb3 = {!!}
+bb1 = inl true
+bb2 = inl false
+bb3 = inr tt
 bb1≠bb2 : bb1 ≡ bb2 → ⊥
 bb1≠bb2 ()
 bb1≠bb3 : bb1 ≡ bb3 → ⊥
@@ -67,16 +72,20 @@ bb2≠bb3 : bb2 ≡ bb3 → ⊥
 bb2≠bb3 ()
 
 ee : (⊤ → ⊥) ⊎ (⊥ → ⊤)
-ee = {!!}
+ee = inr (λ {()})
+
+-- btb : ⊥ → Bool
+-- btb _ = true is basically the same as btb _ = false 
 
 -- how many different elements does this type have?
+--  (1 +  (1 × 0))  ×  (1 + 0)
 d : (⊤ ⊎ (⊤ × ⊥)) × (⊤ ⊎ ⊥)
-d = {!!}
+d = inl tt , inl tt
 
 from : {A : Set} → A × A → (Bool → A)
-from = {!!}
+from (a1 , a2) = λ {true → a1 ; false → a2}
 to : {A : Set} → (Bool → A) → A × A
-to = {!!}
+to f = f true , f false
 bij : {A : Set} → A × A ↔ (Bool → A)
 bij = from , to
 -- ez igazából annak tesztelése, hogy ez bijekció
@@ -98,8 +107,10 @@ testfromto4 = refl
 
 -- (⊎, ⊥) form a commutative monoid (kommutativ egysegelemes felcsoport)
 
+-- C-u C-u C-c C-,
 assoc⊎ : {A B C : Set} → (A ⊎ B) ⊎ C ↔ A ⊎ (B ⊎ C)
-assoc⊎ = {!!}
+assoc⊎ = (λ x → case x (λ y → case y (λ a → inl a) λ b → inr (inl b)) λ c → inr (inr c)) ,
+          λ { (inl a) → inl (inl a) ; (inr bvc) → case bvc (λ b → inl (inr b)) λ c → inr c }
 
 idl⊎ : {A : Set} → ⊥ ⊎ A ↔ A
 idl⊎ = {!!}
@@ -108,8 +119,9 @@ idl⊎ = {!!}
 idr⊎ : {A : Set} → A ⊎ ⊥ ↔ A
 idr⊎ = {!!}
 
+-- homework
 comm⊎ : {A B : Set} → A ⊎ B ↔ B ⊎ A
-comm⊎ = {!!}
+comm⊎ = (λ avb → case avb (λ a → inr a) {!!}) , {!!}
 
 -- (×, ⊤) form a commutative monoid (kommutativ egysegelemes felcsoport)
 
