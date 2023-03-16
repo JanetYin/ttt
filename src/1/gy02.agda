@@ -97,7 +97,13 @@ assoc⊎ = to' , from' where
   from' (inr (inr x)) = inr x
 
 idl⊎ : {A : Set} → ⊥ ⊎ A ↔ A
-idl⊎ = {!!}
+idl⊎ = to' , from' where
+  to' : {A : Set} → ⊥ ⊎ A → A
+  to' (inl x) = exfalso x
+  to' (inr x) = x
+
+  from' : {A : Set} → A → ⊥ ⊎ A
+  from' a = inr a
 
 idr⊎ : {A : Set} → A ⊎ ⊥ ↔ A
 idr⊎ = {!!}
@@ -108,7 +114,12 @@ comm⊎ = {!!}
 -- (×, ⊤) form a commutative monoid (kommutativ egysegelemes felcsoport)
 
 assoc× : {A B C : Set} → (A × B) × C ↔ A × (B × C)
-assoc× = {!!}
+assoc× = to' , from' where
+  to' : {A B C : Set} → (A × B) × C → A × (B × C)
+  to' abc = fst (fst abc) , (snd (fst abc) , snd abc)
+
+  from' : {A B C : Set} → A × (B × C) → (A × B) × C
+  from' (a , b , c) = (a , b) , c
 
 idl× : {A : Set} → ⊤ × A ↔ A
 idl× = {!!}
@@ -119,7 +130,12 @@ idr× = {!!}
 -- ⊥ is a null element
 
 null× : {A : Set} → A × ⊥ ↔ ⊥
-null× = {!!}
+null× = to' , from' where
+  to' : {A : Set} → A × ⊥ → ⊥
+  to' a = snd a
+
+  from' : {A : Set} → ⊥ → A × ⊥
+  from' a = exfalso a
 
 -- distributivity of × and ⊎
 
