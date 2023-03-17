@@ -32,4 +32,4 @@ comm⊎ : {A B : Set} → A ⊎ B ↔ B ⊎ A
 comm⊎ = {!!}
 
 spec : {A B C : Set} → (A ⊎ B) ⊎ C ↔ C ⊎ (B ⊎ A)
-spec = ?
+spec = {!!}
