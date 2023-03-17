@@ -1,60 +1,28 @@
 open import lib
 
--- about _×_ (\x) and _⊎_ (\u+)
-
-rec : ℕ × Bool
--- fst rec = 5
--- snd rec = true
-rec = 5 , true
-
--- 5 , 4 != 4 , 5
-
-un1 un2 : ℕ ⊎ Bool
-un1 = inl 5
-un2 = inr true
-
-un3 : ℕ ⊎ ℕ
-un3 = inr 5
-
--- inl 5 =? inr 5
-
--- Maybe is actually ℕ ⊎ ⊤
-
--- NOTE: until here (and case in lib)
-
 ------------------------------------------------------
 -- simple finite types
 ------------------------------------------------------
 
--- look at the definition with M-.
--- pattern matching: C-c C-c
 flip : ℕ × Bool → Bool × ℕ
-flip (n , b) = b , n
+flip (fst₁ , snd₁) = snd₁ , fst₁
 
--- same scheme
 flipback : Bool × ℕ → ℕ × Bool
-flipback = {!!}
+flipback = λ x → snd x , fst x
 
--- in general:
 comm× : {A B : Set} → A × B → B × A
-comm× (a , b) = b , a
--- basically, this is the only way it can be defined
+comm× = λ {(fst₁ , snd₁) → snd₁ , fst₁}
 
 comm×back : {A B : Set} → B × A → A × B
 comm×back = comm×
 
---        2  × 1
 b1 b2 : Bool × ⊤
 b1 = true , tt
 b2 = false , tt
-b1≠b2 : b1 ≡ b2 → ⊥  --what is this?
+b1≠b2 : b1 ≡ b2 → ⊥
 b1≠b2 ()
--- b1≠b2 = λ {()}
--- λ { true → ? ; false → ? }
 
---      1  + 1
 t1 t2 : ⊤ ⊎ ⊤
-
 t1 = inl tt
 t2 = inr tt
 t1≠t2 : t1 ≡ t2 → ⊥
@@ -72,24 +40,16 @@ bb2≠bb3 : bb2 ≡ bb3 → ⊥
 bb2≠bb3 ()
 
 ee : (⊤ → ⊥) ⊎ (⊥ → ⊤)
-ee = inr (λ {()})
+ee = inr λ x → exfalso x -- vagy tt
 
--- btb : ⊥ → Bool
--- btb _ = true is basically the same as btb _ = false 
-
--- how many different elements does this type have?
---  (1 +  (1 × 0))  ×  (1 + 0)
 d : (⊤ ⊎ (⊤ × ⊥)) × (⊤ ⊎ ⊥)
 d = inl tt , inl tt
 
 from : {A : Set} → A × A → (Bool → A)
-from (a1 , a2) = λ {true → a1 ; false → a2}
+from = λ {x false → snd x
+        ; x true → fst x}
 to : {A : Set} → (Bool → A) → A × A
-to f = f true , f false
-bij : {A : Set} → A × A ↔ (Bool → A)
-bij = from , to
--- ez igazából annak tesztelése, hogy ez bijekció
--- és miért kell ezt tesztelni? mert amúgy tudnál ⊤ ↔ Bool-t is csinálni
+to = λ f → f true , f false
 testfromto1 : {A : Set}{a b : A} → fst (to (from (a , b))) ≡ a
 testfromto1 = refl
 testfromto2 : {A : Set}{a b : A} → snd (to (from (a , b))) ≡ b
@@ -103,25 +63,23 @@ testfromto4 = refl
 -- all algebraic laws systematically
 ------------------------------------------------------
 
--- Curry–Howard correspondence
-
 -- (⊎, ⊥) form a commutative monoid (kommutativ egysegelemes felcsoport)
 
--- C-u C-u C-c C-,
 assoc⊎ : {A B C : Set} → (A ⊎ B) ⊎ C ↔ A ⊎ (B ⊎ C)
-assoc⊎ = (λ x → case x (λ y → case y (λ a → inl a) λ b → inr (inl b)) λ c → inr (inr c)) ,
-          λ { (inl a) → inl (inl a) ; (inr bvc) → case bvc (λ b → inl (inr b)) λ c → inr c }
+assoc⊎ = (λ {(inl (inl x)) → inl x
+           ; (inl (inr x)) → inr (inl x)
+           ; (inr x) → inr (inr x)}) , λ {(inl x) → inl (inl x)
+                                        ; (inr (inl x)) → inl (inr x)
+                                        ; (inr (inr x)) → inr x}
 
 idl⊎ : {A : Set} → ⊥ ⊎ A ↔ A
 idl⊎ = {!!}
 
--- homework
 idr⊎ : {A : Set} → A ⊎ ⊥ ↔ A
 idr⊎ = {!!}
 
--- homework
 comm⊎ : {A B : Set} → A ⊎ B ↔ B ⊎ A
-comm⊎ = (λ avb → case avb (λ a → inr a) {!!}) , {!!}
+comm⊎ = {!!}
 
 -- (×, ⊤) form a commutative monoid (kommutativ egysegelemes felcsoport)
 
@@ -131,14 +89,13 @@ assoc× = {!!}
 idl× : {A : Set} → ⊤ × A ↔ A
 idl× = {!!}
 
--- homework
 idr× : {A : Set} → A × ⊤ ↔ A
 idr× = {!!}
 
 -- ⊥ is a null element
 
-nullr× : {A : Set} → A × ⊥ ↔ ⊥
-nullr× = {!!}
+null× : {A : Set} → A × ⊥ ↔ ⊥
+null× = {!!}
 
 -- distributivity of × and ⊎
 
@@ -149,12 +106,9 @@ dist = {!!}
 
 curry : ∀{A B C : Set} → (A × B → C) ↔ (A → B → C)
 curry = {!!}
--- think of it another way: C^(A×B)=(C^B)^A
 
--- homework
 ⊎×→ : {A B C D : Set} → ((A ⊎ B) → C) ↔ (A → C) × (B → C)
 ⊎×→ = {!!}
--- C^(A+B)=(C^A)×(C^B)
 
 law^0 : {A : Set} → (⊥ → A) ↔ ⊤
 law^0 = {!!}
@@ -175,7 +129,6 @@ iso1 = {!!}
 iso2 : {A B : Set} → ((A ⊎ B) → ⊥) ↔ ((A → ⊥) × (B → ⊥))
 iso2 = {!!}
 
--- here make sure that it is a bijection
 iso3 : (⊤ ⊎ ⊤ ⊎ ⊤) ↔ Bool ⊎ ⊤
 iso3 = {!!}
 testiso3 : fst iso3 (inl tt) ≡ fst iso3 (inr (inl tt)) → ⊥
@@ -185,7 +138,6 @@ testiso3' ()
 testiso3'' : fst iso3 (inr (inl tt)) ≡ fst iso3 (inr (inr tt)) → ⊥
 testiso3'' ()
 
--- here too
 iso4 : (⊤ → ⊤ ⊎ ⊥ ⊎ ⊤) ↔ (⊤ ⊎ ⊤)
 iso4 = {!!} , {!!}
 testiso4 : fst iso4 (λ _ → inl tt) ≡ fst iso4 (λ _ → inr (inr tt)) → ⊥

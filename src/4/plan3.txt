@@ -1,8 +1,9 @@
 0:00-0:05	kérdések
 0:05-0:15	röpi
 0:15-0:20	röpi megbeszélése, ha van igény rá
-0:20-0:35	összeadogatós
-0:35-0:45	mese: Curry–Howard
-0:45-1:15	feladatok gy02-ből
-1:15-1:28	gy03? (max. gcd-ig)
+0:20-0:25	lib alja (bottomtól)
+0:25-0:40	összeadogatós
+0:40-0:50	mese: Curry–Howard
+0:50-1:20	feladatok gy02-ből
+1:20-1:28	gy03? (max. gcd-ig)
 1:28-1:30	röpi témája, házi

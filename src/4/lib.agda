@@ -33,7 +33,7 @@ record _×_ {i}{j}(A : Set i)(B : Set j) : Set (i ⊔ j) where
 open _×_ public
 
 -- Sum types
-data _⊎_ {i}{j}(A : Set i)(B : Set j) : Set (i ⊔ j) where
+data _⊎_ {i}{j}(A : Set i)(B : Set j) : Set (i ⊔ j) where         -- \u+
   inl : A → A ⊎ B
   inr : B → A ⊎ B
 
@@ -44,23 +44,24 @@ case (inl a) f g = f a
 case (inr b) f g = g b
 
 -- Empty type
-data ⊥ : Set where
+data ⊥ : Set where  -- \bot
 
 exfalso : ∀{i}{A : Set i} → ⊥ → A
 exfalso ()
 
 -- Unit type
-record ⊤ : Set where
+record ⊤ : Set where        -- \top
   instance constructor tt
 open ⊤ public
+{-# BUILTIN UNIT ⊤ #-}
 
-_↔_ : ∀{i j} → Set i → Set j → Set (i ⊔ j)
+_↔_ : ∀{i j} → Set i → Set j → Set (i ⊔ j)         -- \lr
 A ↔ B = (A → B) × (B → A)
 
-¬_ : ∀{i} → Set i → Set i
+¬_ : ∀{i} → Set i → Set i                     -- \neg
 ¬ A = A → ⊥
 
-infix 4 _≢_
+infix 4 _≢_                                     -- \equiv  \nequiv  
 
 _≢_ : ∀{i}{A : Set i}(x y : A) → Set i
 x ≢ y = ¬ (x ≡ y)
