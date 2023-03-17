@@ -1,14 +1,40 @@
 open import lib hiding (_+_; _*_; _-_; _<_)
 
+
+xor : Bool × Bool → Bool
+xor (false , false) = false
+xor (false , true) = true
+xor (true , false) = true
+xor (true , true) = false
+
+test-xor-1 : xor (true  , true ) ≡ false
+test-xor-1 = refl
+test-xor-2 : xor (true  , false) ≡ true
+test-xor-2 = refl
+test-xor-3 : xor (false , true ) ≡ true
+test-xor-3 = refl
+test-xor-4 : xor (false , false) ≡ false
+test-xor-4 = refl
+
 ---------------------------------------------------------
 -- random isomorphisms
 ------------------------------------------------------
 
+-- case függvény
+-- case : {A B C : Set} → A ⊎ B → (A → C) → (B → C) → C
+-- case (inl a) ac _ = ac a
+-- case (inr b) _ bc = bc b
+
 iso1 : {A B : Set} → (Bool → (A ⊎ B)) ↔ ((Bool → A) ⊎ Bool × A × B ⊎ (Bool → B))
-iso1 = {!!}
+iso1 = (λ x → case (x true) (λ x₁ → inl (λ b → x₁)) λ x₁ → inr (inr (λ b → x₁))) ,
+--  λ { (inl x) x₁ → {!!} ; (inr x) x₁ → {!!}} -- Ctrl-C Ctrl-r
+  λ { (inl x) x₁ → inl (x x₁) ;
+  (inr (inl (fst₁ , fst₂ , snd₁))) x₁ → inl fst₂ ;
+  (inr (inr x)) x₁ → inr (x x₁)}
 
 iso2 : {A B : Set} → ((A ⊎ B) → ⊥) ↔ ((A → ⊥) × (B → ⊥))
-iso2 = {!!}
+iso2 = (λ x → (λ a → x (inl a)) , λ b → x (inr b))
+  , λ { x (inl x₁) → fst x x₁ ; x (inr x₁) → snd x x₁}
 
 iso3 : (⊤ ⊎ ⊤ ⊎ ⊤) ↔ Bool ⊎ ⊤
 iso3 = {!!}
@@ -30,6 +56,8 @@ testiso4' ()
 -- natural numbers
 ---------------------------------------------------------
 
+-- data ℕ = zero | suc ℕ
+
 data Maybe A : Set where
   Nothing : Maybe A
   Just    : A → Maybe A
@@ -47,7 +75,16 @@ pred↔zerosuc-test2 : {n : ℕ} → pred (zerosuc (Just n)) ≡ Just n
 pred↔zerosuc-test2 = refl
 
 double : ℕ → ℕ
-double = {!!}
+double zero = zero
+double (suc n) = suc (suc (double n))
+
+--- double (suc (suc (suc zero))) ≡ double 3
+--- n = suc (suc zero)
+--- suc (suc (double n)) ≡ suc (suc (double (suc (suc zero))))
+--- n = suc zero
+--- suc (suc (suc (suc (double (suc zero)))))
+--- n = zero
+--- suc (suc (suc (suc (suc (suc (zero))))))
 
 double-test1 : double 2 ≡ 4
 double-test1 = refl
@@ -57,7 +94,9 @@ double-test3 : double 10 ≡ 20
 double-test3 = refl
 
 half : ℕ → ℕ
-half = {!!}
+half zero = zero
+half (suc zero) = zero
+half (suc (suc n)) = suc (half n)
 
 half-test1 : half 10 ≡ 5
 half-test1 = refl
@@ -67,7 +106,10 @@ half-test3 : half 12 ≡ 6
 half-test3 = refl
 
 _+_ : ℕ → ℕ → ℕ
-_+_ = {!!}
+zero + zero = zero
+zero + suc x₁ = suc x₁
+suc x + zero = suc x
+suc x + suc x₁ = suc (suc (x + x₁))
 infixl 6 _+_
 
 +-test1 : 3 + 5 ≡ 8
@@ -78,7 +120,8 @@ infixl 6 _+_
 +-test3 = refl
 
 _*_ : ℕ → ℕ → ℕ
-_*_ = {!!}
+zero * y = zero
+suc x * y = x * y + y
 infixl 7 _*_
 
 *-test1 : 3 * 4 ≡ 12
@@ -91,7 +134,8 @@ infixl 7 _*_
 *-test4 = refl
 
 _^_ : ℕ → ℕ → ℕ
-_^_ = {!!}
+x ^ zero = suc zero
+x ^ suc x₁ = x * (x ^ x₁)
 infixr 8 _^_
 
 ^-test1 : 3 ^ 4 ≡ 81
@@ -106,7 +150,9 @@ infixr 8 _^_
 ^-test5 = refl
 
 _! : ℕ → ℕ
-_! = {!!}
+zero ! = suc zero
+suc x ! = suc x * x !
+
 
 !-test1 : 3 ! ≡ 6
 !-test1 = refl
@@ -116,7 +162,10 @@ _! = {!!}
 !-test3 = refl
 
 _-_ : ℕ → ℕ → ℕ
-_-_ = {!!}
+zero - zero = zero
+zero - suc x₁ = zero
+suc x - zero = suc x
+suc x - suc x₁ = x - x₁
 infixl 6 _-_
 
 -test1 : 3 - 2 ≡ 1
@@ -127,7 +176,10 @@ infixl 6 _-_
 -test3 = refl
 
 _≥_ : ℕ → ℕ → Bool
-_≥_ = {!!}
+zero ≥ zero = true
+zero ≥ suc x₁ = false
+suc x ≥ zero = true
+suc x ≥ suc x₁ = x ≥ x₁
 
 ≥test1 : 3 ≥ 2 ≡ true
 ≥test1 = refl
@@ -136,9 +188,18 @@ _≥_ = {!!}
 ≥test3 : 3 ≥ 4 ≡ false
 ≥test3 = refl
 
+_&&_ : Bool → Bool → Bool
+true && true = true
+_ && _ = false
+
+
+not'' : Bool → Bool
+not'' true = false
+not'' false = true
+
 -- ne hasznalj rekurziot, hanem hasznald _≥_-t!
 _>_ : ℕ → ℕ → Bool
-_>_ = {!!}
+a > b = (a ≥ b) && not'' (b ≥ a)
 
 >test1 : 3 > 2 ≡ true
 >test1 = refl
@@ -146,6 +207,10 @@ _>_ = {!!}
 >test2 = refl
 >test3 : 3 > 4 ≡ false
 >test3 = refl
+
+not' : Bool → Bool
+not' true = false
+not' false = true
 
 _<_ : ℕ → ℕ → Bool
 _<_ = {!!}
@@ -168,7 +233,9 @@ min-test3 : min 3 3 ≡ 3
 min-test3 = refl
 
 comp : {A : Set} → ℕ → ℕ → A → A → A → A
-comp m n m<n m=n m>n = {!!}
+comp m n m<n m=n m>n with m ≥ n
+... | false = {!!}
+... | true = {!!}
 
 comp-test1 : comp 10 10 0 1 2 ≡ 1
 comp-test1 = refl

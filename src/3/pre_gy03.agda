@@ -8,6 +8,8 @@ data Maybe A : Set where
   Nothing : Maybe A
   Just    : A → Maybe A
 
+-- data ℕ = zero | suc ℕ
+
 pred : ℕ → Maybe ℕ
 pred zero = Nothing
 pred (suc n) = Just n
@@ -21,7 +23,8 @@ pred↔zerosuc-test2 : {n : ℕ} → pred (zerosuc (Just n)) ≡ Just n
 pred↔zerosuc-test2 = refl
 
 double : ℕ → ℕ
-double = {!!}
+double zero = zero
+double (suc x) = suc (suc (double x))
 
 double-test1 : double 2 ≡ 4
 double-test1 = refl
@@ -31,7 +34,9 @@ double-test3 : double 10 ≡ 20
 double-test3 = refl
 
 half : ℕ → ℕ
-half = {!!}
+half zero = zero
+half (suc zero) = zero
+half (suc (suc x)) = suc (half x)
 
 half-test1 : half 10 ≡ 5
 half-test1 = refl
@@ -41,7 +46,8 @@ half-test3 : half 12 ≡ 6
 half-test3 = refl
 
 _+_ : ℕ → ℕ → ℕ
-_+_ = {!!}
+zero + x₁ = x₁
+suc x + x₁ = suc (x + x₁)
 infixl 6 _+_
 
 +-test1 : 3 + 5 ≡ 8
