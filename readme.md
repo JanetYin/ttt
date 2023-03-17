@@ -102,7 +102,7 @@ A Tao könyv fejezetei vannak hivatkozva.
 |      | delay monad                                                       | delay monad                      |
 |      | oszthatosag, ha d|x es d|y, akkor d|x+y                           |                                  |
 
-## Típusok szabályai
+## Bevezető és kivezető szabályok
 
 | típus | bevezető       | eliminációs                                                  |
 |       | (ha ez a Goal) | (ha van egy t nevű feltétel vagy korábbról ismert definíció) |
@@ -115,4 +115,3 @@ A Tao könyv fejezetei vannak hivatkozva.
 |-------|----------------|--------------------------------------------------------------|
 | Bool  | true,false     | if t then ? else ?                                           |
 | ℕ     | zero,suc       | iteNat ? ? t, recNat ? ? t                                   |
-
