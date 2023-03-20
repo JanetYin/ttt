@@ -168,6 +168,11 @@ n ->   / \
 double' n -> if n == 0 then 0 else double' (n - 1) ->
 if n == 0 then 0 else if n == 0 then 0 else double' ((n - 1) - 1) ->
 if n == 0 then 0 else if n == 0 then 0 else if n == 0 then 0 else double' (((n - 1) - 1) - 1) -> ... ez folytatódna a végtelenségig.
+
+A fenti double működik n-re, tehát double n mindig terminál és ezt agda látja is.
+Ha n konkrét érték, akkor mintaillesztés miatt minden kiderül.
+Ha n változó, akkor a double n kifejezés már normálformában van, így szintén terminál.
+C-c C-n `double n` = double n
 -}
 
 _≥_ : ℕ → ℕ → Bool
@@ -318,7 +323,7 @@ iteNat'-test1 = refl
 iteNat'-test2 : {A : Set}{z : A}{s : A → A}{n : ℕ} → iteNat' z s (suc n) ≡ s (iteNat' z s n)
 iteNat'-test2 = refl
 
--- FEL: add meg recNat-ot mintaillesztes nelkul, iteNat segitsegevel (lasd eloadas)
+-- FEL: add meg recNat-ot mintaillesztes nelkul, iteNat segitsegevel
 recNat' : {A : Set} → A → (ℕ → A → A) → ℕ → A
 recNat' = {!!}
 
