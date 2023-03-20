@@ -112,6 +112,6 @@ A Tao könyv fejezetei vannak hivatkozva.
 | _⊎_   | inl ?, inr ?   | case t ? ?                                                   |
 | _×_   | ? , ?          | fst t, snd t                                                 |
 | _→_   | λ x → ?        | t ?                                                          |
-|-------|----------------|--------------------------------------------------------------|
+|       |                |                                                              |
 | Bool  | true,false     | if t then ? else ?                                           |
 | ℕ     | zero,suc       | iteNat ? ? t, recNat ? ? t                                   |
