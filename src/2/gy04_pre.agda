@@ -6,7 +6,30 @@ data Maybe A : Set where
   Nothing : Maybe A
   Just    : A → Maybe A
 
-comp : {A : Type} → ℕ → ℕ → A → A → A → A
+_≥_ : ℕ → ℕ → Bool
+_≥_ _ zero = true
+_≥_ zero _ = false
+_≥_ (suc n) (suc m) = n ≥ m
+
+≥test1 : 3 ≥ 2 ≡ true
+≥test1 = refl
+≥test2 : 3 ≥ 3 ≡ true
+≥test2 = refl
+≥test3 : 3 ≥ 4 ≡ false
+≥test3 = refl
+
+-- ne hasznalj rekurziot, hanem hasznald _≥_-t!
+_>_ : ℕ → ℕ → Bool
+_>_ m n = (m - n) ≥ 1
+
+>test1 : 3 > 2 ≡ true
+>test1 = refl
+>test2 : 3 > 3 ≡ false
+>test2 = refl
+>test3 : 3 > 4 ≡ false
+>test3 = refl
+
+comp : {A : Set} → ℕ → ℕ → A → A → A → A
 comp m n m<n m=n m>n = if m < n then m<n else (if m > n then m>n else m=n)
 
 comp-test1 : comp 10 10 0 1 2 ≡ 1
