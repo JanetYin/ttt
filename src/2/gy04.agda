@@ -44,7 +44,9 @@ comp-test3 = refl
 ---------------------------------------------------------
 
 add-if : ℕ → ℕ
-add-if = {!   !}
+add-if zero = 3
+add-if (suc zero) = 5
+add-if (suc (suc n)) = suc (suc (add-if n))
  
 test-1 : add-if 3 ≡ 7
 test-1 = refl
@@ -65,7 +67,8 @@ data List (A : Set) : Set where
 infixr 6 _∷_
 
 length : {A : Set} → List A → ℕ
-length = {!!}
+length [] = 0
+length (x ∷ xs) = suc (length xs)
 
 length-test1 : length (1 ∷ 2 ∷ 3 ∷ []) ≡ 3
 length-test1 = refl
@@ -73,20 +76,23 @@ length-test2 : length (1 ∷ []) ≡ 1
 length-test2 = refl
 
 sumList : List ℕ → ℕ
-sumList = {!!}
+sumList [] = zero
+sumList (x ∷ xs) = x + sumList xs
 
 sumList-test : sumList (1 ∷ 2 ∷ 3 ∷ []) ≡ 6
 sumList-test = refl
 
 _++_ : {A : Set} → List A → List A → List A
-_++_ = {!!}
+[] ++ ys = ys
+x ∷ xs ++ ys = x ∷ (xs ++ ys)
 infixr 5 _++_
 
 ++-test : 3 ∷ 2 ∷ [] ++ 1 ∷ 4 ∷ [] ≡ 3 ∷ 2 ∷ 1 ∷ 4 ∷ []
 ++-test = refl
 
 map : {A B : Set} → (A → B) → List A → List B
-map = {!!}
+map f [] = []
+map f (x ∷ xs) = f x ∷ map f xs
 
 map-test : map (_+ 2) (3 ∷ 9 ∷ []) ≡ (5 ∷ 11 ∷ [])
 map-test = refl
@@ -96,6 +102,12 @@ iteList n c [] = n
 iteList n c (a ∷ as) = c a (iteList n c as)
 
 -- FEL: add meg a fenti fuggvenyeket (length, ..., map) iteList segitsegevel!
+
+length' : {A : Set} → List A → ℕ
+length' xs = iteList 0 (λ _ x → suc x) xs
+
+map' : {A B : Set} → (A → B) → List A → List B
+map' f xs = iteList [] (λ a acc → f a ∷ acc) xs
 
 -- FEL: add meg recNat-ot, es vezesd vissza iteNat-ra!
 
@@ -122,13 +134,17 @@ e = const 2 [*] (const 3 [+] const 4)
 -}
 
 eval : Expr → ℕ
-eval = {!!}
+eval (const x) = x
+eval (exp [+] exp₁) = eval exp + eval exp₁
+eval (exp [*] exp₁) = eval exp * eval exp₁
 
 eval-test : eval e ≡ 14
 eval-test = refl
 
 height : Expr → ℕ
-height = {!!}
+height (const x) = 0
+height (exp [+] exp₁) = suc (comp (height exp) (height exp₁) (height exp₁) (height exp) (height exp))
+height (exp [*] exp₁) = suc (comp (height exp) (height exp₁) (height exp₁) (height exp) (height exp))
 
 height-test : height e ≡ 2
 height-test = refl
@@ -153,7 +169,8 @@ t = node (node leaf 1 (node leaf 2 leaf)) 5 leaf
 
 
 tree2List : {A : Set} → Tree A → List A
-tree2List = {!!}
+tree2List leaf = []
+tree2List (node tree x tree₁) = tree2List tree ++ x ∷ tree2List tree₁
 
 tree2List-test : tree2List t ≡ 1 ∷ 2 ∷ 5 ∷ []
 tree2List-test = refl
@@ -168,7 +185,11 @@ suc n ≤? suc m = n ≤? m
 -- ez a fuggveny egy rendezett faba illeszt be egy uj erteket ugy,
 -- hogy a fa rendezett maradjon
 insert : ℕ → Tree ℕ → Tree ℕ
-insert = {!!}
+insert n leaf = node leaf n leaf
+insert n (node tree x tree₁) = comp n x
+  (node (insert n tree) x tree₁)
+  (node (insert n tree) x tree₁)
+  (node tree x (insert n tree₁))
 
 t' : Tree ℕ
 t' = node (node (node leaf 0 leaf) 1 (node leaf 2 leaf)) 5 leaf
@@ -186,7 +207,7 @@ insert-test = refl
 
 -- egy listat egy rendezett fara alakit.
 list2tree : List ℕ → Tree ℕ
-list2tree = λ _ → leaf
+list2tree = {!   !}
 
 tree-sort : List ℕ → List ℕ
 tree-sort = {!!}
@@ -331,7 +352,8 @@ tail (from n) = from (1 + n)
 
 -- pointwise addition
 zipWith : {A B C : Set} → (A → B → C) → Stream A → Stream B → Stream C
-zipWith = {!!}
+head (zipWith f sa sb) = f (head sa) (head sb)
+tail (zipWith f sa sb) = zipWith f (tail sa) (tail sb)
 
 filterL : {A : Set} → (A → Bool) → List A → List A
 filterL = {!!}
