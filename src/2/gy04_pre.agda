@@ -6,6 +6,16 @@ data Maybe A : Set where
   Nothing : Maybe A
   Just    : A → Maybe A
 
+comp : {A : Type} → ℕ → ℕ → A → A → A → A
+comp m n m<n m=n m>n = if m < n then m<n else (if m > n then m>n else m=n)
+
+comp-test1 : comp 10 10 0 1 2 ≡ 1
+comp-test1 = refl
+comp-test2 : comp 10 11 0 1 2 ≡ 0
+comp-test2 = refl
+comp-test3 : comp 12 11 0 1 2 ≡ 2
+comp-test3 = refl
+
 ---------------------------------------------------------
 -- lists
 ---------------------------------------------------------
