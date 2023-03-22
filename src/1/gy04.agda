@@ -3,9 +3,33 @@
 open import lib
 
 ---------------------------------------------------------
--- pred egy kicsit jobban
+-- pred egy kicsit jobban (refinement type-okkal)
 ---------------------------------------------------------
 
+{-
+pred : ℕ → Maybe ℕ
+pred 0 = Nothing
+pred (suc n) = Just n
+-}
+
+NonZero : ℕ → Set
+NonZero zero = ⊥
+NonZero (suc n) = ⊤
+
+-- \{{ = ⦃
+-- \}} = ⦄
+pred : (n : ℕ) → .⦃ NonZero n ⦄ → ℕ
+pred (suc n) = n
+
+n' : ℕ
+n' = pred 1
+-- Ez teljesen jó, 1 az nem 0.
+
+{-
+n'' : ℕ
+n'' = pred 0 
+-- Ez fordítási hibás kód!
+-}
 
 ---------------------------------------------------------
 -- lists
@@ -17,21 +41,35 @@ data Maybe A : Set where
 
 data List (A : Set) : Set where
   [] : List A
-  _∷_ : A → List A → List A
-infixr 6 _∷_
+  _∷_ : A → List A → List A -- \:: = ∷
+infixr 5 _∷_
 
 length : {A : Set} → List A → ℕ
-length = {!!}
+length [] = 0
+length (x ∷ xs) = suc (length xs)
 
 length-test1 : length (1 ∷ 2 ∷ 3 ∷ []) ≡ 3
 length-test1 = refl
 length-test2 : length (1 ∷ []) ≡ 1
 length-test2 = refl
 
-sumList : List ℕ → ℕ
-sumList = {!!}
+length-test3 : (λ x → length (true ∷ false ∷ false ∷ x)) ≡ (λ x → suc (suc (suc (length x))))
+length-test3 = refl
 
-sumList-test : sumList (1 ∷ 2 ∷ 3 ∷ []) ≡ 6
+iteList : {A B : Set} → B → (A → B → B) → List A → B
+iteList n c [] = n
+iteList n c (x ∷ xs) = c x (iteList n c xs)
+
+-- iteList n c (1 ∷ 2 ∷ 3 ∷ []) = c 1 (c 2 (c 3 n))
+
+sum : List ℕ → ℕ
+sum [] = 0
+sum (x ∷ xs) = x + sum xs
+
+sum' : List ℕ → ℕ
+sum' = iteList 0 _+_
+
+sumList-test : sum (1 ∷ 2 ∷ 3 ∷ []) ≡ 6
 sumList-test = refl
 
 _++_ : {A : Set} → List A → List A → List A
@@ -42,13 +80,11 @@ infixr 5 _++_
 ++-test = refl
 
 map : {A B : Set} → (A → B) → List A → List B
-map = {!!}
+map f [] = []
+map f (x ∷ xs) = f x ∷ map f xs
 
 map-test : map (_+ 2) (3 ∷ 9 ∷ []) ≡ (5 ∷ 11 ∷ [])
 map-test = refl
-
-iteList : {A B : Set} → B → (A → B → B) → List A → B
-iteList n c l = {!   !}
 
 -- FELADAT: add meg a fenti függvényeket (length, ..., map) iteList segítségével!
 
@@ -75,7 +111,9 @@ e = const 2 [*] (const 3 [+] const 4)
 -}
 
 eval : Expr → ℕ
-eval = {!!}
+eval (const x) = x
+eval (l [+] r) = eval l + eval r
+eval (l [*] r) = eval l * eval r
 
 eval-test : eval e ≡ 14
 eval-test = refl
@@ -104,6 +142,8 @@ t = node (node leaf 1 (node leaf 2 leaf)) 5 leaf
    / \
 -}
 
+sumTree : Tree ℕ → ℕ
+sumTree = {!   !}
 
 tree2List : {A : Set} → Tree A → List A
 tree2List = {!!}
@@ -231,7 +271,7 @@ test-tI'4 = refl
 -- Csúnya rész
 ---------------------------------------------------------
 
-{-# NO_POSITIVITY_CHECK #-}
+{-# NO_POSITIVITY_CHECK #-} -- Csúnya dolog
 data Tm : Set where
   lam : (Tm → Tm) → Tm
 
@@ -245,7 +285,7 @@ self-apply = lam (λ t → app t t)
 Ω : Tm
 Ω = app self-apply self-apply
 
-{-# NO_POSITIVITY_CHECK #-}
+{-# NO_POSITIVITY_CHECK #-} -- Csúnya dolog
 data Weird : Set where
   foo : (Weird → ⊥) → Weird
 
@@ -260,7 +300,10 @@ bad = {!!}
 ---------------------------------------------------------
 
 record Stream (A : Set) : Set where
-  {-végtelen lista-}
+  coinductive
+  field
+    head : A
+    tail : Stream A
 open Stream
 
 -- check that the type of head : Stream A → A
@@ -268,15 +311,18 @@ open Stream
 
 -- copattern matching
 zeroes : Stream ℕ
-zeroes = {!   !}
+head zeroes = 0
+tail zeroes = zeroes
 
 -- by pattern match on n
 countDownFrom : ℕ → List ℕ
-countDownFrom n = {!!}
+countDownFrom zero = 0 ∷ []
+countDownFrom x@(suc n) = x ∷ countDownFrom n
 
 -- from n is not by pattern match on n
 from : ℕ → Stream ℕ
-from = {!   !}
+head (from n) = n
+tail (from n) = from (suc n)
 
 -- pointwise addition
 zipWith : {A B C : Set} → (A → B → C) → Stream A → Stream B → Stream C
