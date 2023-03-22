@@ -81,7 +81,16 @@ half n e = {!!}
 -- a második paramétert úgy kell értelmezni, hogy mindig 1-et hozzá kell adni.
 -- Tehát pl. mod 100 14 = 100 % (1 + 14) = 100 % 15 = 10
 mod : ℕ → ℕ → ℕ
-mod a b = {!!}
+{-# TERMINATING #-}
+mod a b = if a < suc b then a else mod (a - suc b) b
+
+{-
+mod a b
+
+         -
+a ->    / \
+       a   b
+-}
 mod-test1 : mod 5 1 ≡ 1
 mod-test1 = refl
 mod-test2 : mod 11 2 ≡ 2
