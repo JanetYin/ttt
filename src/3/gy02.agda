@@ -108,6 +108,9 @@ assoc⊎ = (λ {
   (inr (inl x)) → inl (inr x) ;
   (inr (inr x)) → inr x}
 
+t11 : {A B : Set} → (A × B) ⊎ B → B
+t11 (inl x) = snd x -- C-c C-c "amire akarsz mintailleszteni" pl C-c C-c
+t11 (inr x) = x  -- C-c C-r refineolás
 
 idl⊎ : {A : Set} → ⊥ ⊎ A ↔ A
 idl⊎ = (λ { (inr x) → x})

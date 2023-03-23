@@ -23,8 +23,12 @@ pred↔zerosuc-test2 : {n : ℕ} → pred (zerosuc (Just n)) ≡ Just n
 pred↔zerosuc-test2 = refl
 
 double : ℕ → ℕ
-double zero = zero
-double (suc x) = suc (suc (double x))
+double zero = zero -- 0 * 2 = 0
+double (suc x) = suc (suc (double x)) -- y = suc x -> x = y - 1
+
+-- doubleList :: [a] -> [a]
+-- doubleList [] = []
+-- doubleList (x : xs) = x : x :  doubleList xs
 
 double-test1 : double 2 ≡ 4
 double-test1 = refl
@@ -33,10 +37,18 @@ double-test2 = refl
 double-test3 : double 10 ≡ 20
 double-test3 = refl
 
+
+--- teljes indukció
+--- zero = 0
+--- x = suc y -> x = y + 1
+
 half : ℕ → ℕ
-half zero = zero
-half (suc zero) = zero
-half (suc (suc x)) = suc (half x)
+half zero = zero -- "páros eset"
+half (suc zero) = zero -- páratlan eset
+half (suc (suc x)) = suc (half x) -- doublenél elhagyunk 1-et és visszarakunk 2-t, itt meg elhagyunk 2-t és visszarakunk 1-et
+
+-- 0 / 2 = 0
+--
 
 half-test1 : half 10 ≡ 5
 half-test1 = refl
@@ -47,8 +59,15 @@ half-test3 = refl
 
 _+_ : ℕ → ℕ → ℕ
 zero + x₁ = x₁
-suc x + x₁ = suc (x + x₁)
+suc x + x₁ = suc (x + x₁) -- suc-ok pakolgatása oda hogy jó legyen
 infixl 6 _+_
+
+--- 3 + 1
+--- suc suc suc zero + suc zero
+--- suc (suc suc zero + suc zero)
+--- suc suc (suc zero + suc zero)
+--- suc suc suc (zero + suc zero)
+--- suc suc suc suc zero
 
 +-test1 : 3 + 5 ≡ 8
 +-test1 = refl
@@ -57,8 +76,12 @@ infixl 6 _+_
 +-test3 : 5 + 0 ≡ 5
 +-test3 = refl
 
+--- k * n, (k - 1) * n mennyi a különbség?
+--- k = 6 és n = 5 30 és 25 között pont 5 azaz n a különbség!!!
+
 _*_ : ℕ → ℕ → ℕ
-_*_ = {!!}
+zero * x₁ = zero -- 0 * vmi = 0
+suc x * x₁ = x₁ + x * x₁ -- (x + 1) * x₁ = x * x₁ + x₁
 infixl 7 _*_
 
 *-test1 : 3 * 4 ≡ 12

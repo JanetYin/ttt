@@ -4,21 +4,32 @@ open import lib
 -- simple finite types
 ------------------------------------------------------
 
+-- Bool aminek két eleme van, true false
+-- _×_ az tartalmaz egy baloldali és jobboldali elemet
+-- ℕ × Bool természetes számot és boolt tartalmaz magában
+-- fst : A × B → A
+-- snd : A × B → B
+-- _,_ : A → B → A × B
+
+
 flip : ℕ × Bool → Bool × ℕ
 flip = {!!}
 
 flipback : Bool × ℕ → ℕ × Bool
 flipback = {!!}
 
-comm× : {A B : Set} → A × B → B × A
-comm× = {!!}
+--- {A B : Set} annyit jelent hogy A és B típusok
+comm× : {A B : Set} → A × B → B × A -- tuple-t akarunk visszaadni, használhatjuk a _,_-t
+comm× x = snd x , fst x -- fst és snd függvényeket
+
+-- A × B × C ≡ A × (B × C)
 
 comm×back : {A B : Set} → B × A → A × B
 comm×back = comm×
-
+--- ⊤ típusnak egy darab eleme van, a tt
 b1 b2 : Bool × ⊤
-b1 = {!!}
-b2 = {!!}
+b1 = true , tt
+b2 = false , tt
 b1≠b2 : b1 ≡ b2 → ⊥
 b1≠b2 ()
 
