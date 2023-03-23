@@ -73,7 +73,8 @@ sumList-test : sum (1 ∷ 2 ∷ 3 ∷ []) ≡ 6
 sumList-test = refl
 
 _++_ : {A : Set} → List A → List A → List A
-_++_ = {!!}
+[] ++ ys = ys
+(x ∷ xs) ++ ys = x ∷ xs ++ ys
 infixr 5 _++_
 
 ++-test : 3 ∷ 2 ∷ [] ++ 1 ∷ 4 ∷ [] ≡ 3 ∷ 2 ∷ 1 ∷ 4 ∷ []
