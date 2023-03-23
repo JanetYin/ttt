@@ -3,6 +3,23 @@ open import lib hiding (_+_; _*_; _-_; _<_)
 ---------------------------------------------------------
 -- natural numbers
 ---------------------------------------------------------
+{-
+data ℕ : Set where
+  zero : ℕ
+  suc  : ℕ → ℕ
+
+2 = suc (suc zero)
+
+suc
+ |
+suc
+ |
+zero
+
+-}
+
+n : ℕ
+n = suc (suc zero)
 
 data Maybe A : Set where
   Nothing : Maybe A
@@ -13,7 +30,8 @@ pred zero = Nothing
 pred (suc n) = Just n
 
 zerosuc : Maybe ℕ → ℕ
-zerosuc = {!!}
+zerosuc Nothing = 0
+zerosuc (Just x) = suc x
 
 pred↔zerosuc-test1 : pred (zerosuc Nothing) ≡ Nothing
 pred↔zerosuc-test1 = refl
@@ -21,8 +39,17 @@ pred↔zerosuc-test2 : {n : ℕ} → pred (zerosuc (Just n)) ≡ Just n
 pred↔zerosuc-test2 = refl
 
 double : ℕ → ℕ
-double = {!!}
+double zero = 0
+double (suc n) = suc (suc (double n))
+{-
+(1 + n) * 2 = 2 + n * 2
 
+suc
+ |
+suc     ->    suc
+ |             |
+zero          zero
+-}
 double-test1 : double 2 ≡ 4
 double-test1 = refl
 double-test2 : double 0 ≡ 0
@@ -30,9 +57,26 @@ double-test2 = refl
 double-test3 : double 10 ≡ 20
 double-test3 = refl
 
-half : ℕ → ℕ
-half = {!!}
+{-
+alma : {A : Set} → A → A
+alma = alma
+-- Csúnya dolog, agda összepirossozza, ez a rekurzió végtelen, ami
+-- nem megengedett agdában.
+-}
 
+half : ℕ → ℕ
+half zero = 0
+half (suc zero) = 0
+half (suc (suc n)) = suc (half n)
+{-
+1 + n    1     n
+----- = --- + ---  -- ez így még kevés, 1/2 ∉ ℕ
+  2      2     2
+
+2 + n        n
+----- = 1 + ---
+  2          2
+-}
 half-test1 : half 10 ≡ 5
 half-test1 = refl
 half-test2 : half 11 ≡ 5
@@ -41,8 +85,11 @@ half-test3 : half 12 ≡ 6
 half-test3 = refl
 
 _+_ : ℕ → ℕ → ℕ
-_+_ = {!!}
+zero + b = b
+(suc a) + b = suc (a + b)
 infixl 6 _+_
+
+-- (1 + a) + b = 1 + (a + b)
 
 +-test1 : 3 + 5 ≡ 8
 +-test1 = refl
@@ -52,8 +99,11 @@ infixl 6 _+_
 +-test3 = refl
 
 _*_ : ℕ → ℕ → ℕ
-_*_ = {!!}
+zero * b = 0
+suc a * b = a * b + b
 infixl 7 _*_
+
+-- (1 + a) * b = b + a * b
 
 *-test1 : 3 * 4 ≡ 12
 *-test1 = refl
@@ -65,9 +115,10 @@ infixl 7 _*_
 *-test4 = refl
 
 _^_ : ℕ → ℕ → ℕ
-_^_ = {!!}
+a ^ zero = 1
+a ^ suc b = a ^ b * a
 infixr 8 _^_
-
+-- a ^ (1 + b) = a ^ 1 * a ^ b
 ^-test1 : 3 ^ 4 ≡ 81
 ^-test1 = refl
 ^-test2 : 3 ^ 0 ≡ 1
@@ -76,12 +127,16 @@ infixr 8 _^_
 ^-test3 = refl
 ^-test4 : 1 ^ 3 ≡ 1
 ^-test4 = refl
-^-test5 : 0 ^ 0 ≡ 1
+^-test5 : 0 ^ 0 ≡ 1 -- ez csúnya dolog
 ^-test5 = refl
 
+-- (a ^ b) ^ c ≠ a ^ (b ^ c)
+-- (3 ^ 3) ^ 2 = 729
+-- 3 ^ (3 ^ 2) = 3 ^ 9 = 6561
 _! : ℕ → ℕ
-_! = {!!}
-
+zero ! = 1
+suc n ! = n ! * suc n
+-- (n + 1) ! = (n + 1) * n!
 !-test1 : 3 ! ≡ 6
 !-test1 = refl
 !-test2 : 1 ! ≡ 1
@@ -90,7 +145,9 @@ _! = {!!}
 !-test3 = refl
 
 _-_ : ℕ → ℕ → ℕ
-_-_ = {!!}
+zero - b = 0
+suc a - zero = suc a
+suc a - suc b = a - b
 infixl 6 _-_
 
 -test1 : 3 - 2 ≡ 1
@@ -100,8 +157,28 @@ infixl 6 _-_
 -test3 : 3 - 4 ≡ 0 -- ez csúnya dolog :(
 -test3 = refl
 
+{-
+double' : ℕ → ℕ
+double' n = if n == 0 then 0 else double' (n - 1)
+-- Ez nem működik, termination checking fails
+        -
+n ->   / \
+      n   1
+
+double' n -> if n == 0 then 0 else double' (n - 1) ->
+if n == 0 then 0 else if n == 0 then 0 else double' ((n - 1) - 1) ->
+if n == 0 then 0 else if n == 0 then 0 else if n == 0 then 0 else double' (((n - 1) - 1) - 1) -> ... ez folytatódna a végtelenségig.
+
+A fenti double működik n-re, tehát double n mindig terminál és ezt agda látja is.
+Ha n konkrét érték, akkor mintaillesztés miatt minden kiderül.
+Ha n változó, akkor a double n kifejezés már normálformában van, így szintén terminál.
+C-c C-n `double n` = double n
+-}
+
 _≥_ : ℕ → ℕ → Bool
-_≥_ = {!!}
+a ≥ zero = true
+zero ≥ suc b = false
+suc a ≥ suc b = a ≥ b -- \ge = ≥
 
 ≥test1 : 3 ≥ 2 ≡ true
 ≥test1 = refl
@@ -112,8 +189,8 @@ _≥_ = {!!}
 
 -- ne hasznalj rekurziot, hanem hasznald _≥_-t!
 _>_ : ℕ → ℕ → Bool
-_>_ = {!!}
-
+a > b = a ≥ suc b
+-- a ≥ b + 1 -> a > b
 >test1 : 3 > 2 ≡ true
 >test1 = refl
 >test2 : 3 > 3 ≡ false
@@ -246,7 +323,7 @@ iteNat'-test1 = refl
 iteNat'-test2 : {A : Set}{z : A}{s : A → A}{n : ℕ} → iteNat' z s (suc n) ≡ s (iteNat' z s n)
 iteNat'-test2 = refl
 
--- FEL: add meg recNat-ot mintaillesztes nelkul, iteNat segitsegevel (lasd eloadas)
+-- FEL: add meg recNat-ot mintaillesztes nelkul, iteNat segitsegevel
 recNat' : {A : Set} → A → (ℕ → A → A) → ℕ → A
 recNat' = {!!}
 

@@ -172,17 +172,13 @@ a másik legyen True, amely legyen az (inr tt) a tesztek miatt.
 (Nyilván nagybetűkkel, mert a kisbetűsök már foglaltak.)
 -}
 
-pattern False = inl tt
-pattern True = inr tt
-
 -- Definiáld az if_then_else'_ függvényt, amely a ⊤ ⊎ ⊤
 -- típussal definiálja a Bool típust.
 -- Add meg a függvény típusát is úgy, hogy a Bool'-t használja!
 -- A második és harmadik paraméterek tetszőlegesek, de azonos
 -- típusúaknak kell lenniük.
 if_then_else'_ : {A : Set} → Bool' → A → A → A
-if False then x else' y = y
-if True then x else' y = x
+if b then x else' y = {!   !}
 
 if-then-else-test1 : {A : Set}{x y : A} → if (inr tt) then x else' y ≡ x
 if-then-else-test1 = refl
@@ -197,11 +193,9 @@ if-then-else-test2 = refl
 ¬'_ : Bool' → Bool'
 _∧'_ _∨'_ _⊃'_ : Bool' → Bool' → Bool'
 
-¬' False = True
-¬' True = False
+¬' b = {!   !}
 
-True ∧' b = b
-False ∧' b = False
+a ∧' b = {!   !}
 a ∨' b = {!   !}
 a ⊃' b = {!   !}
 

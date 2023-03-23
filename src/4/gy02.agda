@@ -162,6 +162,7 @@ law^0 = {!!}
 law^1 : {A : Set} → (⊤ → A) ↔ A
 law^1 = {!!}
 
+-- homework
 law1^ : {A : Set} → (A → ⊤) ↔ ⊤
 law1^ = {!!}
 

@@ -101,3 +101,17 @@ A Tao könyv fejezetei vannak hivatkozva.
 |      |                                                                   | pigeonhole principle             |
 |      | delay monad                                                       | delay monad                      |
 |      | oszthatosag, ha d|x es d|y, akkor d|x+y                           |                                  |
+
+## Bevezető és kivezető szabályok
+
+| típus | bevezető       | eliminációs                                                  |
+|       | (ha ez a Goal) | (ha van egy t nevű feltétel vagy korábbról ismert definíció) |
+|-------|----------------|--------------------------------------------------------------|
+| ⊥     |                | exfalso t                                                    |
+| ⊤     | tt             |                                                              |
+| _⊎_   | inl ?, inr ?   | case t ? ?                                                   |
+| _×_   | ? , ?          | fst t, snd t                                                 |
+| _→_   | λ x → ?        | t ?                                                          |
+|       |                |                                                              |
+| Bool  | true,false     | if t then ? else ?                                           |
+| ℕ     | zero,suc       | iteNat ? ? t, recNat ? ? t                                   |
