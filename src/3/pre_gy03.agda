@@ -290,13 +290,18 @@ recNat'-test2 = refl
 -- lists
 ---------------------------------------------------------
 
+triple : ℕ → ℕ
+triple zero = zero
+triple (suc x) = suc (suc (suc (triple x)))
+
 data List (A : Set) : Set where
   [] : List A
   _∷_ : A → List A → List A
 infixr 6 _∷_
 
 length : {A : Set} → List A → ℕ
-length = {!!}
+length [] = zero
+length (x ∷ x₁) = suc (length x₁)
 
 length-test1 : length (1 ∷ 2 ∷ 3 ∷ []) ≡ 3
 length-test1 = refl
@@ -304,20 +309,39 @@ length-test2 : length (1 ∷ []) ≡ 1
 length-test2 = refl
 
 sumList : List ℕ → ℕ
-sumList = {!!}
+sumList [] = zero
+sumList (x ∷ x₁) = x + sumList x₁
 
-sumList-test : sumList (1 ∷ 2 ∷ 3 ∷ []) ≡ 6
+-- ::
+-- ű::
+-- ∷
+--
+-- sum (1 ∷ 2 ∷ 3 ∷ [])
+-- 1 + sum (2 ∷ 3 ∷ [])
+-- 1 + (2 + sum (3 ∷ []))
+-- 1 + (2 + (3 + sum []))
+-- 1 + (2 + (3 + 0))
+
+sumList-test : sumList (1 ∷ 2 ∷ 3 ∷ []) ≡ 6 -- így kell használni
 sumList-test = refl
 
 _++_ : {A : Set} → List A → List A → List A
-_++_ = {!!}
+[] ++ [] = []
+[] ++ x ∷ x₁ = x ∷ x₁
+x ∷ x₁ ++ [] = x ∷ x₁
+x ∷ x₁ ++ x₂ ∷ x₃ = x ∷ (x₁ ++ x₂ ∷ x₃)
 infixr 5 _++_
+
+_+++_ : {A : Set} → List A → List A → List A
+[] +++ x₁ = x₁
+(x ∷ x₂) +++ x₁ = x ∷ (x₂ +++ x₁)
 
 ++-test : 3 ∷ 2 ∷ [] ++ 1 ∷ 4 ∷ [] ≡ 3 ∷ 2 ∷ 1 ∷ 4 ∷ []
 ++-test = refl
 
 map : {A B : Set} → (A → B) → List A → List B
-map = {!!}
+map f [] = []
+map f (x ∷ x₁) = (f x) ∷ map f x₁
 
 map-test : map (_+ 2) (3 ∷ 9 ∷ []) ≡ (5 ∷ 11 ∷ [])
 map-test = refl
@@ -372,7 +396,7 @@ data Tree (A : Set) : Set where
   node : Tree A → A → Tree A → Tree A
 
 t : Tree ℕ
-t = node (node leaf 1 (node leaf 2 leaf)) 5 leaf
+t = node (node (node leaf 3 leaf) 1 (node leaf 2 leaf)) 5 leaf
 {-
     5
    / \
@@ -384,10 +408,20 @@ t = node (node leaf 1 (node leaf 2 leaf)) 5 leaf
 
 
 tree2List : {A : Set} → Tree A → List A
-tree2List = {!!}
+tree2List leaf = []
+tree2List (node x x₁ x₂) = tree2List x ++ (x₁ ∷ []) ++ tree2List x₂
 
-tree2List-test : tree2List t ≡ 1 ∷ 2 ∷ 5 ∷ []
-tree2List-test = refl
+--tree2List-test : tree2List t ≡ 1 ∷ 2 ∷ 5 ∷ []
+--tree2List-test = refl
+
+
+postorder : {A : Set} → Tree A → List A
+postorder leaf = []
+postorder (node x x₁ x₂) = postorder x₂ ++ postorder x ++ (x₁ ∷ [])
+
+preorder : {A : Set} → Tree A → List A
+preorder leaf = []
+preorder (node x x₁ x₂) = (x₁ ∷ []) ++ preorder x ++ preorder x₂ 
 
 _≤?_ : ℕ → ℕ → Bool
 zero ≤? m = true
