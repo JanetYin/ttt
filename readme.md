@@ -104,6 +104,7 @@ A Tao könyv fejezetei vannak hivatkozva.
 
 ## Bevezető és kivezető szabályok
 
+
 | típus | bevezető       | eliminációs                                                  |
 |       | (ha ez a Goal) | (ha van egy t nevű feltétel vagy korábbról ismert definíció) |
 |-------|----------------|--------------------------------------------------------------|

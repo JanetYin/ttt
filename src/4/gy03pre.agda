@@ -54,6 +54,7 @@ _+_ = {!!}
 +-test3 : 5 + 0 ≡ 5
 +-test3 = refl
 
+-- homework
 _*_ : ℕ → ℕ → ℕ
 _*_ = {!!}
 infixl 7 _*_
@@ -202,8 +203,9 @@ even?-test1 = refl
 even?-test2 : even? 200 ≡ true
 even?-test2 = refl
 
+-- innen egyéni munka
 fib : ℕ → ℕ
-fib = {!!}
+fib n = {!!}
 
 fib-test1 : fib 6 ≡ 13
 fib-test1 = refl
@@ -234,6 +236,7 @@ div-test1 = refl
 div-test2 : div 11 2 ≡ 3
 div-test2 = refl
 
+-- innen megint együtt
 iteNat : {A : Set} → A → (A → A) → ℕ → A
 iteNat z s zero = z
 iteNat z s (suc n) = s (iteNat z s n)
@@ -268,9 +271,10 @@ recNat'-test2 = refl
 
 data List (A : Set) : Set where
   [] : List A
-  _∷_ : A → List A → List A
+  _∷_ : A → List A → List A   -- ∷-ot \::-ként kell írni
 infixr 6 _∷_
 
+--egyéni munka
 length : {A : Set} → List A → ℕ
 length = {!!}
 
@@ -340,9 +344,8 @@ height = {!!}
 height-test : height e ≡ 2
 height-test = refl
 
-
+-- házi
 -- http://www.cs.nott.ac.uk/~psztxa/mgs.2021/datatypes.pdf -ben a 3. feladat (74. oldal):
-
 data Tree (A : Set) : Set where
   leaf : Tree A
   node : Tree A → A → Tree A → Tree A
@@ -416,6 +419,7 @@ tR = node (node (node [] ∷ []) ∷ node [] ∷ node (node [] ∷ node [] ∷ [
  |  /\
 -}
 
+-- próbálgasd esetleg
 countNodes     : RoseTree → ℕ
 countNodesList : List RoseTree → ℕ
 countNodes = {!!}
@@ -455,6 +459,7 @@ data TreeInf : Set where
 t2 : TreeInf
 t2 = node (λ _ → node (λ _ → leaf))
 
+--ezt nézzük még meg
 -- tI n should be a complete tree of height n (all branches should have height n-1, and so on)
 tI : ℕ → TreeInf
 tI = {!!}
@@ -464,6 +469,7 @@ tI-test1 = refl
 tI-test2 : tI 5 ≡ node λ _ → node λ _ → node λ _ → node λ _ → node λ _ → leaf
 tI-test2 = refl
 
+-- meg ezt is
 -- a tree where the height of the n^th branch is n (all branches have finite length, but there is no upper bound)
 tI' : TreeInf
 tI' = {!!}

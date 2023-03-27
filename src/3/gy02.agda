@@ -78,26 +78,49 @@ testfromto3 = refl
 testfromto4 : {A : Set}{a b : A} → from (to (λ x → if x then a else b)) false ≡ b
 testfromto4 = refl
 
+-- C-c C-c a mintaillesztés
+
+exp : {A B : Set} → (A × B) ⊎ B → B
+exp (inl (fst₁ , snd₁)) = snd₁
+exp (inr x) = x
+
+t1-exp : exp (inl (1 , 2)) ≡ 2
+t1-exp = refl
+
+t2-exp : exp {A = ⊥} (inr tt) ≡ tt
+t2-exp = refl
+
 ------------------------------------------------------
 -- all algebraic laws systematically
 ------------------------------------------------------
 
 -- (⊎, ⊥) form a commutative monoid (kommutativ egysegelemes felcsoport)
 
+
 -- case : (A ⊎ B) → (A → C) → (B → C) → C
 assoc⊎ : {A B C : Set} → (A ⊎ B) ⊎ C ↔ A ⊎ (B ⊎ C)
-assoc⊎ = {!!} , λ x → case x
-  (λ a → inl (inl a))
-  λ x₁ → case x₁ (λ b → inl (inr b)) λ c → inr c
+assoc⊎ = (λ {
+  (inl (inl x)) → inl x ;
+  (inl (inr x)) → inr (inl x) ;
+  (inr x) → inr (inr x)})
+  , λ {
+  (inl x) → inl (inl x) ;
+  (inr (inl x)) → inl (inr x) ;
+  (inr (inr x)) → inr x}
+
+t11 : {A B : Set} → (A × B) ⊎ B → B
+t11 (inl x) = snd x -- C-c C-c "amire akarsz mintailleszteni" pl C-c C-c
+t11 (inr x) = x  -- C-c C-r refineolás
 
 idl⊎ : {A : Set} → ⊥ ⊎ A ↔ A
-idl⊎ = {!!}
+idl⊎ = (λ { (inr x) → x})
+  , (λ x → inr x)
 
 idr⊎ : {A : Set} → A ⊎ ⊥ ↔ A
-idr⊎ = {!!}
+idr⊎ = (λ { (inl x) → x}) , λ x → inl x
 
 comm⊎ : {A B : Set} → A ⊎ B ↔ B ⊎ A
-comm⊎ = {!!}
+comm⊎ = (λ x → case x (λ x₁ → inr x₁) λ x₁ → inl x₁) , λ { (inl x) → inr x ; (inr x) → inl x}
 
 -- (×, ⊤) form a commutative monoid (kommutativ egysegelemes felcsoport)
 

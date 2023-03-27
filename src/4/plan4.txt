@@ -1,0 +1,19 @@
+0:00-0:03	kérdések
+0:03-0:13	röpi
+0:13-0:18	megbeszélés igény szerint
+0:18-0:23	bevezetés/elimináció
+0:23-0:48	egyéni munka gy02-n; közben segítek (amit homeworknek jelöltem, az nem annyira fontos, hogy itt)
+0:48-0:53	ha valamit szeretnének megnézni, megnézzük
+0:53-1:28	gy03-ban amíg jutunk
+1:28-1:30	jövő heti zh + megkérdezni a formátumot (óra végi röpi aznapi anyagból, anyone?)
+
+iterátor:
+	a z az, hogy a zerot mire cseréljük
+	az s az, hogy a sucot mire cseréljük
+
+rekurzornál:
+	z-re cseréljük a zerot
+	(s n)-re a sucot
+
+iterátorból rekurzor:
+	a trükk az, hogy ℕ × A-ra képzel
