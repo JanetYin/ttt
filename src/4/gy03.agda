@@ -25,7 +25,8 @@ pred↔zerosuc-test2 : {n : ℕ} → pred (zerosuc (Just n)) ≡ Just n
 pred↔zerosuc-test2 = refl
 
 double : ℕ → ℕ
-double = {!!}
+double zero = zero
+double (suc x) = suc (suc (double x))  --2*(1+x)=2+2*x
 
 double-test1 : double 2 ≡ 4
 double-test1 = refl
@@ -35,7 +36,9 @@ double-test3 : double 10 ≡ 20
 double-test3 = refl
 
 half : ℕ → ℕ
-half = {!!}
+half zero    = zero
+half (suc zero) = zero
+half (suc (suc n)) = suc (half n) --(n+2)/2=n/2+1
 
 half-test1 : half 10 ≡ 5
 half-test1 = refl
@@ -45,7 +48,9 @@ half-test3 : half 12 ≡ 6
 half-test3 = refl
 
 _+_ : ℕ → ℕ → ℕ
-_+_ = {!!}
+zero  + m = m
+suc n + m = suc (n + m)
+-- suc n + m = n + suc m
 
 +-test1 : 3 + 5 ≡ 8
 +-test1 = refl
@@ -84,6 +89,7 @@ infixr 8 _^_
 ^-test5 : 0 ^ 0 ≡ 1
 ^-test5 = refl
 
+-- otthonra
 _! : ℕ → ℕ
 _! = {!!}
 
@@ -94,9 +100,14 @@ _! = {!!}
 !-test3 : 6 ! ≡ 720
 !-test3 = refl
 
+-- otthonra
+-- két dologra kell pattern matchelni
+-- és azt mondjuk, hogy pl. 0 - 1 = 0
 _-_ : ℕ → ℕ → ℕ
 _-_ = {!!}
 infixl 6 _-_
+
+--------------------------------------- itt tartottunk
 
 -test1 : 3 - 2 ≡ 1
 -test1 = refl
@@ -126,6 +137,7 @@ _>_ = {!!}
 >test3 : 3 > 4 ≡ false
 >test3 = refl
 
+-- ezt minél egyszerűbben
 _<_ : ℕ → ℕ → Bool
 _<_ = {!!}
 
@@ -136,6 +148,7 @@ _<_ = {!!}
 <test3 : 3 < 4 ≡ true
 <test3 = refl
 
+-- önállóan
 min : ℕ → ℕ → ℕ
 min = {!!}
 
@@ -146,6 +159,7 @@ min-test2 = refl
 min-test3 : min 3 3 ≡ 3
 min-test3 = refl
 
+-- önállóan
 comp : {A : Set} → ℕ → ℕ → A → A → A → A
 comp m n m<n m=n m>n = {!!}
 
@@ -156,6 +170,7 @@ comp-test2 = refl
 comp-test3 : comp 12 11 0 1 2 ≡ 2
 comp-test3 = refl
 
+-- ezt közösen
 -- hasznald comp-ot!
 gcd : ℕ → ℕ → ℕ
 -- {-# TERMINATING #-}  -- feketemágia, kac-kac
@@ -195,6 +210,7 @@ not : Bool → Bool
 not true = false
 not false = true
 
+-- házi
 even? : ℕ → Bool
 even? = {!!}
 
@@ -203,7 +219,7 @@ even?-test1 = refl
 even?-test2 : even? 200 ≡ true
 even?-test2 = refl
 
--- innen egyéni munka
+-- házi
 fib : ℕ → ℕ
 fib n = {!!}
 
@@ -212,6 +228,7 @@ fib-test1 = refl
 fib-test2 : fib 3 ≡ 3
 fib-test2 = refl
 
+-- közösen
 eq? : ℕ → ℕ → Bool
 eq? = {!!}
 
@@ -220,6 +237,7 @@ eq?-test1 = refl
 eq?-test2 : eq? 4 4 ≡ true
 eq?-test2 = refl
 
+-- gyakorlásnak
 -- rem m n = a maradek, ha elosztjuk m-et (suc n)-el
 rem : ℕ → ℕ → ℕ
 rem a b = {!!}
@@ -228,6 +246,7 @@ rem-test1 = refl
 rem-test2 : rem 11 2 ≡ 2
 rem-test2 = refl
 
+-- gyakorlásnak
 -- div m n = m-ben hanyszor van meg (suc n)
 div : ℕ → ℕ → ℕ
 div a b = {!!}
@@ -236,15 +255,17 @@ div-test1 = refl
 div-test2 : div 11 2 ≡ 3
 div-test2 = refl
 
--- innen megint együtt
+-- akit érdekel, ezt megnézheti itt
 iteNat : {A : Set} → A → (A → A) → ℕ → A
 iteNat z s zero = z
 iteNat z s (suc n) = s (iteNat z s n)
 
+-- akit érdekel
 recNat : {A : Set} → A → (ℕ → A → A) → ℕ → A
 recNat z s zero = z
 recNat z s (suc n) = s n (recNat z s n)
 
+-- akit érdekel
 -- FEL: add meg iteNat-ot mintaillesztes nelkul, recNat segitsegevel
 iteNat' : {A : Set} → A → (A → A) → ℕ → A
 iteNat' = {!!}
@@ -254,6 +275,7 @@ iteNat'-test1 = refl
 iteNat'-test2 : {A : Set}{z : A}{s : A → A}{n : ℕ} → iteNat' z s (suc n) ≡ s (iteNat' z s n)
 iteNat'-test2 = refl
 
+-- akit érdekel
 -- FEL: add meg recNat-ot mintaillesztes nelkul, iteNat segitsegevel (lasd eloadas)
 recNat' : {A : Set} → A → (ℕ → A → A) → ℕ → A
 recNat' = {!!}
@@ -296,12 +318,14 @@ infixr 5 _++_
 ++-test : 3 ∷ 2 ∷ [] ++ 1 ∷ 4 ∷ [] ≡ 3 ∷ 2 ∷ 1 ∷ 4 ∷ []
 ++-test = refl
 
+-- ezt együtt
 map : {A B : Set} → (A → B) → List A → List B
 map = {!!}
 
 map-test : map (_+ 2) (3 ∷ 9 ∷ []) ≡ (5 ∷ 11 ∷ [])
 map-test = refl
 
+-- foldr
 iteList : {A B : Set} → B → (A → B → B) → List A → B
 iteList n c [] = n
 iteList n c (a ∷ as) = c a (iteList n c as)
@@ -332,12 +356,14 @@ e = const 2 [*] (const 3 [+] const 4)
   3   4
 -}
 
+-- ezt együtt
 eval : Expr → ℕ
 eval = {!!}
 
 eval-test : eval e ≡ 14
 eval-test = refl
 
+-- gyakorlásnak
 height : Expr → ℕ
 height = {!!}
 
@@ -398,6 +424,7 @@ insert-test = refl
 list2tree : List ℕ → Tree ℕ
 list2tree = λ _ → leaf
 
+-- ezt esetleg együtt még
 tree-sort : List ℕ → List ℕ
 tree-sort = {!!}
 
@@ -409,6 +436,7 @@ tree-sort-test2 = refl
 
 -- nested types
 
+-- RoseTree már nem kell
 data RoseTree : Set where
   node : List RoseTree → RoseTree
 
@@ -474,6 +502,7 @@ tI-test2 = refl
 tI' : TreeInf
 tI' = {!!}
 
+-- indexelés
 _!_ : TreeInf → ℕ → TreeInf
 leaf ! n = leaf
 node ts ! n = ts n
@@ -485,3 +514,4 @@ test-tI'3 : tI' ! 3 ≡ node λ _ → node λ _ → node λ _ → leaf
 test-tI'3 = refl
 test-tI'4 : tI' ! 5 ≡ node λ _ → node λ _ → node λ _ → node λ _ → node λ _ → leaf
 test-tI'4 = refl
+
