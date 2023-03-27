@@ -1,0 +1,12 @@
+0:00-0:03	kérdések
+0:03-0:15	röpi
+0:15-0:20	megbeszélés (ha igény van rá)
+0:20-0:35	önállóan: _-_, _≥_, _>_, _<_, min, comp
+0:35-0:45	gcd elmagyarázva
+0:45-0:50	Listhez: map közösen
+0:50-0:55	Exprhez: eval közösen
+0:55-1:00	TreeInfhez: tI, tI' közösen
+1:00-1:05	Weird
+1:05-1:20	Stream
+1:20-1:28	Vec-et elkezdem mesélni
+1:28-1:30	háziösszesítés; röpi témája

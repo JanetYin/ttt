@@ -170,8 +170,42 @@ law1^ = {!!}
 -- random isomorphisms
 ------------------------------------------------------
 
-iso1 : {A B : Set} → (Bool → (A ⊎ B)) ↔ ((Bool → A) ⊎ Bool × A × B ⊎ (Bool → B))
-iso1 = {!!}
+{-
+f : Bool → A ⊎ B
+ismered: f true, f false
+
+tfh. f true = inl a1; f false = inl a2
+ezt megfeleltetem annak, hogy (if b then a1 else a2)
+lesz inl (λ bool → if bool then a1 else a2)
+
+tfh. f true = inl a; f false = inr b
+ezt megfeleltetem annak, hogy true , (a , b)
+
+tfh. f true = inr b; f false = inl a
+ezt megfeleltetem annak, hogy false , (a , b)
+
+tfh. f true = inl b1; f false = inr b2
+ezt megfeleltetem annak, hogy (λ bool → if bool then b1 else b2)
+-}
+
+{-
+másik irány:
+kapok vagy egy inl (booltoa)-t, vagy egy inr (inl boolxaxb)-t, vagy egy inr (inr booltob)-t
+ha egy inl (booltoa)-m van: lesz λ bool → if bool then (inl (booltoa true)) else (inl (booltoa false))
+ha egy inr (inl (inbool , a , b))-m van: megnézem a boolt
+if inbool then
+  λ bool → if bool then (inl a) else (inr b)
+ else
+  λ bool → if bool then (inr b) else (inl a)
+ha egy inr (inr booltob)-m van: hasonlóan, mint fönt
+-}
+
+iso1 : {A B : Set} → (Bool → (A ⊎ B)) ↔ ((Bool → A) ⊎ ((Bool × A × B) ⊎ (Bool → B)))
+iso1 = (λ f → case (f true) (λ a1 → case (f false) (λ a2 → inl λ bool → if bool then a1 else a2)
+                                                     λ b2 → inr (inl (true , a1 , b2)))
+                             λ b1 → case (f false) (λ a2 → inr (inl (false , a2 , b1)))
+                                                     λ b2 → inr (inr λ bool → if bool then b1 else b2)) ,
+       {!!}
 
 iso2 : {A B : Set} → ((A ⊎ B) → ⊥) ↔ ((A → ⊥) × (B → ⊥))
 iso2 = {!!}

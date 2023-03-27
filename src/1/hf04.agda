@@ -108,6 +108,25 @@ interleave-test3 : tail (interleave (from 0) (from 100)) ≡ interleave (from 10
 interleave-test3 = refl
 
 {-
+Definiáld a _++ₛ_ függvényt, amely egy Stream elejére egy véges hosszú
+listát fűz.
+-}
+_++ₛ_ : {A : Set} → List A → Stream A → Stream A
+xs ++ₛ ys = ?
+
+++ₛ-test1 : head ((10 ∷ 20 ∷ 30 ∷ []) ++ₛ from 0) ≡ 10
+++ₛ-test1 = refl
+
+++ₛ-test2 : head (tail (tail ((10 ∷ 20 ∷ 30 ∷ []) ++ₛ from 0))) ≡ 30
+++ₛ-test2 = refl
+
+++ₛ-test3 : head (tail (tail (tail ((10 ∷ 20 ∷ 30 ∷ []) ++ₛ from 0)))) ≡ 0
+++ₛ-test3 = refl
+
+++ₛ-test4 : head (tail (tail (tail (tail (tail ((10 ∷ 20 ∷ 30 ∷ []) ++ₛ from 0)))))) ≡ 2
+++ₛ-test4 = refl
+
+{-
 Definiáld a halfStream függvényt, amely egy végtelen lista minden második
 elemét elhagyja! (Az elsőt megtartja, másodikat eldobja, harmadikat megtartja, stb.)
 Add meg a típusát is!
@@ -407,8 +426,90 @@ emptiesₛ-test3 : takeₛ 4 (emptiesₛ (mapₛ (λ n → replicate n 10) (1 �
 emptiesₛ-test3 = refl
 -}
 ------------------------------------------
+{-
+intersperse-test1 : intersperse [] ((1 ∷ []) ∷ (2 ∷ 3 ∷ []) ∷ (4 ∷ []) ∷ []) ≡ (1 ∷ []) ∷ [] ∷ (2 ∷ 3 ∷ []) ∷ [] ∷ (4 ∷ []) ∷ []
+intersperse-test1 = refl
+
+intersperse-test2 : intersperse 0 (4 ∷ 6 ∷ 11 ∷ 1 ∷ 0 ∷ 2 ∷ []) ≡ 4 ∷ 0 ∷ 6 ∷ 0 ∷ 11 ∷ 0 ∷ 1 ∷ 0 ∷ 0 ∷ 0 ∷ 2 ∷ []
+intersperse-test2 = refl
+
+intersperse-test3 : (λ x → intersperse x (4 ∷ 6 ∷ 2 ∷ [])) ≡ (λ a → 4 ∷ a ∷ 6 ∷ a ∷ 2 ∷ [])
+intersperse-test3 = refl
+
+intersperse-test4 : (λ (x : ℕ) → intersperse x []) ≡ (λ a → [])
+intersperse-test4 = refl
+
+intersperse-test5 : intersperse 10 (9 ∷ []) ≡ 9 ∷ []
+intersperse-test5 = refl
+-}
+{-
+intersperseₛ-test1 : head (tail (tail (intersperseₛ 0 (repeatₛ 1)))) ≡ 1
+intersperseₛ-test1 = refl
+
+intersperseₛ-test2 : head (tail (intersperseₛ 0 (repeatₛ 1))) ≡ 0
+intersperseₛ-test2 = refl
+
+intersperseₛ-test3 : takeₛ 10 (intersperseₛ 1 (from 2)) ≡ 2 ∷ 1 ∷ 3 ∷ 1 ∷ 4 ∷ 1 ∷ 5 ∷ 1 ∷ 6 ∷ 1 ∷ []
+intersperseₛ-test3 = refl
+-}
+------------------------------------------
+{-
+splitAt-test1 : {A : Set} → (λ xs → splitAt {A} 0 xs) ≡ (λ xs → [] , xs)
+splitAt-test1 = refl
+
+splitAt-test2 : splitAt 3 (1 ∷ 2 ∷ []) ≡ (1 ∷ 2 ∷ [] , [])
+splitAt-test2 = refl
+
+splitAt-test3 : splitAt 3 (1 ∷ 2 ∷ 3 ∷ []) ≡ (1 ∷ 2 ∷ 3 ∷ [] , [])
+splitAt-test3 = refl
+
+splitAt-test4 : splitAt 3 (1 ∷ 2 ∷ 3 ∷ 4 ∷ []) ≡ (1 ∷ 2 ∷ 3 ∷ [] , (4 ∷ []))
+splitAt-test4 = refl
+-}
+{-
+splitAtₛ-test1 : splitAtₛ 0 (from 1) ≡ ([] , from 1)
+splitAtₛ-test1 = refl
+
+splitAtₛ-test2 : splitAtₛ 4 (from 1) ≡ (1 ∷ 2 ∷ 3 ∷ 4 ∷ [] , from 5)
+splitAtₛ-test2 = refl
+
+splitAtₛ-test3 : splitAtₛ 5 (halfStream (from 0)) ≡ (0 ∷ 2 ∷ 4 ∷ 6 ∷ 8 ∷ [] , halfStream (from 10))
+splitAtₛ-test3 = refl
+-}
+------------------------------------------
 -- majd a splitOn-hoz egy teszt függvény lesz ez
 even : ℕ → Bool
 even 0 = true
 even 1 = false
 even (suc (suc n)) = even n
+
+{-
+splitOn-test1 : (λ p → splitOn {ℕ} p []) ≡ (λ p → [] ∷ [])
+splitOn-test1 = refl
+
+splitOn-test2 : splitOn (_== 2) (1 ∷ 2 ∷ 3 ∷ 4 ∷ 5 ∷ []) ≡ (1 ∷ []) ∷ (3 ∷ 4 ∷ 5 ∷ []) ∷ []
+splitOn-test2 = refl
+
+splitOn-test3 : splitOn (_== 2) (1 ∷ 2 ∷ 3 ∷ 4 ∷ 2 ∷ []) ≡ (1 ∷ []) ∷ (3 ∷ 4 ∷ []) ∷ [] ∷ []
+splitOn-test3 = refl
+
+splitOn-test4 : splitOn even (1 ∷ 2 ∷ 3 ∷ 4 ∷ 2 ∷ []) ≡ (1 ∷ []) ∷ (3 ∷ []) ∷ [] ∷ [] ∷ []
+splitOn-test4 = refl
+
+splitOn-test5 : splitOn even (10 ∷ 1 ∷ 3 ∷ 4 ∷ []) ≡ [] ∷ (1 ∷ 3 ∷ []) ∷ [] ∷ []
+splitOn-test5 = refl
+
+splitOn-test6 : splitOn even (1 ∷ 3 ∷ 4 ∷ 6 ∷ 7 ∷ []) ≡ (1 ∷ 3 ∷ []) ∷ [] ∷ (7 ∷ []) ∷ []
+splitOn-test6 = refl
+-}
+------------------------------------------
+{-
+cycleₛ-test1 : takeₛ 10 (cycleₛ (1 ∷ 2 ∷ 3 ∷ [])) ≡ 1 ∷ 2 ∷ 3 ∷ 1 ∷ 2 ∷ 3 ∷ 1 ∷ 2 ∷ 3 ∷ 1 ∷ []
+cycleₛ-test1 = refl
+
+cycleₛ-test2 : takeₛ 4 (cycleₛ (true ∷ [])) ≡ true ∷ true ∷ true ∷ true ∷ []
+cycleₛ-test2 = refl
+
+cycleₛ-test3 : takeₛ 7 (cycleₛ (10 ∷ 20 ∷ [])) ≡ 10 ∷ 20 ∷ 10 ∷ 20 ∷ 10 ∷ 20 ∷ 10 ∷ []
+cycleₛ-test3 = refl
+-}
