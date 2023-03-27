@@ -1,4 +1,4 @@
-# Típuselmélet (Agda) tantárgy, ELTE, 2023 tavasz
+3# Típuselmélet (Agda) tantárgy, ELTE, 2023 tavasz
 
 Fontos, hogy megfelelő kóddal vedd fel a tárgyat:
 
@@ -104,9 +104,7 @@ A Tao könyv fejezetei vannak hivatkozva.
 
 ## Bevezető és kivezető szabályok
 
-
-| típus | bevezető       | eliminációs                                                  |
-|       | (ha ez a Goal) | (ha van egy t nevű feltétel vagy korábbról ismert definíció) |
+| tipus | bevezető (ha ez a Goal) | eliminációs (ha van egy t nevű feltétel vagy korábbról ismert definíció) |
 |-------|----------------|--------------------------------------------------------------|
 | ⊥     |                | exfalso t                                                    |
 | ⊤     | tt             |                                                              |
