@@ -1,6 +1,25 @@
 {-# OPTIONS --guardedness #-}
-
 open import lib
+
+------------------------------------------
+-- kvizmegoldás
+------------------------------------------
+
+add-if : ℕ → ℕ
+add-if zero = 2
+add-if (suc zero) = 4
+add-if (suc (suc x)) = suc (suc (add-if x))
+
+test-1 : add-if 3 ≡ 6
+test-1 = refl
+test-2 : add-if 6 ≡ 8
+test-2 = refl
+test-3 : add-if 15 ≡ 18
+test-3 = refl
+test-4 : add-if 2 ≡ 4
+test-4 = refl
+
+---------------------------------------------
 
 data Maybe A : Set where
   Nothing : Maybe A
@@ -49,7 +68,8 @@ data List (A : Set) : Set where
 infixr 6 _∷_
 
 length : {A : Set} → List A → ℕ
-length = {!!}
+length [] = 0
+length (x ∷ x₁) = 1 + length x₁
 
 length-test1 : length (1 ∷ 2 ∷ 3 ∷ []) ≡ 3
 length-test1 = refl
@@ -57,20 +77,23 @@ length-test2 : length (1 ∷ []) ≡ 1
 length-test2 = refl
 
 sumList : List ℕ → ℕ
-sumList = {!!}
+sumList [] = 0
+sumList (x ∷ x₁) = x + sumList x₁
 
 sumList-test : sumList (1 ∷ 2 ∷ 3 ∷ []) ≡ 6
 sumList-test = refl
 
 _++_ : {A : Set} → List A → List A → List A
-_++_ = {!!}
+[] ++ x₁ = x₁
+x ∷ x₂ ++ x₁ = x ∷ (x₂ ++ x₁)
 infixr 5 _++_
 
 ++-test : 3 ∷ 2 ∷ [] ++ 1 ∷ 4 ∷ [] ≡ 3 ∷ 2 ∷ 1 ∷ 4 ∷ []
 ++-test = refl
 
 map : {A B : Set} → (A → B) → List A → List B
-map = {!!}
+map f [] = []
+map f (x ∷ xs) = f x ∷ map f xs
 
 map-test : map (_+ 2) (3 ∷ 9 ∷ []) ≡ (5 ∷ 11 ∷ [])
 map-test = refl
@@ -80,6 +103,20 @@ iteList n c [] = n
 iteList n c (a ∷ as) = c a (iteList n c as)
 
 -- FEL: add meg a fenti fuggvenyeket (length, ..., map) iteList segitsegevel!
+
+length' : {A : Set} → List A → ℕ
+length' = iteList 0 (λ _ x₂ → suc x₂)
+
+length-test-1 : length' (1 ∷ 2 ∷ 3 ∷ []) ≡ 3
+length-test-1 = refl
+length-test-2 : length' (1 ∷ []) ≡ 1
+length-test-2 = refl
+
+sum : List ℕ → ℕ
+sum x = iteList 0 (λ x₁ x₂ → x₁ + x₂) x
+
+map' : {A B : Set} → (A → B) → List A → List B
+map' f = iteList [] (λ a neut → f a ∷ neut)
 
 -- FEL: add meg recNat-ot, es vezesd vissza iteNat-ra!
 
@@ -137,10 +174,19 @@ t = node (node leaf 1 (node leaf 2 leaf)) 5 leaf
 
 
 tree2List : {A : Set} → Tree A → List A
-tree2List = {!!}
+tree2List leaf = []
+tree2List (node x x₁ x₂) = tree2List x ++ (x₁ ∷ tree2List x₂)
 
 tree2List-test : tree2List t ≡ 1 ∷ 2 ∷ 5 ∷ []
 tree2List-test = refl
+
+preorder : {A : Set} → Tree A → List A
+preorder leaf = []
+preorder (node x x₁ x₂) = x₁ ∷ preorder x ++ preorder x₂
+
+postorder : {A : Set} → Tree A → List A
+postorder leaf = []
+postorder (node x x₁ x₂) = postorder x ++ postorder x₂ ++ x₁ ∷ []
 
 _≤?_ : ℕ → ℕ → Bool
 zero ≤? m = true
@@ -170,7 +216,7 @@ insert-test = refl
 
 -- egy listat egy rendezett fara alakit.
 list2tree : List ℕ → Tree ℕ
-list2tree = λ _ → leaf
+list2tree = {!   !}
 
 tree-sort : List ℕ → List ℕ
 tree-sort = {!!}
@@ -193,10 +239,13 @@ tR = node (node (node [] ∷ []) ∷ node [] ∷ node (node [] ∷ node [] ∷ [
  |  /\
 -}
 
+{-# TERMINATING #-}
 countNodes     : RoseTree → ℕ
+countNodes (node x) = suc (iteList 0 (λ rt neut → countNodes rt + neut) x)
+
 countNodesList : List RoseTree → ℕ
-countNodes = {!!}
-countNodesList = {!!}
+countNodesList [] = 0
+countNodesList (x ∷ x₁) = countNodes x + countNodesList x₁
 
 countNodes-test : countNodes tR ≡ 7
 countNodes-test = refl
@@ -266,8 +315,12 @@ test-tI'4 = refl
 data Tm : Set where
   lam : (Tm → Tm) → Tm
 
+{-
+data Tm = Lam (Tm -> Tm)
+-}
+
 app : Tm → (Tm → Tm)
-app = {!!}
+app (lam x) = x
 
 self-apply : Tm
 self-apply = lam (λ t → app t t)
@@ -280,11 +333,15 @@ self-apply = lam (λ t → app t t)
 data Weird : Set where
   foo : (Weird → ⊥) → Weird
 
+{-
+data Weird = Foo (Weird -> ⊥)
+-}
+
 unweird : Weird → ⊥
-unweird = {!!}
+unweird (foo x) = x (foo x)
 
 bad : ⊥
-bad = {!!}
+bad = unweird (foo unweird)
 
 ---------------------------------------------------------
 -- coinductive types
