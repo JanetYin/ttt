@@ -1,3 +1,5 @@
+module gy05 where
+
 open import lib
 
 -- Vec and Fin
