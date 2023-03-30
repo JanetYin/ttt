@@ -1,4 +1,4 @@
-3# Típuselmélet (Agda) tantárgy, ELTE, 2023 tavasz
+# Típuselmélet (Agda) tantárgy, ELTE, 2023 tavasz
 
 Fontos, hogy megfelelő kóddal vedd fel a tárgyat:
 
