@@ -363,7 +363,8 @@ tail zeroes = zeroes
 
 -- by pattern match on n
 countDownFrom : ℕ → List ℕ
-countDownFrom n = {!!}
+countDownFrom zero = []
+countDownFrom (suc n) = suc n ∷ countDownFrom n
 
 -- from n is not by pattern match on n
 from : ℕ → Stream ℕ
@@ -372,7 +373,8 @@ tail (from n) = from (1 + n)
 
 -- pointwise addition
 zipWith : {A B C : Set} → (A → B → C) → Stream A → Stream B → Stream C
-zipWith = {!!}
+head (zipWith f a b) = f (head a) (head b)
+tail (zipWith f a b) = zipWith f (tail a) (tail b)
 
 filterL : {A : Set} → (A → Bool) → List A → List A
 filterL = {!!}
