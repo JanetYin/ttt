@@ -3,23 +3,30 @@ module gy05 where
 open import lib
 
 -- Vec and Fin
-
 infixr 5 _∷_
 data Vec (A : Set) : ℕ → Set where
   []  : Vec A 0
   _∷_ : {n : ℕ} → A → Vec A n → Vec A (suc n)
 
-head : {A : Set}{n : ℕ} → ?
-head = {!!}
+single : Vec Bool 1
+single = true ∷ []
 
-tail : {A : Set}{n : ℕ} → ?
-tail = {!!}
+head : {A : Set}{n : ℕ} → Vec A (suc n) → A
+head (x ∷ xs) = x
+
+tail : {A : Set}{n : ℕ} → Vec A (suc n) → Vec A n
+tail (x ∷ xs) = xs
 
 countDownFrom : (n : ℕ) → Vec ℕ n
-countDownFrom = {!!}
+countDownFrom zero    = []
+countDownFrom (suc n) = suc n ∷ countDownFrom n
 
 test-countDownFrom : countDownFrom 3 ≡ 3 ∷ 2 ∷ 1 ∷ []
 test-countDownFrom = refl
+
+take : {A : Set}{n : ℕ} → (m : ℕ) → Vec A (m + n) → Vec A m
+take zero xs = []
+take (suc m) (x ∷ xs) = x ∷ take m xs
 
 data Fin : ℕ → Set where  -- Fin n = n-elemu halmaz
   zero : {n : ℕ} → Fin (suc n)
@@ -29,11 +36,11 @@ f0 : Fin 0 → ⊥
 f0 ()
 
 f1-0 : Fin 1
-f1-0 = {!!}
+f1-0 = zero
 
 f2-0 f2-1 : Fin 2
-f2-0 = {!!}
-f2-1 = {!!}
+f2-0 = zero {1}
+f2-1 = suc {1} (zero {0})
 
 f3-0 f3-1 f3-2 : Fin 3
 f3-0 = {!!}
@@ -46,11 +53,13 @@ f4-1 = {!!}
 f4-2 = {!!}
 f4-3 = {!!}
 
-infixl 5 _!!_
-_!!_ : {A : Set} → ?
-xs !! n = {!!}
+infixl 9 _!!_
+_!!_ : {A : Set}{n : ℕ} → Vec A n → Fin n → A
+[] !! i = exfalso (f0 i)
+(x ∷ xs) !! zero = x
+(x ∷ xs) !! suc i = xs !! i
 
-test-!! : 3 ∷ 4 ∷ 1 ∷ [] !! (suc (suc zero)) ≡ 1
+test-!! : (zero ∷ 4 ∷ 1 ∷ []) !! (suc (suc zero)) ≡ 1
 test-!! = refl
 
 fromℕ : (n : ℕ) → Fin (suc n)
@@ -59,26 +68,36 @@ fromℕ = {!!}
 test-fromℕ : fromℕ 3 ≡ suc (suc (suc zero))
 test-fromℕ = refl
 
-map : {A B : Set} → ?
-map f as = {!!}
-
 data List (A : Set) : Set where
   []  : List A
   _∷_ : A → List A → List A
-infixr 5 _∷_
+
+map : {A B : Set}{n : ℕ} → (A → B) → Vec A n → Vec B n
+map f [] = []
+map f (x ∷ xs) = f x ∷ map f xs
 
 length : {A : Set} → List A → ℕ
 length [] = 0
 length (_ ∷ xs) = suc (length xs)
 
-fromList : {A : Set}(xs : List A) → ?
-fromList = {!!}
+fromList : {A : Set}(xs : List A) → Vec A (length xs)
+fromList [] = []
+fromList (x ∷ xs) = x ∷ fromList xs
 
-_++_ : {A : Set}{m n : ℕ} → ?
-xs ++ ys = {!!}
+_++_ : {A : Set}{m n : ℕ} → Vec A m → Vec A n → Vec A (m + n)
+[] ++ ys = ys
+(x ∷ xs) ++ ys = x ∷ (xs ++ ys)
 
 -- Nem egyszerű, probléma lesz, új ötlet kell.
 -- reverse
+
+{-
+A naív definíció nem működik.
+
+reverse : {A : Set}{n : ℕ} → Vec A n → Vec A n
+reverse [] = []
+reverse (x ∷ xs) = reverse xs ++ (x ∷ [])
+-}
 
 -- NEHÉZ FELADAT
 tabulate : {n : ℕ}{A : Set} → (Fin n → A) → Vec A n
