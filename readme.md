@@ -80,7 +80,7 @@ A Tao könyv fejezetei vannak hivatkozva.
 |      | 5.3 Π es Σ                                                        |                                  |
 |    6 | fuggo tipusok                                                     | fin                              |
 |      | 5.4 relating simple and dependent type formers                    |                                  |
-|      | 5.5 arithmetic of types (Fin (m|n) ≅ Fin m ⊎ Fin n)               |                                  |
+|      | 5.5 arithmetic of types `(Fin (m+n) ≅ Fin m ⊎ Fin n)`             |                                  |
 |    7 | klasszikus logika, predikutumok, relaciok, elsorendu logika       | propositional logic              |
 |      | 3.1 Boolean logic                                                 |                                  |
 |      | 3.2 prop as types                                                 |                                  |
@@ -100,7 +100,7 @@ A Tao könyv fejezetei vannak hivatkozva.
 |      | ellenpelda relaciok                                               | ellenpelda relaciok, fuggvenyek  |
 |      |                                                                   | pigeonhole principle             |
 |      | delay monad                                                       | delay monad                      |
-|      | oszthatosag, ha d|x es d|y, akkor d|x+y                           |                                  |
+|      | oszthatosag, ha `d|x` es `d|y`, akkor `d|x+y`                     |                                  |
 
 ## Bevezető és kivezető szabályok
 
