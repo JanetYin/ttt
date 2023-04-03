@@ -108,9 +108,9 @@ A Tao könyv fejezetei vannak hivatkozva.
 |-------|----------------|--------------------------------------------------------------|
 | ⊥     |                | exfalso t                                                    |
 | ⊤     | tt             |                                                              |
-| _⊎_   | inl ?, inr ?   | case t ? ?                                                   |
-| _×_   | ? , ?          | fst t, snd t                                                 |
-| _→_   | λ x → ?        | t ?                                                          |
+| ⊎     | inl ?, inr ?   | case t ? ?                                                   |
+| ×     | ? , ?          | fst t, snd t                                                 |
+| →     | λ x → ?        | t ?                                                          |
 |       |                |                                                              |
 | Bool  | true,false     | if t then ? else ?                                           |
 | ℕ     | zero,suc       | iteNat ? ? t, recNat ? ? t                                   |
