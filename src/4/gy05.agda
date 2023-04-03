@@ -13,6 +13,9 @@ data Vec (A : Set) : ℕ → Set where
   []  : Vec A 0
   _∷_ : {n : ℕ} → A → Vec A n → Vec A (suc n)
 
+exvec : Vec Bool 3
+exvec = true ∷ (true ∷ (false ∷ []))
+
 head : {A : Set}{n : ℕ} → Vec A (suc n) → A
 head = {!!}
 
@@ -33,16 +36,16 @@ f0 : Fin 0 → ⊥
 f0 ()
 
 f1-0 : Fin 1
-f1-0 = {!!}
+f1-0 = zero {0}
 
 f2-0 f2-1 : Fin 2
-f2-0 = {!!}
-f2-1 = {!!}
+f2-0 = zero {1}
+f2-1 = suc {1} (zero {0})
 
 f3-0 f3-1 f3-2 : Fin 3
-f3-0 = {!!}
-f3-1 = {!!}
-f3-2 = {!!}
+f3-0 = zero {2}
+f3-1 = suc {2} (zero {1})
+f3-2 = suc {2} (suc {1} (zero {0}))
 
 f4-0 f4-1 f4-2 f4-3 : Fin 4
 f4-0 = {!!}
