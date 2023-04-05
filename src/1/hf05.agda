@@ -58,8 +58,8 @@ Definiáld az iteVec függvényt, amely legyen a vektor destruktora,
 azaz feldolgozza egy vektor összes elemét.
 (Ugyanazt csinálja, mint az iteList.)
 -}
-iteVec : {A B : Set}{n : ℕ} → (A → B → B) → B → Vec A ? → B
-iteVec = ?
+iteVec : {A B : Set}{n : ℕ} → (A → B → B) → B → Vec A {!   !} → B
+iteVec = {!   !}
 
 iteVec-test1 : iteVec _+_ 0 [] ≡ 0
 iteVec-test1 = refl
@@ -78,11 +78,11 @@ Ez a két függvény a foldr és foldl függőtípusos változatai, általánosa
 így egyértelmű, hogy a függvénynek tényleg azt kell csinálni, mint a foldr-nek
 és foldl-nek és más nem igazán lehet.
 -}
-elimVecᵣ : {A : Set}{n : ℕ}(B : ℕ → Set) → ({n : ℕ} → A → B ? → B ?) → B ? → Vec A ? → B ?
-elimVecᵣ = ?
+elimVecᵣ : {A : Set}{n : ℕ}(B : ℕ → Set) → ({n : ℕ} → A → B {!   !} → B {!   !}) → B {!   !} → Vec A {!   !} → B {!   !}
+elimVecᵣ = {!   !}
 
-elimVecₗ : {A : Set}{n : ℕ}(B : ℕ → Set) → ({n : ℕ} → B ? → A → B ?) → B ? → Vec A ? → B ?
-elimVecₗ = ?
+elimVecₗ : {A : Set}{n : ℕ}(B : ℕ → Set) → ({n : ℕ} → B {!   !} → A → B {!   !}) → B {!   !} → Vec A {!   !} → B {!   !}
+elimVecₗ = {!   !}
 
 elimVecᵣ-test1 : elimVecᵣ (λ _ → ℕ) _+_ 0 [] ≡ 0
 elimVecᵣ-test1 = refl
@@ -112,8 +112,8 @@ elimVecₗ-test4 = refl
 Definiáld a replicate függvényt, amely n db azonos elemet tesz bele
 a vektorba.
 -}
-replicate : {A : Set}(n : ℕ) → A → Vec A ?
-replicate = ?
+replicate : {A : Set}(n : ℕ) → A → Vec A {!   !}
+replicate = {!   !}
 
 replicate-test1 : {A : Set} → (λ (x : A) → replicate 5 x) ≡ (λ x → x ∷ x ∷ x ∷ x ∷ x ∷ [])
 replicate-test1 = refl
@@ -127,8 +127,8 @@ replicate-test3 = refl
 {-
 Definiáld a drop függvényt, amely n db elemet elhagy a vektor elejéről.
 -}
-drop : {A : Set}{m : ℕ} → ? → Vec A ? → Vec A ?
-drop = ?
+drop : {A : Set}{m : ℕ} → {!   !} → Vec A {!   !} → Vec A {!   !}
+drop = {!   !}
 
 drop-test1 : drop {ℕ} 0 [] ≡ []
 drop-test1 = refl
@@ -146,8 +146,8 @@ drop-test4 = refl
 Definiáld a zipWith függvényt, amely azonos elemszámú vektorokat összepárosít egy adott
 függvény alapján (egyszerre haladva a két vektoron az elemeken alkalmazz egy függvényt).
 -}
-zipWith : {A B C : Set}{n : ℕ} → (A → B → C) → Vec A ? → Vec B ? → Vec C ?
-zipWith = ?
+zipWith : {A B C : Set}{n : ℕ} → (A → B → C) → Vec A {!   !} → Vec B {!   !} → Vec C {!   !}
+zipWith = {!   !}
 
 zipWith-test1 : zipWith _+_ (1 ∷ 3 ∷ 9 ∷ 2 ∷ []) (10 ∷ 0 ∷ 5 ∷ 6 ∷ []) ≡ 11 ∷ 3 ∷ 14 ∷ 8 ∷ []
 zipWith-test1 = refl
@@ -164,8 +164,8 @@ Hogy melyikben van több elem, ezt nem tudjuk, bármelyik lehet a nagyobb
 elemszámú.
 -}
 
-restrictWith : {A B C : Set}{n m : ℕ} → (A → B → C) → Vec A ? → Vec B ? → Vec C ?
-restrictWith = ?
+restrictWith : {A B C : Set}{n m : ℕ} → (A → B → C) → Vec A {!   !} → Vec B {!   !} → Vec C {!   !}
+restrictWith = {!   !}
 
 restrictWith-test1 : restrictWith _+_ (1 ∷ 3 ∷ 9 ∷ 2 ∷ []) (10 ∷ 0 ∷ 5 ∷ 6 ∷ []) ≡ 11 ∷ 3 ∷ 14 ∷ 8 ∷ []
 restrictWith-test1 = refl
@@ -181,8 +181,8 @@ restrictWith-test4 = refl
 {-
 Definiáld a splitAt függvényt, amely az n. indexű elemnél ketté bontja a vektort.
 -}
-splitAt : {A : Set}{m : ℕ} → ? → Vec A ? → ?
-splitAt = ?
+splitAt : {A : Set}{m : ℕ} → {!   !} → Vec A {!   !} → {!   !}
+splitAt = {!   !}
 
 splitAt-test1 : {A : Set} → (λ xs → splitAt {A} {10} 0 xs) ≡ (λ xs → [] , xs)
 splitAt-test1 = refl
@@ -200,8 +200,8 @@ splitAt-test4 = refl
 Definiáld a matrixAdd függvényt, amely a mátrix összeadást valósítja meg.
 Segítség: A két mátrixnak milyennek kell lennie, hogy össze lehessen adni azokat?
 -}
-matrixAdd : {n m : ℕ} → Vec ? ? → Vec ? ? → Vec ? ?
-matrixAdd = ?
+matrixAdd : {n m : ℕ} → Vec {!   !} {!   !} → Vec {!   !} {!   !} → Vec {!   !} {!   !}
+matrixAdd = {!   !}
 
 matrixAdd-test1 : matrixAdd {10} [] [] ≡ []
 matrixAdd-test1 = refl
@@ -220,8 +220,8 @@ matrixAdd-test3 = refl
 Definiáld a deletions függvény, amely kitöröl a vektorból egy darab
 elemet az összes lehetséges módon.
 -}
-deletions : {A : Set}{n : ℕ} → Vec A ? → Vec ? ?
-deletions = ?
+deletions : {A : Set}{n : ℕ} → Vec A {!   !} → Vec {!   !} {!   !}
+deletions = {!   !}
 
 deletions-test1 : deletions (1 ∷ 2 ∷ 3 ∷ []) ≡ (2 ∷ 3 ∷ []) ∷ (1 ∷ 3 ∷ []) ∷ (1 ∷ 2 ∷ []) ∷ []
 deletions-test1 = refl
@@ -241,8 +241,8 @@ deletions-test3 = refl
 Definiáld az insertions függvényt, amely egy darab elemet egy vektorba az összes
 lehetséges módon beilleszt!
 -}
-insertions : {A : Set}{n : ℕ} → A → Vec A ? → Vec ? ?
-insertions = ?
+insertions : {A : Set}{n : ℕ} → A → Vec A {!   !} → Vec {!   !} {!   !}
+insertions = {!   !}
 
 insertions-test1 : insertions 0 (1 ∷ 2 ∷ 3 ∷ []) ≡
   (0 ∷ 1 ∷ 2 ∷ 3 ∷ []) ∷
@@ -267,8 +267,8 @@ insertions-test3 = refl
 Definiáld a permutations függvényt, amely egy vektor összes lehetséges
 permutációját megadja!
 -}
-permutations : {A : Set}{n : ℕ} → Vec A ? → Vec ? ?
-permutations = ?
+permutations : {A : Set}{n : ℕ} → Vec A {!   !} → Vec {!   !} {!   !}
+permutations = {!   !}
 
 permutations-test1 : permutations (1 ∷ 2 ∷ 3 ∷ []) ≡
   (1 ∷ 2 ∷ 3 ∷ []) ∷
@@ -321,14 +321,7 @@ reverse (x ∷ xs) = reverse xs ++ (x ∷ []) -- type error n + 1 ≠ suc n
 Bizonyítsd be, hogy a Fin 2 típus izomorf a Bool típussal!
 -}
 Fin2↔Bool : Fin 2 ↔ Bool
-Fin2↔Bool = to , from where
-  to : Fin 2 → Bool
-  to zero = false
-  to (suc zero) = true
-
-  from : Bool → Fin 2
-  from false = zero
-  from true = suc zero
+Fin2↔Bool = ?
 
 Fin2-proof1 : ∀ x → fst Fin2↔Bool (snd Fin2↔Bool x) ≡ x
 Fin2-proof1 false = refl
@@ -343,12 +336,10 @@ Definiáld a raiseᵣ, raiseₗ függvényeket, amelyek jobbról, illetve balró
 növelik a Fin szintjét.
 -}
 raiseᵣ : {m : ℕ}(n : ℕ) → Fin m → Fin (n + m)
-raiseᵣ zero i = i
-raiseᵣ (suc n) i = suc (raiseᵣ n i)
+raiseᵣ = ?
 
 raiseₗ : {m : ℕ} → Fin m → (n : ℕ) → Fin (m + n)
-raiseₗ zero n = zero
-raiseₗ (suc i) n = suc (raiseₗ i n)
+raiseₗ = ?
 
 {-
 Bizonyítsd be, hogy a Fin n ⊎ Fin m izomorf Fin (n + m)-mel.
@@ -357,17 +348,7 @@ Megj.: Nem tudtam hozzá jó tesztet írni, mert nem triviális
        bizonyítani, hogy oda-vissza és vissza-oda is identitás lesz.
 -}
 FinIso : {n m : ℕ} → Fin n ⊎ Fin m ↔ Fin (n + m)
-FinIso = to , from where
-  to : {n m : ℕ} → Fin n ⊎ Fin m → Fin (n + m)
-  to {n} {m} (inl x) = raiseₗ x m
-  to {n} {m} (inr x) = raiseᵣ n x
-
-  from : {n m : ℕ} → Fin (n + m) → Fin n ⊎ Fin m
-  from {zero} {m} x = inr x
-  from {suc n} {m} zero = inl zero
-  from {suc n} {m} (suc x) with from {n} {m} x
-  ... | inl a = inl (suc a)
-  ... | inr b = inr b
+FinIso = ?
 
 {-
 Definiáld az insertAt függvényt, amely egy elemet egy adott indexű
@@ -377,8 +358,7 @@ ha oda szeretnénk az elemet beszúrni.)
 -}
 
 insertAt : {A : Set}{n : ℕ} → Vec A n → Fin (suc n) → A → Vec A (suc n)
-insertAt xs       zero     v = v ∷ xs
-insertAt (x ∷ xs) (suc i)  v = x ∷ insertAt xs i v
+insertAt = ?
 
 insertAt-test1 : insertAt (1 ∷ 2 ∷ []) zero 0 ≡ 0 ∷ 1 ∷ 2 ∷ []
 insertAt-test1 = refl
@@ -406,8 +386,7 @@ egy elemet.
 -}
 
 removeAt : {A : Set}{n : ℕ} → Vec A (suc n) → Fin (suc n) → Vec A n
-removeAt (_ ∷ xs)     zero     = xs
-removeAt (x ∷ y ∷ xs) (suc i)  = x ∷ removeAt (y ∷ xs) i
+removeAt = ?
 
 removeAt-test1 : removeAt (1 ∷ 2 ∷ 3 ∷ 4 ∷ []) zero ≡ 2 ∷ 3 ∷ 4 ∷ []
 removeAt-test1 = refl
@@ -430,8 +409,7 @@ az azon az indexű helyen lévő elemre!
 infixl 6 _[_]%=_
 
 _[_]%=_ : {A : Set}{n : ℕ} → Vec A n → Fin n → (A → A) → Vec A n
-(x ∷ xs) [ zero ]%= f = f x ∷ xs
-(x ∷ xs) [ suc i ]%= f = x ∷ xs [ i ]%= f
+xs [ i ]%= f = ?
 
 update-test1 : (1 ∷ 2 ∷ 3 ∷ 4 ∷ 5 ∷ []) [ zero ]%= (10 *_) ≡ (10 ∷ 2 ∷ 3 ∷ 4 ∷ 5 ∷ [])
 update-test1 = refl
@@ -456,7 +434,7 @@ elemet lecserélünk egy másik elemre!
 infixl 6 _[_]≔_
 
 _[_]≔_ : {A : Set}{n : ℕ} → Vec A n → Fin n → A → Vec A n
-xs [ i ]≔ y = xs [ i ]%= λ _ → y
+xs [ i ]≔ y = ?
 
 updateValue-test1 : (1 ∷ 2 ∷ 9 ∷ []) [ zero ]≔ 0 ≡ 0 ∷ 2 ∷ 9 ∷ []
 updateValue-test1 = refl
