@@ -20,8 +20,12 @@ zero ≠0 = ⊥
 (suc _) ≠0 = ⊤
 
 pred : (n : ℕ) {n≠0 : n ≠0} → ℕ
-pred zero {()}
-pred (suc n) {tt} = n
+--pred zero {()}
+--pred (suc n) {tt} = n
+pred (suc n) = n
+
+⊤≡⊤ : ⊤ ≡ ⊤
+⊤≡⊤ = refl
 
 ex1 : ℕ
 ex1 = pred 4
@@ -36,14 +40,15 @@ data Vec {i} (A : Set i) : ℕ → Set i where
   _∷_ : {n : ℕ} → A → Vec A n → Vec A (suc n)
 
 exvec : Vec Bool 3
-exvec = true ∷ (true ∷ (false ∷ []))
+exvec = (true ∷ (false ∷ true ∷ []))
 
-head : {A : Set}{n : ℕ} → Vec A (suc n) → A
+head : ∀ {i}{A : Set i}{n : ℕ} → Vec A (suc n) → A
 head = {!!}
 
-tail : {A : Set}{n : ℕ} → Vec A (suc n) → Vec A n
-tail = {!!}
+tail : ∀ {i}{A : Set i}{n : ℕ} → Vec A (suc n) → Vec A n
+tail (_ ∷ v) = v
 
+-- countDownFrom 3 = 3 ∷ (2 ∷ (1 ∷ []))
 countDownFrom : (n : ℕ) → Vec ℕ n
 countDownFrom = {!!}
 
@@ -62,12 +67,12 @@ f1-0 = zero {0}
 
 f2-0 f2-1 : Fin 2
 f2-0 = zero {1}
-f2-1 = suc {1} (zero {0})
+f2-1 = suc {1} f1-0
 
 f3-0 f3-1 f3-2 : Fin 3
 f3-0 = zero {2}
-f3-1 = suc {2} (zero {1})
-f3-2 = suc {2} (suc {1} (zero {0}))
+f3-1 = suc {2} f2-0
+f3-2 = suc {2} f2-1
 
 f4-0 f4-1 f4-2 f4-3 : Fin 4
 f4-0 = {!!}
@@ -76,19 +81,22 @@ f4-2 = {!!}
 f4-3 = {!!}
 
 infix 5 _!!_
-_!!_ : {A : Set}{n : ℕ} → Vec A n → Fin n → A
-xs !! n = {!!}
+_!!_ : ∀ {i}{A : Set i}{n : ℕ} → Vec A n → Fin n → A
+xs !! zero = {!!}
+xs !! suc n = {!!}
 
 test-!! : 3 ∷ 4 ∷ 1 ∷ [] !! (suc (suc zero)) ≡ 1
-test-!! = refl
+test-!! = {!!}
 
 -- az n-nek megfelelő Fin (suc n) típusú dolgot
 fromℕ : (n : ℕ) → Fin (suc n)
-fromℕ = {!!}
+fromℕ zero = zero -- egyik a ℕ.zero, másik a Fin.zero
+fromℕ (suc n) = suc (fromℕ n)
 
 test-fromℕ : fromℕ 3 ≡ suc (suc (suc zero))
 test-fromℕ = refl
 
+-- map f (3 ∷ (4 ∷ [])) = (f 3) ∷ ((f 4) ∷ [])
 map : {A B : Set}(f : A → B){n : ℕ} → Vec A n → Vec B n
 map f as = {!!}
 
@@ -106,15 +114,17 @@ data List {i} (A : Set i) : Set i where
   _∷_ : A → List A → List A
 
 lengthList : ∀ {i} {A : Set i} → List A → ℕ
-lengthList = {!!}
+lengthList [] = zero
+lengthList (_ ∷ ls) = suc (lengthList ls)
 
 -- ehhez képest:
 lengthVec : ∀ {i} {A : Set i} {n : ℕ} → Vec A n → ℕ
-lengthVec = {!!}
+lengthVec {n = n} xs = {!!}
 
 -- önállóan
 fromList : ∀ {i} {A : Set i}(as : List A) → Vec A (lengthList as)
-fromList = {!!}
+fromList [] = []
+fromList (x ∷ as) = x ∷ (fromList as) --bal oldali ∷ a listáé, jobb oldali a vektoré
 
 -- önállóan
 _++_ : ∀ {i} {A : Set i}{m n : ℕ} → Vec A m → Vec A n → Vec A (m + n)
@@ -122,8 +132,20 @@ _++_ = {!!}
 
 -- önállóan
 tabulate : ∀ {i} {A : Set i} {n : ℕ} → (Fin n → A) → Vec A n
-tabulate = {!!}
+tabulate {n = zero} f = []
+tabulate {n = suc n} f = f zero ∷ tabulate λ k → f (suc k)
 
+exFin : Fin 3 → ℕ
+exFin zero = 98
+exFin (suc zero) = 165
+exFin (suc (suc zero)) = 223
+
+tabulate-back : ∀ {i} {A : Set i} {n : ℕ} → Vec A n → (Fin n → A)
+--tabulate-back xs k = xs !! k
+tabulate-back = _!!_
+
+-- NOTE: eddig kell egyelőre
+----------------------------------------------------------------
 -- Sigma types
 -- mint az _×_, de a második tag típusa függ az első tag értékétől
 ℕ⁺ : Set
