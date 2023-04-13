@@ -1,15 +1,11 @@
-module gy05 where
-
 open import lib
 
 -- Vec and Fin
-infixr 5 _∷_
+
+infixr 6 _∷_
 data Vec (A : Set) : ℕ → Set where
   []  : Vec A 0
   _∷_ : {n : ℕ} → A → Vec A n → Vec A (suc n)
-
-single : Vec Bool 1
-single = true ∷ []
 
 head : {A : Set}{n : ℕ} → Vec A (suc n) → A
 head (x ∷ xs) = x
@@ -18,15 +14,11 @@ tail : {A : Set}{n : ℕ} → Vec A (suc n) → Vec A n
 tail (x ∷ xs) = xs
 
 countDownFrom : (n : ℕ) → Vec ℕ n
-countDownFrom zero    = []
+countDownFrom zero = []
 countDownFrom (suc n) = suc n ∷ countDownFrom n
 
 test-countDownFrom : countDownFrom 3 ≡ 3 ∷ 2 ∷ 1 ∷ []
 test-countDownFrom = refl
-
-take : {A : Set}{n : ℕ} → (m : ℕ) → Vec A (m + n) → Vec A m
-take zero xs = []
-take (suc m) (x ∷ xs) = x ∷ take m xs
 
 data Fin : ℕ → Set where  -- Fin n = n-elemu halmaz
   zero : {n : ℕ} → Fin (suc n)
@@ -39,79 +31,64 @@ f1-0 : Fin 1
 f1-0 = zero
 
 f2-0 f2-1 : Fin 2
-f2-0 = zero {1}
-f2-1 = suc {1} (zero {0})
+f2-0 = zero
+f2-1 = suc (zero)
 
 f3-0 f3-1 f3-2 : Fin 3
-f3-0 = {!!}
-f3-1 = {!!}
-f3-2 = {!!}
+f3-0 = zero
+f3-1 = suc zero
+f3-2 = suc (suc zero)
 
 f4-0 f4-1 f4-2 f4-3 : Fin 4
-f4-0 = {!!}
-f4-1 = {!!}
-f4-2 = {!!}
-f4-3 = {!!}
+f4-0 = zero
+f4-1 = suc zero
+f4-2 = suc (suc zero)
+f4-3 = suc (suc (suc zero))
 
-infixl 9 _!!_
+infix 5 _!!_
 _!!_ : {A : Set}{n : ℕ} → Vec A n → Fin n → A
-[] !! i = exfalso (f0 i)
-(x ∷ xs) !! zero = x
-(x ∷ xs) !! suc i = xs !! i
+x ∷ xs !! zero = x
+x ∷ xs !! suc n = xs !! n
 
-test-!! : (zero ∷ 4 ∷ 1 ∷ []) !! (suc (suc zero)) ≡ 1
+test-!! : 3 ∷ 4 ∷ 1 ∷ [] !! (suc (suc zero)) ≡ 1
 test-!! = refl
 
 fromℕ : (n : ℕ) → Fin (suc n)
-fromℕ = {!!}
+fromℕ zero = zero
+fromℕ (suc n) = suc (fromℕ n)
 
 test-fromℕ : fromℕ 3 ≡ suc (suc (suc zero))
 test-fromℕ = refl
+
+map : {A B : Set}(f : A → B){n : ℕ} → Vec A n → Vec B n
+map f [] = []
+map f (x ∷ xs) = f x ∷ map f xs
 
 data List (A : Set) : Set where
   []  : List A
   _∷_ : A → List A → List A
 
-map : {A B : Set}{n : ℕ} → (A → B) → Vec A n → Vec B n
-map f [] = []
-map f (x ∷ xs) = f x ∷ map f xs
-
 length : {A : Set} → List A → ℕ
-length [] = 0
-length (_ ∷ xs) = suc (length xs)
+length [] = zero
+length (x ∷ xs) = suc (length xs)
 
-fromList : {A : Set}(xs : List A) → Vec A (length xs)
+fromList : {A : Set}(as : List A) → Vec A (length as)
 fromList [] = []
 fromList (x ∷ xs) = x ∷ fromList xs
 
 _++_ : {A : Set}{m n : ℕ} → Vec A m → Vec A n → Vec A (m + n)
 [] ++ ys = ys
-(x ∷ xs) ++ ys = x ∷ (xs ++ ys)
+(x ∷ xs) ++ ys = x ∷ xs ++ ys
 
--- Nem egyszerű, probléma lesz, új ötlet kell.
--- reverse
-
-{-
-A naív definíció nem működik.
-
-reverse : {A : Set}{n : ℕ} → Vec A n → Vec A n
-reverse [] = []
-reverse (x ∷ xs) = reverse xs ++ (x ∷ [])
--}
-
--- NEHÉZ FELADAT
 tabulate : {n : ℕ}{A : Set} → (Fin n → A) → Vec A n
-tabulate = {!!}
+tabulate {zero} {A} f = []
+tabulate {suc n} {A} f = f (fromℕ n) ∷ tabulate {n}{A} λ x → f (suc x)
 
 -- Sigma types
 
-filter : {A : Set}{n : ℕ}(p : A → Bool) → Vec A n → Σ ℕ (λ n → Vec A n)
-filter p [] = 0 , []
-filter p (x ∷ xs) = let (n , ys) = filter p xs in if p x
-  then (suc n , x ∷ ys)
-  else (n , ys)
-
--- A × B = Σ A (λ _ → B)
+filter : {A : Set}{n : ℕ}(f : A → Bool) → Vec A n → Σ ℕ (Vec A)
+filter f [] = zero , []
+filter f (x ∷ xs) = if f x then suc (fst (filter f xs)) , x ∷ snd (filter f xs) else (filter f xs)
 
 test-filter : filter (3 <_) (4 ∷ 3 ∷ 2 ∷ 5 ∷ []) ≡ (2 , 4 ∷ 5 ∷ [])
 test-filter = refl

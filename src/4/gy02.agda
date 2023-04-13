@@ -148,12 +148,13 @@ dist = {!!}
 -- exponentiation laws
 
 curry : ∀{A B C : Set} → (A × B → C) ↔ (A → B → C)
-curry = {!!}
+curry = (λ f a b → f (a , b)) , λ f axb → f (fst axb) (snd axb)
 -- think of it another way: C^(A×B)=(C^B)^A
 
 -- homework
 ⊎×→ : {A B C D : Set} → ((A ⊎ B) → C) ↔ (A → C) × (B → C)
-⊎×→ = {!!}
+⊎×→ = (λ f → (λ a → f (inl a)) , λ b → f (inr b)) ,
+       λ (f , g) avb → case avb f g
 -- C^(A+B)=(C^A)×(C^B)
 
 law^0 : {A : Set} → (⊥ → A) ↔ ⊤
@@ -164,7 +165,7 @@ law^1 = {!!}
 
 -- homework
 law1^ : {A : Set} → (A → ⊤) ↔ ⊤
-law1^ = {!!}
+law1^ = (λ f → tt) , λ  tt → _
 
 ---------------------------------------------------------
 -- random isomorphisms
@@ -184,7 +185,7 @@ ezt megfeleltetem annak, hogy true , (a , b)
 tfh. f true = inr b; f false = inl a
 ezt megfeleltetem annak, hogy false , (a , b)
 
-tfh. f true = inl b1; f false = inr b2
+tfh. f true = inr b1; f false = inr b2
 ezt megfeleltetem annak, hogy (λ bool → if bool then b1 else b2)
 -}
 
@@ -208,11 +209,19 @@ iso1 = (λ f → case (f true) (λ a1 → case (f false) (λ a2 → inl λ bool 
        {!!}
 
 iso2 : {A B : Set} → ((A ⊎ B) → ⊥) ↔ ((A → ⊥) × (B → ⊥))
-iso2 = {!!}
+iso2 = (λ f → (λ a → f {!!}) , {!!}) , λ (f , g) avb → {!!}
 
 -- here make sure that it is a bijection
+{-
+bal oldal    | jobb oldal
+-------------------------
+inl tt       | inl false
+inr (inl tt) | inl true
+inr (inr tt) | inr tt
+-}
 iso3 : (⊤ ⊎ ⊤ ⊎ ⊤) ↔ Bool ⊎ ⊤
-iso3 = {!!}
+iso3 = (λ { (inl tt) → inl false ; (inr (inl tt)) → inl true ; (inr (inr tt)) → inr tt}) ,
+       λ { (inl false) → inl tt ; (inl true) → inr (inl tt) ; (inr tt) → inr (inr tt)}
 testiso3 : fst iso3 (inl tt) ≡ fst iso3 (inr (inl tt)) → ⊥
 testiso3 ()
 testiso3' : fst iso3 (inl tt) ≡ fst iso3 (inr (inr tt)) → ⊥
@@ -221,8 +230,14 @@ testiso3'' : fst iso3 (inr (inl tt)) ≡ fst iso3 (inr (inr tt)) → ⊥
 testiso3'' ()
 
 -- here too
+{-
+bal oldal               | jobb oldal
+------------------------------------
+λ tt → inl tt          | inl tt
+λ tt → inr (inr tt)    | inr tt
+-}
 iso4 : (⊤ → ⊤ ⊎ ⊥ ⊎ ⊤) ↔ (⊤ ⊎ ⊤)
-iso4 = {!!} , {!!}
+iso4 = (λ f → case (f tt) (λ _ → inl tt) λ _ → inr tt) , {!!}
 testiso4 : fst iso4 (λ _ → inl tt) ≡ fst iso4 (λ _ → inr (inr tt)) → ⊥
 testiso4 ()
 testiso4' : snd iso4 (inl tt) tt ≡ snd iso4 (inr tt) tt → ⊥

@@ -104,7 +104,9 @@ _! = {!!}
 -- két dologra kell pattern matchelni
 -- és azt mondjuk, hogy pl. 0 - 1 = 0
 _-_ : ℕ → ℕ → ℕ
-_-_ = {!!}
+zero - _ = zero --ez csúnya, de nem tudunk mást csinálni
+n - zero = n
+suc n - suc m = n - m
 infixl 6 _-_
 
 --------------------------------------- itt tartottunk
@@ -117,7 +119,9 @@ infixl 6 _-_
 -test3 = refl
 
 _≥_ : ℕ → ℕ → Bool
-_≥_ = {!!}
+_ ≥ zero = true
+zero ≥ suc m = false
+suc n ≥ suc m = n ≥ m
 
 ≥test1 : 3 ≥ 2 ≡ true
 ≥test1 = refl
@@ -128,7 +132,7 @@ _≥_ = {!!}
 
 -- ne hasznalj rekurziot, hanem hasznald _≥_-t!
 _>_ : ℕ → ℕ → Bool
-_>_ = {!!}
+n > m = n ≥ (suc m)
 
 >test1 : 3 > 2 ≡ true
 >test1 = refl
@@ -139,7 +143,7 @@ _>_ = {!!}
 
 -- ezt minél egyszerűbben
 _<_ : ℕ → ℕ → Bool
-_<_ = {!!}
+n < m = m > n
 
 <test1 : 3 < 2 ≡ false
 <test1 = refl
@@ -161,7 +165,7 @@ min-test3 = refl
 
 -- önállóan
 comp : {A : Set} → ℕ → ℕ → A → A → A → A
-comp m n m<n m=n m>n = {!!}
+comp m n m<n m=n m>n = if (m < n) then m<n else (if (m > n) then m>n else m=n)
 
 comp-test1 : comp 10 10 0 1 2 ≡ 1
 comp-test1 = refl
@@ -170,12 +174,21 @@ comp-test2 = refl
 comp-test3 : comp 12 11 0 1 2 ≡ 2
 comp-test3 = refl
 
+{-
+miért nem szeretjük a TERMINATING-et:
+b : ⊥
+{-# TERMINATING #-}
+b = b
+-}
+
+{-
 -- ezt közösen
 -- hasznald comp-ot!
 gcd : ℕ → ℕ → ℕ
 -- {-# TERMINATING #-}  -- feketemágia, kac-kac
+gcd zero n = n
 gcd m zero = m
-gcd = {!!}
+gcd m n = comp m n (gcd m (n - m)) m (gcd (m - n) n)
 
 gcd-test1 : gcd 6 9 ≡ 3
 gcd-test1 = refl
@@ -187,11 +200,11 @@ gcd-test4 : gcd 12 24 ≡ 12
 gcd-test4 = refl
 gcd-test5 : gcd 19 17 ≡ 1
 gcd-test5 = refl
-
+-}
 -- hasznald ugyanazt a definiciot, mint gcd-nel, de most fuel szerinti rekurzio
 gcd-helper : ℕ → ℕ → ℕ → ℕ
 gcd-helper zero m n = 42
-gcd-helper (suc fuel) m n = {!!}
+gcd-helper (suc fuel) m n = comp m n (gcd-helper fuel m (n - m)) m (gcd-helper fuel (m - n) n)
 gcd' : ℕ → ℕ → ℕ
 gcd' m n = gcd-helper (m + n) m n  --at most (m + n) steps are enough
 
@@ -230,30 +243,36 @@ fib-test2 = refl
 
 -- közösen
 eq? : ℕ → ℕ → Bool
-eq? = {!!}
+eq? zero zero = true
+eq? (suc n) (suc m) = eq? n m
+eq? _ _ = false
 
 eq?-test1 : eq? 4 3 ≡ false
 eq?-test1 = refl
 eq?-test2 : eq? 4 4 ≡ true
 eq?-test2 = refl
 
--- gyakorlásnak
+-- házi (valamelyik a kettő közül)
 -- rem m n = a maradek, ha elosztjuk m-et (suc n)-el
 rem : ℕ → ℕ → ℕ
+-- rem a b = {!if a ≥ (suc b) then rem (a - suc b) b else zero!}
 rem a b = {!!}
-rem-test1 : rem 5 1 ≡ 1
-rem-test1 = refl
-rem-test2 : rem 11 2 ≡ 2
-rem-test2 = refl
 
--- gyakorlásnak
+-- házi (valamelyik a kettő közül)
 -- div m n = m-ben hanyszor van meg (suc n)
 div : ℕ → ℕ → ℕ
-div a b = {!!}
+-- div a b = if (a ≥ (suc b)) then suc (div (a - suc b) b) else zero
+div a b = div-fuel a b a
+  where
+  div-fuel : ℕ → ℕ → ℕ → ℕ
+  div-fuel a b zero = 42
+  div-fuel a b (suc fuel) = if (a ≥ (suc b)) then (suc (div-fuel (a - suc b) b fuel)) else zero
 div-test1 : div 5 1 ≡ 2
 div-test1 = refl
 div-test2 : div 11 2 ≡ 3
 div-test2 = refl
+
+-- NOTE: idáig röpi-téma
 
 -- akit érdekel, ezt megnézheti itt
 iteNat : {A : Set} → A → (A → A) → ℕ → A
@@ -320,7 +339,8 @@ infixr 5 _++_
 
 -- ezt együtt
 map : {A B : Set} → (A → B) → List A → List B
-map = {!!}
+map f [] = []
+map f (x ∷ as) = (f x) ∷ (map f as)
 
 map-test : map (_+ 2) (3 ∷ 9 ∷ []) ≡ (5 ∷ 11 ∷ [])
 map-test = refl
@@ -358,7 +378,9 @@ e = const 2 [*] (const 3 [+] const 4)
 
 -- ezt együtt
 eval : Expr → ℕ
-eval = {!!}
+eval (const x) = x
+eval (ex [+] ex₁) = (eval ex) + (eval ex₁)
+eval (ex [*] ex₁) = (eval ex) * (eval ex₁)
 
 eval-test : eval e ≡ 14
 eval-test = refl
@@ -482,10 +504,14 @@ heightRoseTree-test2 = refl
 data TreeInf : Set where
   leaf : TreeInf
   node : (ℕ → TreeInf) → TreeInf
-
+{-
+    .
+   /|\ \...
+-}
 -- a balanced tree which has height two (draw it!)
 t2 : TreeInf
 t2 = node (λ _ → node (λ _ → leaf))
+
 
 --ezt nézzük még meg
 -- tI n should be a complete tree of height n (all branches should have height n-1, and so on)
@@ -502,6 +528,7 @@ tI-test2 = refl
 tI' : TreeInf
 tI' = {!!}
 
+
 -- indexelés
 _!_ : TreeInf → ℕ → TreeInf
 leaf ! n = leaf
@@ -514,4 +541,3 @@ test-tI'3 : tI' ! 3 ≡ node λ _ → node λ _ → node λ _ → leaf
 test-tI'3 = refl
 test-tI'4 : tI' ! 5 ≡ node λ _ → node λ _ → node λ _ → node λ _ → node λ _ → leaf
 test-tI'4 = refl
-

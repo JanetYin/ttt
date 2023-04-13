@@ -30,16 +30,21 @@ self-apply = lam (λ t → app t t)
 Ω : Tm
 Ω = app self-apply self-apply
 
+{-
 -- ezt nézzük meg
-{-# NO_POSITIVITY_CHECK #-}
+-- {-# NO_POSITIVITY_CHECK #-}
 data Weird : Set where
   foo : (Weird → ⊥) → Weird
 
 unweird : Weird → ⊥
-unweird = {!!}
+unweird (foo x) = x (foo x)
+
+weird : Weird
+weird = foo unweird
 
 bad : ⊥
-bad = {!!}
+bad = unweird weird
+-}
 
 ---------------------------------------------------------
 -- coinductive types
@@ -65,13 +70,20 @@ countDownFrom : ℕ → List ℕ
 countDownFrom n = {!!}
 
 -- végtelen lista?
-fromList : ℕ → List ℕ
-fromList n = {!!}
+-- fromList : ℕ → List ℕ
+-- fromList n = n ∷ (fromList (suc n))
+
+{-
+fromList 0
+0 ∷ (fromList 1)
+0 ∷ (1 ∷ (fromList 2))
+...
+-}
 
 -- from n is not by pattern match on n
 from : ℕ → Stream ℕ
 head (from n) = n
-tail (from n) = from (1 + n)
+tail (from n) = from (suc n)
 
 -- lehet ilyet is
 -- miért?

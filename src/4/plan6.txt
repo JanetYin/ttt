@@ -1,0 +1,15 @@
+0:00-0:13	kérdések (de tényleg)
+0:03-0:15	röpi
+0:15-0:18	megbeszélés (ha van rá igény)
+0:18-0:25	és ha már függő típusok, a _≠0 pont egy remek példa, hogy ott a korábbi argumentumtól függ a későbbi típusa
+0:25-0:30	emlékeztető a Vecről
+0:30-0:35	head és tail és countDownFrom önállóan
+0:35-0:45	emlékeztető a Finről
+0:45-0:50	_!!_, fromℕ, map önállóan
+0:50-0:55	kitérő az univerzumokról (de ne nagyon)
+0:55-1:00	lengthList vs. lengthVec
+1:00-1:10	fromList, _++_, tabulate
+1:10-1:15	szigma, pi (esetleg ha van idő: miért szigma, miért pi?)
+1:15-1:20	filter közösen
+1:20-1:28	gy06.agdából az első három közösen
+1:28-1:30	házik, röpi témája
