@@ -27,7 +27,7 @@ data Fin : ℕ → Set where
 ---------------------------------------------
 
 -- Írj függvényt, ami Finből ℕ-ba konvertál! A típusszignatúrát is te add meg!
-toℕ : {!!}
+toℕ : ∀ {n : ℕ} → Fin n → ℕ
 toℕ = {!!}
 
 -- Írj függvényt, ami Fin n-ből Fin (suc n)-be konvertál úgy, hogy az értéket meghagyja!
@@ -48,8 +48,22 @@ duplicate = {!!}
 
 -- Írd be egy vektorba Fin n összes elemét, növekvő sorrendben! A típusszignatúrát is te add meg!
 -- Segítség: használj korábbi függvényt (másold be ide).
-allFins : {!!}
-allFins = {!!}
+tabulate : ∀ {i} {A : Set i} {n : ℕ} → (Fin n → A) → Vec A n
+tabulate {n = zero} f = []
+tabulate {n = suc n} f = f zero ∷ tabulate λ k → f (suc k)
+
+{-
+f zero = zero
+f (suc zero) = suc zero
+f (suc (suc zero)) = suc (suc zero)
+-}
+
+-- itt ízlés kérdése, hogy n rejtett-e vagy sem
+allFins : {n : ℕ} → Vec (Fin n) n
+allFins = tabulate λ x → x
+
+example : Vec (Fin 6) 6
+example = allFins {6}
 
 -- Írj függvényt, ami egy vektor elemeit megfordítja!
 -- Segítség: használj segédfüggvényt, aminek két vektorparamétere van. Az egyikből pakoljunk át a másikba.

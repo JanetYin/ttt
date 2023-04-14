@@ -146,25 +146,37 @@ tabulate-back = _!!_
 
 -- NOTE: eddig kell egyelőre
 ----------------------------------------------------------------
--- Sigma types
+-- Sigma types         \GS
 -- mint az _×_, de a második tag típusa függ az első tag értékétől
 ℕ⁺ : Set
 ℕ⁺ = Σ ℕ (λ n → n ≠0)
 
-{-
--- van a Π is, de annak nem szokott külön neve lenni
-Π : ∀ {i j} {A : Set i} (B : A → Set j) → Set (i ⊔ j)
-Π {A = A} B = (a : A) → B a
--}
-
 five⁺ : ℕ⁺
-five⁺ = {!!} , {!!}
+five⁺ = 0 , {!!}
+
+VecWithLen : ∀{i} (A : Set i) → Set i
+VecWithLen A = Σ ℕ (Vec A)
+--Vec A 0 ⊎ Vec A 1 ⊎ Vec A 2 ⊎ Vec A 3 ⊎...
+
+vwl : VecWithLen ℕ
+vwl = 0 , {!!}
+
+-- van a Π is, de annak nem szokott külön neve lenni
+-- Vec A 0 × Vec A 1 × Vec A 2 × Vec A 3 ×...
+-- de ez nem olyan fontos
+Π : ∀ {i j} (A : Set i) (B : A → Set j) → Set (i ⊔ j) -- \Pi
+Π A B = (a : A) → B a
+
+pv : Π ℕ (Vec Bool) -- (n : ℕ) → Vec Bool n
+pv = {!!}
 
 -- zero⁺ : ℕ⁺
 -- zero⁺ = {!!}
 
 filter : ∀ {i}{A : Set i}{n : ℕ}(p : A → Bool) → Vec A n → Σ ℕ (Vec A)
-filter = {!!}
+filter p [] = 0 , []
+filter p (x ∷ xs) = if (p x) then suc (fst (filter p xs)) , x ∷ (snd (filter p xs))
+                                      else (filter p xs)
 
 test-filter : filter (3 <_) (4 ∷ 3 ∷ 2 ∷ 5 ∷ []) ≡ (2 , 4 ∷ 5 ∷ [])
 test-filter = refl

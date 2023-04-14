@@ -5,8 +5,21 @@ data Fin : ℕ → Set where  -- Fin n = n-elemu halmaz
   suc  : {n : ℕ} → Fin n → Fin (suc n)
 
 
+-- Σ=⊎ = (λ s → if (fst s) then inl {!snd s!} else {!!}) , -- ez nem megy
+
+--egyik módszer
 Σ=⊎ : ∀ {i} {A : Set i} {B : Set i} → Σ Bool (if_then A else B) ↔ A ⊎ B
-Σ=⊎ = {!!}
+Σ=⊎ = (λ {(true , a) → inl a ; (false , b) → inr b}) ,    
+       {!!}
+
+-- másik módszer: segédfüggvény
+Σ=⊎' : ∀ {i} {A : Set i} {B : Set i} → Σ Bool (if_then A else B) ↔ A ⊎ B
+Σ=⊎' = part1 ,
+      {!!}
+  where
+  part1 : ∀ {i} {A : Set i} {B : Set i} → Σ Bool (if_then A else B) → A ⊎ B
+  part1 (false , b) = inr b
+  part1 (true , a) = inl a
 
 Σ=× : ∀ {i j} {A : Set i} {B : Set j} → Σ A (λ _ → B) ↔ A × B
 Σ=× = {!!}
@@ -26,6 +39,9 @@ dependentCurry = {!!}
 ∀×-distr  : ∀ {i j k}{A : Set i}{P : A → Set j}{Q : A → Set k} → ((a : A) → P a × Q a)  ↔ ((a : A) → P a) × ((a : A) → Q a)
 ∀×-distr = {!!}
 
+-- és ∃-re?
+-- mi a ∃?
+
 Bool=Fin2 : Bool ↔ Fin 2
 Bool=Fin2 = {!!}
 
@@ -34,21 +50,24 @@ Fin1+3=Fin4 = {!!}
 
 -- relating Fin m ⊎ Fin n and Fin (m + n)
 
+--balra injektálni
 inj₁f : {m n : ℕ} → Fin m → Fin (m + n)
 inj₁f i = {!!}
 
 test-inj₁f : inj₁f {3}{4} (suc (suc zero)) ≡ suc (suc zero)
 test-inj₁f = refl
 
+-- jobbra injektálni
 inj₂f : {m n : ℕ} → Fin n → Fin (m + n)
 inj₂f {m}  i = {!!}
 
 test-inj₂f : inj₂f {3}{4} (suc (suc zero)) ≡ suc (suc (suc (suc (suc zero))))
 test-inj₂f = refl
 
-f : {m n : ℕ} → Fin m ⊎ Fin n → Fin (m + n)
-f (inl i) = inj₁f i
-f (inr i) = inj₂f i
+--és ezekből leképezés:
+fiso : {m n : ℕ} → Fin m ⊎ Fin n → Fin (m + n)
+fiso (inl i) = inj₁f i
+fiso (inr i) = inj₂f i
 
 casef : {m n : ℕ}{C : Set} → (Fin m → C) → (Fin n → C) → Fin (m + n) → C
 casef {m}  f g i       = {!!}

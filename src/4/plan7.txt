@@ -1,0 +1,10 @@
+0:00-0:15	röpi
+0:15-0:20	kérdés (ha van)
+0:20-0:25	szigma
+0:25-0:30	filter önállóan
+0:30-0:33	filter megbeszélése
+0:33-0:48	első 6 önállóan
+0:48-0:58	első 6-ból megbeszélni: Π (miért a függvény a Π?), meg hát mindegyik jelentéséről egy pár szót
+0:58-1:03	kvantorok: mi felel meg minek? (ez kihagyható, ha sietni kell)
+1:03-1:13	inj₂f-ig önállóan
+1:13-1:18	ezek megbeszélése
