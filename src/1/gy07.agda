@@ -21,8 +21,8 @@ weaken : {X : Set} → X → ¬ ¬ X
 weaken x = λ ¬x → ¬x x
 
 {-
-hard : {X : Set} → ¬ ¬ X → X
-hard ¬¬x = exfalso (¬¬x λ x → ¬¬x λ x₁ → {!   !})
+impossible : {X : Set} → ¬ ¬ X → X
+impossible ¬¬x = exfalso (¬¬x λ x → ¬¬x λ x₁ → {!   !})
 -}
 
 fun : {X Y : Set} → (¬ X) ⊎ Y → (X → Y)
