@@ -1,51 +1,34 @@
-module gy07 where
-
 open import lib
 
 ---------------------------------------------------------
 -- propositional logic
 ------------------------------------------------------
 
--- C1 : A ⊃ B ⊃ A ∧ B
-
 subt-prod : {A A' B B' : Set} → (A → A') → (B → B') → A × B → A' × B'
-subt-prod f g (a , b) = f a , g b
+subt-prod = {!!}
 
 subt-fun : {A A' B B' : Set} → (A → A') → (B → B') → (A' → B) → (A → B')
-subt-fun f g h a = g (h (f a))
+subt-fun = {!!}
 
-contradiction : {X Y : Set} → ¬ X → X → Y
-contradiction ¬x x = exfalso (¬x x)
+anything : {X Y : Set} → ¬ X → X → Y
+anything = {!!}
 
-weaken : {X : Set} → X → ¬ ¬ X
-weaken x = λ ¬x → ¬x x
-
-{-
-hard : {X : Set} → ¬ ¬ X → X
-hard ¬¬x = exfalso (¬¬x λ x → ¬¬x λ x₁ → {!   !})
--}
+ret : {X : Set} → X → ¬ ¬ X
+ret = {!!}
 
 fun : {X Y : Set} → (¬ X) ⊎ Y → (X → Y)
-fun (inl ¬x) x = contradiction ¬x x
-fun (inr y) x = y
+fun = {!!}
 
 -- De Morgan
 
 dm1 : {X Y : Set} →  ¬ (X ⊎ Y) ↔ ¬ X × ¬ Y
-dm1 = to , from where
-  to : {X Y : Set} → ¬ (X ⊎ Y) → ¬ X × ¬ Y
-  to f = (λ x → f (inl x)) , λ y → f (inr y)
+dm1 = {!!}
 
-  from : {X Y : Set} → ¬ X × ¬ Y → ¬ (X ⊎ Y)
-  from (¬x , ¬y) (inl x) = ¬x x
-  from (¬x , ¬y) (inr y) = ¬y y
-  
 dm2 : {X Y : Set} → ¬ X ⊎ ¬ Y → ¬ (X × Y)
-dm2 (inl ¬x) (x , y) = ¬x x
-dm2 (inr ¬y) (x , y) = ¬y y
+dm2 = {!!}
 
 dm2b : {X Y : Set} → ¬ ¬ (¬ (X × Y) → ¬ X ⊎ ¬ Y)
-dm2b f = f (λ ¬xy → inl (λ x → f λ ¬xy2 → inr λ y → ¬xy (x , y)))
+dm2b = {!!}
 
 -- stuff
 
@@ -59,10 +42,10 @@ nocontra = {!!}
 ¬¬invol₂ = {!!}
 
 nnlem : {X : Set} → ¬ ¬ (X ⊎ ¬ X)
-nnlem f = f (inr (λ x → f (inl x)))
+nnlem = {!!}
 
 nndnp : {X : Set} → ¬ ¬ (¬ ¬ X → X)
-nndnp f = f λ ¬¬x → exfalso (¬¬x λ x → f λ ¬¬x2 → x)
+nndnp = {!!}
 
 dec2stab : {X : Set} → (X ⊎ ¬ X) → (¬ ¬ X → X)
 dec2stab = {!!}
@@ -72,8 +55,7 @@ Dec : Set → Set
 Dec A = A ⊎ ¬ A
 
 ee1 : {X Y : Set} → Dec (X ⊎ Y → ¬ ¬ (Y ⊎ X))
-ee1 = inl λ where (inl x) f → f (inr x)
-                  (inr y) f → f (inl y)
+ee1 = {!!}
 
 ee2 : {X : Set} → Dec (¬ (X ⊎ ¬ X))
 ee2 = {!!}
