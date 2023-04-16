@@ -17,6 +17,8 @@ data ⊥ : Set where
 
 _≠0 : ℕ → Set
 zero ≠0 = ⊥
+(suc _) ≠0 = ⊤_≠0 : ℕ → Set
+zero ≠0 = ⊥
 (suc _) ≠0 = ⊤
 
 pred : (n : ℕ) {n≠0 : n ≠0} → ℕ
@@ -144,7 +146,7 @@ tabulate-back : ∀ {i} {A : Set i} {n : ℕ} → Vec A n → (Fin n → A)
 --tabulate-back xs k = xs !! k
 tabulate-back = _!!_
 
--- NOTE: eddig kell egyelőre
+-- NOTE: itt volt óraváltás
 ----------------------------------------------------------------
 -- Sigma types         \GS
 -- mint az _×_, de a második tag típusa függ az első tag értékétől
