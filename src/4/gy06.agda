@@ -50,7 +50,7 @@ Fin1+3=Fin4 = {!!}
 
 -- relating Fin m ⊎ Fin n and Fin (m + n)
 
---balra injektálni
+-- balra injektálni
 inj₁f : {m n : ℕ} → Fin m → Fin (m + n)
 inj₁f i = {!!}
 
@@ -64,13 +64,13 @@ inj₂f {m}  i = {!!}
 test-inj₂f : inj₂f {3}{4} (suc (suc zero)) ≡ suc (suc (suc (suc (suc zero))))
 test-inj₂f = refl
 
---és ezekből leképezés:
+-- és ezekből leképezés:
 fiso : {m n : ℕ} → Fin m ⊎ Fin n → Fin (m + n)
-fiso (inl i) = inj₁f i
-fiso (inr i) = inj₂f i
+fiso = {!!}
 
+-- ez nehezebb
 casef : {m n : ℕ}{C : Set} → (Fin m → C) → (Fin n → C) → Fin (m + n) → C
-casef {m}  f g i       = {!!}
+casef = {!!}
 
 test-casef : casef {3}{3} (λ i → i) (λ i → i) (suc (suc zero)) ≡ suc (suc zero)
 test-casef = refl
@@ -79,9 +79,10 @@ test-casef' = refl
 test-casef'' : casef {3}{3} (λ i → i) (λ i → i) (suc (suc (suc (suc zero)))) ≡ suc zero
 test-casef'' = refl
 
--- use inj₁f,inj₂f in one direction and "casef inj₁ inj₂" in the other direction
+-- use inj₁f,inj₂f in one direction and casef in the other direction
 Fin+ : {m n : ℕ} → Fin (m + n) ↔ Fin m ⊎ Fin n
-Fin+ = {!!}
+Fin+ {m} {n} = (λ i → casef {m} {n} inl inr i)
+     , fiso
 
 -- this might be hard
 Fin* : {m n : ℕ} → Fin (m * n) ↔ Fin m × Fin n
@@ -91,12 +92,11 @@ Fin* = {!!}
 --  Σ  a i = a 0 + a 1 + ... + a (n-1)
 -- i=0
 
-Σℕ : (n : ℕ) → (Fin n → ℕ) → ℕ
-Σℕ zero    a = 0
-Σℕ (suc n) a = a zero + Σℕ n (λ i → a (suc i))
+Σℕ : {n : ℕ} → (Fin n → ℕ) → ℕ
+Σℕ = {!!}
 
 -- not very easy
-Σ+ : (n : ℕ)(a : Fin n → ℕ) → Σ (Fin n) (λ i → Fin (a i)) ↔ Fin (Σℕ n a)
+Σ+ : (n : ℕ)(a : Fin n → ℕ) → Σ (Fin n) (λ i → Fin (a i)) ↔ Fin (Σℕ {n} a)
 Σ+ = {!!}
 
 -- n-1
@@ -104,8 +104,7 @@ Fin* = {!!}
 -- i=0
 
 Πℕ : (n : ℕ) → (Fin n → ℕ) → ℕ
-Πℕ zero    a = 0
-Πℕ (suc n) a = a zero * Πℕ n (λ i → a (suc i))
+Πℕ = {!!}
 
 -- not very easy
 Π* : (n : ℕ)(a : Fin n → ℕ) → ((i : Fin n) → Fin (a i)) ↔ Fin (Πℕ n a)
