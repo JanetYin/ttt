@@ -105,8 +105,13 @@ tabulate = {!!}
 
 -- Sigma types
 
-filter : {A : Set}{n : ℕ}(f : A → Bool) → Vec A n → Σ ℕ (Vec A)
-filter = {!!}
+filter : {A : Set}{n : ℕ}(p : A → Bool) → Vec A n → Σ ℕ (λ n → Vec A n)
+filter p [] = 0 , []
+filter p (x ∷ xs) = let (n , ys) = filter p xs in if p x
+  then (suc n , x ∷ ys)
+  else (n , ys)
+
+-- A × B = Σ A (λ _ → B)
 
 test-filter : filter (3 <_) (4 ∷ 3 ∷ 2 ∷ 5 ∷ []) ≡ (2 , 4 ∷ 5 ∷ [])
 test-filter = refl

@@ -1,5 +1,3 @@
-module gy06 where
-
 open import lib
 
 data Fin : ℕ → Set where  -- Fin n = n-elemu halmaz
@@ -7,57 +5,43 @@ data Fin : ℕ → Set where  -- Fin n = n-elemu halmaz
   suc  : {n : ℕ} → Fin n → Fin (suc n)
 
 
-Σ=⊎ : {A B : Set} → Σ Bool (λ b → if b then A else B) ↔ A ⊎ B
-Σ=⊎ = to , from where
-  to : {A B : Set} → Σ Bool (λ b → if b then A else B) → A ⊎ B
-  to (false , ab) = inr ab
-  to (true , ab) = inl ab
+-- Σ=⊎ = (λ s → if (fst s) then inl {!snd s!} else {!!}) , -- ez nem megy
 
-  from : {A B : Set} → A ⊎ B → Σ Bool (λ b → if b then A else B)
-  from (inl x) = true , x
-  from (inr x) = false , x
+--egyik módszer
+Σ=⊎ : ∀ {i} {A : Set i} {B : Set i} → Σ Bool (if_then A else B) ↔ A ⊎ B
+Σ=⊎ = (λ {(true , a) → inl a ; (false , b) → inr b}) ,    
+       {!!}
 
-Σ=× : {A B : Set} → Σ A (λ _ → B) ↔ A × B
-Σ=× = to , from where
-  to : {A B : Set} → Σ A (λ _ → B) → A × B
-  to (a , b) = a , b
+-- másik módszer: segédfüggvény
+Σ=⊎' : ∀ {i} {A : Set i} {B : Set i} → Σ Bool (if_then A else B) ↔ A ⊎ B
+Σ=⊎' = part1 ,
+      {!!}
+  where
+  part1 : ∀ {i} {A : Set i} {B : Set i} → Σ Bool (if_then A else B) → A ⊎ B
+  part1 (false , b) = inr b
+  part1 (true , a) = inl a
 
-  from : {A B : Set} → A × B → Σ A (λ _ → B)
-  from (a , b) = a , b
+Σ=× : ∀ {i j} {A : Set i} {B : Set j} → Σ A (λ _ → B) ↔ A × B
+Σ=× = {!!}
 
--- Π(a : A) : B a
-Π=→ : {A B : Set} → ((a : A) → (λ _ → B) a) ≡ (A → B)
-Π=→ = refl
+-- ez a kettő tényleg ugyanaz a típus (vegyük észre, hogy _≡_ van _↔_ helyett)
+Π≡→ : ∀ {i j} {A : Set i} {B : Set j} → ((a : A) → (λ _ → B) a) ≡ (A → B)
+Π≡→ = {!!}
 
-{-
-   Π     Σ
-  / \   / \
- /   \ /   \
-→     ×     ⊎
--}
+→=× : ∀ {i} {A : Set i} {B : Set i} → ((b : Bool) → if b then A else B) ↔ A × B
+→=× = {!!}
 
-→=× : {A B : Set} → ((b : Bool) → if b then A else B) ↔ A × B
-→=× = to , from where
-  to : {A B : Set} → ((b : Bool) → if b then A else B) → A × B
-  to f = f true , f false
-
-  from : {A B : Set} → A × B → ((b : Bool) → if b then A else B)
-  from (a , b) false = b
-  from (a , b) true = a
-  
+-- az egyik két külön 
 dependentCurry : {A : Set}{B : A → Set}{C : (a : A) → B a → Set} →
   ((a : A)(b : B a) → C a b) ↔ ((w : Σ A B) → C (fst w) (snd w))
 dependentCurry = {!!}
 
--- ∀P ∀Q ((∀a(P(a) ∧ Q(a)) ↔ ∀aP(a) ∧ ∀aQ(a))
-∀×-distr  : {A : Set}{P : A → Set}{Q : A → Set} → ((a : A) → P a × Q a)  ↔ ((a : A) → P a) × ((a : A) → Q a)
-∀×-distr = to , from where
-  to : {A : Set}{P : A → Set}{Q : A → Set} → ((a : A) → P a × Q a) → ((a : A) → P a) × ((a : A) → Q a)
-  to f = (λ a → fst (f a)) , λ a → snd (f a)
+∀×-distr  : ∀ {i j k}{A : Set i}{P : A → Set j}{Q : A → Set k} → ((a : A) → P a × Q a)  ↔ ((a : A) → P a) × ((a : A) → Q a)
+∀×-distr = {!!}
 
-  from : {A : Set}{P : A → Set}{Q : A → Set} → ((a : A) → P a) × ((a : A) → Q a) → ((a : A) → P a × Q a)
-  from (f , g) a = f a , g a
-  
+-- és ∃-re?
+-- mi a ∃?
+
 Bool=Fin2 : Bool ↔ Fin 2
 Bool=Fin2 = {!!}
 
@@ -66,21 +50,24 @@ Fin1+3=Fin4 = {!!}
 
 -- relating Fin m ⊎ Fin n and Fin (m + n)
 
+--balra injektálni
 inj₁f : {m n : ℕ} → Fin m → Fin (m + n)
 inj₁f i = {!!}
 
 test-inj₁f : inj₁f {3}{4} (suc (suc zero)) ≡ suc (suc zero)
 test-inj₁f = refl
 
+-- jobbra injektálni
 inj₂f : {m n : ℕ} → Fin n → Fin (m + n)
 inj₂f {m}  i = {!!}
 
 test-inj₂f : inj₂f {3}{4} (suc (suc zero)) ≡ suc (suc (suc (suc (suc zero))))
 test-inj₂f = refl
 
-f : {m n : ℕ} → Fin m ⊎ Fin n → Fin (m + n)
-f (inl i) = inj₁f i
-f (inr i) = inj₂f i
+--és ezekből leképezés:
+fiso : {m n : ℕ} → Fin m ⊎ Fin n → Fin (m + n)
+fiso (inl i) = inj₁f i
+fiso (inr i) = inj₂f i
 
 casef : {m n : ℕ}{C : Set} → (Fin m → C) → (Fin n → C) → Fin (m + n) → C
 casef {m}  f g i       = {!!}
