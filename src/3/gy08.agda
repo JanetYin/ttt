@@ -11,19 +11,21 @@ f : {X Y : Set} → Dec ((¬ (Y → X) → ¬ (X → Y)) → ¬ ¬ ((X → Y) �
 f = inl (λ x x₁ → x (λ x₂ → x₁ (λ x₃ x₄ → x₂ x₄)) (λ x₂ → exfalso (x₁ (λ _ _ → x₂))))
 
 f4 : Dec ((X Y : Set) → X ⊎ Y → Y)
-f4 = {!!}
+f4 = inr λ x → x ⊤ ⊥ (inl tt)
 
 f5 : Dec ((X Y Z : Set) → (X → Z) ⊎ (Y → Z) → (X ⊎ Y → Z))
-f5 = {!!}
+f5 = inr λ x → x ⊥ ⊤ ⊥ (inl λ z → z) (inr tt)
 
 f6 : Dec ((X Y Z : Set) → (X → Z) × (Y → Z) → (X × Y → Z))
-f6 = {!!}
+f6 = inl (λ X Y Z xz×yz x×y → fst xz×yz (fst x×y))
 
 f7 : Dec ((X Y Z : Set) → (X × Y → Z) → (X → Z) × (Y → Z))
-f7 = {!!}
+f7 = inr (λ x → fst (x ⊤ ⊥ ⊥ snd) tt)
 
 f8 : Dec ((X Y Z : Set) → (X ⊎ Y × Z) → (X ⊎ Y) × (X ⊎ Z))
-f8 = {!!}
+f8 = inl (λ {
+  X Y Z (inl x) → (inl x) , (inl x) ;
+  X Y Z (inr x) → (inr (fst x)) , (inr (snd x))})
 
 f9 : Dec ((X Y Z : Set) → (X ⊎ Y) × (X ⊎ Z) → (X ⊎ Y × Z))
 f9 = {!!}
@@ -44,33 +46,42 @@ module People
   (_sameAs_  : Person → Person → Set) -- ez most itt az emberek egyenlosege
   where
 
+  -- \GS
+  -- \Sigma
   -- Define the _hasChild predicate.
   _hasChild : Person → Set
-  x hasChild = {!!}
+  x hasChild = Σ Person λ p → p childOf x -- ∃ p. p childOf x
 
   -- Formalise: Ann is not a child of Kate.
   ANK : Set
-  ANK = {!!}
+  ANK = ¬ (Ann childOf Kate)
 
+  -- \neg
+  -- \times
+  -- \all
+  -- ∃ parent. ∃ child. child isChildOf parent ∧ ∀ child2. (child2 isChildOf parent) ⊃ (child2 sameAs child)
   -- Formalise: there is someone with exactly one child.
   ONE : Set
-  ONE = {!!}
+  ONE = Σ Person
+    (λ parent → Σ Person
+    λ child → (child childOf parent) ×
+    ((child2 : Person) → (child2 childOf parent) → child2 sameAs child))
 
   -- Define the relation _parentOf_.
   _parentOf_ : Person → Person → Set
-  x parentOf y = {!!}
+  x parentOf y = y childOf x
 
   -- Formalise: No one is the parent of everyone.
   NOPE : Set
-  NOPE = {!!}
+  NOPE = ¬ Σ Person λ parent → ∀ child → parent parentOf child
 
   -- Prove that if Ann has no children then Kate is not the child of Ann.
   AK : ¬ (Σ Person λ y → y childOf Ann) → ¬ (Kate childOf Ann)
-  AK = {!!}
+  AK ¬ΣAnn kcoa = ¬ΣAnn (Kate , kcoa)
 
   -- Prove that if there is no person who is his own parent than no one is the parent of everyone.
   ¬NOPE : ¬ (Σ Person λ x → x parentOf x) → NOPE
-  ¬NOPE = {!!}
+  ¬NOPE ¬Σ (p , proof) = ¬Σ (p , proof p)
 
 ---------------------------------------------------------
 -- predicate (first order) logic laws
