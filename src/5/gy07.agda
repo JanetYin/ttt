@@ -69,31 +69,34 @@ Dec : Set → Set
 Dec A = A ⊎ ¬ A
 
 ee1 : {X Y : Set} → Dec (X ⊎ Y → ¬ ¬ (Y ⊎ X))
-ee1 = {!!}
+ee1 = inl λ where (inl x) x₁ → x₁ (inr x)
+                  (inr x) x₁ → x₁ (inl x)
 
 ee2 : {X : Set} → Dec (¬ (X ⊎ ¬ X))
-ee2 = {!!}
+ee2 = inr λ f → f (inr λ x → f (inl x))
 
 e3 : {X : Set} → Dec (¬ (X → (¬ X → X)))
-e3 = {!!}
+e3 = inr λ f → f λ x ¬x → x
 
 e4 : Dec ℕ
-e4 = {!!}
+e4 = inl (suc (suc (suc (suc zero))))
 
 e5 : Dec ⊥
-e5 = {!!}
+e5 = inr λ x → x
 
 e6 : {X : Set} → Dec (⊥ → X ⊎ ¬ X)
-e6 = {!!}
+e6 = inl λ x → exfalso x
 
 e7 : {X : Set} → Dec (X × ¬ X → ¬ X ⊎ X)
-e7 = {!!}
+e7 = inl λ x → inr (fst x)
 
 e8 : {X : Set} → Dec ((X → X) → ⊥)
-e8 = {!!}
+e8 = inr λ x → x λ x₁ → x₁
 
 f1 : {X Y : Set} → ¬ ¬ X ⊎ ¬ ¬ Y → ¬ ¬ (X ⊎ Y)
-f1 = {!!}
+f1 (inl x) x₁ = x λ x₂ → x₁ (inl x₂)
+f1 (inr x) x₁ = x λ x₂ → x₁ (inr x₂)
 
 f2 : ({X Y : Set} → ¬ (X × Y) → ¬ X ⊎ ¬ Y) → {X Y : Set} → ¬ ¬ (X ⊎ Y) → ¬ ¬ X ⊎ ¬ ¬ Y
-f2 = {!!}
+f2 dm x₁ = dm λ (fx , fy) → x₁ λ where (inl x) → fx x
+                                       (inr y) → fy y
