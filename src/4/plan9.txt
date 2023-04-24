@@ -1,0 +1,13 @@
+0:00-0:20	röpi
+0:20-0:25	megbeszélés, ha van igény
+0:25-0:35	Fin+, Σℕ, Πℕ önállóan
+0:35-0:40	megbeszélés (Πℕ-ot már nem kell, az egy kaptafa az előzővel)
+0:40-0:50	megkérdezzük, kell-e ismétlés Curry–Howardból; ha nem, kezdjenek el gyakorolni a gy07-tel dm2b-ig
+0:50-0:55	megbeszélés, ha kérnek valamit
+0:55-1:02	nndnp-ig önállóan
+1:02-1:05	megbeszélés, ha kell valami
+1:05-1:15	mese lemről és dnp-ről
+1:15-1:18	Dec elmagyarázása (de azok már legyenek házinak)
+1:18-1:25	gy08 elejéről az f-ek
+1:25-1:28	megbeszélés, ha kell
+1:28-1:30	házi; röpi anyaga

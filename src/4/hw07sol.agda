@@ -74,6 +74,20 @@ snd Σ↔⊎⊎⊎ (inr (inr (inr d))) = suc (suc (suc zero)) , d
 -- Írd meg az alábbi izomorfizmus _első felét_. Ez nehezebb, mert tervezni is kell, hogy ténylegesen bijekció legyen.
 -- Segítség: jól jön egy egészosztás; ezt fentre bemásoltam.
 -- A második fele nehéz, és kell hozzá olyan is, amit nem tanultunk, de megpróbálhatod, ha sok időd van;)
-ΣℕBool↔ℕ :  Σ ℕ Fin ↔ ℕ
-fst ΣℕBool↔ℕ (i , j) = div (i * (suc i)) 2 + toℕ j
-snd ΣℕBool↔ℕ n = {!!}
+
+{-
+(n : ℕ)      Fin n
+0         |
+1         | zero {0}
+2         | zero,    suc zero
+3         | zero,    suc zero, suc (suc zero)
+4         | zero,    suc zero, suc (suc zero), suc (suc (suc zero))
+
+hány van előtte?
+ha n , k a rekord:
+n * (n - 1) / 2 + k
+-}
+
+ΣℕFin↔ℕ :  Σ ℕ Fin ↔ ℕ
+fst ΣℕFin↔ℕ (suc n-1 , k) = let n = (suc n-1) in div (n * n-1) 2 + toℕ k
+snd ΣℕFin↔ℕ n = {!!}

@@ -22,16 +22,17 @@ fun = {!!}
 -- De Morgan
 
 dm1 : {X Y : Set} →  ¬ (X ⊎ Y) ↔ ¬ X × ¬ Y
-dm1 = {!!}
+dm1 = ?
 
 dm2 : {X Y : Set} → ¬ X ⊎ ¬ Y → ¬ (X × Y)
 dm2 = {!!}
+-- visszafelé igaz?
 
 dm2b : {X Y : Set} → ¬ ¬ (¬ (X × Y) → ¬ X ⊎ ¬ Y)
 dm2b = {!!}
 -- minek a ¬ ¬?
 
--- dolgok:
+-- stuff
 
 nocontra : {X : Set} → ¬ (X ↔ ¬ X)
 nocontra = {!!}
@@ -48,26 +49,13 @@ nnlem = {!!}
 nndnp : {X : Set} → ¬ ¬ (¬ ¬ X → X)
 nndnp = {!!}
 
-{- ezeket együtt majd
+dec2stab : {X : Set} → (X ⊎ ¬ X) → (¬ ¬ X → X)
+dec2stab = {!!}
 
--- kizárt harmadik elve (law of excluded middle, tertium non datur)
-lem : {X : Set} → X ⊎ ¬ X
-lem = ?
-
-dnp : {X : Set} → ¬ ¬ X → X
-dnp = ?
--}
-
-lem→dnp : {X : Set} → (X ⊎ ¬ X) → (¬ ¬ X → X)
-lem→dnp = {!!}
-
--- ez azt jelenti, hogy neked kell már eldönteni, hogy
--- azt bizonyítod, hogy van-e eleme, vagy azt, hogy nincs
+-- you have to decide:
 Dec : Set → Set
 Dec A = A ⊎ ¬ A
 
------------------------------------------------------------
--- házi
 ee1 : {X Y : Set} → Dec (X ⊎ Y → ¬ ¬ (Y ⊎ X))
 ee1 = {!!}
 
@@ -92,8 +80,6 @@ e7 = {!!}
 e8 : {X : Set} → Dec ((X → X) → ⊥)
 e8 = {!!}
 
------------------------------------------------------------
--- itteni
 f1 : {X Y : Set} → ¬ ¬ X ⊎ ¬ ¬ Y → ¬ ¬ (X ⊎ Y)
 f1 = {!!}
 
