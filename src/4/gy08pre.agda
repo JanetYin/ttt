@@ -8,26 +8,19 @@ Dec : ∀{i} → Set i → Set i
 Dec A = A ⊎ ¬ A
 
 f4 : Dec ((X Y : Set) → X ⊎ Y → Y)
-f4 = inr λ f → f ⊤ ⊥ (inl tt)
+f4 = {!!}
 
--- X = i      X = h
--- Y = h VAGY Y = i
--- Z = h      Z = h
 f5 : Dec ((X Y Z : Set) → (X → Z) ⊎ (Y → Z) → (X ⊎ Y → Z))
-f5 = inr λ f → f ⊥ ⊤ ⊥ (inl (λ b → b)) (inr tt)
+f5 = {!!}
 
 f6 : Dec ((X Y Z : Set) → (X → Z) × (Y → Z) → (X × Y → Z))
-f6 = inl λ _ _ _ → λ (f , g) (x , y) → g y
+f6 = {!!}
 
--- X = h
--- Y = i
--- Z = h
 f7 : Dec ((X Y Z : Set) → (X × Y → Z) → (X → Z) × (Y → Z))
-f7 = inr λ f → snd (f ⊥ ⊤ ⊥ fst) tt
+f7 = {!!}
 
 f8 : Dec ((X Y Z : Set) → (X ⊎ Y × Z) → (X ⊎ Y) × (X ⊎ Z))
-f8 = inl λ where X Y Z (inl x) → inl x , inl x
-                 X Y Z (inr (y , z)) → inr y , inr z
+f8 = {!!}
 
 f9 : Dec ((X Y Z : Set) → (X ⊎ Y) × (X ⊎ Z) → (X ⊎ Y × Z))
 f9 = {!!}
@@ -49,17 +42,16 @@ module People
   where
 
   -- Define the _hasChild predicate.
-  -- ∃y (y childOf x)
   _hasChild : Person → Set
-  x hasChild = Σ Person λ y → y childOf x
+  x hasChild = {!!}
 
   -- Formalise: Ann is not a child of Kate.
   ANK : Set
-  ANK = ¬ (Ann childOf Kate)
+  ANK = {!!}
 
   -- Formalise: there is someone with exactly one child.
   ONE : Set
-  ONE = Σ Person (λ p → (Σ Person λ x → x childOf p × ((y : Person) → y childOf p → x sameAs y)))
+  ONE = {!!}
 
   -- Define the relation _parentOf_.
   _parentOf_ : Person → Person → Set
