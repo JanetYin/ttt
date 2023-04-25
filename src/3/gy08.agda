@@ -4,6 +4,33 @@ open import lib
 -- higher order logic
 ------------------------------------------------------
 
+-- ∀f. ≡ ∀ f → ≡ (f : vmi típus) →
+-- ∃f. ≡ Σ vmi típus λ f →
+-- A v B = A ⊎ B
+-- A ∧ B = A × B
+-- A ⊃ B = A → B
+-- A ⟺ B = A ↔ B
+-- ¬ A ≡ A → ⊥
+
+d1 : {A : Set} → (A → A)
+d1 = λ x → x
+
+d2 : {A B : Set} → (A ⊎ (B × A)) → A
+d2 (inl x) = x
+d2 (inr (fst₁ , snd₁)) = snd₁
+
+-- exfalso : ⊥ → A
+-- ¬ A ≡ A → ⊥
+d3 : {A : Set} → A → ¬ ¬ A
+d3 x y = y x
+
+d4 : {A : Set} → ¬ ¬ (¬ ¬ A → A)
+d4 x = x (λ x₁ → exfalso (x₁ (λ x₂ → x (λ _ → x₂))))
+
+
+dm2b : {X Y : Set} → ¬ ¬ (¬ (X × Y) → ¬ X ⊎ ¬ Y)
+dm2b f = f (λ ¬x×y → inr (λ y → f (λ _ → inl (λ x → ¬x×y (x , y)))))
+
 Dec : ∀{i} → Set i → Set i
 Dec A = A ⊎ ¬ A
 
@@ -82,6 +109,111 @@ module People
   -- Prove that if there is no person who is his own parent than no one is the parent of everyone.
   ¬NOPE : ¬ (Σ Person λ x → x parentOf x) → NOPE
   ¬NOPE ¬Σ (p , proof) = ¬Σ (p , proof p)
+
+
+module Food
+  (Food : Set) -- Univerzum
+  (apple : Food) -- univ beli elem
+  (banana : Food) -- univ beli elem
+  (spaghetti : Food) -- univ beli elem
+  (isTasty : Food → Set) -- predikátum
+  (isDisgusting : Food → Set) -- predikátum
+  (_isGoodWith_ : Food → Food → Set) -- predikátum
+  (_sameAs_ : Food → Food → Set) -- predikátum
+  (notDisgusting : ∀ x → isTasty x ↔ ¬ isDisgusting x) -- axióma
+  (notTasty : ∀ x → isDisgusting x ↔ ¬ isTasty x)
+  (bananaTasty : isTasty banana)
+  where
+
+  -- ∀a ≡ (a : Típus) →
+  -- ∀a ≡ ∀ a →
+  --
+  -- ∃a ≡ Σ A λ a →
+
+  -- a banán finom
+  tastyBanana : Set
+  tastyBanana = isTasty banana
+
+  -- semmi sem finom
+  -- ∀f. ¬ isTasty f
+  -- ¬ (∃f. isTasty f)
+  ssf : Set
+  ssf = (a : Food) → ¬ (isTasty a) -- ∀ a → ¬ isTasty a
+
+  ssf' : Set
+  ssf' = ¬ (Σ Food λ a → isTasty a)
+
+  -- ha semmi sem finom, akkor a banán nem finom
+  bnt : Set
+  bnt = ssf → ¬ tastyBanana
+
+--- ¬ A ≡ A → ⊥
+--- ((a : Food) → (isTasty a) → ⊥)
+--- tastyBanana
+
+
+  -- ∧ ≡ ×
+  -- v ≡ ⊎
+  -- record Σ (A : Set)(B : A → Set) : Set where
+    -- constructor _,_
+    -- field
+      -- fst : A
+      -- snd : B fst
+  --
+
+  iteΣ : Σ Bool λ b → if b then ℕ else ⊤
+  iteΣ = false , tt
+
+  pbnt : bnt
+  pbnt ssf tastyBanana = ssf banana tastyBanana
+
+  -- nem létezik undorító és finom étel
+  -- ¬ (∃ f. isDisg f ∧ isTasty f) ≡ (∃ f. isDisg f ∧ isTasty f) → ⊥
+  ntd : Set
+  ntd = ¬ Σ Food λ f → isTasty f × isDisgusting f
+
+  pntd : ntd
+  pntd (food , tastyf×disgf) = helper food (snd tastyf×disgf) (fst tastyf×disgf)
+    where
+      helper : ∀ x → isDisgusting x → ¬ (isTasty x)
+      helper = λ x → fst (notTasty x)
+
+
+  -- minden étel jó valami étellel
+  -- ∀f. ∃g. f isGoodWith g
+  -- isGoodWith
+  egws : Set
+  egws = ∀ f → Σ Food λ g → f isGoodWith g
+
+  -- minden finom étel jó saját magával
+  -- ∀f. isTasty f → f isGoodWith f
+  agwt : Set
+  agwt = ∀ f → isTasty f → f isGoodWith f
+
+  -- az unfordító ételek jók minden finom étellel
+  -- ∀ f. isDisgusting f → (∀ g. isTasty g → f isGoodWith g)
+  ntgwt : Set
+  ntgwt = ∀ f → isDisgusting f → ∀ g → isTasty g → f isGoodWith g
+
+  -- minden étel finom vagy undorító
+  aton : Set
+  aton = ∀ f → isTasty f ⊎ isDisgusting f
+
+  -- Ha aton, ntgwt, agwt akkor egws
+
+  impl : Set
+  impl = aton × ntgwt × agwt → egws
+
+  implp : impl -- Σ Food λ g → f isGoodWith g
+  -- x : isTasty f
+  -- f : Food
+  implp (aton , ntgwt , agwt) f = case (aton f) (λ x → f , (agwt f x)) λ x → banana , (ntgwt f x banana bananaTasty)
+
+  -- van olyan étel ami nem finom semmivel
+  ent : Set
+  ent = Σ Food λ f → ∀ g → ¬ (f isGoodWith g)
+
+
 
 ---------------------------------------------------------
 -- predicate (first order) logic laws
