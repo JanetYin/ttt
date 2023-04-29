@@ -7,10 +7,10 @@ open import lib
 ------------------------------------------------------
 
 sym : ∀{i}{A : Set i}{x y : A} → x ≡ y → y ≡ x
-sym = {!!}
+sym refl = refl
 
 trans : ∀{i}{A : Set i}{x y z : A} → x ≡ y → y ≡ z → x ≡ z
-trans = {!!}
+trans refl eq2 = eq2
 
 cong : ∀{i j}{A : Set i}{B : Set j}(f : A → B){x y : A} → x ≡ y → f x ≡ f y
 cong = {!!}
