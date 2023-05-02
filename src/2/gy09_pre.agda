@@ -10,6 +10,15 @@ sym = {!!}
 trans : ∀{i}{A : Set i}{x y z : A} → x ≡ y → y ≡ z → x ≡ z
 trans = {!!}
 
+infix  3 _∎
+infixr 2 _≡⟨_⟩_
+
+_≡⟨_⟩_ : ∀{i}{A : Set i}(x : A){y z : A} → x ≡ y → y ≡ z → x ≡ z
+x ≡⟨ x≡y ⟩ y≡z = {!   !}
+
+_∎ : ∀{i}{A : Set i}(a : A) → a ≡ a
+a ∎ = refl
+
 cong : ∀{i j}{A : Set i}{B : Set j}(f : A → B){x y : A} → x ≡ y → f x ≡ f y
 cong = {!!}
 
