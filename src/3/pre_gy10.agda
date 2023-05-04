@@ -1,3 +1,4 @@
+{-# OPTIONS --rewriting #-}
 open import lib
 
 ---------------------------------------------------------
@@ -64,13 +65,33 @@ comm* (suc m) n = trans (cong (n +_) (comm* m n)) (comm*-helper n m)
 ------------------------------------------------------
 
 p4 : (x y : ℕ) → ((x + (y + zero)) + x) ≡ (2 * x + y)
-p4 = {!!}
+p4 x y =
+  trans (ass+ x (y + zero) x)
+  (trans (cong (λ z → x + z)
+  (trans (ass+ y zero x)
+  (trans (comm+ y x) (sym (ass+ x zero y)))))
+  (sym (ass+ x (x + zero) y)))
+
+
+p4' : (x y : ℕ) → ((x + (y + zero)) + x) ≡ (2 * x + y)
+p4' x y rewrite idr+ y rewrite idr+ x = trans (comm+ (x + y) x) (trans refl (sym (ass+ x x y)))
 
 p3 : (a b : ℕ) → a + a + b + a * 0 ≡ 2 * a + b
-p3 = {!!}
+p3 a b =
+  trans (ass+ (a + a) b (a * zero))
+  (trans (ass+ a a (b + a * zero))
+  (trans (cong (λ z → a + z)
+  (trans (cong (λ z → a + z)
+  (trans (cong (λ z → b + z) (nullr* a)) (idr+ b)))
+  (sym (ass+ a zero b))))
+  (sym (ass+ a (a + zero) b))))
 
 p2 : (a b c : ℕ) → c * (b + 1 + a) ≡ a * c + b * c + c
-p2 = {!!}
+p2 a b c =
+  trans (comm* c (b + 1 + a))
+  (trans (dist+* c (b + 1) a)
+  (trans (trans (cong (λ z → z + a * c)
+  (trans (dist+* c b 1) (cong (λ z → b * c + z) (idr+ c)))) (comm+ (b * c + c) (a * c))) (sym (ass+ (a * c) (b * c) c))))
 
 [m+n]^2=m^2+2mn+n^2 : (m n : ℕ) → (m + n) * (m + n) ≡ m * m + 2 * m * n + n * n
 [m+n]^2=m^2+2mn+n^2 = {!!}
@@ -102,3 +123,26 @@ p1 = {!!}
 
 *^ : (a b n : ℕ) → (a * b) ^ n ≡ a ^ n * b ^ n
 *^ = {!!}
+
+infix  3 _∎
+infixr 2 _≡⟨_⟩_
+
+_≡⟨_⟩_ : ∀{i}{A : Set i}(x : A){y z : A} → x ≡ y → y ≡ z → x ≡ z
+x ≡⟨ x≡y ⟩ y≡z = trans x≡y y≡z
+
+_∎ : ∀{i}{A : Set i}(a : A) → a ≡ a
+a ∎ = refl
+
+p4'' : (x y : ℕ) → ((x + (y + zero)) + x) ≡ (2 * x + y)
+p4'' x y =
+  x + (y + zero) + x
+  ≡⟨ cong (λ z → x + z + x) (idr+ y) ⟩
+  x + y + x
+  ≡⟨ ass+ x y x ⟩
+  x + (y + x)
+  ≡⟨ cong (λ z → x + z) (comm+ y x) ⟩
+  x + (x + y)
+  ≡⟨  sym (ass+ x x y)  ⟩
+  x + x + y
+  ≡⟨ cong (λ z → x + z + y) (sym (idr+ x)) ⟩
+  x + (x + zero) + y ∎
