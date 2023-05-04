@@ -214,6 +214,38 @@ module Food
   ent = Σ Food λ f → ∀ g → ¬ (f isGoodWith g)
 
 
+module PluMin
+  -- univerzumbeli elemek típusa
+  (TransitLine : Set) -- járat
+  -- univerzumbeli elemek
+  (MetrolineM3 : TransitLine) -- M3-as metró
+  (Tramline1   : TransitLine) -- 1-es villamos
+  (BuslineM30  : TransitLine) -- M30-as busz
+  (Busline9    : TransitLine) -- 9-es busz
+  (Tramline4   : TransitLine) -- 4-es villamos
+  -- predikátumok
+  (isAvailable : TransitLine → Set) -- isAvailable X ≡ X közlekedik
+  (_replaces_ : TransitLine → TransitLine → Set) -- X replaces Y ≡ Y helyett X közlekedik
+  where
+
+    -- Formalizáljuk az alábbi kifejezéseket
+
+    -- Minden járat esetén,
+    -- ha az a járat nem közlekedik akkor létezik egy másik járat,
+    -- ami helyette közlekedik
+    ∃replacement : Set
+    ∃replacement = (x : TransitLine) → ¬ (isAvailable x) → Σ TransitLine λ p → p replaces x
+
+    -- Nem közlekedik semmi a 9-es busz helyett
+    noreplacementfor9 : Set
+    noreplacementfor9 = ∀ x → ¬ (x replaces Busline9)
+
+    -- Bizonyítsd be az alábbi kifejezést!
+    -- Ha (∃replacement) minden járat esetén, ha az a járat nem jár, akkor létezik egy másik járat, ami helyette jár,
+    -- és a 9-es nem közlekedik, akkor nem igaz, hogy (noreplacementfor9) nem közlekedik semmi a 9-es busz helyett
+    lemma : ∃replacement × ¬ (isAvailable Busline9) → ¬ noreplacementfor9
+    lemma (fst₁ , snd₁) x₁ = x₁ (fst (fst₁ Busline9 snd₁)) (snd (fst₁ Busline9 snd₁))
+
 
 ---------------------------------------------------------
 -- predicate (first order) logic laws
@@ -240,9 +272,36 @@ module Food
 ∀⊎-distr' = {!!}
 
 Σ×-distr' : ¬ ((A : Set)(P : A → Set)(Q : A → Set) → (Σ A P × Σ A Q → Σ A λ a → P a × Q a))
-Σ×-distr' w = {!!}
+Σ×-distr' w = handle absurd
+  where
+  P' : Bool → Set
+  P' true = ⊤
+  P' false = ⊥
+  Q' : Bool → Set
+  Q' true = ⊥
+  Q' false = ⊤
+  absurd : (Σ Bool λ a → P' a × Q' a)
+  absurd = w Bool P' Q' ((true , tt) , (false , tt))
+  handle : ¬ (Σ Bool λ a → P' a × Q' a)
+  handle (false , snd₁) = fst snd₁
+  handle (true , snd₁) = snd snd₁
+
+Σ×-distr'' : ¬ ((A : Set)(P : A → Set)(Q : A → Set) → (Σ A P × Σ A Q → Σ A λ a → P a × Q a))
+Σ×-distr'' w with  (w Bool (λ { true → ⊥ ; false → ⊤ }) (λ { false → ⊥ ; true → ⊤ }) ((false , tt) , true , tt))
+... | false , snd₁ = snd snd₁
+... | true , snd₁ = fst snd₁
+
+-- with mintaillesztés
+f' : ℕ → ℕ
+f' x with x + 1
+... | zero = 1
+... | suc y = 2
  
 Σ∀       : (A B : Set)(R : A → B → Set)        → (Σ A λ x → (y : B) → R x y) → (y : B) → Σ A λ x → R x y
 Σ∀ = {!!}
-AC       : (A B : Set)(R : A → B → Set)        → ((x : A) → Σ B λ y → R x y) → Σ (A → B) λ f → (x : A) → R x (f x)
-AC = {!!}
+AC       :
+  (A B : Set)
+  (R : A → B → Set) →
+  ((x : A) → Σ B λ y → R x y) → Σ (A → B) λ f → (x : A) → R x (f x)
+fst (AC A B R f) = λ a → fst (f a)
+snd (AC A B R f) = λ a → snd (f a)
