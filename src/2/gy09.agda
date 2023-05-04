@@ -1,50 +1,55 @@
-module gy09 where
-
 open import lib
 
 ---------------------------------------------------------
 -- equality
 ------------------------------------------------------
 
+refl' : ∀{i}{A : Set i}{a : A} → a ≡ a
+refl' = refl
+
 sym : ∀{i}{A : Set i}{x y : A} → x ≡ y → y ≡ x
 sym refl = refl
 
 trans : ∀{i}{A : Set i}{x y z : A} → x ≡ y → y ≡ z → x ≡ z
-trans refl eq2 = eq2
+trans refl x₁ = x₁
 
-cong : ∀{i j}{A : Set i}{B : Set j}(f : A → B){x y : A} → x ≡ y → f x ≡ f y
-cong = {!!}
-
-subst : ∀{i j}{A : Set i}(P : A → Set j){x y : A} → x ≡ y → P x → P y
-subst = {!!}
+infix  3 _∎
+infixr 2 _≡⟨_⟩_
 
 _≡⟨_⟩_ : ∀{i}{A : Set i}(x : A){y z : A} → x ≡ y → y ≡ z → x ≡ z
-_ ≡⟨ p ⟩ q = trans p q
+x ≡⟨ x≡y ⟩ y≡z = trans x≡y y≡z
 
-_∎ : ∀{i}{A : Set i}(x : A) → x ≡ x
-_ ∎ = refl
+_∎ : ∀{i}{A : Set i}(a : A) → a ≡ a
+a ∎ = refl
 
-infixr 2 _≡⟨_⟩_
-infix 3 _∎
+cong : ∀{i j}{A : Set i}{B : Set j}(f : A → B){x y : A} → x ≡ y → f x ≡ f y
+cong f refl = refl
+
+subst : ∀{i j}{A : Set i}(P : A → Set j){x y : A} → x ≡ y → P x → P y
+subst P refl x₁ = x₁
 
 ---------------------------------------------------------
 -- properties of +,*
 ------------------------------------------------------
 
 idl+ : (n : ℕ) → zero + n ≡ n
-idl+ = {!!}
+idl+ = λ n → refl
 
 idr+ : (n : ℕ) → n + zero ≡ n
-idr+ = {!!}
+idr+ zero = refl
+idr+ (suc n) = cong suc (idr+ n)
 
 ass+ : (m n o : ℕ) → (m + n) + o ≡ m + (n + o)
-ass+ = {!!}
+ass+ zero n o = refl
+ass+ (suc m) n o = cong suc (ass+ m n o)
 
 comm+-helper : (n m : ℕ) → suc n + m ≡ n + suc m
-comm+-helper = {!!}
+comm+-helper zero m = refl
+comm+-helper (suc n) m = cong suc (comm+-helper n m)
 
 comm+ : (m n : ℕ) → m + n ≡ n + m
-comm+ = {!!}
+comm+ zero n = sym (idr+ n)
+comm+ (suc m) n = trans (cong suc (comm+ m n)) (comm+-helper n m)
 
 dist+* : (m n o : ℕ) → (n + o) * m ≡ n * m + o * m
 dist+* = {!!}

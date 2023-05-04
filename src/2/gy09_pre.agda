@@ -1,5 +1,3 @@
-module gy09 where
-
 open import lib
 
 ---------------------------------------------------------
@@ -7,25 +5,25 @@ open import lib
 ------------------------------------------------------
 
 sym : ∀{i}{A : Set i}{x y : A} → x ≡ y → y ≡ x
-sym refl = refl
+sym = {!!}
 
 trans : ∀{i}{A : Set i}{x y z : A} → x ≡ y → y ≡ z → x ≡ z
-trans refl eq2 = eq2
+trans = {!!}
+
+infix  3 _∎
+infixr 2 _≡⟨_⟩_
+
+_≡⟨_⟩_ : ∀{i}{A : Set i}(x : A){y z : A} → x ≡ y → y ≡ z → x ≡ z
+x ≡⟨ x≡y ⟩ y≡z = {!   !}
+
+_∎ : ∀{i}{A : Set i}(a : A) → a ≡ a
+a ∎ = refl
 
 cong : ∀{i j}{A : Set i}{B : Set j}(f : A → B){x y : A} → x ≡ y → f x ≡ f y
 cong = {!!}
 
 subst : ∀{i j}{A : Set i}(P : A → Set j){x y : A} → x ≡ y → P x → P y
 subst = {!!}
-
-_≡⟨_⟩_ : ∀{i}{A : Set i}(x : A){y z : A} → x ≡ y → y ≡ z → x ≡ z
-_ ≡⟨ p ⟩ q = trans p q
-
-_∎ : ∀{i}{A : Set i}(x : A) → x ≡ x
-_ ∎ = refl
-
-infixr 2 _≡⟨_⟩_
-infix 3 _∎
 
 ---------------------------------------------------------
 -- properties of +,*
