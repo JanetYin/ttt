@@ -94,7 +94,7 @@ A Tao könyv fejezetei vannak hivatkozva.
 |   11 | induktiv tipusok tovabbi tulajdonsagai: konstruktorok             | data konstruktorok inj, diszj    |
 |      | injektivitasa, diszjunktsaga, egyenloseg eldonthetosege           | eldontheto egyenlosegek          |
 |      |                                                                   |                                  |
-| TODO | klasszikus vs. konstruktiv logika (sqrt(2) irrac)                 |                                  |
+| TODO | klasszikus vs. konstruktiv logika (a,b irrac, a^b rac)            |                                  |
 |      | parametricitas, Reynolds fabula                                   |                                  |
 |      |                                                                   | f:Bool→Bool-ra f∘f∘f=f           |
 |      | ellenpelda relaciok                                               | ellenpelda relaciok, fuggvenyek  |
