@@ -104,8 +104,12 @@ snd (∀×-distr A P Q) = λ hyp → λ a → fst hyp a , snd hyp a
 Σ×-distr-there A P Q (a , (pa , qa)) = (a , pa) , (a , qa)
 Σ⊎-distr  :    (A : Set)(P : A → Set)(Q : A → Set) → (Σ A λ a → P a ⊎ Q a)  ↔ Σ A P ⊎ Σ A Q
 Σ⊎-distr = {!!}
+
 Σ¬→¬∀        :    (A : Set)(P : A → Set)              → (Σ A λ a → ¬ P a)      → ¬ ((a : A) → P a)
 Σ¬→¬∀ = {!!}
+-- ez visszafelé nem igaz!
+-- miért?
+
 ¬Σ↔∀¬        :    (A : Set)(P : A → Set)              → (¬ Σ A λ a → P a)      ↔ ((a : A) → ¬ P a)
 ¬Σ↔∀¬ = {!!}
 ⊎↔ΣBool   :    (A B : Set)                         → (A ⊎ B)                ↔ Σ Bool (λ b → if b then A else B)
@@ -113,11 +117,14 @@ snd (∀×-distr A P Q) = λ hyp → λ a → fst hyp a , snd hyp a
 ¬¬∀-nat   :    (A : Set)(P : A → Set)              → ¬ ¬ ((x : A) → P x)    → (x : A) → ¬ ¬ (P x)
 ¬¬∀-nat = {!!}
 
+-- itt konkrétan hamisságot bizonyítunk
+-- ellenpéldát kell mutatni
 ∀⊎-distr' : ¬ ((A : Set)(P : A → Set)(Q : A → Set) → (((a : A) → P a ⊎ Q a) → ((a : A) → P a) ⊎ ((a : A) → Q a)))
-∀⊎-distr' = {!!}
+∀⊎-distr' f = {! !}
 
+-- itt is
 Σ×-distr' : ¬ ((A : Set)(P : A → Set)(Q : A → Set) → (Σ A P × Σ A Q → Σ A λ a → P a × Q a))
-Σ×-distr' w = {!!}
+Σ×-distr' = {!!}
 
 -- ha van kulcs, ami minden ajtót nyit, akkor minden ajtóhoz van kulcs, ami nyitja (de fordítva nem
 Σ∀       : (A B : Set)(R : A → B → Set)        → (Σ A λ x → (y : B) → R x y) → (y : B) → Σ A λ x → R x y

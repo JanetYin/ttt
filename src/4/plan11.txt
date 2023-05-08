@@ -1,0 +1,12 @@
+0:00-0:15	röpi
+0:15-0:20	kérdések, ha vannak
+0:20-0:25	∀⊎-distr'-en keresztül egy ellenpéldás
+0:25-0:35	önálló munka fájl végéig
+0:35-0:40	kis refl-ös azonosságokat együtt gyorsan (sőt, a substra lehet egy két percet hagyni)
+0:40-0:45	ass+-ig együtt
+0:45-0:50	comm+-helpert önállóan
+0:50-1:00	dist+*-ig együtt
+1:00-1:20	comm*-ig önállóan
+1:20-1:25	comm*-helpert valószínűleg együtt is meg kell nézni
+1:25-1:28	ha nagyon sok időnk van, gy10 elejét is meg lehet nézni együtt
+1:28-1:30	pótröpik rendje, anyag, házi
