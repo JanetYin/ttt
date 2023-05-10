@@ -18,6 +18,7 @@ x ≡⟨ x≡y ⟩ y≡z = trans x≡y y≡z
 
 _∎ : ∀{i}{A : Set i}(a : A) → a ≡ a
 a ∎ = refl
+-- \qed
 
 cong : ∀{i j}{A : Set i}{B : Set j}(f : A → B){x y : A} → x ≡ y → f x ≡ f y
 cong f refl = refl
@@ -73,23 +74,76 @@ comm* (suc m) n = trans (cong (n +_) (comm* m n)) (comm*-helper n m)
 ------------------------------------------------------
 
 p4 : (x y : ℕ) → ((x + (y + zero)) + x) ≡ (2 * x + y)
-p4 = {!!}
+p4 x y = x + (y + zero) + x
+    ≡⟨ cong (λ a → x + a + x) (idr+ y) ⟩ 
+    x + y + x
+    ≡⟨ ass+ x y x ⟩ 
+    x + (y + x)
+    ≡⟨ cong (λ a → x + a) (comm+ y x) ⟩
+    x + (x + y)
+    ≡⟨ sym (ass+ x x y) ⟩ 
+    x + x + y
+    ≡⟨ cong (λ a → x + a + y) (sym (idr+ x)) ⟩
+    x + (x + zero) + y ∎
 
 p3 : (a b : ℕ) → a + a + b + a * 0 ≡ 2 * a + b
-p3 = {!!}
+p3 a b = a + a + b + a * zero 
+        ≡⟨ cong (λ x → a + a + b + x) (nullr* a) ⟩ 
+        a + a + b + zero
+        ≡⟨ idr+ (a + a + b) ⟩ 
+        a + a + b
+        ≡⟨ cong (λ x → a + x + b) (sym (idr+ a)) ⟩ 
+        a + (a + zero) + b ∎
 
 p2 : (a b c : ℕ) → c * (b + 1 + a) ≡ a * c + b * c + c
-p2 = {!!}
+p2 a b c = c * (b + 1 + a) 
+        ≡⟨ comm* c (b + 1 + a) ⟩ -- meg kell fordítani a szorzatot
+        (b + 1 + a) * c
+        ≡⟨ dist+* c (b + 1) a ⟩ -- dist+*
+        (b + 1) * c + a * c
+        ≡⟨ cong (λ x → x + a * c) (dist+* c b 1) ⟩ -- dist+*
+        b * c + (c + zero) + a * c
+        ≡⟨ comm+ (b * c + (c + zero)) (a * c) ⟩ -- maradék átalakítások
+        a * c + (b * c + (c + zero))
+        ≡⟨ sym (ass+ (a * c) (b * c) (c + zero)) ⟩
+        a * c + b * c + (c + zero)
+        ≡⟨ cong (λ x → a * c + b * c + x) (idr+ c) ⟩
+        a * c + b * c + c ∎
 
 [m+n]^2=m^2+2mn+n^2 : (m n : ℕ) → (m + n) * (m + n) ≡ m * m + 2 * m * n + n * n
 [m+n]^2=m^2+2mn+n^2 = {!!}
 
 _^_ : ℕ → ℕ → ℕ
-a ^ n = {!!}
+a ^ zero = suc zero
+a ^ suc zero = a
+a ^ suc n = a * (a ^ n)
 infixl 9 _^_
 
 p1 : (a b : ℕ) → (a + b) ^ 2 ≡ a ^ 2 + 2 * a * b + b ^ 2
-p1 = {!!}
+p1 a b = (a + b) * (a + b) 
+        ≡⟨ dist+* (a + b) a b ⟩ 
+        a * (a + b) + b * (a + b)
+        ≡⟨ cong (λ x → x + b * (a + b)) (comm* a (a + b)) ⟩ 
+        (a + b) * a + b * (a + b)
+        ≡⟨ cong (λ x → x + b * (a + b)) (dist+* a a b) ⟩ 
+        a * a + b * a + b * (a + b)
+        ≡⟨ cong (λ x → a * a + b * a + x) (comm* b (a + b)) ⟩ 
+        a * a + b * a + (a + b) * b
+        ≡⟨ cong (λ x → a * a + b * a + x) (dist+* b a b) ⟩ 
+        a * a + b * a + (a * b + b * b)
+        ≡⟨ ass+ (a * a) (b * a) (a * b + b * b) ⟩
+        a * a + (b * a + (a * b + b * b))
+        ≡⟨ cong (λ x → a * a + x) (sym (ass+ (b * a) (a * b) (b * b))) ⟩
+        a * a + (b * a + a * b + b * b)
+        ≡⟨ sym (ass+ (a * a) (b * a + a * b) (b * b)) ⟩
+        a * a + (b * a + a * b) + b * b
+        ≡⟨ cong (λ x → a * a + x + b * b) {!   !} ⟩
+        {!   !}
+        ≡⟨ {!   !} ⟩
+        {!   !}
+        ≡⟨ {!   !} ⟩
+        a * a + (a + (a + zero)) * b + b * b ∎
+
 
 0^ : (n : ℕ) → 0 ^ (suc n) ≡ 0
 0^ = {!!}
