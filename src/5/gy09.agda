@@ -4,14 +4,11 @@ open import lib
 -- equality
 ------------------------------------------------------
 
-refl' : ∀{i}{A : Set i}{a : A} → a ≡ a
-refl' = refl
-
 sym : ∀{i}{A : Set i}{x y : A} → x ≡ y → y ≡ x
 sym refl = refl
 
 trans : ∀{i}{A : Set i}{x y z : A} → x ≡ y → y ≡ z → x ≡ z
-trans refl x₁ = x₁
+trans refl x = x
 
 infix  3 _∎
 infixr 2 _≡⟨_⟩_
@@ -26,14 +23,14 @@ cong : ∀{i j}{A : Set i}{B : Set j}(f : A → B){x y : A} → x ≡ y → f x 
 cong f refl = refl
 
 subst : ∀{i j}{A : Set i}(P : A → Set j){x y : A} → x ≡ y → P x → P y
-subst P refl x₁ = x₁
+subst P refl x = x
 
 ---------------------------------------------------------
 -- properties of +,*
 ------------------------------------------------------
 
 idl+ : (n : ℕ) → zero + n ≡ n
-idl+ = λ n → refl
+idl+ n = refl
 
 idr+ : (n : ℕ) → n + zero ≡ n
 idr+ zero = refl
@@ -53,29 +50,25 @@ comm+ (suc m) n = trans (cong suc (comm+ m n)) (comm+-helper n m)
 
 dist+* : (m n o : ℕ) → (n + o) * m ≡ n * m + o * m
 dist+* m zero o = refl
-dist+* m (suc n) o = sym (trans (ass+ m (n * m) (o * m)) (cong (λ x → m + x) (sym (dist+* m n o))))
+dist+* m (suc n) o =
+    trans (cong (λ x → m + x) (dist+* m n o)) 
+    (sym (ass+ m (n * m) (o * m)))
+-- (m +_)
 
 nullr* : (n : ℕ) → n * 0 ≡ 0
-nullr* zero = refl
-nullr* (suc n) = nullr* n
+nullr* = {!!}
 
 idl* : (n : ℕ) → 1 * n ≡ n
-idl* zero = refl
-idl* (suc n) = cong suc (idr+ n)
+idl* = {!!}
 
 idr* : (n : ℕ) → n * 1 ≡ n
-idr* zero = refl
-idr* (suc n) = cong suc (idr* n)
+idr* = {!!}
 
 ass* : (m n o : ℕ) → (m * n) * o ≡ m * (n * o)
-ass* zero n o = refl
-ass* (suc m) n o = trans (dist+* o n (m * n)) 
-                         (cong (λ x → n * o + x) (ass* m n o))
+ass* = {!!}
 
 comm*-helper : (n m : ℕ) → n + n * m ≡ n * suc m
-comm*-helper zero m = refl
-comm*-helper (suc n) m = cong suc (trans (sym (ass+ n m (n * m))) (trans (cong (λ x → x + n * m) (comm+ n m)) (trans (ass+ m n (n * m)) (cong (λ x → m + x) (comm*-helper n m)))))
+comm*-helper = {!!}
 
 comm* : (m n : ℕ) → m * n ≡ n * m
-comm* zero n = sym (nullr* n)
-comm* (suc m) n = trans (cong (λ x → n + x) (comm* m n)) (comm*-helper n m)
+comm* = {!!}

@@ -52,14 +52,20 @@ Fin1+3=Fin4 = {!!}
 
 -- balra injektálni
 inj₁f : {m n : ℕ} → Fin m → Fin (m + n)
-inj₁f i = {!!}
+inj₁f {suc m-1} {n} (zero {m-1}) = zero {m-1 + n}
+inj₁f {suc m-1} {n} (suc {m-1} k) = suc {m-1 + n} (inj₁f {m-1} {n} k)
+
+{-
+inj₁f {3 2} (suc (zero {0}))
+-}
 
 test-inj₁f : inj₁f {3}{4} (suc (suc zero)) ≡ suc (suc zero)
 test-inj₁f = refl
 
 -- jobbra injektálni
 inj₂f : {m n : ℕ} → Fin n → Fin (m + n)
-inj₂f {m}  i = {!!}
+inj₂f {zero} i = i
+inj₂f {suc m} i = suc (inj₂f {m} i)
 
 test-inj₂f : inj₂f {3}{4} (suc (suc zero)) ≡ suc (suc (suc (suc (suc zero))))
 test-inj₂f = refl
@@ -93,7 +99,18 @@ Fin* = {!!}
 -- i=0
 
 Σℕ : {n : ℕ} → (Fin n → ℕ) → ℕ
-Σℕ = {!!}
+Σℕ {zero} f = 0
+Σℕ {suc n} f = f zero + (Σℕ λ k → f (suc k))
+
+{-
+f : Fin 2 → ℕ
+f zero = 42
+f (suc zero) = 113
+
+Σℕ {2} f = f zero + (Σℕ λ k → f (suc k)) = f zero + (f (suc zero) + Σℕ λ k → (λ i → f suc i) (suc k))
+                                           = f zero + (f (suc zero) + Σℕ λ k → f (suc (suc k))) =
+                                           = f zero + (f (suc zero) + 0)
+-}
 
 -- not very easy
 Σ+ : (n : ℕ)(a : Fin n → ℕ) → Σ (Fin n) (λ i → Fin (a i)) ↔ Fin (Σℕ {n} a)
@@ -103,9 +120,12 @@ Fin* = {!!}
 --  Π  a i = a 0 * a 1 * ... * a (n-1)
 -- i=0
 
-Πℕ : (n : ℕ) → (Fin n → ℕ) → ℕ
+Πℕ : {n : ℕ} → (Fin n → ℕ) → ℕ
 Πℕ = {!!}
 
 -- not very easy
-Π* : (n : ℕ)(a : Fin n → ℕ) → ((i : Fin n) → Fin (a i)) ↔ Fin (Πℕ n a)
+Π* : (n : ℕ)(a : Fin n → ℕ) → ((i : Fin n) → Fin (a i)) ↔ Fin (Πℕ {n} a)
 Π* = {!!}
+
+k  : Fin 10
+k = inj₂f {6} (suc (suc (zero {1})))

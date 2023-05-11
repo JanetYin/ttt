@@ -1,0 +1,10 @@
+0:00-0:15	röpi
+0:15-0:20	megbeszélés (röpié, házié, akármié)
+0:20-0:30	gy08 elejéről az f-ek
+0:30-0:35	kvantorok elmagyarázása
+0:35-0:40	modulból első kettő közösen
+0:40-0:50	többi önállóan
+0:50-0:55	∀×-distr és Σ×-distr-there közösen
+0:55-1:15	többi önállóan
+1:15-1:28	gy09.agda elejéről mese, aztán ass+-ig közösen
+1:28-1:30	házi; röpi témája
