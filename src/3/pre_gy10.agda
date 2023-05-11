@@ -146,35 +146,3 @@ p4'' x y =
   x + x + y
   ≡⟨ cong (λ z → x + z + y) (sym (idr+ x)) ⟩
   x + (x + zero) + y ∎
-
-distr+*₂ : ∀ x y z a → (x + y + z) * a ≡ x * a + y * a + z * a
-distr+*₂ x y z a =
-  (x + y + z) * a
-  ≡⟨ dist+* a (x + y) z ⟩
-  (x + y) * a + z * a
-  ≡⟨ cong (λ q → q + z * a) (dist+* a x y) ⟩
-  x * a + y * a + z * a ∎
-
-cong₃ : {A B C D : Set}{a a' : A}{b b' : B}{c c' : C}(f : A → B → C → D) → a ≡ a' → b ≡ b' → c ≡ c' → f a b c ≡ f a' b' c'
-cong₃ f refl refl refl = refl
-
-p : ∀ x y z → (x + y + z) * (x + y + z) ≡ x * x + y * y + z * z + 2 * (x * y + x * z + y * z)
-p x y z =
-  (x + y + z) * (x + y + z)
-  ≡⟨ distr+*₂ x y z (x + y + z) ⟩
-  x * (x + y + z) + y * (x + y + z) + z * (x + y + z)
-  ≡⟨ cong₃ (λ q₁ q₂ q₃ → q₁ + q₂ + q₃)
-    (comm* x (x + y + z))
-    (comm* y (x + y + z))
-    (comm* z (x + y + z)) ⟩
-  (x + y + z) * x + (x + y + z) * y + (x + y + z) * z
-  ≡⟨ cong₃ (λ q₁ q₂ q₃ → q₁ + q₂ + q₃)
-    (distr+*₂ x y z x)
-    (distr+*₂ x y z y)
-    (distr+*₂ x y z z)  ⟩
-  x * x + y * x + z * x + (x * y + y * y + z * y) +
-    (x * z + y * z + z * z)
-  ≡⟨ {!!} ⟩
-  {!!}
-  ≡⟨ {!!} ⟩
-  x * x + y * y + z * z + (x * y + x * z + y * z + (x * y + x * z + y * z + zero)) ∎
