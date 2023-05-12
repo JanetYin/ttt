@@ -16,6 +16,16 @@ cong f refl = refl
 subst : ∀{i j}{A : Set i}(P : A → Set j){x y : A} → x ≡ y → P x → P y
 subst P refl p = p
 
+_≡⟨_⟩_ : ∀{i}{A : Set i}(x : A){y z : A} → x ≡ y → y ≡ z → x ≡ z
+_ ≡⟨ p ⟩ q = trans p q
+
+-- \qed = ∎
+_∎ : ∀{i}{A : Set i}(x : A) → x ≡ x
+_ ∎ = refl
+
+infixr 2 _≡⟨_⟩_
+infix 3 _∎
+
 ass+ : (a b c : ℕ) → (a + b) + c ≡ a + (b + c)
 ass+ zero    b c = refl
 ass+ (suc a) b c = cong suc (ass+ a b c)
@@ -37,7 +47,21 @@ dist+* m zero o = refl
 dist+* m (suc n) o = trans (cong (m +_) (dist+* m n o)) (sym (ass+ m (n * m) (o * m)))
 
 dist*+ : (m n o : ℕ) → m * (n + o) ≡ m * n + m * o
-dist*+
+dist*+ zero n o = refl
+dist*+ (suc m) n o =
+  n + o + m * (n + o)
+  ≡⟨ cong (n + o +_) (dist*+ m n o) ⟩
+  (n + o) + (m * n + m * o)
+  ≡⟨ ass+ n o (m * n + m * o) ⟩
+  n + (o + (m * n + m * o))
+  ≡⟨ cong (n +_) (sym (ass+ o (m * n) (m * o))) ⟩
+  n + (o + m * n + m * o)
+  ≡⟨ cong (λ x → n + (x + m * o)) (comm+ o (m * n)) ⟩
+  n + (m * n + o + m * o)
+  ≡⟨ cong (n +_) (ass+ (m * n) o (m * o)) ⟩
+  n + (m * n + (o + m * o))
+  ≡⟨ sym (ass+ n (m * n) (o + m * o)) ⟩
+  n + m * n + (o + m * o) ∎
 
 nullr* : (n : ℕ) → n * 0 ≡ 0
 nullr* zero = refl
@@ -72,29 +96,53 @@ a ^ zero = 1
 a ^ suc n = a * a ^ n
 
 0^ : (n : ℕ) → 0 ^ (suc n) ≡ 0
-0^ = {!!}
+0^ n = refl
 
 ^0 : (a : ℕ) → a ^ 0 ≡ 1
-^0 = {!!}
+^0 a = refl
 
 1^ : (n : ℕ) → 1 ^ n ≡ 1
-1^ = {!!}
+1^ zero = refl
+1^ (suc n) = cong (_+ 0) (1^ n)
 
 ^1 : (a : ℕ) → a ^ 1 ≡ a
-^1 = {!!}
+^1 = idr*
 
-^+ : (a m n : ℕ) → a ^ (m + n) ≡ a ^ m * a ^ n
-^+ = {!!}
+^+ : (m n o : ℕ) → m ^ (n + o) ≡ m ^ n * m ^ o
+^+ m zero o = sym (idr+ (m ^ o))
+^+ m (suc n) o = trans (cong (m *_) (^+ m n o)) (sym (ass* m (m ^ n) (m ^ o)))
 
 ^* : (a m n : ℕ) → a ^ (m * n) ≡ (a ^ m) ^ n
-^* = {!!}
+^* a 0 n = sym (1^ n)
+^* a (suc m) zero = cong (a ^_) (nullr* m)
+^* a (suc m) (suc n) =
+  a * a ^ (n + m * suc n)
+  ≡⟨ cong (a *_) (^+ a n (m * suc n)) ⟩
+  a * (a ^ n * a ^ (m * suc n))
+  ≡⟨ cong (λ x → a * (a ^ n * x)) (^* a m (suc n)) ⟩
+  a * (a ^ n * (a ^ m * (a ^ m) ^ n))
+  ≡⟨ cong (λ x → a * (a ^ n * (a ^ m * x))) (sym (^* a m n)) ⟩
+  a * (a ^ n * (a ^ m * a ^ (m * n)))
+  ≡⟨ {!   !} ⟩
+  {!   !}
+  ≡⟨ {!   !} ⟩
+  {!   !}
+  ≡⟨ {!   !} ⟩
+  a * a ^ m * (a ^ n * a ^ (m * n))
+  ≡⟨ cong (a * a ^ m *_) (sym (^+ a n (m * n))) ⟩
+  a * a ^ m * a ^ (n + m * n)
+  ≡⟨ cong (a ^ suc m *_) (^* a (suc m) n) ⟩
+  a ^ suc m * (a ^ suc m) ^ n ∎
 
 *^ : (a b n : ℕ) → (a * b) ^ n ≡ a ^ n * b ^ n
-*^ = {!!}
+*^ a b n = {!   !}
 
 ---------------------------------------------------------
 -- equational reasoning
 ------------------------------------------------------
+
+Dec : ∀{i} → Set i → Set i
+Dec A = A ⊎ ¬ A
 
 [m+n]^2=m^2+2mn+n^2 : (m n : ℕ) → (m + n) * (m + n) ≡ m * m + 2 * m * n + n * n
 [m+n]^2=m^2+2mn+n^2 = {!!}

@@ -56,19 +56,29 @@ dist+* m (suc n) o =
 -- (m +_)
 
 nullr* : (n : ℕ) → n * 0 ≡ 0
-nullr* = {!!}
+nullr* zero = refl
+nullr* (suc n) = nullr* n
 
 idl* : (n : ℕ) → 1 * n ≡ n
-idl* = {!!}
+idl* zero = refl
+idl* (suc n) = cong suc (idl* n)
 
 idr* : (n : ℕ) → n * 1 ≡ n
-idr* = {!!}
+idr* zero = refl
+idr* (suc n) = cong suc (idr* n)
 
 ass* : (m n o : ℕ) → (m * n) * o ≡ m * (n * o)
-ass* = {!!}
+ass* zero n o = refl
+ass* (suc m) n o = trans (dist+* o n (m * n)) (cong (λ x → n * o + x) (ass* m n o))
+
+seged : (n m o : ℕ) → n + (m + o) ≡ m + (n + o)
+seged zero m o = refl
+seged (suc n) m o = trans (cong suc (seged n m o)) (comm+-helper m (n + o))
 
 comm*-helper : (n m : ℕ) → n + n * m ≡ n * suc m
-comm*-helper = {!!}
+comm*-helper zero m = refl
+comm*-helper (suc n) m = cong suc (trans (seged n m (n * m)) (cong (λ x → m + x) (comm*-helper n m)))
 
 comm* : (m n : ℕ) → m * n ≡ n * m
-comm* = {!!}
+comm* zero n = sym (nullr* n)
+comm* (suc m) n = trans (cong (λ x → n + x) (comm* m n)) (comm*-helper n m)

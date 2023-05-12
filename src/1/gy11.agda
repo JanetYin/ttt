@@ -16,6 +16,15 @@ cong f refl = refl
 subst : ∀{i j}{A : Set i}(P : A → Set j){x y : A} → x ≡ y → P x → P y
 subst P refl p = p
 
+_≡⟨_⟩_ : ∀{i}{A : Set i}(x : A){y z : A} → x ≡ y → y ≡ z → x ≡ z
+_ ≡⟨ p ⟩ q = trans p q
+
+_∎ : ∀{i}{A : Set i}(x : A) → x ≡ x
+_ ∎ = refl
+
+infixr 2 _≡⟨_⟩_
+infix 3 _∎
+
 ---------------------------------------------------------
 -- konstruktorok injektivitasa
 ------------------------------------------------------
