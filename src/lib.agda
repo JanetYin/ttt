@@ -9,7 +9,6 @@ open import Agda.Builtin.Bool
 open import Agda.Builtin.Sigma
   public
 
-infixr 4 _,_
 infixr 2 _×_
 infixr 1 _⊎_
 infix 0 _↔_
@@ -18,13 +17,13 @@ if_then_else_ : ∀{i}{A : Set i}(t : Bool)(u v : A) → A
 if true  then u else v = u
 if false then u else v = v
 
+pred : ℕ → ℕ
+pred 0 = 0
+pred (suc n) = n
+
 -- Product types
-record _×_ {i}{j}(A : Set i)(B : Set j) : Set (i ⊔ j) where
-  constructor _,_
-  field
-    fst : A
-    snd : B
-open _×_ public
+_×_ : ∀{i j}(A : Set i)(B : Set j) → Set (i ⊔ j)
+A × B = Σ A (λ _ → B)
 
 -- Sum types
 data _⊎_ {i}{j}(A : Set i)(B : Set j) : Set (i ⊔ j) where
