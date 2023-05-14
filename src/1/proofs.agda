@@ -19,8 +19,43 @@ cong₃ : ∀{i j k l}{A : Set i}{B : Set j}{C : Set k}{D : Set l}(f : A → B �
   x ≡ x' → y ≡ y' → z ≡ z' → f x y z ≡ f x' y' z'
 cong₃ f refl refl refl = refl
 
+cong∘ : ∀{i j}{A : Set i}{B : Set j}(f : B → A)(g : A → B) →
+  {a b : A}(eq : a ≡ b) → cong f (cong g eq) ≡ cong (λ x → f (g x)) eq
+cong∘ f g refl = refl
+
+cong-id : ∀{i}{A : Set i}{a b : A} →
+  (eq : a ≡ b) → cong (λ x → x) eq ≡ eq
+cong-id refl = refl
+
 subst : ∀{i j}{A : Set i}(P : A → Set j){x y : A} → x ≡ y → P x → P y
 subst P refl px = px
+
+substconst  : ∀{ℓ}{A : Set ℓ}{ℓ'}{B : Set ℓ'}{a a' : A}(e : a ≡ a'){b : B} →
+  subst (λ _ → B) e b ≡ b
+substconst refl = refl
+
+substcong : ∀{ℓ ℓ' ℓ''}{A : Set ℓ}{B : Set ℓ'}(C : B → Set ℓ'')(f : A → B) → 
+  {a a' : A}(e : a ≡ a'){c : C (f a)} → 
+  subst {A = B} C (cong f e) c ≡ subst {A = A} (λ a → C (f a)) e c
+substcong C f refl = refl
+
+substΠ : ∀{ℓ ℓ' ℓ''}{A : Set ℓ}{B : Set ℓ'}(C : A → B → Set ℓ'') →
+  {a a' : A}(e : a ≡ a'){f : (b : B) → C a b} → 
+  subst (λ a → (b : B) → C a b) e f ≡ λ b → subst (λ a → C a b) e (f b)
+substΠ C refl = refl
+
+substsubst : ∀{ℓ}{A : Set ℓ}{ℓ'}(P : A → Set ℓ'){a a' a'' : A}(e : a ≡ a')(e' : a' ≡ a''){p : P a} →
+  subst P e' (subst P e p) ≡ subst P (trans e e') p
+substsubst P refl refl = refl
+
+subst→' : ∀{ℓ ℓ' ℓ''}{A : Set ℓ}{B : Set ℓ'}(C : A → Set ℓ''){a a' : A}(e : a ≡ a'){f : B → C a} → 
+  subst (λ a → B → C a) e f ≡ λ b → subst C e (f b)
+subst→' C refl = refl
+
+subst$ : ∀{ℓ ℓ' ℓ''}{A : Set ℓ}{B : A → Set ℓ'}{C : A → Set ℓ''}
+  (f : ∀ a → B a → C a){a a' : A}(e : a ≡ a'){b : B a} → 
+  f a' (subst B e b) ≡ subst C e (f a b) 
+subst$ f refl = refl
 
 _≡⟨_⟩_ : ∀{i}{A : Set i}(x : A){y z : A} → x ≡ y → y ≡ z → x ≡ z
 _ ≡⟨ p ⟩ q = trans p q
@@ -111,6 +146,63 @@ comm* (suc m) n =
   n + n * m
   ≡⟨ sym (sucr* n m) ⟩
   n * suc m ∎
+
+infixr 8 _^_
+_^_ : ℕ → ℕ → ℕ
+a ^ zero = 1
+a ^ suc n = a * a ^ n
+
+nulll^ : (n : ℕ) → 1 ^ n ≡ 1
+nulll^ zero = refl
+nulll^ (suc n) = cong (_+ 0) (nulll^ n)
+
+idr^ : (a : ℕ) → a ^ 1 ≡ a
+idr^ = idr*
+
+dist^+ : (m n o : ℕ) → m ^ (n + o) ≡ m ^ n * m ^ o
+dist^+ m zero o = sym (idr+ (m ^ o))
+dist^+ m (suc n) o = trans (cong (m *_) (dist^+ m n o)) (sym (ass* m (m ^ n) (m ^ o)))
+
+dist^* : (a m n : ℕ) → a ^ (m * n) ≡ (a ^ m) ^ n
+dist^* a 0 n = sym (nulll^ n)
+dist^* a (suc m) zero = cong (a ^_) (nullr* m)
+dist^* a (suc m) (suc n) =
+  a * a ^ (n + m * suc n)
+  ≡⟨ cong (a *_) (dist^+ a n (m * suc n)) ⟩
+  a * (a ^ n * a ^ (m * suc n))
+  ≡⟨ cong (λ x → a * (a ^ n * x)) (dist^* a m (suc n)) ⟩
+  a * (a ^ n * (a ^ m * (a ^ m) ^ n))
+  ≡⟨ cong (λ x → a * (a ^ n * (a ^ m * x))) (sym (dist^* a m n)) ⟩
+  a * (a ^ n * (a ^ m * a ^ (m * n)))
+  ≡⟨ cong (a *_) (sym (ass* (a ^ n) (a ^ m) (a ^ (m * n)))) ⟩
+  a * (a ^ n * a ^ m * a ^ (m * n))
+  ≡⟨ cong (λ x → a * (x * a ^ (m * n))) (comm* (a ^ n) (a ^ m)) ⟩
+  a * (a ^ m * a ^ n * a ^ (m * n))
+  ≡⟨ cong (a *_) (ass* (a ^ m) (a ^ n) (a ^ (m * n))) ⟩
+  a * (a ^ m * (a ^ n * a ^ (m * n)))
+  ≡⟨ sym (ass* a (a ^ m) (a ^ n * a ^ (m * n))) ⟩
+  a * a ^ m * (a ^ n * a ^ (m * n))
+  ≡⟨ cong (a * a ^ m *_) (sym (dist^+ a n (m * n))) ⟩
+  a * a ^ m * a ^ (n + m * n)
+  ≡⟨ cong (a ^ suc m *_) (dist^* a (suc m) n) ⟩
+  a ^ suc m * (a ^ suc m) ^ n ∎
+
+dist*^ : (a b n : ℕ) → (a * b) ^ n ≡ a ^ n * b ^ n
+dist*^ a b zero = refl
+dist*^ a b (suc n) =
+  a * b * (a * b) ^ n
+  ≡⟨ cong (a * b *_) (dist*^ a b n) ⟩
+  a * b * (a ^ n * b ^ n)
+  ≡⟨ ass* a b (a ^ n * b ^ n) ⟩
+  a * (b * (a ^ n * b ^ n))
+  ≡⟨ cong (a *_) (sym (ass* b (a ^ n) (b ^ n))) ⟩
+  a * (b * a ^ n * b ^ n)
+  ≡⟨ cong (λ x → a * (x * b ^ n)) (comm* b (a ^ n)) ⟩
+  a * (a ^ n * b * b ^ n)
+  ≡⟨ cong (a *_) (ass* (a ^ n) b (b ^ n)) ⟩
+  a * (a ^ n * (b * b ^ n))
+  ≡⟨ sym (ass* a (a ^ n) (b * b ^ n)) ⟩
+  a * a ^ n * (b * b ^ n) ∎
 
 sucinj : ∀{x y} → suc x ≡ suc y → x ≡ y
 sucinj refl = refl
