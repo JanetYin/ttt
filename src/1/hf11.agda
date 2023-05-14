@@ -34,7 +34,7 @@ p8 : (x y z : ℕ) → (27 ^ x) ^ y + 9 ^ z ≡ 3 ^ (3 * x * y + 2 * z)
 p8 = {!   !}
 ------------------------------------------------------------------
 -- ÚJ DOLOG INNENTŐL LEFELÉ: (nyilván nem ilyen lesz a +/-)
--- A három utolsó feladathoz új dolog kell, ≢-t még nem bizonyítottunk.
+-- Az öt utolsó feladathoz új dolog kell, ≢-t még nem bizonyítottunk.
 -- Nem nagy varázslat, egyértelmű értékek esetén agda magától ki tudja találni,
 -- hogy nem fog menni, pl (0 ≡ 1)-ről tudja agda, hogy kamu.
 
