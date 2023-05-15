@@ -41,6 +41,10 @@ data List (A : Set) : Set where
 ∷inj2 : ∀{A}{x y : A}{xs ys : List A} → x ∷ xs ≡ y ∷ ys → xs ≡ ys
 ∷inj2 = {!!}
 
+-- ezeket egyszerre is fel lehet írni nyugodtan
+∷inj : ∀{A}{x y : A}{xs ys : List A} → x ∷ xs ≡ y ∷ ys → {!   !}
+∷inj = {!   !}
+
 -- prove all of the above without pattern matching on equalities!
 
 ---------------------------------------------------------
