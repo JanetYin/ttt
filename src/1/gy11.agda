@@ -77,7 +77,7 @@ nil≠cons = {!!}
 -- egyenlosegek eldonthetosege
 ------------------------------------------------------
 
-Dec : Set → Set
+Dec : ∀{i} → Set i → Set i
 Dec A = A ⊎ ¬ A
 
 _≟Bool_ : (b b' : Bool) → Dec (b ≡ b')
@@ -120,10 +120,10 @@ task1 = {!   !}
 task2 : {n : ℕ} → n ≡ 3 → n ≢ 10
 task2 = {!   !}
 
-≢notTrans : ¬ ({a b c : ℕ} → a ≢ b → b ≢ c → a ≢ c)
+≢notTrans : ∀{i} → ¬ ({A : Set i}{a b c : A} → a ≢ b → b ≢ c → a ≢ c)
 ≢notTrans = {!   !}
 
-≢notReflexive : {a : ℕ} → ¬ (a ≢ a)
+≢notReflexive : ∀{i}{A : Set i}{a : A} → ¬ (a ≢ a)
 ≢notReflexive = {!   !}
 
 task3 : ⊤ ≢ ⊤ ⊎ ⊤
