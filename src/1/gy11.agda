@@ -1,36 +1,14 @@
+module gy11 where
+
 open import lib
-
----------------------------------------------------------
--- library
-------------------------------------------------------
-
-sym : ∀{i}{A : Set i}{x y : A} → x ≡ y → y ≡ x
-sym refl = refl
-
-trans : ∀{i}{A : Set i}{x y z : A} → x ≡ y → y ≡ z → x ≡ z
-trans refl refl = refl
-
-cong : ∀{i j}{A : Set i}{B : Set j}(f : A → B){x y : A} → x ≡ y → f x ≡ f y
-cong f refl = refl
-
-subst : ∀{i j}{A : Set i}(P : A → Set j){x y : A} → x ≡ y → P x → P y
-subst P refl p = p
-
-_≡⟨_⟩_ : ∀{i}{A : Set i}(x : A){y z : A} → x ≡ y → y ≡ z → x ≡ z
-_ ≡⟨ p ⟩ q = trans p q
-
-_∎ : ∀{i}{A : Set i}(x : A) → x ≡ x
-_ ∎ = refl
-
-infixr 2 _≡⟨_⟩_
-infix 3 _∎
+open import proofs
 
 ---------------------------------------------------------
 -- konstruktorok injektivitasa
 ------------------------------------------------------
 
-sucinj : (m n : ℕ) → suc m ≡ suc n → m ≡ n
-sucinj = {!!}
+sucinj'' : (m n : ℕ) → suc m ≡ suc n → m ≡ n
+sucinj'' = {!!}
 
 -- prove it without pattern matching on e! (hint: use pred)
 sucinj' : (m n : ℕ) → suc m ≡ suc n → m ≡ n
@@ -115,3 +93,38 @@ _≟BinTree_ = {!!}
 
 _≟List_ : {A : Set} → ({x y : A} → Dec (x ≡ y)) → {xs ys : List A} → Dec (xs ≡ ys)
 _≟List_ = {!!}
+
+-------------------------------------------
+-- injektív függvények
+-------------------------------------------
+
++injl : {n m k : ℕ} → n + m ≡ n + k → m ≡ k
++injl = {!   !}
+
++injr : {n m k : ℕ} → n + m ≡ k + m → n ≡ k
++injr = {!   !}
+
+*injr : {n m k : ℕ} → n * suc m ≡ k * suc m → n ≡ k
+*injr = {!   !}
+
+*injl : {n m k : ℕ} → suc n * m ≡ suc n * k → m ≡ k
+*injl = {!   !}
+
+-------------------------------------------
+-- nem egyenlőségek
+-------------------------------------------
+
+task1 : ¬ ((n : ℕ) → n ≡ 3)
+task1 = {!   !}
+
+task2 : {n : ℕ} → n ≡ 3 → n ≢ 10
+task2 = {!   !}
+
+≢notTrans : ¬ ({a b c : ℕ} → a ≢ b → b ≢ c → a ≢ c)
+≢notTrans = {!   !}
+
+≢notReflexive : {a : ℕ} → ¬ (a ≢ a)
+≢notReflexive = {!   !}
+
+task3 : ⊤ ≢ ⊤ ⊎ ⊤
+task3 = {!   !}
