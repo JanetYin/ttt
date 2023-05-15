@@ -1,4 +1,3 @@
--- BEGIN FIX
 {-# OPTIONS --guardedness #-}
 
 open import Agda.Primitive
@@ -15,10 +14,10 @@ open import Agda.Builtin.Bool
 open import Agda.Builtin.Sigma
   public
 
-infixr 5 _∷_
 infixr 2 _×_
 infixr 1 _⊎_
 infix 0 _↔_
+infixr 5 _∷_
 
 if_then_else_ : ∀{i}{A : Set i}(t : Bool)(u v : A) → A
 if true  then u else v = u
@@ -80,7 +79,7 @@ data Fin : ℕ → Set where
   zero : {n : ℕ} → Fin (suc n)
   suc  : {n : ℕ} → Fin n → Fin (suc n)
 
--- coinductive natural numbers (nat ∪ {∞})
+-- coinductive natural numbers (ℕ ∪ {∞})
 record ℕ∞ : Set where
   coinductive
   constructor mkCoNat
@@ -156,8 +155,8 @@ pred∞ ∞ = just ∞
 -- b1 and b2 should be such that b1 ℕ 1 2 ≠ b2 ℕ 1 2
 b1 b2 : (A : Set) → A → A → A
 -- END FIX
-b1 = {!!}
-b2 = {!!}
+b1 A a b = a
+b2 A a b = b
 -- BEGIN FIX
 test-b1-b2 : ¬ (b1 ℕ 1 2 ≡ b2 ℕ 1 2)
 test-b1-b2 ()
@@ -166,48 +165,57 @@ test-b1-b2 ()
 -- BEGIN FIX
 weirdLogicalEquiv : (A B C : Set) → (B → A → (⊥ ⊎ C)) ↔ (A → (B → C × A))
 -- END FIX
-weirdLogicalEquiv = {!!}
+weirdLogicalEquiv A B C = (λ f a b → case (f b a) exfalso (λ c → c) , a) , (λ f b a → inr (fst (f a b)))
 
 -- BEGIN FIX
 cocΣ : (A : Set)(B : A → Set) → Σ A B ↔ ((C : Set) → ((a : A) → B a → C) → C)
 -- END FIX
-cocΣ = {!!}
+fst (cocΣ A B) (a , ba) C f = f a ba
+snd (cocΣ A B) f = f (Σ A B) (λ a ba → a , ba)
 
 -- BEGIN FIX
 prop : {P : Set} → P ⊎ ¬ P → (¬ ( ¬ P) → P)
 -- END FIX
-prop = {!!}
+prop = λ x x₁ → case x (λ z → z) λ x₂ → exfalso (x₁ x₂)
 
 -- BEGIN FIX
 ref≤ : (x : ℕ) → x ≤ x
 -- END FIX
-ref≤ = {!!}
+ref≤ x = zero , refl
 
 -- BEGIN FIX
 cong⁻¹ : {A B : Set}(a b : A)(f : A → B) → ¬ (f a ≡ f b) → ¬ (a ≡ b)
 -- END FIX
-cong⁻¹ = {!!}
+cong⁻¹ a b f ¬f a≡b = ¬f (cong f a≡b)
 
 -- BEGIN FIX
 a+b=0→a=0 : (a b : ℕ) → (a + b) ≡ 0 → a ≡ 0
 -- END FIX
-a+b=0→a=0 = {!!}
+a+b=0→a=0 zero b e = refl
+a+b=0→a=0 (suc a) b ()
 
 -- BEGIN FIX
 noℕsqrt : ¬ ((n k : ℕ) → Σ ℕ λ m → m * m ≡ n * k)
 -- END FIX
-noℕsqrt = {!!}
+noℕsqrt x with x 1 2
+... | suc (suc zero) , ()
+... | suc (suc (suc m)) , pr with cong (λ x → pred (pred x)) pr
+... | ()
 
 -- BEGIN FIX
 ¬¬∃↓ : ¬ ((f : ℕ → ℕ) → Σ ℕ λ n → (k : ℕ) → suc (f n) ≤ (f k))
 -- END FIX
-¬¬∃↓ = {!!}
+¬¬∃↓ x with x (λ _ → 0)
+... | num , proof with proof 0
+... | zero , ()
+... | suc num₂ , ()
 
 -- BEGIN FIX
 -- works like haskell's zip
 zipStream : {A B : Set} → Stream A → Stream B → Stream (A × B)
 -- END FIX
-zipStream = {!!}
+head (zipStream sa sb) = (head sa) , (head sb)
+tail (zipStream sa sb) = zipStream (tail sa) (tail sb)
 -- BEGIN FIX
 test-s1 : takeStream 10 (zipStream (iterate suc 0) (iterate pred 100)) ≡
   (0 , 100) ∷ (1 , 99) ∷ (2 , 98) ∷
