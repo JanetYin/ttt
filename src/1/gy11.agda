@@ -128,5 +128,5 @@ task2 = {!   !}
 ≢notReflexive : ∀{i}{A : Set i}{a : A} → ¬ (a ≢ a)
 ≢notReflexive = {!   !}
 
-task3 : ⊤ ≢ ⊤ ⊎ ⊤
+task3 : ⊤ ≢ (⊤ ⊎ ⊤)
 task3 = {!   !}
