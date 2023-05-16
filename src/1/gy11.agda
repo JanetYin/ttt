@@ -91,10 +91,10 @@ _≟ℕ_ : (n n' : ℕ) → Dec (n ≡ n')
 _≟ℕ_ = {!!}
 
 _≟BinTree_ : (t t' : BinTree) → Dec (t ≡ t')
-_≟BinTree_ = ?
+_≟BinTree_ = {!   !}
 
 _≟List_ : {A : Set} → (xs ys : List A) → {f : (x y : A) → Dec (x ≡ y)} → Dec (xs ≡ ys)
-_≟List_ = ?
+_≟List_ = {!   !}
 
 -------------------------------------------
 -- injektív függvények
