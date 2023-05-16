@@ -137,29 +137,37 @@ p1 a b = (a + b) * (a + b)
         a * a + (b * a + a * b + b * b)
         ≡⟨ sym (ass+ (a * a) (b * a + a * b) (b * b)) ⟩
         a * a + (b * a + a * b) + b * b
-        ≡⟨ cong (λ x → a * a + x + b * b) {!   !} ⟩
-        {!   !}
-        ≡⟨ {!   !} ⟩
-        {!   !}
-        ≡⟨ {!   !} ⟩
+        ≡⟨ cong (λ x → a * a + (x + a * b) + b * b) (comm* b a) ⟩
+        a * a + (a * b + a * b) + b * b
+        ≡⟨ cong (λ x → a * a + x + b * b) (sym (dist+* b a a)) ⟩
+        a * a + (a + a) * b + b * b
+        ≡⟨ cong (λ x → a * a + (a + x) * b + b * b) (sym (idr+ a)) ⟩
         a * a + (a + (a + zero)) * b + b * b ∎
 
+_^'_ : ℕ → ℕ → ℕ
+a ^' zero = suc zero
+a ^' suc n = a * (a ^' n)
+infixl 9 _^'_
 
 0^ : (n : ℕ) → 0 ^ (suc n) ≡ 0
-0^ = {!!}
+0^ zero = refl
+0^ (suc n) = refl
 
 ^0 : (a : ℕ) → a ^ 0 ≡ 1
-^0 = {!!}
+^0 a = refl
 
-1^ : (n : ℕ) → 1 ^ n ≡ 1
-1^ = {!!}
+1^ : (n : ℕ) → 1 ^' n ≡ 1
+1^ zero = refl
+1^ (suc n) = trans (idr+ (1 ^' n)) (1^ n)
 
-^1 : (a : ℕ) → a ^ 1 ≡ a
-^1 = {!!}
+^1 : (a : ℕ) → a ^' 1 ≡ a
+^1 a = idr* a
 
-^+ : (a m n : ℕ) → a ^ (m + n) ≡ a ^ m * a ^ n
-^+ = {!!}
+^+ : (a m n : ℕ) → a ^' (m + n) ≡ a ^' m * a ^' n
+^+ a zero n = sym (idr+ (a ^' n))
+^+ a (suc m) n = trans (cong (λ x → a * x) (^+ a m n)) (sym (ass* a (a ^' m) (a ^' n)))
 
+-- gondolkodós
 ^* : (a m n : ℕ) → a ^ (m * n) ≡ (a ^ m) ^ n
 ^* = {!!}
 
