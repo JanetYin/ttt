@@ -30,7 +30,7 @@ p7 : (a b : ℕ) → b + a + b + a + b + a ≡ 3 * (b + 0 + a) * 1
 p7 = {!   !}
 
 -- Hatványozás mágia
-p8 : (x y z : ℕ) → (27 ^ x) ^ y + 9 ^ z ≡ 3 ^ (3 * x * y + 2 * z)
+p8 : (x y z : ℕ) → (27 ^ x) ^ y * 9 ^ z ≡ 3 ^ (3 * x * y + 2 * z)
 p8 = {!   !}
 ------------------------------------------------------------------
 -- ÚJ DOLOG INNENTŐL LEFELÉ: (nyilván nem ilyen lesz a +/-)
