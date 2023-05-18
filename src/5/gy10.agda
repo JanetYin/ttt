@@ -174,8 +174,42 @@ p1 a b = (a + b) * ((a + b) * 1)
 ^+ a zero y = sym (idr+ (a ^ y))
 ^+ a (suc x) y = trans (cong (λ b → a * b) (^+ a x y)) (sym (ass* a (a ^ x) (a ^ y)))
 
-^* : (a x y : ℕ) → a ^ (x * y) ≡ (a ^ x) ^ y
-^* = {!   !}
-
 *^ : (a b n : ℕ) → (a * b) ^ n ≡ a ^ n * b ^ n
-*^ = {!!}
+*^ a b zero = refl
+*^ a b (suc n) = a * b * (a * b) ^ n 
+        ≡⟨ cong (λ z → a * b * z) (*^ a b n) ⟩
+        a * b * (a ^ n * b ^ n)
+        ≡⟨ ass* a b (a ^ n * b ^ n) ⟩
+        a * (b * (a ^ n * b ^ n))
+        ≡⟨ cong (λ z → a * z) (sym (ass* b (a ^ n) (b ^ n))) ⟩
+        a * (b * a ^ n * b ^ n)
+        ≡⟨ cong (λ z → a * (z * (b ^ n))) (comm* b (a ^ n)) ⟩
+        a * (a ^ n * b * b ^ n)
+        ≡⟨ sym (ass* a (a ^ n * b) (b ^ n)) ⟩
+        a * (a ^ n * b) * b ^ n
+        ≡⟨ cong (λ z → z * (b ^ n)) (sym (ass* a (a ^ n) b)) ⟩
+        a * a ^ n * b * b ^ n
+        ≡⟨ ass* (a * (a ^ n)) b (b ^ n) ⟩
+        a * a ^ n * (b * b ^ n) ∎
+
+^* : (a x y : ℕ) → a ^ (x * y) ≡ (a ^ x) ^ y
+^* a zero y = sym (1^ y)
+^* a (suc x) zero = cong (λ z → a ^ z) (nullr* x)
+^* zero (suc x) (suc y) = refl
+^* (suc a) (suc x) (suc y) = suc a ^ (y + x * suc y) + a * suc a ^ (y + x * suc y) 
+        ≡⟨ refl ⟩
+        suc a * suc a ^ (y + x * suc y) 
+        ≡⟨ cong (λ z → suc a * z) (^+ (suc a) y (x * suc y)) ⟩
+        suc a * (suc a ^ y * suc a ^ (x * suc y))
+        ≡⟨ sym (ass* (suc a) (suc a ^ y) (suc a ^ (x * suc y))) ⟩
+        (suc a * suc a ^ y) * suc a ^ (x * suc y)
+        ≡⟨ cong (λ z → (suc a * suc a ^ y) * z) (^* (suc a) x (suc y)) ⟩
+        (suc a * suc a ^ y) * (suc a ^ x * suc a ^ x ^ y)
+        ≡⟨ refl ⟩
+        (suc a ^ (suc y)) * (suc a ^ x ^ (suc y))
+        ≡⟨ sym (*^ (suc a) (suc a ^ x) (suc y)) ⟩
+        (suc a * suc a ^ x) ^ (suc y)
+        ≡⟨ refl ⟩
+        (suc a ^ x + a * suc a ^ x) ^ (suc y)
+        ≡⟨ refl ⟩
+        (suc a ^ x + a * suc a ^ x) * (suc a ^ x + a * suc a ^ x) ^ y ∎
