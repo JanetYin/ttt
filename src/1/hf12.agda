@@ -3,6 +3,48 @@ module hf12 where
 open import lib
 open import proofs
 
+--------------------------------
+-- diszjunktság maradék feladat
+--------------------------------
+
+-- Próbáljátok ki nyugodtan, hogy ezek
+-- működnek mintaillesztéssel,
+-- de működnek subst-tal is!
+
+-- Subst-nál ne feledjétek, hogy a konstruktorok
+-- csak az érdekesek, az egyikre ⊤-ot ad vissza P,
+-- másikra ⊥-ot, akkor megy minden egyszerűen.
+
+n≠sucn : ∀ n → ¬ (n ≡ suc n)
+n≠sucn = {!!}
+
+-- Lehet indukciót használni n-en, és oda kell subst,
+-- hogy bizonyítsuk, hogy 0 ≢ 1
+n≠sucn' : ∀ n → ¬ (n ≡ suc n)
+n≠sucn' n = {!!}
+
+leaf≠node : ∀{f} → ¬ (Tree.leaf ≡ node f)
+leaf≠node = {!!}
+
+leaf≠nodeSubst : ∀{f} → ¬ (Tree.leaf ≡ node f)
+leaf≠nodeSubst = {!!}
+
+leaf≠node' : ∀{x y} → ¬ (BinTree.leaf ≡ node x y)
+leaf≠node' = {!!}
+
+leaf≠nodeSubst' : ∀{x y} → ¬ (BinTree.leaf ≡ node x y)
+leaf≠nodeSubst' = {!!}
+
+nil≠cons : ∀{A}{x : A}{xs} → ¬ ([] ≡ x ∷ xs)
+nil≠cons = {!!}
+
+nil≠cons' : ∀{A}{x : A}{xs} → ¬ ([] ≡ x ∷ xs)
+nil≠cons' = {!!}
+
+-----------------------------
+-- Eldönthetőség
+-----------------------------
+
 Dec : ∀{i} → Set i → Set i
 Dec A = A ⊎ ¬ A
 
@@ -11,6 +53,18 @@ _≟⊤_ = {!   !}
 
 _≟⊥_ : (a b : ⊥) → Dec (a ≡ b)
 _≟⊥_ = {!   !}
+
+_≟Bool_ : (b b' : Bool) → Dec (b ≡ b')
+_≟Bool_ = {!!}
+
+_≟ℕ_ : (n n' : ℕ) → Dec (n ≡ n')
+_≟ℕ_ = {!!}
+
+_≟BinTree_ : (t t' : BinTree) → Dec (t ≡ t')
+_≟BinTree_ = {!   !}
+
+_≟List_ : {A : Set} → (xs ys : List A) → {f : (x y : A) → Dec (x ≡ y)} → Dec (xs ≡ ys)
+_≟List_ = {!   !}
 
 -----------------------------------------------
 -- Bool műveletek
@@ -72,21 +126,46 @@ task3 = {!   !}
 ⊃notinjr : ¬ (∀ a b c → (a ⊃ c) ≡ (b ⊃ c) → a ≡ b)
 ⊃notinjr = {!   !}
 
+¬¬involutive : ∀ a → ¬ᵇ ¬ᵇ a ≡ a
+¬¬involutive = {!   !}
+
+----------------------------------------------
+-- ℕ függvények injektivitása
+----------------------------------------------
+
++injl : {n m k : ℕ} → n + m ≡ n + k → m ≡ k
++injl = {!   !}
+
++injr : {n m k : ℕ} → n + m ≡ k + m → n ≡ k
++injr = {!   !}
+
+*injr : {n m k : ℕ} → n * suc m ≡ k * suc m → n ≡ k
+*injr = {!   !}
+
+*injl : {n m k : ℕ} → suc n * m ≡ suc n * k → m ≡ k
+*injl = {!   !}
+
 ----------------------------------------------
 -- Nem egyenlőség természetes számokon
 ----------------------------------------------
 
-task4 : ∀ n → Σ ℕ (n ≢_)
+task4 : ¬ ((n : ℕ) → n ≡ 3)
 task4 = {!   !}
 
-task5 : Σ ℕ (λ n → ∀ m → n ≢ suc m)
+task5 : {n : ℕ} → n ≡ 3 → n ≢ 10
 task5 = {!   !}
 
-task6 : ¬ ((n k : ℕ) → 2 ^ suc n ≡ 3 ^ suc k)
+task6 : ∀ n → Σ ℕ (n ≢_)
 task6 = {!   !}
 
-task7 : (n k : ℕ) → 2 ^ suc n ≢ 3 ^ suc k
+task7 : Σ ℕ (λ n → ∀ m → n ≢ suc m)
 task7 = {!   !}
+
+task8 : ¬ ((n k : ℕ) → 2 ^ suc n ≡ 3 ^ suc k)
+task8 = {!   !}
+
+task9 : (n k : ℕ) → 2 ^ suc n ≢ 3 ^ suc k
+task9 = {!   !}
 
 ----------------------------------------------
 -- Bizonyítások injektivitása
@@ -115,3 +194,23 @@ infixr 4 _,=_
 _,=_ : ∀{i j}{A : Set i}{B : A → Set j}{a b : A}{x : B a}{y : B b} →
   {!   !}
 _,=_ = {!   !}
+
+------------------------------
+-- ≢ tulajdonságok
+------------------------------
+
+≢notTrans : ∀{i} → ¬ ({A : Set i}{a b c : A} → a ≢ b → b ≢ c → a ≢ c)
+≢notTrans = {!   !}
+
+≢notReflexive : ∀{i}{A : Set i}{a : A} → ¬ (a ≢ a)
+≢notReflexive = {!   !}
+
+------------------------------
+-- ≢ típusokon
+------------------------------
+
+-- Trükkös feladat, jó ötlet kell hozzá!
+-- Arra kell gondolni, hogy ha két típus egyenlő, akkor
+-- ebből milyen tulajdonságokat kapunk.
+task10 : ⊤ ≢ (⊤ ⊎ ⊤)
+task10 eq = {!   !}
