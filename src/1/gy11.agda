@@ -8,42 +8,65 @@ open import proofs
 ------------------------------------------------------
 
 sucinj'' : (m n : ℕ) → suc m ≡ suc n → m ≡ n
-sucinj'' = {!!}
+sucinj'' m .m refl = refl
 
 -- prove it without pattern matching on e! (hint: use pred)
 sucinj' : (m n : ℕ) → suc m ≡ suc n → m ≡ n
-sucinj' m n e = {!!}
+sucinj' m n e = cong pred e
 
 data Tree : Set where
   leaf : Tree
   node : (ℕ → Tree) → Tree
 
+getNode : Tree → (ℕ → Tree)
+getNode leaf = λ _ → leaf
+getNode (node x) = x
+
 nodeinj : ∀{f g} → node f ≡ node g → f ≡ g
-nodeinj = {!!}
+nodeinj e = cong getNode e
 
 data BinTree : Set where
   leaf : BinTree
   node : BinTree → BinTree → BinTree
 
+left : BinTree → BinTree
+left leaf = leaf
+left (node l r) = l
+
+right : BinTree → BinTree
+right leaf = leaf
+right (node l r) = r
+
 nodeinjl : ∀{x y x' y'} → BinTree.node x y ≡ node x' y' → x ≡ x'
-nodeinjl = {!!}
+nodeinjl = cong left
 
 nodeinjr : ∀{x y x' y'} → BinTree.node x y ≡ node x' y' → y ≡ y'
-nodeinjr = {!!}
+nodeinjr = cong right
 
 data List (A : Set) : Set where
   []  : List A
   _∷_ : A → List A → List A
 
+getInl : {A : Set} → A ⊎ A → A
+getInl (inl x) = x
+getInl (inr x) = x
+
+inl-inj : {A : Set}{x y : A} → inl x ≡ inl y → x ≡ y
+inl-inj = cong getInl
+
 ∷inj1 : ∀{A}{x y : A}{xs ys : List A} → x ∷ xs ≡ y ∷ ys → x ≡ y
-∷inj1 = {!!}
+∷inj1 {_} {x} e = cong (λ {[] → x; (l ∷ ls) → l}) e
+
+tail : {A : Set} → List A → List A
+tail [] = []
+tail (_ ∷ xs) = xs
 
 ∷inj2 : ∀{A}{x y : A}{xs ys : List A} → x ∷ xs ≡ y ∷ ys → xs ≡ ys
-∷inj2 = {!!}
+∷inj2 = cong tail
 
 -- ezeket egyszerre is fel lehet írni nyugodtan
-∷inj : ∀{A}{x y : A}{xs ys : List A} → x ∷ xs ≡ y ∷ ys → {!   !}
-∷inj = {!   !}
+∷inj : ∀{A}{x y : A}{xs ys : List A} → x ∷ xs ≡ y ∷ ys → (x ≡ y) × (xs ≡ ys)
+∷inj e = ∷inj1 e , ∷inj2 e
 
 -- prove all of the above without pattern matching on equalities!
 
@@ -52,14 +75,20 @@ data List (A : Set) : Set where
 ------------------------------------------------------
 
 true≠false : ¬ (true ≡ false)
-true≠false = {!!}
+true≠false ()
 
 -- prove this without pattern matching in this function on e! (use subst!)
 true≠false' : ¬ (true ≡ false)
-true≠false' e = {!!}
+true≠false' e = subst P e tt where
+  P : Bool → Set
+  P false = ⊥
+  P true = ⊤
 
 zero≠sucn : ∀{n} → ¬ (zero ≡ suc n)
-zero≠sucn = {!!}
+zero≠sucn e = subst P e tt where
+  P : ℕ → Set
+  P zero = ⊤
+  P (suc _) = ⊥
 
 n≠sucn : ∀ n → ¬ (n ≡ suc n)
 n≠sucn = {!!}
@@ -129,4 +158,4 @@ task2 = {!   !}
 ≢notReflexive = {!   !}
 
 task3 : ⊤ ≢ (⊤ ⊎ ⊤)
-task3 = {!   !}
+task3 eq = {! eq  !}
