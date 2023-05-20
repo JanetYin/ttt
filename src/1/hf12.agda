@@ -3,6 +3,19 @@ module hf12 where
 open import lib
 open import proofs
 
+data Tree : Set where
+  leaf : Tree
+  node : (ℕ → Tree) → Tree
+
+data BinTree : Set where
+  leaf : BinTree
+  node : BinTree → BinTree → BinTree
+
+infixr 5 _∷_
+data List (A : Set) : Set where
+  []  : List A
+  _∷_ : A → List A → List A
+
 --------------------------------
 -- diszjunktság maradék feladat
 --------------------------------
