@@ -110,8 +110,5 @@ assoc (suc m) n o = cong suc (assoc m n o)
 -- ℕ a 0-val es _+_-al egysegelemes felcsoport (monoid)
 
 -- igazabol ez kommutativ monoidot alkot
-comm : (m n : ℕ) → m + n ≡ n + m
-comm = {!!}
-
 
 -- klassz vs konstr

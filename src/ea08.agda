@@ -1,6 +1,6 @@
 module ea08 where
 
-open import lib hiding (_≡_)
+open import lib
 ----------
 -- Kvíz --
 ----------
@@ -115,8 +115,8 @@ f (suc x) = tt ∷ f x
 -- ∃∧ : ∃x (P x × Q x) → ∃x (P x) × ∃x (Q x)
 
 ------------------------------------------------------------
-data _≡_ {i}{A : Set i}(a : A) : A → Set i where
-  refl : a ≡ a
+-- data _≡_ {i}{A : Set i}(a : A) : A → Set i where
+--   refl : a ≡ a
 
 trans : ∀{i}{A : Set i}{a b c : A} →
   a ≡ b → b ≡ c → a ≡ c
