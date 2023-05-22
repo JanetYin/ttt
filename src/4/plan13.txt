@@ -1,0 +1,12 @@
+0:00-0:15	röpi (aztán 15 után már elkezdem)
+0:15-0:20	házimegbeszélés, ha kell
+0:20-0:25	röpimegbeszélés, ha kell
+0:25-0:35	nodeinj-ig együtt
+0:35-0:45	nodeinjl, nodeinjr önállóan
+0:45-0:50	ezt beszéljük is meg
+0:50-0:55	n≠sucn'-ig együtt
+0:55-1:05	nil≠cons-ig önállóan
+1:05-1:10	_≟Bool_ együtt
+1:10-1:20	utána levők önállóan (_≟Tree_-re vigyázz)
+1:20-1:28	együtt a ℕ≠Bool (azt nem helyben oldom meg, csak elmutogatom)
+1:28-1:30	beszéljünk, hogy mikor nézzünk mintavizsgát

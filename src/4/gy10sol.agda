@@ -64,7 +64,19 @@ comm* (suc m) n = trans (cong (n +_) (comm* m n)) (comm*-helper n m)
 ------------------------------------------------------
 
 p4 : (x y : ℕ) → ((x + (y + zero)) + x) ≡ (2 * x + y)
-p4 = {!!}
+p4 x y = trans (cong (_+ x) (sym (ass+ x y zero)))
+        (trans (ass+ (x + y) zero x)
+        (trans (ass+ x y x)
+        (trans (cong (x +_) (comm+ y x))
+        (trans (sym (ass+ x x y))
+               (cong (λ t → x + t + y) (sym (idr+ x)))))))
+{-
+                 ass+              ass+                 ass+           comm+
+x + (y + zero) + x = x + y + zero + x = x + y + (zero + x) = x + (y + x) = x + (x + y) =
+                                                      x
+                 ass+        nullr+
+                   = x + x + y = x + (x + zero) + y
+-}
 
 p3 : (a b : ℕ) → a + a + b + a * 0 ≡ 2 * a + b
 p3 = {!!}
@@ -73,31 +85,58 @@ p2 : (a b c : ℕ) → c * (b + 1 + a) ≡ a * c + b * c + c
 p2 = {!!}
 
 [m+n]^2=m^2+2mn+n^2 : (m n : ℕ) → (m + n) * (m + n) ≡ m * m + 2 * m * n + n * n
-[m+n]^2=m^2+2mn+n^2 = {!!}
+[m+n]^2=m^2+2mn+n^2 m n = {!!}
+{-
+               dist+*                       comm*                       comm*
+(m + n) * (m + n) = m * (m + n) + n * (m + n) = m * (m + n) + (m + n) * n =
+                                            dist+*                        dist+*
+                  = (m + n) * m + (m + n) * n = m * m + n * m + (m + n) * n =
+                                                   ass+                           comm*
+                  = m * m + n * m + (m * n + n * n) = m * m + n * m + m * n + n * n =
+                                                ass+                              dist+*
+                  = m * m + m * n + m * n + n * n = m * m + (m * n + m * n) + n * n =
+                                              idr+
+                  = m * m + (m + m) * n + n * n = m * m + (m + (m + zero)) * n + n * n
+-}
 
 _^_ : ℕ → ℕ → ℕ
-_^_ = {!!}
+a ^ zero = 1
+a ^ suc n = a * (a ^ n)
+infixl 9 _^_
 
 p1 : (a b : ℕ) → (a + b) ^ 2 ≡ a ^ 2 + 2 * a * b + b ^ 2
-p1 = {!!}
+p1 a b = {!!}
 
 0^ : (n : ℕ) → 0 ^ (suc n) ≡ 0
-0^ = {!!}
+0^ n = refl
 
 ^0 : (a : ℕ) → a ^ 0 ≡ 1
-^0 = {!!}
+^0 a = refl
 
 1^ : (n : ℕ) → 1 ^ n ≡ 1
-1^ = {!!}
+1^ zero = refl
+1^ (suc n) = {!!}
+{-
+           idr+     1^
+1 ^ n + zero = 1 ^ n = 1
+-}
 
 ^1 : (a : ℕ) → a ^ 1 ≡ a
-^1 = {!!}
+^1 = idr*
 
 ^+ : (a m n : ℕ) → a ^ (m + n) ≡ a ^ m * a ^ n
-^+ = {!!}
+^+ a zero n = sym (idr+ (a ^ n))
+^+ a (suc m) n = {!!}
 
 *^ : (a b n : ℕ) → (a * b) ^ n ≡ a ^ n * b ^ n
-*^ = {!!}
+*^ a b zero = refl
+*^ a b (suc n) = {!!}
+
 
 ^* : (a m n : ℕ) → a ^ (m * n) ≡ (a ^ m) ^ n
-^* = {!!}
+^* a zero n = sym (1^ n)
+^* a (suc m) n = {!!}
+{-
+               ^+                    ^*
+a ^ (n + m * n) = a ^ n * a ^ (m * n) = a ^ n * (a ^ m * a ^ n) =
+-}

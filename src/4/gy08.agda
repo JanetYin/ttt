@@ -8,7 +8,7 @@ Dec : ∀{i} → Set i → Set i
 Dec A = A ⊎ ¬ A
 
 f4 : Dec ((X Y : Set) → X ⊎ Y → Y)
-f4 = {!!}
+f4 = inr λ f → f ⊤ ⊥ (inl tt)
 
 f5 : Dec ((X Y Z : Set) → (X → Z) ⊎ (Y → Z) → (X ⊎ Y → Z))
 f5 = {!!}
@@ -120,7 +120,27 @@ snd (∀×-distr A P Q) = λ hyp → λ a → fst hyp a , snd hyp a
 -- itt konkrétan hamisságot bizonyítunk
 -- ellenpéldát kell mutatni
 ∀⊎-distr' : ¬ ((A : Set)(P : A → Set)(Q : A → Set) → (((a : A) → P a ⊎ Q a) → ((a : A) → P a) ⊎ ((a : A) → Q a)))
-∀⊎-distr' f = {! !}
+∀⊎-distr' f = case helper case₁ {!!}
+  where
+  helper : ((a : Bool) → a ≡ true) ⊎ ((a : Bool) → a ≡ false)
+  helper = f Bool (_≡ true) (_≡ false) (λ { true → inl refl ; false → inr refl} )
+
+  case₁ : ((a : Bool) → a ≡ true) → ⊥
+  case₁ f with f false
+  case₁ f      | ()
+
+  case₂ : ((a : Bool) → a ≡ false) → ⊥
+  case₂ f with f true
+  case₂ f      | ()
+
+{-
+ez mutatja a logikáját
+de ilyet lehetőleg ne csináljatok
+≥2 : ℕ → Set
+≥2 n with (n - 1)
+...    | zero = ⊥
+...    | (suc n-1) = ⊤
+-}
 
 -- itt is
 Σ×-distr' : ¬ ((A : Set)(P : A → Set)(Q : A → Set) → (Σ A P × Σ A Q → Σ A λ a → P a × Q a))

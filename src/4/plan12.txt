@@ -1,0 +1,16 @@
+0:00-0:20	röpi; közben aki megvan, annak szorzásosak önállóan, és ha az is megvan, a dist+*-on gondolkodjon (és ha még az is, akkor gy10-ből a hatványozást írja meg)
+			többiek is szeretném, hogy kitöltsék, mert vizsgára gyakorlás, meg látom, hogy az mennyire megy
+0:20-0:21	Teams megnézése
+0:21-0:25	megbeszélés, ha kell
+0:25-0:30	with a true ≡ false-ra?
+0:30-0:35	dist+*-ot együtt
+0:35-0:40	ass*-ig önállóan, ha nem csinálták
+0:40-0:45	comm*-helpert valószínűleg együtt is meg kell nézni; comm* már gyors onnan
+0:45-0:50	gy10: _^_ önállóan, ismétlésnek
+0:50-0:55	gy10: p4-et együtt
+0:55-1:05	p3-at, p2-t önállóan
+1:05-1:10	ha kell, megbeszélni a tervet; aztán még valósítsák meg Agdában is
+1:10-1:15	picit hagyni őket gondolkodni az (m+n)^2-esen
+1:15-1:20	megmutatni a tervet; csinálják meg Agdában otthon
+1:20-1:28	dolgozzanak önállóan hatványozósokon?
+1:28-1:30	röpi témája, házi

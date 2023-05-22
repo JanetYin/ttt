@@ -1,4 +1,5 @@
-open import lib
+open import Agda.Builtin.Nat renaming (Nat to ℕ)
+open import Agda.Builtin.Equality
 
 ---------------------------------------------------------
 -- library
@@ -64,19 +65,35 @@ comm* (suc m) n = trans (cong (n +_) (comm* m n)) (comm*-helper n m)
 ------------------------------------------------------
 
 p4 : (x y : ℕ) → ((x + (y + zero)) + x) ≡ (2 * x + y)
-p4 = {!!}
+p4 x y = trans (cong (λ t → x + t + x) (idr+ y))
+        (trans (comm+ (x + y) x)
+        (trans (sym (ass+ x x y))
+               (cong (λ t → x + t + y) (sym (idr+ x)))))
+{-
+suc (suc zero) * x = x + (suc zero) * x = x + (x + zero * x) = x + (x + zero)
 
+                 idr+         comm+         ass+        idr+
+x + (y + zero) + x = (x + y) + x = x + (x + y) = x + x + y = x + (x + zero) + y
+-}
+
+-- házi
 p3 : (a b : ℕ) → a + a + b + a * 0 ≡ 2 * a + b
 p3 = {!!}
 
+-- házi
 p2 : (a b c : ℕ) → c * (b + 1 + a) ≡ a * c + b * c + c
 p2 = {!!}
 
+-- ez nehezebb
 [m+n]^2=m^2+2mn+n^2 : (m n : ℕ) → (m + n) * (m + n) ≡ m * m + 2 * m * n + n * n
 [m+n]^2=m^2+2mn+n^2 = {!!}
 
 _^_ : ℕ → ℕ → ℕ
-_^_ = {!!}
+n ^ zero = 1
+n ^ suc m = n * (n ^ m)
+infixr 9 _^_
+
+-- ami ez alatt van, házi (hasonló a szorzásoshoz, csak a kitevőre kell mintát illeszteni)
 
 p1 : (a b : ℕ) → (a + b) ^ 2 ≡ a ^ 2 + 2 * a * b + b ^ 2
 p1 = {!!}

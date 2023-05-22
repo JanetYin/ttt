@@ -45,23 +45,32 @@ suc m + n = suc (m + n) = suc (n + m) = suc n + m = n + suc m
 
 dist+* : (m n o : ℕ) → (n + o) * m ≡ n * m + o * m
 dist+* m zero o = refl
-dist+* m (suc n) o = {!!}
+dist+* m (suc n) o = trans (cong (m +_) (dist+* m n o))
+                           (sym (ass+ m (n * m) (o * m)))
 {-
              dist+*                 ass+
 m + (n + o) * m = m + (n * m + o * m) = m + n * m + o * m
 -}
 
 nullr* : (n : ℕ) → n * 0 ≡ 0
-nullr* = {!!}
+nullr* zero = refl
+nullr* (suc n) = nullr* n
 
 idl* : (n : ℕ) → 1 * n ≡ n
 idl* n = idr+ n
 
 idr* : (n : ℕ) → n * 1 ≡ n
-idr* = {!!}
+idr* zero = refl
+idr* (suc n) = cong suc (idr* n)
 
 ass* : (m n o : ℕ) → (m * n) * o ≡ m * (n * o)
-ass* = {!!}
+ass* zero n o = refl
+ass* (suc m) n o = trans (dist+* o n (m * n))
+                         (cong ((n * o) +_) (ass* m n o))
+{-
+              dist+*              ass*       
+(n + m * n) * o = n * o + m * n * o = n * o + m * (n * o)
+-}
 
 comm*-helper : (n m : ℕ) → n + n * m ≡ n * suc m
 comm*-helper zero m = refl
@@ -74,4 +83,9 @@ n + (m + n * m) = n + m + n * m = m + n + n * m = m + (n + n * m) = m + n * suc 
 -}
 
 comm* : (m n : ℕ) → m * n ≡ n * m
-comm* = {!!}
+comm* zero n = sym (nullr* n)
+comm* (suc m) n = trans (cong (n +_) (comm* m n)) (comm*-helper n m)
+{-
+        comm*     comm*-helper
+n + m * n = n + n * m = n * suc m
+-}
