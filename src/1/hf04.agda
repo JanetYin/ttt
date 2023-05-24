@@ -112,7 +112,7 @@ Definiáld a _++ₛ_ függvényt, amely egy Stream elejére egy véges hosszú
 listát fűz.
 -}
 _++ₛ_ : {A : Set} → List A → Stream A → Stream A
-xs ++ₛ ys = ?
+xs ++ₛ ys = {!   !}
 
 ++ₛ-test1 : head ((10 ∷ 20 ∷ 30 ∷ []) ++ₛ from 0) ≡ 10
 ++ₛ-test1 = refl
