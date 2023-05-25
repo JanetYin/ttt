@@ -156,8 +156,8 @@ pred∞ ∞ = just ∞
 -- b1 and b2 should be such that b1 ℕ 1 2 ≠ b2 ℕ 1 2
 b1 b2 : (A : Set) → A → A → A
 -- END FIX
-b1 = {!!}
-b2 = {!!}
+b1 A x x₁ = x
+b2 A x x₁ = x₁
 -- BEGIN FIX
 test-b1-b2 : ¬ (b1 ℕ 1 2 ≡ b2 ℕ 1 2)
 test-b1-b2 ()
@@ -166,48 +166,58 @@ test-b1-b2 ()
 -- BEGIN FIX
 weirdLogicalEquiv : (A B C : Set) → (B → A → (⊥ ⊎ C)) ↔ (A → (B → C × A))
 -- END FIX
-weirdLogicalEquiv = {!!}
+fst (weirdLogicalEquiv A B C) x x₁ x₂ = case (x x₂ x₁) exfalso (λ x₃ → x₃) , x₁
+snd (weirdLogicalEquiv A B C) x x₁ x₂ = inr (fst (x x₂ x₁))
 
 -- BEGIN FIX
 cocΣ : (A : Set)(B : A → Set) → Σ A B ↔ ((C : Set) → ((a : A) → B a → C) → C)
 -- END FIX
-cocΣ = {!!}
+fst (cocΣ A B) (fst₁ , snd₁) C x₁ = x₁ fst₁ snd₁
+snd (cocΣ A B) x = x (Σ A B) λ a x₁ → a , x₁
 
 -- BEGIN FIX
 prop : {P : Set} → P ⊎ ¬ P → (¬ ( ¬ P) → P)
 -- END FIX
-prop = {!!}
+prop x x₁ with x
+... | inl x₂ = x₂
+... | inr x₂ = exfalso (x₁ x₂)
 
 -- BEGIN FIX
 ref≤ : (x : ℕ) → x ≤ x
 -- END FIX
-ref≤ = {!!}
+ref≤ x = zero , refl
 
 -- BEGIN FIX
 cong⁻¹ : {A B : Set}(a b : A)(f : A → B) → ¬ (f a ≡ f b) → ¬ (a ≡ b)
 -- END FIX
-cong⁻¹ = {!!}
+cong⁻¹ a b f x x₁ = x (cong f x₁)
 
 -- BEGIN FIX
 a+b=0→a=0 : (a b : ℕ) → (a + b) ≡ 0 → a ≡ 0
 -- END FIX
-a+b=0→a=0 = {!!}
+a+b=0→a=0 zero b x = refl
 
 -- BEGIN FIX
 noℕsqrt : ¬ ((n k : ℕ) → Σ ℕ λ m → m * m ≡ n * k)
 -- END FIX
-noℕsqrt = {!!}
+noℕsqrt x with x 1 2
+... | suc (suc zero) , ()
+... | suc (suc (suc n)) , ()
 
 -- BEGIN FIX
 ¬¬∃↓ : ¬ ((f : ℕ → ℕ) → Σ ℕ λ n → (k : ℕ) → suc (f n) ≤ (f k))
 -- END FIX
-¬¬∃↓ = {!!}
+¬¬∃↓ x with x (λ _ → zero)
+... | n , f with f 44
+... | zero , ()
+... | suc n₁ , ()
 
 -- BEGIN FIX
 -- works like haskell's zip
 zipStream : {A B : Set} → Stream A → Stream B → Stream (A × B)
 -- END FIX
-zipStream = {!!}
+head (zipStream x x₁) = head x , head x₁
+tail (zipStream x x₁) = zipStream (tail x) (tail x₁)
 -- BEGIN FIX
 test-s1 : takeStream 10 (zipStream (iterate suc 0) (iterate pred 100)) ≡
   (0 , 100) ∷ (1 , 99) ∷ (2 , 98) ∷
