@@ -72,7 +72,7 @@ idr+ (suc n) = cong suc (idr+ n)
 
 sucr+ : (n m : ℕ) → n + suc m ≡ suc (n + m)
 sucr+ zero m = refl
-sucr+ (suc n) m = cong (λ x → suc x) (sucr+ n m)
+sucr+ (suc n) m = cong suc (sucr+ n m)
 
 ass+ : (m n o : ℕ) → (m + n) + o ≡ m + (n + o)
 ass+ zero n o = refl
