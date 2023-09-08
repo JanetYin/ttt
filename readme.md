@@ -10,13 +10,13 @@ Előadás oktatója: Kaposi Ambrus (akaposi kukac inf.elte.hu).
 
 Gyakorlatok oktatói (a 4-es csoportba csak eötvös kollégisták mehetnek):
 
-| kurzus kód     | időpont               | helyszín                 | gyakorlatvezető név | ______@inf.elte.hu |
-|----------------|-----------------------|--------------------------|---------------------|--------------------|
-| 1              | Szerda 17:45-19:15    | Északi Tömb 7.16 (PC 12) | Bense Viktor        | qils07             |
-| 2              | Kedd 17:45-19:15      | Déli Tömb 00-411 (PC 7)  | Merth Borbála       | f6tnix             |
-| 3              | Csütörtök 16:00-17:30 | Déli Tömb 2-709 (PC 9)   | Petes Márton        | tx0lwm             |
-| 4 EC-s csoport | egyeztetés alatt      | egyeztetés alatt         | Csimma Viktor       | midffj             |
-| 5              | Csütörtök 17:45-19:15 | Északi Tömb 7.16 (PC 12) | Merth Borbála       | f6tnix             |
+| kurzus kód     | időpont               | helyszín                          | gyakorlatvezető név | ______@inf.elte.hu |
+|----------------|-----------------------|-----------------------------------|---------------------|--------------------|
+| 1              | Kedd 19:30-21:00      | Déli Tömb 00-410 (PC 1)           | Török Bálint Bence  | fcjylp             |
+| 2              | Hétfo 17:45-19:15     | Déli Tömb 2-218 (komp. alg.)      | Petes Márton        | tx0lwm             |
+| 3              | Csütörtök 17:45-19:15 | Déli Tömb 2-124 (Microsoft Labor) | Bense Viktor        | qils07             |
+| 4              | Hétfo 19:30-21:00     | Déli Tömb 2-218 (komp. alg.)      | Merth Borbála       | f6tnix             |
+| 5              | Kedd 19:30-21:00      | Déli Tömb 2-124 (Microsoft Labor) | Csimma Viktor       | midffj             |
 
 Nagyon fontos, hogy azt a gyakorlatot vedd fel a Neptunban, amelyikre ténylegesen jársz, mert a Canvas automatikusan veszi át az infót a Neptunból.
 
