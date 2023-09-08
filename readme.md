@@ -8,7 +8,7 @@ Fontos, hogy megfelelő kóddal vedd fel a tárgyat:
 
 Előadás oktatója: Kaposi Ambrus (akaposi kukac inf.elte.hu).
 
-Gyakorlatok oktatói (a 4-es csoportba csak eötvös kollégisták mehetnek):
+Gyakorlatok oktatói:
 
 | kurzus kód     | időpont               | helyszín                          | gyakorlatvezető név | ______@inf.elte.hu |
 |----------------|-----------------------|-----------------------------------|---------------------|--------------------|
