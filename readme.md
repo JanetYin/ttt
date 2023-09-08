@@ -35,8 +35,8 @@ A gyakorlati jegy a mikrozh-kból áll össze, mindegyikre 0 vagy 1 pontot lehet
 | 0-4.999   | 1    |
 | 5-6.249   | 2    |
 | 6.25-7.49 | 3    |
-| 7.5-8.249 | 4    |
-| 8.25-     | 5    |
+| 7.5-8.749 | 4    |
+| 8.75-     | 5    |
 
 Vizsgázni az jöhet, akinek a Canvas kvízek átlaga 50% fölött van és van gyakorlati jegye.
 
