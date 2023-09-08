@@ -1,12 +1,14 @@
-open import lib
+open import Lib hiding (fromℕ)
+open import Lib.Containers.Vector hiding (head; tail; map; length; _++_)
+open import Lib.Containers.List hiding (head; tail; map; length; _++_; filter)
 
 -- Vec and Fin
-
-infixr 6 _∷_
+{-
+infixr 5 _∷_
 data Vec (A : Set) : ℕ → Set where
   []  : Vec A 0
   _∷_ : {n : ℕ} → A → Vec A n → Vec A (suc n)
-
+-}
 head : {A : Set}{n : ℕ} → Vec A (suc n) → A
 head = {!!}
 
@@ -19,10 +21,11 @@ countDownFrom = {!!}
 test-countDownFrom : countDownFrom 3 ≡ 3 ∷ 2 ∷ 1 ∷ []
 test-countDownFrom = refl
 
+{-
 data Fin : ℕ → Set where  -- Fin n = n-elemu halmaz
   zero : {n : ℕ} → Fin (suc n)
   suc  : {n : ℕ} → Fin n → Fin (suc n)
-
+-}
 f0 : Fin 0 → ⊥
 f0 ()
 
@@ -44,12 +47,16 @@ f4-1 = {!!}
 f4-2 = {!!}
 f4-3 = {!!}
 
-infix 5 _!!_
+-- Lib-ben a unicode ‼ az indexelés.
+infixl 9 _!!_
 _!!_ : {A : Set}{n : ℕ} → Vec A n → Fin n → A
 xs !! n = {!!}
 
-test-!! : 3 ∷ 4 ∷ 1 ∷ [] !! (suc (suc zero)) ≡ 1
+test-!! : (the ℕ 3 ∷ 4 ∷ 1 ∷ []) !! (suc (suc zero)) ≡ 1
 test-!! = refl
+
+test2-!! : (the ℕ 3 ∷ 4 ∷ 1 ∷ 0 ∷ 10 ∷ []) !! 3 ≡ 0 -- 3-as literál a !! után valójában Fin 5 típusú.
+test2-!! = refl
 
 fromℕ : (n : ℕ) → Fin (suc n)
 fromℕ = {!!}
@@ -60,9 +67,11 @@ test-fromℕ = refl
 map : {A B : Set}(f : A → B){n : ℕ} → Vec A n → Vec B n
 map f as = {!!}
 
+{-
 data List (A : Set) : Set where
   []  : List A
   _∷_ : A → List A → List A
+-}
 
 length : {A : Set} → List A → ℕ
 length = {!!}
@@ -81,5 +90,5 @@ tabulate = {!!}
 filter : {A : Set}{n : ℕ}(f : A → Bool) → Vec A n → Σ ℕ (Vec A)
 filter = {!!}
 
-test-filter : filter (3 <_) (4 ∷ 3 ∷ 2 ∷ 5 ∷ []) ≡ (2 , 4 ∷ 5 ∷ [])
+test-filter : filter {ℕ} (3 <ᵇ_) (4 ∷ 3 ∷ 2 ∷ 5 ∷ []) ≡ (2 , 4 ∷ 5 ∷ [])
 test-filter = refl

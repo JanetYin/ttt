@@ -13,6 +13,7 @@ open import Lib.Sigma hiding (map)
 open import Lib.Unit
 open import Lib.Empty
 open import Lib.Dec
+open import Lib.Dec.PatternSynonym
 
 reflV : ∀{i}{A : Set i}{n : ℕ∞}(xs : CoVec A n) → xs ≈V xs
 head-≡ (reflV xs) = refl

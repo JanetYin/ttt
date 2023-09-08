@@ -1,11 +1,9 @@
-open import lib
+open import Lib
+open import Lib.Dec.PatternSynonym
 
 ---------------------------------------------------------
 -- higher order logic
 ------------------------------------------------------
-
-Dec : ∀{i} → Set i → Set i
-Dec A = A ⊎ ¬ A
 
 f4 : Dec ((X Y : Set) → X ⊎ Y → Y)
 f4 = {!!}

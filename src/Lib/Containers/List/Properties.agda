@@ -6,6 +6,7 @@ open import Lib.Containers.List.Type
 open import Lib.Containers.List.Base
 open import Lib.Equality
 open import Lib.Dec
+open import Lib.Dec.PatternSynonym
 open import Lib.Sigma
 open import Lib.Empty
 open import Lib.Unit

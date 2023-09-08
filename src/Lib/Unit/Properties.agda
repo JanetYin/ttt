@@ -4,6 +4,7 @@ module Lib.Unit.Properties where
 
 open import Lib.Unit.Type
 open import Lib.Dec
+open import Lib.Dec.PatternSynonym
 open import Lib.Equality.Type
 
 infix 4 _≟_

@@ -3,8 +3,19 @@
 module Lib.Conat.Type where
 
 open import Lib.Unit.Type
-open import Lib.Sum.Type
+open import Lib.Maybe.Type
 
+record ℕ∞ : Set where
+  coinductive
+  constructor conat'
+  field
+    pred∞ : Maybe ℕ∞
+
+open ℕ∞ public
+
+∞ : ℕ∞
+pred∞ ∞ = just ∞
+{-
 record ℕ∞ : Set
 
 ℕ∞' : Set
@@ -20,3 +31,4 @@ record ℕ∞ where
   pattern suc∞ n = inr n
 
 open ℕ∞ public
+-}

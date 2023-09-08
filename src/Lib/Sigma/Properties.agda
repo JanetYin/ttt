@@ -6,6 +6,7 @@ open import Lib.Sigma.Type
 open import Lib.Sigma.Base
 open import Lib.Equality
 open import Lib.Dec
+open import Lib.Dec.PatternSynonym
 open import Lib.Unit
 open import Lib.Empty
 open import Lib.Bool.Type
