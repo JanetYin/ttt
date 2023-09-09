@@ -1,6 +1,6 @@
 Kedves Hallgatók!
 
-A Típuselmélet nevű tárgy keretei között az Agda programozási nyelvet fogjuk használni. A benti gépeken van Agda telepítve, viszonylag frissek (2.6.2.2), így az nem kéne, hogy túl nagy gondot jelentsen. Ennek ellenére javallott a saját gép használata, és azzal jöjjenek az első gyakorlatra, amelyre már legyen telepítve az Agda 2.6.3-as (2023.01.30. időpont szerinti legfrissebb kiadott) verziója, mert a teljes kódbázis a legfrissebb verzióra épül.
+A Típuselmélet nevű tárgy keretei között az Agda programozási nyelvet fogjuk használni. A benti gépeken van Agda telepítve, viszonylag frissek (2.6.2.2), így az nem kéne, hogy túl nagy gondot jelentsen. Ennek ellenére javallott a saját gép használata, és azzal jöjjenek az első gyakorlatra, amelyre már legyen telepítve az Agda 2.6.3-as verziója, mert a teljes kódbázis a legfrissebb verzióra épül.
 
 Telepítés menete:
 Az Agda működéséhez szükséges a GHC (legalább 9.2.8) és Cabal (legalább 3.6.2.0) megléte a számítógépen. Ha van a számítógépen ilyen, akkor ezen üzenet [2]-es lépéséhez szükséges menni. A telepítés menete remélhetőleg OS X-en, Linuxon és Windowson is egyaránt megy. Ha valamiért mégsem, akkor Teams-en keresztül akár a csoportban lehet nyugodtan írni és ilyeneket megbeszélni, lehet kérdezni, megpróbálok válaszolni a felmerülő kérdésekre.
