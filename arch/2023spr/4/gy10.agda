@@ -104,9 +104,6 @@ p1 = {!!}
 ^0 : (a : ℕ) → a ^ 0 ≡ 1
 ^0 = {!!}
 
-1^ : (n : ℕ) → 1 ^ n ≡ 1
-1^ = {!!}
-
 ^1 : (a : ℕ) → a ^ 1 ≡ a
 ^1 = {!!}
 
@@ -118,3 +115,28 @@ p1 = {!!}
 
 ^* : (a m n : ℕ) → a ^ (m * n) ≡ (a ^ m) ^ n
 ^* = {!!}
+
+1^ : (n : ℕ) → 1 ^ n ≡ 1
+1^ zero = refl
+1^ (suc n) = trans (idr+ (1 ^ n)) (1^ n)
+
+------------------------------------------------------
+-- zh-feladat megoldása
+------------------------------------------------------
+
+lastOne : (a b : ℕ) → b + a + a * 1 ^ b + b * 1 ≡ 2 * (a + b)
+lastOne a b = trans (cong (λ t → t + a * 1 ^ b + b * 1) (comm+ b a))
+             (trans (cong (λ t → a + b + a * 1 ^ b + t) (idr* b))
+             (trans (cong (λ t → a + b + a * t + b) (1^ b))
+             (trans (cong (λ t → a + b + t + b) (idr* a))
+             (trans (ass+ (a + b) a b)
+                    (cong (λ t → a + b + t) (sym (idr+ (a + b))))))))
+
+{-
+                            comm+                       idr*
+((b + a) + a * 1 ^ b) + b * 1 = a + b + a * 1 ^ b + b * 1 = a + b + a * 1 ^ b + b =
+      1^                 idr*                 ass+              idr+
+       = a + b + a * 1 + b = ((a + b) + a) + b = a + b + (a + b) = a + b + (a + b + zero)
+-}
+
+-- segítség: nézz fel;)
