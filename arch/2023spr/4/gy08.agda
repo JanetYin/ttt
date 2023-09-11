@@ -20,7 +20,8 @@ f7 : Dec ((X Y Z : Set) → (X × Y → Z) → (X → Z) × (Y → Z))
 f7 = {!!}
 
 f8 : Dec ((X Y Z : Set) → (X ⊎ Y × Z) → (X ⊎ Y) × (X ⊎ Z))
-f8 = {!!}
+f8 = inl λ _ _ _ xv[yaz] → case xv[yaz] (λ x → inl x , inl x)
+                                λ yaz → inr (fst yaz) , inr (snd yaz)
 
 f9 : Dec ((X Y Z : Set) → (X ⊎ Y) × (X ⊎ Z) → (X ⊎ Y × Z))
 f9 = {!!}

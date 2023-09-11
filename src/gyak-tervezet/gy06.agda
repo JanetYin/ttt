@@ -1,9 +1,4 @@
-open import lib
-
-data Fin : ℕ → Set where  -- Fin n = n-elemu halmaz
-  zero : {n : ℕ} → Fin (suc n)
-  suc  : {n : ℕ} → Fin n → Fin (suc n)
-
+open import Lib
 
 Σ=⊎ : {A B : Set} → Σ Bool (if_then A else B) ↔ A ⊎ B
 Σ=⊎ = {!!}

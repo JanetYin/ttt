@@ -7,6 +7,7 @@ open import Lib.Nat.Base
 open import Lib.Unit.Type
 open import Lib.Equality
 open import Lib.Dec
+open import Lib.Dec.PatternSynonym
 
 suc-injective : ∀{n m} → suc n ≡ suc m → n ≡ m
 suc-injective refl = refl

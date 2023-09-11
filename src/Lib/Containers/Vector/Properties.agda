@@ -7,6 +7,7 @@ open import Lib.Containers.Vector.Base
 open import Lib.Sigma hiding (map)
 open import Lib.Equality
 open import Lib.Dec
+open import Lib.Dec.PatternSynonym
 open import Lib.Nat
 open import Lib.Unit
 open import Lib.Empty

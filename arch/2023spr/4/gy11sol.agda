@@ -62,9 +62,12 @@ data List (A : Set) : Set where
   []  : List A
   _∷_ : A → List A → List A
 
--- házi
+headWithDefault : {A : Set} → A → List A → A 
+headWithDefault _   (x ∷ _) = x
+headWithDefault def [] = def
+
 ∷inj1 : ∀{A}{x y : A}{xs ys : List A} → x ∷ xs ≡ y ∷ ys → x ≡ y
-∷inj1 = {!!}
+∷inj1 {x = x} e = cong (headWithDefault x) e
 
 -- házi
 ∷inj2 : ∀{A}{x y : A}{xs ys : List A} → x ∷ xs ≡ y ∷ ys → xs ≡ ys
@@ -133,7 +136,11 @@ _≟Tree_ : (t t' : Tree) → Dec (t ≡ t')
 _≟Tree_ = {!!}
 
 _≟BinTree_ : (t t' : BinTree) → Dec (t ≡ t')
-_≟BinTree_ = {!!}
+leaf ≟BinTree leaf = inl refl
+leaf ≟BinTree node t' t'' = inr {!!}
+node t t₁ ≟BinTree leaf = inr {!!}
+node t t₁ ≟BinTree node t' t₁' = case (t ≟BinTree t') (case (t₁ ≟BinTree t₁') (λ e2 e1 → inl
+                                                                                         (trans (cong (BinTree.node t) e2) (cong (λ x → BinTree.node x t₁') e1))) {!!}) {!!}
 
 _≟List_ : {A : Set} → ({x y : A} → Dec (x ≡ y)) → {xs ys : List A} → Dec (xs ≡ ys)
 _≟List_ = {!!}

@@ -1,4 +1,4 @@
-open import lib
+open import Lib hiding (sym; trans; cong; subst; idl+; idr+; sucr+; ass+; comm+; dist+*; nullr*; idl*; idr*; sucr*; ass*; comm*)
 
 ---------------------------------------------------------
 -- equality
@@ -26,6 +26,9 @@ idl+ = {!!}
 idr+ : (n : ℕ) → n + zero ≡ n
 idr+ = {!!}
 
+sucr+ : (n m : ℕ) → n + suc m ≡ suc (n + m)
+sucr+ = {!!}
+
 ass+ : (m n o : ℕ) → (m + n) + o ≡ m + (n + o)
 ass+ = {!!}
 
@@ -46,6 +49,9 @@ idl* = {!!}
 
 idr* : (n : ℕ) → n * 1 ≡ n
 idr* = {!!}
+
+sucr* : (n m : ℕ) → n * suc m ≡ n + n * m
+sucr* = {!!}
 
 ass* : (m n o : ℕ) → (m * n) * o ≡ m * (n * o)
 ass* = {!!}

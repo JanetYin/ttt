@@ -3,6 +3,7 @@
 module Lib.Bool.Properties where
 
 open import Lib.Dec
+open import Lib.Dec.PatternSynonym
 open import Lib.Bool.Type
 open import Lib.Bool.Base
 open import Lib.Equality

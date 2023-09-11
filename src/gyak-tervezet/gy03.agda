@@ -1,23 +1,25 @@
-open import lib hiding (_+_; _*_; _-_; _<_)
+open import Lib hiding (_+_; _*_; _-_; _^_; _!; pred)
+open import Lib.Containers.List hiding (length; _++_; map; iteList)
 
 ---------------------------------------------------------
 -- natural numbers
 ---------------------------------------------------------
 
-data Maybe A : Set where
-  Nothing : Maybe A
-  Just    : A → Maybe A
+{-
+data Maybe (A : Set) : Set where
+  just : A → Maybe A
+  nothing : Maybe A
+-}
 
 pred : ℕ → Maybe ℕ
-pred zero = Nothing
-pred (suc n) = Just n
+pred = {!!}
 
 zerosuc : Maybe ℕ → ℕ
 zerosuc = {!!}
 
-pred↔zerosuc-test1 : pred (zerosuc Nothing) ≡ Nothing
+pred↔zerosuc-test1 : pred (zerosuc nothing) ≡ nothing
 pred↔zerosuc-test1 = refl
-pred↔zerosuc-test2 : {n : ℕ} → pred (zerosuc (Just n)) ≡ Just n
+pred↔zerosuc-test2 : {n : ℕ} → pred (zerosuc (just n)) ≡ just n
 pred↔zerosuc-test2 = refl
 
 double : ℕ → ℕ
@@ -76,7 +78,7 @@ infixr 8 _^_
 ^-test3 = refl
 ^-test4 : 1 ^ 3 ≡ 1
 ^-test4 = refl
-^-test5 : 0 ^ 0 ≡ 1
+^-test5 : 0 ^ 0 ≡ 1 -- csúnya dolog
 ^-test5 = refl
 
 _! : ℕ → ℕ
@@ -97,7 +99,7 @@ infixl 6 _-_
 -test1 = refl
 -test2 : 3 - 3 ≡ 0
 -test2 = refl
--test3 : 3 - 4 ≡ 0
+-test3 : 3 - 4 ≡ 0 -- csúnya dolog
 -test3 = refl
 
 _≥_ : ℕ → ℕ → Bool
@@ -144,11 +146,11 @@ min-test3 = refl
 comp : {A : Set} → ℕ → ℕ → A → A → A → A
 comp m n m<n m=n m>n = {!!}
 
-comp-test1 : comp 10 10 0 1 2 ≡ 1
+comp-test1 : comp {ℕ} 10 10 0 1 2 ≡ 1
 comp-test1 = refl
-comp-test2 : comp 10 11 0 1 2 ≡ 0
+comp-test2 : comp {ℕ} 10 11 0 1 2 ≡ 0
 comp-test2 = refl
-comp-test3 : comp 12 11 0 1 2 ≡ 2
+comp-test3 : comp {ℕ} 12 11 0 1 2 ≡ 2
 comp-test3 = refl
 
 -- hasznald comp-ot!
@@ -184,10 +186,6 @@ gcd'-test4 : gcd' 12 24 ≡ 12
 gcd'-test4 = refl
 gcd'-test5 : gcd' 19 17 ≡ 1
 gcd'-test5 = refl
-
-not : Bool → Bool
-not true = false
-not false = true
 
 even? : ℕ → Bool
 even? = {!!}
@@ -261,17 +259,19 @@ recNat'-test2 = refl
 -- lists
 ---------------------------------------------------------
 
+{-
 data List (A : Set) : Set where
   [] : List A
   _∷_ : A → List A → List A
-infixr 6 _∷_
+infixr 5 _∷_
+-}
 
 length : {A : Set} → List A → ℕ
 length = {!!}
 
-length-test1 : length (1 ∷ 2 ∷ 3 ∷ []) ≡ 3
+length-test1 : length {ℕ} (1 ∷ 2 ∷ 3 ∷ []) ≡ 3
 length-test1 = refl
-length-test2 : length (1 ∷ []) ≡ 1
+length-test2 : length {ℕ} (1 ∷ []) ≡ 1
 length-test2 = refl
 
 sumList : List ℕ → ℕ
@@ -284,7 +284,7 @@ _++_ : {A : Set} → List A → List A → List A
 _++_ = {!!}
 infixr 5 _++_
 
-++-test : 3 ∷ 2 ∷ [] ++ 1 ∷ 4 ∷ [] ≡ 3 ∷ 2 ∷ 1 ∷ 4 ∷ []
+++-test : the ℕ 3 ∷ 2 ∷ [] ++ 1 ∷ 4 ∷ [] ≡ 3 ∷ 2 ∷ 1 ∷ 4 ∷ []
 ++-test = refl
 
 map : {A B : Set} → (A → B) → List A → List B

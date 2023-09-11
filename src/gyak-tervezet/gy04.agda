@@ -1,15 +1,7 @@
-{-# OPTIONS --guardedness #-}
+open import Lib hiding (_+∞_; coiteℕ∞)
 
-open import lib
-
-data List (A : Set) : Set where
-  [] : List A
-  _∷_ : A → List A → List A
-infixr 6 _∷_
-
-data Maybe A : Set where
-  Nothing : Maybe A
-  Just    : A → Maybe A
+open import Lib.Containers.List hiding (zipWith; head; tail)
+open import Lib.Containers.Stream hiding (zipWith; coiteStream)
 
 ---------------------------------------------------------
 -- positivity
@@ -43,19 +35,19 @@ bad = {!!}
 -- coinductive types
 ---------------------------------------------------------
 
+{-
 record Stream (A : Set) : Set where
   coinductive
   field
     head : A
     tail : Stream A
 open Stream
-
+-}
 -- check that the type of head : Stream A → A
 --                        tail : Stream A → Stream A
 
 zeroes : Stream ℕ
-head zeroes = 0
-tail zeroes = zeroes
+zeroes = {!!}
 
 -- by pattern match on n
 countDownFrom : ℕ → List ℕ
@@ -63,8 +55,7 @@ countDownFrom n = {!!}
 
 -- from n is not by pattern match on n
 from : ℕ → Stream ℕ
-head (from n) = n
-tail (from n) = from (1 + n)
+from n = {!!}
 
 -- pointwise addition
 zipWith : {A B C : Set} → (A → B → C) → Stream A → Stream B → Stream C
@@ -114,10 +105,7 @@ record Machine : Set where
 open Machine
 
 calculatorFrom : ℕ → Machine
-getNumber (calculatorFrom n) = n
-add (calculatorFrom n) m = calculatorFrom (m + n)
-mul (calculatorFrom n) m = calculatorFrom (m * n)
-reset (calculatorFrom n) = calculatorFrom 0
+calculatorFrom n = {!!}
 
 c0 c1 c2 c3 c4 c5 : Machine
 c0 = calculatorFrom 0
@@ -128,22 +116,31 @@ c4 = reset c3
 c5 = add c4 2
 
 -- conatural numbers
+{-
 record ℕ∞ : Set where
   coinductive
   field
     pred∞ : Maybe ℕ∞
 open ℕ∞
-
-0∞ 1∞ 2∞ 3∞ : ℕ∞
-pred∞ 0∞ = Nothing
-pred∞ 1∞ = Just 0∞
-pred∞ 2∞ = Just 1∞
-pred∞ 3∞ = Just 2∞
-∞ : ℕ∞
-pred∞ ∞ = Just ∞
+-}
 
 _+∞_ : ℕ∞ → ℕ∞ → ℕ∞
 _+∞_ = {!!}
+
+-- Ez a függvény létezik, ezzel lehet megnézni
+-- egy conat tényleges értékét.
+-- Az első paraméter a fuel, maximum ezt a természetes számot tudja visszaadni.
+-- Második paraméter a conat, amire kíváncsiak vagyunk.
+-- Értelemszerűen ∞-re mindig nothing az eredmény.
+{-
+ℕ∞→ℕ : ℕ → ℕ∞ → Maybe ℕ
+ℕ∞→ℕ zero _ = nothing
+ℕ∞→ℕ (suc n) c with pred∞ c
+... | zero∞ = just 0
+... | suc∞ b with ℕ∞→ℕ n b
+... | nothing = nothing
+... | just x = just (suc x)
+-}
 
 coiteℕ∞ : {B : Set} → (B → Maybe B) → B → ℕ∞
 coiteℕ∞ = {!!}

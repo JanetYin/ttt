@@ -2,14 +2,16 @@
 
 module Lib.Conat.Bisimulation where
 
+open import Lib.Conat.PatternSynonym
 open import Lib.Conat.Type
+open import Lib.Maybe.Type
 open import Lib.Unit
 open import Lib.Empty
 
 infix 4 _≈ℕ∞_ _≈ℕ∞′′_
 record _≈ℕ∞_ (x y : ℕ∞) : Set
 
-_≈ℕ∞′′_ : ℕ∞' → ℕ∞' → Set
+_≈ℕ∞′′_ : Maybe ℕ∞ → Maybe ℕ∞ → Set
 zero∞  ≈ℕ∞′′ zero∞  = ⊤
 zero∞  ≈ℕ∞′′ suc∞ y = ⊥
 suc∞ x ≈ℕ∞′′ zero∞  = ⊥
@@ -24,7 +26,7 @@ open _≈ℕ∞_ public
 infix 4 _≈ℕ∞ₚᵣ_ _≈ℕ∞'ₚᵣ_ 
 record _≈ℕ∞ₚᵣ_ {a b c d : ℕ∞} (e1 : a ≈ℕ∞ b) (e2 : c ≈ℕ∞ d) : Set
 
-_≈ℕ∞'ₚᵣ_ : {a b c d : ℕ∞'} → (e1 : a ≈ℕ∞′′ b) → (e2 : c ≈ℕ∞′′ d) → Set
+_≈ℕ∞'ₚᵣ_ : {a b c d : Maybe ℕ∞} → (e1 : a ≈ℕ∞′′ b) → (e2 : c ≈ℕ∞′′ d) → Set
 _≈ℕ∞'ₚᵣ_ {zero∞} {zero∞} {zero∞} {zero∞} e1 e2 = ⊤
 _≈ℕ∞'ₚᵣ_ {zero∞} {zero∞} {suc∞ c} {suc∞ d} e1 e2 = _≈ℕ∞ₚᵣ_ {conat' zero∞} {conat' zero∞} {c} {d} (λ where .prove → tt) e2
 _≈ℕ∞'ₚᵣ_ {suc∞ a} {suc∞ b} {zero∞} {zero∞} e1 e2 = _≈ℕ∞ₚᵣ_ {a} {b} {conat' zero∞} {conat' zero∞} e1 λ where .prove → tt

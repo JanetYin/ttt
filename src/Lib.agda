@@ -6,6 +6,7 @@ module Lib where
 -- They have to be imported manually,
 -- because there are a lot of functions that have the same name.
 
+open import Lib.Level public
 open import Lib.Unit public
   renaming (_≟_ to _≟⊤_)
 open import Lib.Empty public
@@ -27,7 +28,7 @@ open import Lib.Maybe public
 
 ------------------------------------------------------------
 -- Change when needed
--- open import Lib.Product public
---   renaming (map to map×)
-open import Lib.Sigma public
-  renaming (map to mapΣ)
+open import Lib.Product public
+  renaming (map to map×)
+-- open import Lib.Sigma public
+  -- renaming (map to mapΣ)

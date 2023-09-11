@@ -1,4 +1,4 @@
-open import lib
+open import Lib
 
 ---------------------------------------------------------
 -- propositional logic
@@ -51,8 +51,12 @@ dec2stab : {X : Set} → (X ⊎ ¬ X) → (¬ ¬ X → X)
 dec2stab = {!!}
 
 -- you have to decide:
+{-
 Dec : Set → Set
 Dec A = A ⊎ ¬ A
+-}
+
+open import Lib.Dec.PatternSynonym
 
 ee1 : {X Y : Set} → Dec (X ⊎ Y → ¬ ¬ (Y ⊎ X))
 ee1 = {!!}

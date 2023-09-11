@@ -24,9 +24,6 @@ open Dec public
 Dec : ∀{i}(A : Set i) → Set i
 Dec A = A ⊎ ¬ A
 
-pattern no x = inr x
-pattern yes x = inl x
-
 Decidable : ∀{i j}{A : Set i} → (A → Set j) → Set _
 Decidable P = ∀ x → Dec (P x)
 

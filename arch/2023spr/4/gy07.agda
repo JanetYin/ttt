@@ -78,7 +78,7 @@ Dec A = A ⊎ ¬ A
 -----------------------------------------------------------
 -- házi
 ee1 : {X Y : Set} → Dec (X ⊎ Y → ¬ ¬ (Y ⊎ X))
-ee1 = {!!}
+ee1 = inl λ xvy → λ nyvx → nyvx (case xvy (λ x → inr x) λ y → inl y)
 
 ee2 : {X : Set} → Dec (¬ (X ⊎ ¬ X))
 ee2 = {!!}
@@ -104,7 +104,8 @@ e8 = {!!}
 -----------------------------------------------------------
 -- itteni
 f1 : {X Y : Set} → ¬ ¬ X ⊎ ¬ ¬ Y → ¬ ¬ (X ⊎ Y)
-f1 = {!!}
+f1 nnxvnny = λ n[xvy] → case nnxvnny (λ nnx → nnx λ x → n[xvy] (inl x))
+                                       λ nny → nny λ y → n[xvy] (inr y)
 
 f2 : ({A B : Set} → ¬ (A × B) → ¬ A ⊎ ¬ B) → {X Y : Set} → ¬ ¬ (X ⊎ Y) → ¬ ¬ X ⊎ ¬ ¬ Y
 f2 hyp {X} {Y} nn[xvy] = hyp λ nxany → nn[xvy] λ xvy → case xvy (fst nxany) (snd nxany)

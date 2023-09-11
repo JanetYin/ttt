@@ -1,4 +1,4 @@
-open import lib
+open import Lib hiding (comm⊎)
 
 ------------------------------------------------------
 -- simple finite types
@@ -45,17 +45,17 @@ ee = {!!}
 d : (⊤ ⊎ (⊤ × ⊥)) × (⊤ ⊎ ⊥)
 d = {!!}
 
-from : {A : Set} → A × A → (Bool → A)
-from = {!!}
-to : {A : Set} → (Bool → A) → A × A
-to = λ f → f true , f false
-testfromto1 : {A : Set}{a b : A} → fst (to (from (a , b))) ≡ a
+from' : {A : Set} → A × A → (Bool → A)
+from' = {!!}
+to' : {A : Set} → (Bool → A) → A × A
+to' = λ f → f true , f false
+testfromto1 : {A : Set}{a b : A} → fst (to' (from' (a , b))) ≡ a
 testfromto1 = refl
-testfromto2 : {A : Set}{a b : A} → snd (to (from (a , b))) ≡ b
+testfromto2 : {A : Set}{a b : A} → snd (to' (from' (a , b))) ≡ b
 testfromto2 = refl
-testfromto3 : {A : Set}{a b : A} → from (to (λ x → if x then a else b)) true ≡ a
+testfromto3 : {A : Set}{a b : A} → from' (to' (λ x → if x then a else b)) true ≡ a
 testfromto3 = refl
-testfromto4 : {A : Set}{a b : A} → from (to (λ x → if x then a else b)) false ≡ b
+testfromto4 : {A : Set}{a b : A} → from' (to' (λ x → if x then a else b)) false ≡ b
 testfromto4 = refl
 
 ------------------------------------------------------

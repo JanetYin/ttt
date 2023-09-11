@@ -4,6 +4,7 @@ module Lib.Empty.Properties where
 
 open import Lib.Empty.Type
 open import Lib.Dec
+open import Lib.Dec.PatternSynonym
 open import Lib.Equality
 
 infix 4 _≟_

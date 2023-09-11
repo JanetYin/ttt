@@ -4,6 +4,7 @@ module Lib.Containers.List.Base where
 
 open import Lib.Containers.List.Type
 open import Lib.Dec
+open import Lib.Dec.PatternSynonym
 open import Lib.Nat
 open import Lib.Unit
 open import Lib.Empty

@@ -6,6 +6,7 @@ open import Lib.Product.Type
 open import Lib.Product.Base
 open import Lib.Equality
 open import Lib.Dec
+open import Lib.Dec.PatternSynonym
 
 ×β₁ : ∀{i j}{A : Set i}{B : Set j}{a : A}{b : B} → fst (a , b) ≡ a
 ×β₁ = refl

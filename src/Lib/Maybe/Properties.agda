@@ -5,6 +5,7 @@ module Lib.Maybe.Properties where
 open import Lib.Maybe.Type
 open import Lib.Equality.Type
 open import Lib.Dec
+open import Lib.Dec.PatternSynonym
 
 just-injective : ∀{i}{A : Set i}{x y : A} → just x ≡ just y → x ≡ y
 just-injective refl = refl
