@@ -1,5 +1,7 @@
 open import Lib
 
+-- open import Agda.Builtin.Nat renaming (Nat to ℕ)
+
 -- 1. git clone https://bitbucket.org/akaposi/ttt
 -- 2. Open this file (PATH) in emacs. (On the lab computers: Alt-F2 "emacs")
 -- 3. Typecheck with "C-c C-l"
@@ -38,11 +40,16 @@ open import Lib
 --   where A and B are any types
 
 add3 : ℕ → ℕ
-add3 = {!!}
+add3 x = x + 3
+
+!!!!!! : ℕ
+!!!!!! = 4
+
+-- C-c C-r
 
 -- try add3 x = x+3, spaces matter!
 
--- C-c C-n  add3 4
+-- C-c C-n add3 4
 
 aNum : ℕ
 aNum = add3 4
@@ -53,6 +60,13 @@ aNum = add3 4
 --      = 7
 
 -- no need to write brackets in "add3(4)"
+
+add5 : ℕ → ℕ -- űbN = ℕ, űto = →
+add5 = λ x → x + 5
+
+twelve : ℕ
+twelve = add5 aNum
+
 
 -- C-c C-n aNum
 
@@ -65,8 +79,8 @@ bNum = add3 (add3 (add3 2))
 
 -- lambda notation
 
-add3' : ℕ → ℕ
-add3' = {!!}
+add3' : ℕ → ℕ -- űGl = λ, űto = →
+add3' = λ n → n + 3 -- C-c C-r
 -- add3 x = x + 3
 
 -- add3' 4 = (λ x → x + 3) 4
@@ -87,7 +101,13 @@ add4 = {!!}
 -- functions with multiple arguments
 
 add : ℕ → ℕ → ℕ
-add = {!!}
+add x y = x + y
+
+add' : ℕ → ℕ → ℕ
+add' = λ x y → x + y
+
+add'' : ℕ → ℕ → ℕ
+add'' = λ x → λ y → x + y
 
 -- ℕ → (ℕ → ℕ) = ℕ → ℕ → ℕ
 --             ≠ (ℕ → ℕ) → ℕ
@@ -109,13 +129,13 @@ num1' = (add 3) 4
 
 -- what is wrong with the following?
 
--- num2 : ℕ
--- num2 = add (3 4)
+num2 : ℕ
+num2 = (add 3) 4
 
 -- what is wrong with the following?
 
--- num3 : ℕ
--- num3 = add 3 (add 4)
+num3 : ℕ
+num3 = add 3 (add 4 5)
 
 -- compute with equational reasoning:
 
@@ -128,9 +148,13 @@ num4 = add 3 (add 4 2)
 -- write a function of the following type:
 
 f1 : (ℕ → ℕ) → ℕ
-f1 = {!!}
+f1 f = f 3
 
 -- test it with f1 add3, f1 add4. is the result the same?
+
+
+f0 : (ℕ → ℕ) → ℕ -- f0 add3 = 7
+f0 f = f 4
 
 -- write two different functions which use their inputs, i.e.
 --   f2 add3 ≠ f2 add4 ≠ f3 add4 ≠ f3 add3
@@ -154,3 +178,6 @@ first = {!!}
 second : {A : Set} → A → A → A
 second = {!!}
 
+-- C-x h = Ctrl-A
+-- M-w = Ctrl-c
+-- C-y = Ctrl-v
