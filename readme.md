@@ -2,9 +2,9 @@
 
 Fontos, hogy megfelelő kóddal vedd fel a tárgyat:
 
- * BSc: IP-18KVSZTME
- * MSc: IPM-18sztKVTEE
- * MSc esti: IPM-18EsztKVTEE
+ * BSc: IP-18KVSZTM[E|G]
+ * MSc: IPM-18sztKVTE[E|G]
+ * MSc esti: IPM-18EsztKVTE[E|G]
 
 Előadás oktatója: Kaposi Ambrus (akaposi kukac inf.elte.hu).
 
