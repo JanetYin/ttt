@@ -3,9 +3,9 @@
 ## Kód / Könyvtár megszerzése
 
 1. git clone https://bitbucket.org/akaposi/ttt
-2. Open this file (PATH) in emacs/VSCode.
-3. Typecheck with "C-c C-l"
-    - The file should now be colored
+2. Nyisd meg az így kapott mappát emacs/VSCode-ban.
+3. Ellenőrizd a típust/töltsed be a fájlt "C-c C-l"
+    - Most már színesnek kell lennie a fájlnak. :)
 
 ## Szükséges kombinációk
 
@@ -36,20 +36,27 @@ Agda-mode key bindings:
 
 ### Unicode
 
-List of unicode symbols:
+Unicode szimbólumok, amiket használunk:
 - → ~ \to
    - \rightarrow
 -    ℕ ~ \bN 
-   -'b'lackboard 'N', there is also \bZ for ℤ, etc
+   -'b'lackboard 'N', és természetesen van \bZ a ℤ leírásához, stb
 -  λ ~ \Gl 
-   - 'G'reek 'l', there is also \GG for Γ, etc
+   - 'G'reek 'l', és természetesen van \GG a Γ leírásához, stb
 
 ## TODAY:
-- base type ℕ
-- function types   A → B
-   - where A and B are any types
+- Az alap típus ℕ
+   - Emlékeztető: A természetes számokat induktívan definiáljuk
+      - `zero : ℕ` vagyis legyen egy szám, amit kijelölünk nullának
+      - `suc n : ℕ → ℕ` vagyis legyen egy szám, ami egy rákövetkezője egy másik számnak. Legegyzserűbben ezt úgy lehet érteni, mintha +1-et hozzáadnék
+         - zero = 0; suc zero = 1; suc (suc zero) = 2; suc (suc (suc ... )) = 42
+         - Amennyu suc-ot látsz, anníi az értéke a számnak
+- függvény típusok   A → B
+   - Ahol is `A` és `B` Típusok 
 
 ## Kód
+
+Emlékeztető:
 
 ### Modul és könyvtár
 
@@ -98,16 +105,14 @@ C-c C-n  add3 4
 aNum : ℕ
 aNum = add3 4
 
-
-
 ```
 
-equational reasoning
+egyenlőségi érvelés
 aNum = add3 4
       = 4 + 3
       = 7
 
-no need to write brackets in "add3(4)"
+nem kell írni zárójeleket "add3(4)"
 
 C-c C-n aNum
 
@@ -118,7 +123,7 @@ bNum = add3 (add3 (add3 2))
 
 ```
 
-"add3 add3 add3 2" is wrong
+"add3 add3 add3 2" rossz kifejezés! Zárójelezés szükséges
 
 C-c C-n bNum
 
@@ -137,7 +142,7 @@ add3' 4 = (λ x → x + 3) 4
         = (4 + 3)
         = 7
 
-test it with C-c C-n!
+Próbáld ki C-c C-n beütésével!
 
 ```agda
 
@@ -146,12 +151,28 @@ add4 = _+ 4
 
 ```
 
-Goal type and context:             C-c C-,
-Goal type, context, inferred type: C-c C-.
-Fill the hole                    : C-c C-space  ,  C-c C-r
-Creating a hole: enter '?'
+Cél és kontextus:             C-c C-,
+Cél, kontextus, és kiértékelt típus: C-c C-.
+Lyukba helyezés                    : C-c C-space  ,  C-c C-r
+Lyuk készítése: enter '?'
 
 ### Több paraméterrel rendelkező függvények
+
+Definiáljuk az összeadást!
+
+> Note:
+> Ahogy feljebb említettem a `zero` és a `suc ?` is
+> konstruktora a természetes számoknak, így tudunk
+> arra mintát illeszteni!  
+> Ha mintát illesztes a `suc` konstrulktor függvényre
+> akkor kibontod belőle. Lényegét tekintve, olyan, mintha
+> a számból kivontál volna belőle egyet.  
+> Itt is működik a megkötéses (bind) mintaillesztés,
+> vagyis hogy egyszerre több mintát is tudsz írni, ami
+> a `@` jellel történik.  
+> Ezt felhasználva legyen ez alábbi egy mintaillesztés:  
+> ``` n@(suc m) ```  
+> Ekkor mondhatjuk azt, hogy `n - 1 = m`.
 
 ```agda
 
@@ -161,11 +182,13 @@ add x n@(suc x₁) = suc (add x x₁)
 
 ```
 
+```plaintext
 ℕ → (ℕ → ℕ) = ℕ → ℕ → ℕ
             ≠ (ℕ → ℕ) → ℕ
-bracketing of λ
+```
+`λ` zárójelezése
 
-same as λ x → λ y → x + y
+same as λ x → λ y → x + y  
 same as λ x y → x + y
 
 ```agda
@@ -176,14 +199,14 @@ add3'' = add 3
 num1 : ℕ
 num1 = add 3 4
 
--- bracketing of application
+-- zárójelezés applikáláskor
 
 num1' : ℕ
 num1' = (add 3) 4
 
 ```
 
-what is wrong with the following?
+Mi a gond a következővel?
 
 ```plaintext
 
@@ -192,7 +215,7 @@ num2 = add (3 4)
 
 ```
 
-what is wrong with the following?
+Mi a gond a következővel?
 
 ```plaintext
 
@@ -201,7 +224,7 @@ num3 = add 3 (add 4)
 
 ```
 
-compute with equational reasoning:
+Számítsad ki egyenlőségi érveléssel:
 
 ```agda
 
@@ -210,10 +233,10 @@ num4 = add 3 (add 4 2)
 
 ```
 
-Higher-order functions: functions with functions as arguments
-e.g. in Haskell:   map :: (a -> b) -> [a] -> [b]
+Magasabb-rendű függvények: függvények függvény paraméterrel
+például Haskell-ben:   map :: (a -> b) -> [a] -> [b]
 
-write a function of the following type:
+írj egy függvényt a következő típus szignatúrával:
 
 ```agda
 
@@ -222,9 +245,9 @@ f1 x = x 5
 
 ```
 
-test it with f1 add3, f1 add4. is the result the same?
+Teszteld `f1 add3` és `f1 add4`-al!. Ugyanaz a végeredmény?
 
-write two different functions which use their inputs, i.e.
+Írj két különböző függvényt, ami **használja** a paramétereit, hgy teljesüljön rá:
 f2 add3 ≠ f2 add4 ≠ f3 add4 ≠ f3 add3
 
 ```agda
@@ -236,14 +259,14 @@ f3 x = x (suc 68)
 tw : {A : Set} → (A → A) → A → A
 tw f n = f (f n)
 
--- consider
+-- Figyeld meg a következőt
 
 t = tw tw add3 1
 
 ```
 
-what is the type of this and why? ask Agda too (C-c C-d).
-what is its value?  guess, and ask Agda too (C-c C-n).
+Mi a típusa neki, és miért? Kérdezd meg agdát (C-c C-d).
+Mi az értéke? kérdezd meg agdát (C-c C-n).
 
 
 ```agda
