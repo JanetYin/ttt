@@ -2,6 +2,26 @@ module gy01 where
 
 open import Lib
 
+{-
+2my8f96 kóddal lehet a Teams csopiba csatlakozni.
+
+Követelmények:
+ZH nincs!
+Heti +/-, 0-1 pont, nem forduló kód automatikusan 0. 10 db
+
+0    - 4.999... : 1
+5    - 6.249... : 2
+6.25 - 7.499... : 3
+7.5  - 8.749... : 4
+8.75 - 10       : 5
+
+Beadandó nincs!
+Házi feladat: nem kötelező, gyakorlás jelleggel.
+
+Max. 3 hiányzás.
+Hiányzások a +/--ban 0 pont.
+-}
+
 -- 1. git clone https://bitbucket.org/akaposi/ttt
 -- 2. Open this file (PATH) in emacs. (On the lab computers: Alt-F2 "emacs")
 -- 3. Typecheck with "C-c C-l"
@@ -39,8 +59,10 @@ open import Lib
 --  function types   A → B
 --   where A and B are any types
 
+-- \bN = ℕ
+-- \r = →
 add3 : ℕ → ℕ
-add3 = {!!}
+add3 x = x + 3
 
 -- try add3 x = x+3, spaces matter!
 
@@ -66,9 +88,9 @@ bNum = add3 (add3 (add3 2))
 -- C-c C-n bNum
 
 -- lambda notation
-
+-- C-c C-r : refine
 add3' : ℕ → ℕ
-add3' = {!!}
+add3' = λ x → x + 3
 -- add3 x = x + 3
 
 -- add3' 4 = (λ x → x + 3) 4
@@ -79,7 +101,7 @@ add3' = {!!}
 -- test it with C-c C-n!
 
 add4 : ℕ → ℕ
-add4 = {!!}
+add4 n = 4 + n
 
 -- Goal type and context:             C-c C-,
 -- Goal type, context, inferred type: C-c C-.
@@ -89,7 +111,7 @@ add4 = {!!}
 -- functions with multiple arguments
 
 add : ℕ → ℕ → ℕ
-add = {!!}
+add = λ x → λ y → x + y
 
 -- ℕ → (ℕ → ℕ) = ℕ → ℕ → ℕ
 --             ≠ (ℕ → ℕ) → ℕ
@@ -130,7 +152,16 @@ num4 = add 3 (add 4 2)
 -- write a function of the following type:
 
 f1 : (ℕ → ℕ) → ℕ
-f1 = {!!}
+f1 = λ x → x 1
+
+{-
+f1 add3 =
+  (λ x → x 1) add3 =
+  (x 1)[x := add3] =
+  add3 1 =
+  1 + 3 =
+  4
+-}
 
 -- test it with f1 add3, f1 add4. is the result the same?
 
@@ -138,21 +169,44 @@ f1 = {!!}
 --   f2 add3 ≠ f2 add4 ≠ f3 add4 ≠ f3 add3
 
 f2 f3 : (ℕ → ℕ) → ℕ
-f2 = {!!}
-f3 = {!!}
+f2 = λ x → x 0
+f3 = λ x → x 2436723472436237
 
 tw : {A : Set} → (A → A) → A → A
 tw f n = f (f n)
 
 -- consider
-
+-- tw : (A → A) → (A → A)
+--        tw -- A ~ B → B
+-- tw : ((B → B) → B → B) → (B → B) → B → B
+-- tw tw : (B → B) → B → B
+-- B ~ ℕ
+-- tw tw : (ℕ → ℕ) → ℕ → ℕ
+-- tw tw add3 : ℕ → ℕ
+-- tw tw add3 1 : ℕ
+t : ℕ
 t = tw tw add3 1
 -- what is the type of this and why? ask Agda too (C-c C-d).
 -- what is its value?  guess, and ask Agda too (C-c C-n).
+{-
+(tw tw add3) 1 =
+tw (tw add3) 1 =
+(tw add3) (tw add3 1) =
+tw add3 (add3 (add3 1)) =
+tw add3 (add3 4) =
+tw add3 7 =
+add3 (add3 7) =
+add3 10 =
+13
+-}
+
+id : {A : Set} → A → A
+id = λ z → z
 
 first : {A : Set} → A → A → A
-first = {!!}
+first a b = a
 
 second : {A : Set} → A → A → A
-second = {!!}
+second a b = b
 
+-- Bool → Bool
