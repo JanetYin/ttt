@@ -51,7 +51,7 @@ sevenTest = refl
 
 -- töltsd ki a lyukakat természetes számokkal; ellenőrizd, hogy a beírt dolgok típushelyesek-e és fogadtasd el őket az Agdával
 
--- írj függvényt a következő típuokkal:
+-- írj függvényt a következő típusokkal:
 tr1 : ℕ → (ℕ → ℕ) → ℕ
 tr1 = {!!}
 tr2 : ℕ → ℕ → (ℕ → ℕ)

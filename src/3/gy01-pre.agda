@@ -1,4 +1,6 @@
-open import Agda.Builtin.Nat renaming (Nat to ℕ)
+module gy01 where
+
+open import Lib
 
 -- 1. git clone https://bitbucket.org/akaposi/ttt
 -- 2. Open this file (PATH) in emacs. (On the lab computers: Alt-F2 "emacs")
@@ -7,13 +9,12 @@ open import Agda.Builtin.Nat renaming (Nat to ℕ)
 
 -- Emacs key bindings (C = Ctrl, M = Alt):
 --  C-x C-f : create or open a file
---  C-x C-s : save file
+--  C-x C-w : save (write) file
 --  C-x C-c : close Emacs
 --  C-space : start selecting text
 --  M-w : Copy
 --  C-w : Cut
---  C-y : Paste (yank)
---  C-x 1 : only display one window 
+--  C-y : Paste
 
 -- Agda-mode key bindings:
 --  C-\       : Switch Agda input mode on/off
@@ -33,16 +34,13 @@ open import Agda.Builtin.Nat renaming (Nat to ℕ)
 --    ℕ       \bN           'b'lackboard 'N', there is also \bZ for ℤ, etc
 --    λ       \Gl           'G'reek 'l', there is also \GG for Γ, etc
 
-
-
 -- TODAY:
 --  base type ℕ
 --  function types   A → B
 --   where A and B are any types
 
 add3 : ℕ → ℕ
-add3 n = n + 3
--- add3 = λ n -> n + 3
+add3 = {!!}
 
 -- try add3 x = x+3, spaces matter!
 
@@ -62,32 +60,21 @@ aNum = add3 4
 
 bNum : ℕ
 bNum = add3 (add3 (add3 2))
--- ((2 + 3) + 3) + 3
 
 -- "add3 add3 add3 2" is wrong
--- bNum' : ℕ
--- bNum' = ((add3 add3) add3) 2
 
 -- C-c C-n bNum
 
 -- lambda notation
 
 add3' : ℕ → ℕ
-add3' = λ x -> x + 3
+add3' = {!!}
 -- add3 x = x + 3
 
 -- add3' 4 = (λ x → x + 3) 4
 --         = (x + 3)[x := 4]
 --         = (4 + 3)
 --         = 7
-
-tf : ℕ -> ℕ
-tf = λ x -> x + x + 3
-
--- tf 4 = (λ x -> x + x + 3) 4
---      = (x + x + 3)[x := 4]
---      = 4 + 4 + 3
---      = 11
 
 -- test it with C-c C-n!
 
@@ -101,8 +88,8 @@ add4 = {!!}
 
 -- functions with multiple arguments
 
-add : ℕ → (ℕ → ℕ)
-add = λ x -> (λ y -> x + y)
+add : ℕ → ℕ → ℕ
+add = {!!}
 
 -- ℕ → (ℕ → ℕ) = ℕ → ℕ → ℕ
 --             ≠ (ℕ → ℕ) → ℕ
@@ -113,9 +100,6 @@ add = λ x -> (λ y -> x + y)
 
 add3'' : ℕ → ℕ
 add3'' = add 3
--- add 3 = (λ x -> (λ y -> x + y)) 3
---       = (λ y -> x + y)[x := 3]
---       = (λ y -> 3 + y)
 
 num1 : ℕ
 num1 = add 3 4
@@ -126,26 +110,14 @@ num1' : ℕ
 num1' = (add 3) 4
 
 -- what is wrong with the following?
+
 -- num2 : ℕ
 -- num2 = add (3 4)
 
 -- what is wrong with the following?
 
-{-
-num3 : ℕ
-num3 = add 3 {!add 4!}
--}
-
-{-
--- this works in Haskell, but not here:
-n : ℕ
-n = k + 1
-
-k : ℕ
-k = 5
--}
-
--- NOTE: idáig jutottunk
+-- num3 : ℕ
+-- num3 = add 3 (add 4)
 
 -- compute with equational reasoning:
 
