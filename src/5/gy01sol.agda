@@ -42,7 +42,7 @@ open import Agda.Builtin.Nat renaming (Nat to ℕ)
 
 add3 : ℕ → ℕ
 add3 n = n + 3
-add3 = λ n -> n + 3
+-- add3 = λ n -> n + 3
 
 -- try add3 x = x+3, spaces matter!
 
