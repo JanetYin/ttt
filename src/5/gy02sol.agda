@@ -6,26 +6,61 @@ open import Lib.Sigma
 open import Lib.Unit
 open import Lib.Empty
 
+--
+-- egy definíció megnézése: ráállsz a kurzorral, majd M-pötty
+-- vissza: C-x k Enter
+
 ------------------------------------------------------
 -- simple finite types
 ------------------------------------------------------
 
+-- \x
+tuple : ℕ × Bool
+tuple = (4 , true)
+proj1 : ℕ
+proj1 = fst tuple
+proj2 : Bool
+proj2 = snd tuple
+
+-- \u+
+sum1 sum2 : ℕ ⊎ Bool
+sum1 = inl 5
+sum2 = inr false
+
+containsNat : ℕ ⊎ Bool -> Bool
+containsNat (inl n) = true
+containsNat (inr b) = false
+
+sum3 sum4 : ℕ ⊎ ℕ
+sum3 = inl 5
+sum4 = inr 5
+
+isLeft : ℕ ⊎ ℕ -> Bool
+isLeft (inl _) = true
+isLeft (inr _) = false
+
+-----------------------------------------
+
 flip : ℕ × Bool → Bool × ℕ
-flip = {!!}
+flip (n , b) = {!!} , {!!}
 
 flipback : Bool × ℕ → ℕ × Bool
 flipback = {!!}
 
 comm× : {A B : Set} → A × B → B × A
-comm× = {!!}
+comm× (a , b) = b , a
+-- or with fst and snd:
+-- comm× t = snd t , fst t
 
 comm×back : {A B : Set} → B × A → A × B
 comm×back = comm×
 
-b1 b2 : Bool × ⊤
+-- NOTE: we were here
+
+b1 b2 : Bool × ⊤    -- \top
 b1 = {!!}
 b2 = {!!}
-b1≠b2 : b1 ≡ b2 → ⊥
+b1≠b2 : b1 ≡ b2 → ⊥   -- \bot
 b1≠b2 ()
 
 t1 t2 : ⊤ ⊎ ⊤
