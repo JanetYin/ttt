@@ -158,7 +158,7 @@ num4 = add 3 (add 4 2)
 -- write a function of the following type:
 
 f1 : (ℕ → ℕ) → ℕ
-f1 = {!!}
+f1 _ = 42
 
 -- test it with f1 add3, f1 add4. is the result the same?
 
@@ -166,21 +166,41 @@ f1 = {!!}
 --   f2 add3 ≠ f2 add4 ≠ f3 add4 ≠ f3 add3
 
 f2 f3 : (ℕ → ℕ) → ℕ
-f2 = {!!}
-f3 = {!!}
+f2 f = f 2
+f3 f = f 3
 
-tw : {A : Set} → (A → A) → A → A
+tw : {A : Set} -> (A → A) → A → A
 tw f n = f (f n)
+
+g : ℕ
+g = tw {ℕ} add3 4
 
 -- consider
 
-t = tw tw add3 1
+t = (tw {ℕ -> ℕ} (tw {ℕ})) add3 1
 -- what is the type of this and why? ask Agda too (C-c C-d).
 -- what is its value?  guess, and ask Agda too (C-c C-n).
+{-
+tw tw add3 1
+= (λ f n -> f (f n)) tw add3 1
+= tw (tw add3) 1
+= (λ f n -> f (f n)) (tw add3) 1
+= (tw add3) ((tw add3) 1)
+=  tw add3  ( tw add3  1)
+=  tw add3  ( add3 (add3 1))
+=  tw add3  7
+= add3 (add3 7)
+= 13
+-}
 
 first : {A : Set} → A → A → A
-first = {!!}
+first a1 _ = a1
 
 second : {A : Set} → A → A → A
-second = {!!}
+second _ a2 = a2
 
+third : {A : Set} → A → A → A
+third a1 a2 = {!!}
+
+third' : ℕ -> ℕ -> ℕ
+third' a1 a2 = {!!}
