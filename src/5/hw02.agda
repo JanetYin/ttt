@@ -1,36 +1,10 @@
-open import Lib
-
--- Hány eleme van az alábbi típusoknak? Add meg az összeset (ha lehet).
-a1 {-a2 a3 ...-} : Bool × Bool
-a1 = {!!}
--- a2 = ?
--- a3 = ?
--- Itt persze annyit adj meg, ahány elem van.
-
--- Hasonlóan a későbbieknél is: számold ki, hány elem van, és add meg az összeset.
-b1 : Bool ⊎ Bool
-b1 = {!!}
-
-c1 : ⊤ × ⊤
-c1 = {!!}
-
-d1 : ⊤ × (⊤ ⊎ ⊤)
-d1 = {!!}
-
-e1 : (⊤ × ⊤) ⊎ ⊤
-e1 = {!!}
-
-f1 : ⊥ ⊎ (⊤ ⊎ ⊥)
-f1 = {!!}
-
-g1 : (⊥ ⊎ ⊤) × ⊥
-g1 = {!!}
-
-h1 : (ℕ × ⊥) ⊎ ⊤
-h1 = {!!}
-
-i1 : Bool × Bool ⊎ Bool
-i1 = {!!}
+open import Agda.Builtin.Nat renaming (Nat to ℕ)
+open import Lib.Equality
+open import Lib.Bool
+open import Lib.Sum hiding (comm⊎)
+open import Lib.Sigma
+open import Lib.Unit
+open import Lib.Empty
 
 -----------------------------------------
 
@@ -64,3 +38,28 @@ add x y = x + y
 -- Mi az alábbi kifejezés típusa, illetve "értéke"? Írd le a levezetést is!
 w : {!!}
 w n = flip (add 5 (flip 1 (add 2))) (flip n add)
+
+-----------------------------------------
+
+-- Hány különböző eleme van az alábbi típusoknak?
+-- Add is meg az összeset! (Csak egy lyukat rakok ide, de csinálj még.
+
+a1 : ⊤ ⊎ Bool
+a1 = {!!}
+
+a2 : ⊤ × Bool
+a2 = {!!}
+
+a3 : ⊤ ⊎ ⊤
+a3 = {!!}
+
+a4 : ⊤ × ⊤
+a4 = {!!}
+
+a5 : Bool ⊎ Bool
+a5 = {!!}
+
+a6 : Bool × Bool
+a6 = {!!}
+
+-- Vélsz szabályszerűséget felfedezni az elemszámokkal kapcsolatban? Milyet?
