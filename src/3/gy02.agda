@@ -6,34 +6,42 @@ open import Lib hiding (comm⊎)
 -- simple finite types
 ------------------------------------------------------
 
+-- \x = \times = × 
 flip : ℕ × Bool → Bool × ℕ
-flip = {!!}
+flip (n , b) = b , n
 
 flipback : Bool × ℕ → ℕ × Bool
-flipback = {!!}
+flipback n = snd n , fst n
 
 comm× : {A B : Set} → A × B → B × A
-comm× = {!!}
+comm× (n , b) = b , n
 
 comm×back : {A B : Set} → B × A → A × B
 comm×back = comm×
 
-b1 b2 : Bool × ⊤
-b1 = {!!}
-b2 = {!!}
+b1 b2 : Bool × ⊤ -- \top = ⊤
+b1 = false , tt
+b2 = true , tt
 b1≠b2 : b1 ≡ b2 → ⊥
 b1≠b2 ()
 
+-- |Bool| = 2
+-- |⊤| = 1
+-- |A × B| = |A| ∙ |B|
+
+-- \uplus = \u+ = ⊎
 t1 t2 : ⊤ ⊎ ⊤
-t1 = {!!}
-t2 = {!!}
+t1 = inl tt
+t2 = inr tt
 t1≠t2 : t1 ≡ t2 → ⊥
 t1≠t2 ()
 
+-- |A ⊎ B| = |A| + |B|
+
 bb1 bb2 bb3 : Bool ⊎ ⊤
-bb1 = {!!}
-bb2 = {!!}
-bb3 = {!!}
+bb1 = inl true
+bb2 = inl false
+bb3 = inr tt
 bb1≠bb2 : bb1 ≡ bb2 → ⊥
 bb1≠bb2 ()
 bb1≠bb3 : bb1 ≡ bb3 → ⊥
@@ -42,10 +50,13 @@ bb2≠bb3 : bb2 ≡ bb3 → ⊥
 bb2≠bb3 ()
 
 ee : (⊤ → ⊥) ⊎ (⊥ → ⊤)
-ee = {!!}
+ee = inr exfalso
+
+-- λ x → f x = f
+-- (x y : ⊤) → x ≝ y
 
 d : (⊤ ⊎ (⊤ × ⊥)) × (⊤ ⊎ ⊥)
-d = {!!}
+d = inl tt , inl tt
 
 from' : {A : Set} → A × A → (Bool → A)
 from' = {!!}
@@ -67,7 +78,14 @@ testfromto4 = refl
 -- (⊎, ⊥) form a commutative monoid (kommutativ egysegelemes felcsoport)
 
 assoc⊎ : {A B C : Set} → (A ⊎ B) ⊎ C ↔ A ⊎ (B ⊎ C)
-assoc⊎ = {!!}
+assoc⊎ = to , from where
+  to : {A B C : Set} → (A ⊎ B) ⊎ C → A ⊎ (B ⊎ C)
+  to (inl (inl a)) = inl a
+  to (inl (inr b)) = inr (inl b)
+  to (inr c) = inr (inr c)
+
+  from : {A B C : Set} → A ⊎ (B ⊎ C) → (A ⊎ B) ⊎ C
+  from abc = {!   !}
 
 idl⊎ : {A : Set} → ⊥ ⊎ A ↔ A
 idl⊎ = {!!}
