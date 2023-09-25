@@ -6,6 +6,12 @@ open import Lib.Containers.List hiding (length; _++_; map; iteList)
 ---------------------------------------------------------
 
 {-
+data ℕ : Set where
+  zero : ℕ
+  suc  : ℕ → ℕ
+-}
+
+{-
 data Maybe (A : Set) : Set where
   just : A → Maybe A
   nothing : Maybe A
