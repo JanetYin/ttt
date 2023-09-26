@@ -6,22 +6,26 @@ open import Lib.Containers.List hiding (length; _++_; map; iteList)
 ---------------------------------------------------------
 
 {-
-data ℕ : Set where
-  zero : ℕ
-  suc  : ℕ → ℕ
--}
-
-{-
 data Maybe (A : Set) : Set where
   just : A → Maybe A
   nothing : Maybe A
 -}
 
+{-
+természetes számok:
+
+data ℕ where
+  zero : ℕ
+  suc : ℕ → ℕ
+-}
+
 pred : ℕ → Maybe ℕ
-pred = {!!}
+pred zero = nothing
+pred (suc x) = just x
 
 zerosuc : Maybe ℕ → ℕ
-zerosuc = {!!}
+zerosuc (just x) = suc x
+zerosuc nothing = zero
 
 pred↔zerosuc-test1 : pred (zerosuc nothing) ≡ nothing
 pred↔zerosuc-test1 = refl
@@ -29,7 +33,8 @@ pred↔zerosuc-test2 : {n : ℕ} → pred (zerosuc (just n)) ≡ just n
 pred↔zerosuc-test2 = refl
 
 double : ℕ → ℕ
-double = {!!}
+double zero = zero
+double (suc x) = suc (suc (double x))
 
 double-test1 : double 2 ≡ 4
 double-test1 = refl
@@ -39,7 +44,9 @@ double-test3 : double 10 ≡ 20
 double-test3 = refl
 
 half : ℕ → ℕ
-half = {!!}
+half zero = zero
+half (suc zero) = zero
+half (suc (suc x)) = suc (half x)
 
 half-test1 : half 10 ≡ 5
 half-test1 = refl
@@ -49,7 +56,8 @@ half-test3 : half 12 ≡ 6
 half-test3 = refl
 
 _+_ : ℕ → ℕ → ℕ
-_+_ = {!!}
+x + zero = x
+x + suc x₁ = suc x + x₁
 infixl 6 _+_
 
 +-test1 : 3 + 5 ≡ 8
@@ -60,7 +68,8 @@ infixl 6 _+_
 +-test3 = refl
 
 _*_ : ℕ → ℕ → ℕ
-_*_ = {!!}
+x * zero = zero
+x * suc x₁ = x + (x * x₁)
 infixl 7 _*_
 
 *-test1 : 3 * 4 ≡ 12
@@ -88,7 +97,8 @@ infixr 8 _^_
 ^-test5 = refl
 
 _! : ℕ → ℕ
-_! = {!!}
+zero ! = 1
+suc x ! = suc x * (x !)
 
 !-test1 : 3 ! ≡ 6
 !-test1 = refl
@@ -98,7 +108,9 @@ _! = {!!}
 !-test3 = refl
 
 _-_ : ℕ → ℕ → ℕ
-_-_ = {!!}
+zero - x₁ = zero
+suc x - zero = suc x
+suc x - suc x₁ = x - x₁
 infixl 6 _-_
 
 -test1 : 3 - 2 ≡ 1
@@ -109,7 +121,9 @@ infixl 6 _-_
 -test3 = refl
 
 _≥_ : ℕ → ℕ → Bool
-_≥_ = {!!}
+x ≥ zero = true
+zero ≥ suc x₁ = false
+suc x ≥ suc x₁ = x ≥ x₁
 
 ≥test1 : 3 ≥ 2 ≡ true
 ≥test1 = refl
@@ -120,7 +134,7 @@ _≥_ = {!!}
 
 -- ne hasznalj rekurziot, hanem hasznald _≥_-t!
 _>_ : ℕ → ℕ → Bool
-_>_ = {!!}
+x > x₁ = x ≥ suc x₁
 
 >test1 : 3 > 2 ≡ true
 >test1 = refl
@@ -140,7 +154,9 @@ _<_ = {!!}
 <test3 = refl
 
 min : ℕ → ℕ → ℕ
-min = {!!}
+min zero x₁ = zero
+min (suc x) zero = zero
+min (suc x) (suc x₁) = suc (min x x₁)
 
 min-test1 : min 3 2 ≡ 2
 min-test1 = refl
@@ -194,7 +210,9 @@ gcd'-test5 : gcd' 19 17 ≡ 1
 gcd'-test5 = refl
 
 even? : ℕ → Bool
-even? = {!!}
+even? zero = true
+even? (suc zero) = false
+even? (suc (suc x)) = even? x
 
 even?-test1 : even? 3 ≡ false
 even?-test1 = refl

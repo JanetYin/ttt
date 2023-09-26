@@ -1,21 +1,35 @@
+# 3. Gyakorlat
+
+## Természetes számok
+
+```agda
+
 open import Lib hiding (_+_; _*_; _-_; _^_; _!; pred)
 open import Lib.Containers.List hiding (length; _++_; map; iteList)
 
----------------------------------------------------------
--- natural numbers
----------------------------------------------------------
+```
 
-{-
+Első lépés, hogy feltesszük a kérdést: Hogyan tudunk saját típust létrehozni?
+A gyakorlaton, és a vizsgán nem kell majd sajátot készítenünk, azonban jó ha tudjuk: a `data` kulcsszó egy adat szerkezetet hooz létre, amihez annyi konstruktoert rendelünk, amenyiit nem szégyenlünk.  
+Ez gyakorlatilag a Haskellből jól ismert `data`. A különbség viszont annyi, hogy itt pontosan meg kell határoznunk a konstruktor típusát!
+
+Nézzük az alábbi példát:
+
+```plaintext
 data ℕ : Set where
   zero : ℕ
   suc  : ℕ → ℕ
--}
+```
 
-{-
+Létrehoztuk a `ℕ` típust, aminek kettő konstruktora van: `zero` ami a 0-t jelöli, továbbá a `suc` amivel fel tudjuk építeni az összes többi számot. Mint a leírásban látható, ezeknek is meg van határozva specifikusan a típusuk.
+
+
 data Maybe (A : Set) : Set where
   just : A → Maybe A
   nothing : Maybe A
 -}
+
+```agda
 
 pred : ℕ → Maybe ℕ
 pred = {!!}
@@ -38,6 +52,10 @@ double-test2 = refl
 double-test3 : double 10 ≡ 20
 double-test3 = refl
 
+```
+
+```agda
+
 half : ℕ → ℕ
 half = {!!}
 
@@ -47,6 +65,10 @@ half-test2 : half 11 ≡ 5
 half-test2 = refl
 half-test3 : half 12 ≡ 6
 half-test3 = refl
+
+```
+
+```agda
 
 _+_ : ℕ → ℕ → ℕ
 _+_ = {!!}
@@ -87,6 +109,10 @@ infixr 8 _^_
 ^-test5 : 0 ^ 0 ≡ 1 -- csúnya dolog
 ^-test5 = refl
 
+```
+
+```agda
+
 _! : ℕ → ℕ
 _! = {!!}
 
@@ -107,6 +133,10 @@ infixl 6 _-_
 -test2 = refl
 -test3 : 3 - 4 ≡ 0 -- csúnya dolog
 -test3 = refl
+
+```
+
+```agda
 
 _≥_ : ℕ → ℕ → Bool
 _≥_ = {!!}
@@ -139,6 +169,10 @@ _<_ = {!!}
 <test3 : 3 < 4 ≡ true
 <test3 = refl
 
+```
+
+```agda
+
 min : ℕ → ℕ → ℕ
 min = {!!}
 
@@ -159,6 +193,9 @@ comp-test2 = refl
 comp-test3 : comp {ℕ} 12 11 0 1 2 ≡ 2
 comp-test3 = refl
 
+```
+
+```agda
 -- hasznald comp-ot!
 gcd : ℕ → ℕ → ℕ
 {-# TERMINATING #-}
@@ -193,6 +230,10 @@ gcd'-test4 = refl
 gcd'-test5 : gcd' 19 17 ≡ 1
 gcd'-test5 = refl
 
+```
+
+```agda
+
 even? : ℕ → Bool
 even? = {!!}
 
@@ -217,6 +258,10 @@ eq?-test1 = refl
 eq?-test2 : eq? 4 4 ≡ true
 eq?-test2 = refl
 
+```
+
+```agda
+
 -- rem m n = a maradek, ha elosztjuk m-et (suc n)-el
 rem : ℕ → ℕ → ℕ
 rem a b = {!!}
@@ -232,6 +277,10 @@ div-test1 : div 5 1 ≡ 2
 div-test1 = refl
 div-test2 : div 11 2 ≡ 3
 div-test2 = refl
+
+```
+
+```agda
 
 iteNat : {A : Set} → A → (A → A) → ℕ → A
 iteNat z s zero = z
@@ -261,16 +310,18 @@ recNat'-test2 = refl
 
 -- FEL: add meg ujra az osszes fent fuggvenyt mintaillesztes nelkul, iteNat es/vagy recNat hasznalataval!
 
----------------------------------------------------------
--- lists
----------------------------------------------------------
+```
 
-{-
+## Listák
+
+```plaintext
 data List (A : Set) : Set where
   [] : List A
   _∷_ : A → List A → List A
 infixr 5 _∷_
--}
+```
+
+```agda
 
 length : {A : Set} → List A → ℕ
 length = {!!}
@@ -293,6 +344,10 @@ infixr 5 _++_
 ++-test : the ℕ 3 ∷ 2 ∷ [] ++ 1 ∷ 4 ∷ [] ≡ 3 ∷ 2 ∷ 1 ∷ 4 ∷ []
 ++-test = refl
 
+```
+
+```agda
+
 map : {A B : Set} → (A → B) → List A → List B
 map = {!!}
 
@@ -307,11 +362,13 @@ iteList n c (a ∷ as) = c a (iteList n c as)
 
 -- FEL: add meg recNat-ot, es vezesd vissza iteNat-ra!
 
----------------------------------------------------------
--- trees
----------------------------------------------------------
+```
+
+## Fák
 
 -- a datatype of expressions
+
+```agda
 
 data Expr : Set where
   const : ℕ → Expr
@@ -480,3 +537,4 @@ test-tI'3 : tI' ! 3 ≡ node λ _ → node λ _ → node λ _ → leaf
 test-tI'3 = refl
 test-tI'4 : tI' ! 5 ≡ node λ _ → node λ _ → node λ _ → node λ _ → node λ _ → leaf
 test-tI'4 = refl
+```
