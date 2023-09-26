@@ -135,12 +135,3 @@ add2 x = 2 + x
 postulate
   isEven : ℕ → Bool
 
--- derive _∘_ as a combinator term?
-
--- ⊎, CustRef, OrdNum, ugyanaz a szam; ∪ vs. ⊎
-
--- ×, curry, uncurry, izomorfizmus
-
--- ⊤, ⊥, Bool=⊤+⊤
-
--- finite type isos
