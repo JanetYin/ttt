@@ -1,0 +1,15 @@
+0:00-0:10	röpi
+0:10-0:13	megbeszélés
+0:13-0:15	a tesztekről mesélés
+0:15-0:25	önálló munka b1-től bb3-ig
+0:25-0:30	megbeszélés; hány elemük van? (algebrai adattípusok)
+0:30-0:35	ee; exfalsóról mese
+0:35-0:40	d először önállóan, aztán segítek; hány eleme van?
+0:40-0:48	akkor általánosan: hogyan lehet elemszámot számolni?
+0:48-0:58	izomorfizmusok mibenléte; from' és to' (from'-re lehet pici önálló időt is hagyni)
+0:58-1:03	assoc⊎, idl⊎ és comm⊎ közösen (ezek is izomorfizmusok igazából, csak nincsenek a tesztek odaírva)
+1:03-1:13	próbálkozzanak picit önállóan; mondjuk law1^-ig (és járjunk körbe)
+1:13-1:18	van-e valami, amit közösen kéne megbeszélni?
+1:18-1:25	iso1, iso2 közösen
+1:25-1:28	többit megnézzük együtt, kiadhatom házinak, vagy kiadhatom házinak és jövő órán nézzük meg?
+1:28-1:30	házi; röpi témája (típusok elemszáma, izomorfizmusok)
