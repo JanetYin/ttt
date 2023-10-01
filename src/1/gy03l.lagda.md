@@ -23,19 +23,25 @@ data ℕ : Set where
 
 Létrehoztuk a `ℕ` típust, aminek kettő konstruktora van: `zero` ami a 0-t jelöli, továbbá a `suc` amivel fel tudjuk építeni az összes többi számot. Mint a leírásban látható, ezeknek is meg van határozva specifikusan a típusuk.
 
+```plaintext
 
 data Maybe (A : Set) : Set where
   just : A → Maybe A
   nothing : Maybe A
--}
+
+```
+
+A haskellből már jól megszokott `Maybe` típus. Teljesen ugyanúgy m̨ödik.
 
 ```agda
 
 pred : ℕ → Maybe ℕ
-pred = {!!}
+pred zero = nothing
+pred (suc x) = just x
 
 zerosuc : Maybe ℕ → ℕ
-zerosuc = {!!}
+zerosuc (just x) = suc x
+zerosuc nothing = zero
 
 pred↔zerosuc-test1 : pred (zerosuc nothing) ≡ nothing
 pred↔zerosuc-test1 = refl
@@ -43,7 +49,8 @@ pred↔zerosuc-test2 : {n : ℕ} → pred (zerosuc (just n)) ≡ just n
 pred↔zerosuc-test2 = refl
 
 double : ℕ → ℕ
-double = {!!}
+double zero = zero
+double (suc x) = suc (suc (double x))
 
 double-test1 : double 2 ≡ 4
 double-test1 = refl
@@ -57,7 +64,9 @@ double-test3 = refl
 ```agda
 
 half : ℕ → ℕ
-half = {!!}
+half zero = zero
+half (suc zero) = zero
+half (suc (suc x)) = suc (half x)
 
 half-test1 : half 10 ≡ 5
 half-test1 = refl
@@ -71,7 +80,8 @@ half-test3 = refl
 ```agda
 
 _+_ : ℕ → ℕ → ℕ
-_+_ = {!!}
+zero + y = y
+suc x + y = suc (x + y)
 infixl 6 _+_
 
 +-test1 : 3 + 5 ≡ 8
@@ -82,7 +92,8 @@ infixl 6 _+_
 +-test3 = refl
 
 _*_ : ℕ → ℕ → ℕ
-_*_ = {!!}
+zero * y = zero
+suc x * y = y + x * y -- (x+1) * y = x * y + y
 infixl 7 _*_
 
 *-test1 : 3 * 4 ≡ 12
@@ -95,7 +106,8 @@ infixl 7 _*_
 *-test4 = refl
 
 _^_ : ℕ → ℕ → ℕ
-_^_ = {!!}
+x ^ zero = suc zero
+x ^ suc y = x * x ^ y -- x ^ (y + 1) = x * x ^ y
 infixr 8 _^_
 
 ^-test1 : 3 ^ 4 ≡ 81
@@ -114,7 +126,8 @@ infixr 8 _^_
 ```agda
 
 _! : ℕ → ℕ
-_! = {!!}
+zero ! = 1
+🤙@(suc x) ! = 🤙 * (x !)
 
 !-test1 : 3 ! ≡ 6
 !-test1 = refl
@@ -123,8 +136,13 @@ _! = {!!}
 !-test3 : 6 ! ≡ 720
 !-test3 = refl
 
-_-_ : ℕ → ℕ → ℕ
-_-_ = {!!}
+🤡 : Set
+🤡 = ℕ
+
+_-_ : 🤡 → 🤡 → 🤡
+zero - x₁ = zero
+suc x - zero = suc x
+suc x - suc x₁ = x - x₁
 infixl 6 _-_
 
 -test1 : 3 - 2 ≡ 1
@@ -139,7 +157,9 @@ infixl 6 _-_
 ```agda
 
 _≥_ : ℕ → ℕ → Bool
-_≥_ = {!!}
+x ≥ zero = true
+zero ≥ suc y = false
+suc x ≥ suc y = x ≥ y
 
 ≥test1 : 3 ≥ 2 ≡ true
 ≥test1 = refl
@@ -150,7 +170,9 @@ _≥_ = {!!}
 
 -- ne hasznalj rekurziot, hanem hasznald _≥_-t!
 _>_ : ℕ → ℕ → Bool
-_>_ = {!!}
+zero > x₁ = false
+suc x > zero = true
+suc x > y@(suc _) = x ≥ y -- @ = bind, vagyis megkötöm a mintaillesztést
 
 >test1 : 3 > 2 ≡ true
 >test1 = refl
@@ -160,7 +182,7 @@ _>_ = {!!}
 >test3 = refl
 
 _<_ : ℕ → ℕ → Bool
-_<_ = {!!}
+x < x₁ = x₁ > x
 
 <test1 : 3 < 2 ≡ false
 <test1 = refl
@@ -174,7 +196,9 @@ _<_ = {!!}
 ```agda
 
 min : ℕ → ℕ → ℕ
-min = {!!}
+min zero y = zero
+min (suc x) zero = zero
+min (suc x) (suc y) = suc (min x y)
 
 min-test1 : min 3 2 ≡ 2
 min-test1 = refl
@@ -184,7 +208,10 @@ min-test3 : min 3 3 ≡ 3
 min-test3 = refl
 
 comp : {A : Set} → ℕ → ℕ → A → A → A → A
-comp m n m<n m=n m>n = {!!}
+comp zero zero m<n m=n m>n = m=n
+comp zero (suc n) m<n m=n m>n = m<n
+comp (suc m) zero m<n m=n m>n = m>n
+comp (suc m) (suc n) = comp m n
 
 comp-test1 : comp {ℕ} 10 10 0 1 2 ≡ 1
 comp-test1 = refl
