@@ -11,6 +11,9 @@ data ℕ : Set where
   suc  : ℕ → ℕ
 -}
 
+two : ℕ
+two = suc (suc zero)
+
 {-
 data Maybe (A : Set) : Set where
   just : A → Maybe A
@@ -18,10 +21,19 @@ data Maybe (A : Set) : Set where
 -}
 
 pred : ℕ → Maybe ℕ
-pred = {!!}
+pred zero = nothing
+pred (suc n) = just n
 
 zerosuc : Maybe ℕ → ℕ
-zerosuc = {!!}
+zerosuc nothing = 0
+zerosuc (just x) = suc x
+
+IsNotZero' : ℕ → Set
+IsNotZero' zero = ⊥ -- \bot = ⊥
+IsNotZero' (suc n) = ⊤
+
+pred'' : (n : ℕ) → IsNotZero' n → ℕ
+pred'' (suc n) _ = n
 
 pred↔zerosuc-test1 : pred (zerosuc nothing) ≡ nothing
 pred↔zerosuc-test1 = refl
@@ -29,7 +41,8 @@ pred↔zerosuc-test2 : {n : ℕ} → pred (zerosuc (just n)) ≡ just n
 pred↔zerosuc-test2 = refl
 
 double : ℕ → ℕ
-double = {!!}
+double zero = 0
+double (suc n) = suc (suc (double n))
 
 double-test1 : double 2 ≡ 4
 double-test1 = refl
@@ -39,7 +52,9 @@ double-test3 : double 10 ≡ 20
 double-test3 = refl
 
 half : ℕ → ℕ
-half = {!!}
+half zero = 0
+half (suc zero) = 0
+half (suc (suc n)) = suc (half n)
 
 half-test1 : half 10 ≡ 5
 half-test1 = refl
@@ -49,7 +64,8 @@ half-test3 : half 12 ≡ 6
 half-test3 = refl
 
 _+_ : ℕ → ℕ → ℕ
-_+_ = {!!}
+zero + m = m
+suc n + m = suc (n + m) -- n + suc m;
 infixl 6 _+_
 
 +-test1 : 3 + 5 ≡ 8
@@ -59,8 +75,13 @@ infixl 6 _+_
 +-test3 : 5 + 0 ≡ 5
 +-test3 = refl
 
+_+''_ : ℕ → ℕ → ℕ
+zero +'' m = m
+suc n +'' m = n +'' suc m
+
 _*_ : ℕ → ℕ → ℕ
-_*_ = {!!}
+zero * b = 0
+suc a * b = b + a * b
 infixl 7 _*_
 
 *-test1 : 3 * 4 ≡ 12
@@ -109,7 +130,9 @@ infixl 6 _-_
 -test3 = refl
 
 _≥_ : ℕ → ℕ → Bool
-_≥_ = {!!}
+_ ≥ zero = true
+zero ≥ suc b = false
+suc a ≥ suc b = a ≥ b
 
 ≥test1 : 3 ≥ 2 ≡ true
 ≥test1 = refl
@@ -120,7 +143,7 @@ _≥_ = {!!}
 
 -- ne hasznalj rekurziot, hanem hasznald _≥_-t!
 _>_ : ℕ → ℕ → Bool
-_>_ = {!!}
+a > b = a ≥ suc b
 
 >test1 : 3 > 2 ≡ true
 >test1 = refl
@@ -130,7 +153,7 @@ _>_ = {!!}
 >test3 = refl
 
 _<_ : ℕ → ℕ → Bool
-_<_ = {!!}
+a < b = b > a
 
 <test1 : 3 < 2 ≡ false
 <test1 = refl

@@ -1,5 +1,8 @@
-open import Lib hiding (_+_; _*_; _-_; _^_; _!; pred)
+open import Agda.Builtin.Nat renaming (Nat to ℕ) hiding (_+_; _*_; _-_; _<_)
 open import Lib.Containers.List hiding (length; _++_; map; iteList)
+open import Lib.Equality
+open import Lib.Bool
+
 
 ---------------------------------------------------------
 -- natural numbers
@@ -11,11 +14,9 @@ data ℕ : Set where
   suc  : ℕ → ℕ
 -}
 
-{-
 data Maybe (A : Set) : Set where
   just : A → Maybe A
   nothing : Maybe A
--}
 
 pred : ℕ → Maybe ℕ
 pred = {!!}
@@ -290,7 +291,7 @@ _++_ : {A : Set} → List A → List A → List A
 _++_ = {!!}
 infixr 5 _++_
 
-++-test : the ℕ 3 ∷ 2 ∷ [] ++ 1 ∷ 4 ∷ [] ≡ 3 ∷ 2 ∷ 1 ∷ 4 ∷ []
+++-test : 3 ∷ 2 ∷ [] ++ 1 ∷ 4 ∷ [] ≡ 3 ∷ 2 ∷ 1 ∷ 4 ∷ []
 ++-test = refl
 
 map : {A B : Set} → (A → B) → List A → List B

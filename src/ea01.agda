@@ -67,12 +67,3 @@ k : (ℕ → ℕ) → ℕ
 k h = h 4 + h 3
 
 -- k add2 = add2 4 + add2 3 = (4 + 2) + (3 + 2) = 6 + 5 = 11
-
--- kovetkezo eloadas 1 perccel rovidebb
-
--- id
--- _∘_
--- square
--- add2
--- square ∘ add2
--- isEven ∘ square
