@@ -144,7 +144,10 @@ x > x₁ = x ≥ suc x₁
 >test3 = refl
 
 _<_ : ℕ → ℕ → Bool
-_<_ = {!!}
+zero < zero = false
+zero < suc x₁ = true
+suc x < zero = false
+suc x < suc x₁ = x < x₁
 
 <test1 : 3 < 2 ≡ false
 <test1 = refl
@@ -166,7 +169,7 @@ min-test3 : min 3 3 ≡ 3
 min-test3 = refl
 
 comp : {A : Set} → ℕ → ℕ → A → A → A → A
-comp m n m<n m=n m>n = {!!}
+comp m n m<n m=n m>n = if m > n then m>n else (if m < n then m<n else m=n)
 
 comp-test1 : comp {ℕ} 10 10 0 1 2 ≡ 1
 comp-test1 = refl
@@ -178,7 +181,9 @@ comp-test3 = refl
 -- hasznald comp-ot!
 gcd : ℕ → ℕ → ℕ
 {-# TERMINATING #-}
-gcd m n = {!!}
+gcd zero n = n
+gcd (suc m) zero = suc m
+gcd (suc m) (suc n) = comp (suc m) (suc n) (gcd (suc m) (suc n - suc m)) (suc m) (gcd (suc m - suc n) (suc n))
 
 gcd-test1 : gcd 6 9 ≡ 3
 gcd-test1 = refl
@@ -237,7 +242,8 @@ eq?-test2 = refl
 
 -- rem m n = a maradek, ha elosztjuk m-et (suc n)-el
 rem : ℕ → ℕ → ℕ
-rem a b = {!!}
+rem zero b = zero
+rem (suc a) b = if ((rem a b) ≥ b) then zero else suc (rem a b)
 rem-test1 : rem 5 1 ≡ 1
 rem-test1 = refl
 rem-test2 : rem 11 2 ≡ 2
@@ -291,7 +297,8 @@ infixr 5 _∷_
 -}
 
 length : {A : Set} → List A → ℕ
-length = {!!}
+length [] = zero
+length (x ∷ x₁) = suc (length x₁)
 
 length-test1 : length {ℕ} (1 ∷ 2 ∷ 3 ∷ []) ≡ 3
 length-test1 = refl
@@ -299,20 +306,23 @@ length-test2 : length {ℕ} (1 ∷ []) ≡ 1
 length-test2 = refl
 
 sumList : List ℕ → ℕ
-sumList = {!!}
+sumList [] = zero
+sumList (x ∷ x₁) = x + sumList x₁
 
 sumList-test : sumList (1 ∷ 2 ∷ 3 ∷ []) ≡ 6
 sumList-test = refl
 
 _++_ : {A : Set} → List A → List A → List A
-_++_ = {!!}
+[] ++ x₁ = x₁
+(x ∷ x₂) ++ x₁ = x ∷ (x₂ ++ x₁)
 infixr 5 _++_
 
 ++-test : the ℕ 3 ∷ 2 ∷ [] ++ 1 ∷ 4 ∷ [] ≡ 3 ∷ 2 ∷ 1 ∷ 4 ∷ []
 ++-test = refl
 
 map : {A B : Set} → (A → B) → List A → List B
-map = {!!}
+map f [] = []
+map f (x ∷ x₁) = f x ∷ map f x₁
 
 map-test : map (_+ 2) (3 ∷ 9 ∷ []) ≡ (5 ∷ 11 ∷ [])
 map-test = refl
@@ -322,6 +332,18 @@ iteList n c [] = n
 iteList n c (a ∷ as) = c a (iteList n c as)
 
 -- FEL: add meg a fenti fuggvenyeket (length, ..., map) iteList segitsegevel!
+
+length' : {A : Set} → List A → ℕ
+length' x = iteList zero (λ x₁ x₂ → suc x₂) x
+
+sumList' : List ℕ → ℕ
+sumList' x = iteList zero (λ a acc → a + acc) x
+
+pp : {A : Set} → List A → List A → List A
+pp x y = iteList y (λ x₁ acc → x₁ ∷ acc) x
+
+pp-test : pp {ℕ} (1 ∷ 4 ∷ []) (3 ∷ 2 ∷ []) ≡ 1 ∷ 4 ∷ 3 ∷ 2 ∷  []
+pp-test = refl
 
 -- FEL: add meg recNat-ot, es vezesd vissza iteNat-ra!
 
@@ -379,7 +401,8 @@ t = node (node leaf 1 (node leaf 2 leaf)) 5 leaf
 
 
 tree2List : {A : Set} → Tree A → List A
-tree2List = {!!}
+tree2List leaf = []
+tree2List (node l v r) = tree2List l ++ (v ∷ tree2List r)
 
 tree2List-test : tree2List t ≡ 1 ∷ 2 ∷ 5 ∷ []
 tree2List-test = refl
@@ -394,7 +417,8 @@ suc n ≤? suc m = n ≤? m
 -- ez a fuggveny egy rendezett faba illeszt be egy uj erteket ugy,
 -- hogy a fa rendezett maradjon
 insert : ℕ → Tree ℕ → Tree ℕ
-insert = {!!}
+insert x leaf = node leaf x leaf
+insert x (node x₁ x₂ x₃) = comp x x₂ (node (insert x x₁) x₂ x₃) (node x₁ x₂ x₃) (node x₁ x₂ (insert x x₃))
 
 t' : Tree ℕ
 t' = node (node (node leaf 0 leaf) 1 (node leaf 2 leaf)) 5 leaf
