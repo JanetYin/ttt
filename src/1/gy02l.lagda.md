@@ -192,7 +192,10 @@ snd null× x = exfalso x , x
 ```agda
 
 dist : {A B C : Set} → A × (B ⊎ C) ↔ (A × B) ⊎ (A × C)
-dist = {!!}
+fst dist (fst₁ , inl a) = inl (fst₁ , a)
+fst dist (fst₁ , inr b) = inr (fst₁ , b)
+snd dist (inl (fst₁ , snd₁)) = fst₁ , inl snd₁
+snd dist (inr (fst₁ , snd₁)) = fst₁ , inr snd₁
 
 ```
 
@@ -201,19 +204,25 @@ dist = {!!}
 ```agda
 
 curry : ∀{A B C : Set} → (A × B → C) ↔ (A → B → C)
-curry = {!!}
+fst curry x x₁ x₂ = x (x₁ , x₂)
+snd curry x (fst₁ , snd₁) = x fst₁ snd₁
 
 ⊎×→ : {A B C D : Set} → ((A ⊎ B) → C) ↔ (A → C) × (B → C)
-⊎×→ = {!!}
+fst ⊎×→ x₁ = (λ x → x₁ (inl x)) , λ x → x₁ (inr x)
+snd ⊎×→ (fst₁ , snd₁) (inl a) = fst₁ a
+snd ⊎×→ (fst₁ , snd₁) (inr b) = snd₁ b
 
 law^0 : {A : Set} → (⊥ → A) ↔ ⊤
-law^0 = {!!}
+fst law^0 x = tt
+snd law^0 x x₁ = exfalso x₁
 
 law^1 : {A : Set} → (⊤ → A) ↔ A
-law^1 = {!!}
+fst law^1 x = x tt
+snd law^1 x x₁ = x
 
 law1^ : {A : Set} → (A → ⊤) ↔ ⊤
-law1^ = {!!}
+fst law1^ x = tt
+snd law1^ x x₁ = x
 
 ```
 
@@ -221,13 +230,35 @@ law1^ = {!!}
 
 ```agda
 iso1 : {A B : Set} → (Bool → (A ⊎ B)) ↔ ((Bool → A) ⊎ Bool × A × B ⊎ (Bool → B))
-iso1 = {!!}
+fst (iso1 {A} {B}) x = f (x true) (x false) where
+  f : A ⊎ B → A ⊎ B → _
+  f (inl a) (inl a₁) = inl λ where
+      true -> a
+      false -> a₁
+  f (inl a) (inr b) = inr (inl (true , a , b))
+  f (inr b) (inl a) = inr (inl (false , (a , b)))
+  f (inr b) (inr b₁) = inr (inr λ where
+      true -> b
+      false → b₁)
+snd iso1 (inl a) b = inl (a b)
+snd iso1 (inr (inl (false , a))) false = inl (fst a)
+snd iso1 (inr (inl (true , a))) false = inr (snd a)
+snd iso1 (inr (inl (false , a))) true = inr (snd a)
+snd iso1 (inr (inl (true , a))) true = inl (fst a)
+snd iso1 (inr (inr y)) b = inr (y b)
 
 iso2 : {A B : Set} → ((A ⊎ B) → ⊥) ↔ ((A → ⊥) × (B → ⊥))
-iso2 = {!!}
+fst iso2 f = (λ x → f (inl x)) , λ x → f (inr x)
+snd iso2 (fs , _) (inl a) = fs a
+snd iso2 (_ , sn) (inr b) = sn b
 
 iso3 : (⊤ ⊎ ⊤ ⊎ ⊤) ↔ Bool ⊎ ⊤
-iso3 = {!!}
+fst iso3 (inl a) = inl true
+fst iso3 (inr (inl a)) = inl false
+fst iso3 (inr (inr b)) = inr b
+snd iso3 (inl false) = inr (inl tt)
+snd iso3 (inl true) = inl tt
+snd iso3 (inr b) = inr (inr b)
 testiso3 : fst iso3 (inl tt) ≡ fst iso3 (inr (inl tt)) → ⊥
 testiso3 ()
 testiso3' : fst iso3 (inl tt) ≡ fst iso3 (inr (inr tt)) → ⊥
@@ -236,7 +267,12 @@ testiso3'' : fst iso3 (inr (inl tt)) ≡ fst iso3 (inr (inr tt)) → ⊥
 testiso3'' ()
 
 iso4 : (⊤ → ⊤ ⊎ ⊥ ⊎ ⊤) ↔ (⊤ ⊎ ⊤)
-iso4 = {!!} , {!!}
+fst iso4 x = f (x tt) where
+   f : ⊤ ⊎ ⊥ ⊎ ⊤ →  ⊤ ⊎ ⊤
+   f (inl a) = inl a
+   f (inr (inr b)) = inr b
+snd iso4 (inl a) x₁ = inl a
+snd iso4 (inr b) x₁ = inr (inr b)
 testiso4 : fst iso4 (λ _ → inl tt) ≡ fst iso4 (λ _ → inr (inr tt)) → ⊥
 testiso4 ()
 testiso4' : snd iso4 (inl tt) tt ≡ snd iso4 (inr tt) tt → ⊥

@@ -1,5 +1,8 @@
-open import Lib hiding (_+_; _*_; _-_; _^_; _!; pred)
+open import Agda.Builtin.Nat renaming (Nat to ℕ) hiding (_+_; _*_; _-_; _<_)
 open import Lib.Containers.List hiding (length; _++_; map; iteList)
+open import Lib.Equality
+open import Lib.Bool
+
 
 ---------------------------------------------------------
 -- natural numbers
@@ -11,29 +14,15 @@ data ℕ : Set where
   suc  : ℕ → ℕ
 -}
 
-two : ℕ
-two = suc (suc zero)
-
-{-
 data Maybe (A : Set) : Set where
   just : A → Maybe A
   nothing : Maybe A
--}
 
 pred : ℕ → Maybe ℕ
-pred zero = nothing
-pred (suc n) = just n
+pred = {!!}
 
 zerosuc : Maybe ℕ → ℕ
-zerosuc nothing = 0
-zerosuc (just x) = suc x
-
-IsNotZero' : ℕ → Set
-IsNotZero' zero = ⊥ -- \bot = ⊥
-IsNotZero' (suc n) = ⊤
-
-pred'' : (n : ℕ) → IsNotZero' n → ℕ
-pred'' (suc n) _ = n
+zerosuc = {!!}
 
 pred↔zerosuc-test1 : pred (zerosuc nothing) ≡ nothing
 pred↔zerosuc-test1 = refl
@@ -41,8 +30,7 @@ pred↔zerosuc-test2 : {n : ℕ} → pred (zerosuc (just n)) ≡ just n
 pred↔zerosuc-test2 = refl
 
 double : ℕ → ℕ
-double zero = 0
-double (suc n) = suc (suc (double n))
+double = {!!}
 
 double-test1 : double 2 ≡ 4
 double-test1 = refl
@@ -52,9 +40,7 @@ double-test3 : double 10 ≡ 20
 double-test3 = refl
 
 half : ℕ → ℕ
-half zero = 0
-half (suc zero) = 0
-half (suc (suc n)) = suc (half n)
+half = {!!}
 
 half-test1 : half 10 ≡ 5
 half-test1 = refl
@@ -64,8 +50,7 @@ half-test3 : half 12 ≡ 6
 half-test3 = refl
 
 _+_ : ℕ → ℕ → ℕ
-zero + m = m
-suc n + m = suc (n + m) -- n + suc m;
+_+_ = {!!}
 infixl 6 _+_
 
 +-test1 : 3 + 5 ≡ 8
@@ -75,13 +60,8 @@ infixl 6 _+_
 +-test3 : 5 + 0 ≡ 5
 +-test3 = refl
 
-_+''_ : ℕ → ℕ → ℕ
-zero +'' m = m
-suc n +'' m = n +'' suc m
-
 _*_ : ℕ → ℕ → ℕ
-zero * b = 0
-suc a * b = b + a * b
+_*_ = {!!}
 infixl 7 _*_
 
 *-test1 : 3 * 4 ≡ 12
@@ -130,9 +110,7 @@ infixl 6 _-_
 -test3 = refl
 
 _≥_ : ℕ → ℕ → Bool
-_ ≥ zero = true
-zero ≥ suc b = false
-suc a ≥ suc b = a ≥ b
+_≥_ = {!!}
 
 ≥test1 : 3 ≥ 2 ≡ true
 ≥test1 = refl
@@ -143,7 +121,7 @@ suc a ≥ suc b = a ≥ b
 
 -- ne hasznalj rekurziot, hanem hasznald _≥_-t!
 _>_ : ℕ → ℕ → Bool
-a > b = a ≥ suc b
+_>_ = {!!}
 
 >test1 : 3 > 2 ≡ true
 >test1 = refl
@@ -153,7 +131,7 @@ a > b = a ≥ suc b
 >test3 = refl
 
 _<_ : ℕ → ℕ → Bool
-a < b = b > a
+_<_ = {!!}
 
 <test1 : 3 < 2 ≡ false
 <test1 = refl
@@ -313,7 +291,7 @@ _++_ : {A : Set} → List A → List A → List A
 _++_ = {!!}
 infixr 5 _++_
 
-++-test : the ℕ 3 ∷ 2 ∷ [] ++ 1 ∷ 4 ∷ [] ≡ 3 ∷ 2 ∷ 1 ∷ 4 ∷ []
+++-test : 3 ∷ 2 ∷ [] ++ 1 ∷ 4 ∷ [] ≡ 3 ∷ 2 ∷ 1 ∷ 4 ∷ []
 ++-test = refl
 
 map : {A B : Set} → (A → B) → List A → List B

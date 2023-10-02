@@ -55,24 +55,28 @@ comm× (a , b) = b , a
 comm×back : {A B : Set} → B × A → A × B
 comm×back = comm×
 
--- NOTE: we were here
+a1 a2 a3 : ⊤ ⊎ Bool
+a1 = inl tt
+a2 = inr true
+a3 = inr false
 
-b1 b2 : Bool × ⊤    -- \top
-b1 = {!!}
-b2 = {!!}
-b1≠b2 : b1 ≡ b2 → ⊥   -- \bot
+b1 b2 : Bool × ⊤
+b1 = true , tt
+b2 = false , tt
+b1≠b2 : b1 ≡ b2 → ⊥
 b1≠b2 ()
 
 t1 t2 : ⊤ ⊎ ⊤
-t1 = {!!}
-t2 = {!!}
+t1 = inl tt
+t2 = inr tt
 t1≠t2 : t1 ≡ t2 → ⊥
 t1≠t2 ()
 
+--              2  +  1
 bb1 bb2 bb3 : Bool ⊎ ⊤
-bb1 = {!!}
-bb2 = {!!}
-bb3 = {!!}
+bb1 = inl false
+bb2 = inl true
+bb3 = inr tt
 bb1≠bb2 : bb1 ≡ bb2 → ⊥
 bb1≠bb2 ()
 bb1≠bb3 : bb1 ≡ bb3 → ⊥
@@ -80,14 +84,54 @@ bb1≠bb3 ()
 bb2≠bb3 : bb2 ≡ bb3 → ⊥
 bb2≠bb3 ()
 
-ee : (⊤ → ⊥) ⊎ (⊥ → ⊤)
-ee = {!!}
+ee : (⊤ → ⊥) ⊎ (⊥ → ⊤)     -- \top  \bot
+ee = inr λ ()
 
+-- bármit! Például:
+
+data Körtefa : Set where
+  k1 k2 k3 : Körtefa
+
+kFromNothing : ⊥ -> Körtefa
+kFromNothing = exfalso
+
+--         2       3           3 ^ 2
+boolToK : Bool -> Körtefa
+boolToK true  = k1
+boolToK false = k1
+
+--         |A -> B| = |B| ^ |A|
+
+--  (1 +  (1 * 0))  * (1  + 0)
 d : (⊤ ⊎ (⊤ × ⊥)) × (⊤ ⊎ ⊥)
-d = {!!}
+d = inl tt , inl tt
+
+--                 |A| * |A|    |A| ^ 2
+-- izomorfizmus
+
+{-
+tfh. A = {a1, a2, a3}
+Bool -> A: 9 db
+true -> a1 és false -> a1
+true -> a1 és false -> a2
+true -> a1 és false -> a3
+...
+true -> a3 és false -> a3
+
+A × A: 9 db
+a1 , a1
+a1 , a2
+a1 , a3
+...
+a3 , a3
+
+-}
 
 from' : {A : Set} → A × A → (Bool → A)
-from' = {!!}
+-- C-c C-c "változó neve" Enter
+-- from' (a1 , a2) false = a2
+-- from' (a1 , a2) true = a1
+from' (a1 , a2) = λ {true -> a1; false -> a2}
 to' : {A : Set} → (Bool → A) → A × A
 to' = λ f → f true , f false
 testfromto1 : {A : Set}{a b : A} → fst (to' (from' (a , b))) ≡ a
@@ -103,13 +147,29 @@ testfromto4 = refl
 -- all algebraic laws systematically
 ------------------------------------------------------
 
+-- Not all ↔'s are isomorphisms!
+-- For example:
+falseIso : Bool ↔ ⊤
+falseIso = (λ _ -> tt) , λ t -> true
+
 -- (⊎, ⊥) form a commutative monoid (kommutativ egysegelemes felcsoport)
 
-assoc⊎ : {A B C : Set} → (A ⊎ B) ⊎ C ↔ A ⊎ (B ⊎ C)
-assoc⊎ = {!!}
+assoc⊎ : {A B C : Set} → (A ⊎ B) ⊎ C ↔ A ⊎ (B ⊎ C)    -- \lr
+-- assoc⊎ = ? , ?
+-- vagy: C-c C-c <nem írok változónevet> Enter
+fst assoc⊎ (inl (inl a)) = inl a
+fst assoc⊎ (inl (inr b)) = inr (inl b)
+fst assoc⊎ (inr c) = inr (inr c)
+snd assoc⊎ (inl a) = {!!}
+snd assoc⊎ (inr (inl b)) = {!!}
+snd assoc⊎ (inr (inr c)) = {!!}
+
+-- NOTE: házi innen
 
 idl⊎ : {A : Set} → ⊥ ⊎ A ↔ A
-idl⊎ = {!!}
+fst idl⊎ (inl ())
+fst idl⊎ (inr b) = {!!}
+snd idl⊎ = {!!}
 
 idr⊎ : {A : Set} → A ⊎ ⊥ ↔ A
 idr⊎ = {!!}
@@ -120,7 +180,7 @@ comm⊎ = {!!}
 -- (×, ⊤) form a commutative monoid (kommutativ egysegelemes felcsoport)
 
 assoc× : {A B C : Set} → (A × B) × C ↔ A × (B × C)
-assoc× = {!!}
+assoc× = {!!} , {!!}
 
 idl× : {A : Set} → ⊤ × A ↔ A
 idl× = {!!}
@@ -154,6 +214,8 @@ law^1 = {!!}
 
 law1^ : {A : Set} → (A → ⊤) ↔ ⊤
 law1^ = {!!}
+
+-- NOTE: házi idáig
 
 ---------------------------------------------------------
 -- random isomorphisms
