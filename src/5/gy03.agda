@@ -14,21 +14,31 @@ data ℕ : Set where
   suc  : ℕ → ℕ
 -}
 
+-- mintát így lehet illeszteni rá:
+isZero : ℕ -> Bool
+isZero zero = true
+isZero (suc n) = false
+
 data Maybe (A : Set) : Set where
   just : A → Maybe A
   nothing : Maybe A
 
+-- 0-ra adjon nothingot;
+-- többire meg justba csomagolva az előzőjét
 pred : ℕ → Maybe ℕ
 pred = {!!}
 
+-- a pred inverze
 zerosuc : Maybe ℕ → ℕ
 zerosuc = {!!}
 
+-- tesztek
 pred↔zerosuc-test1 : pred (zerosuc nothing) ≡ nothing
 pred↔zerosuc-test1 = refl
 pred↔zerosuc-test2 : {n : ℕ} → pred (zerosuc (just n)) ≡ just n
 pred↔zerosuc-test2 = refl
 
+-- adja vissza a paraméter kétszeresét
 double : ℕ → ℕ
 double = {!!}
 
@@ -39,6 +49,8 @@ double-test2 = refl
 double-test3 : double 10 ≡ 20
 double-test3 = refl
 
+-- ez izgalmasabb:
+-- adja vissza a paraméter felét; lefelé kerekítve
 half : ℕ → ℕ
 half = {!!}
 
