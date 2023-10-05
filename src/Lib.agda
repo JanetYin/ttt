@@ -28,7 +28,7 @@ open import Lib.Maybe public
 
 ------------------------------------------------------------
 -- Change when needed
-open import Lib.Product public
-  renaming (map to map×)
--- open import Lib.Sigma public
-  -- renaming (map to mapΣ)
+-- open import Lib.Product public
+  -- renaming (map to map×)
+open import Lib.Sigma public
+  renaming (map to mapΣ)
