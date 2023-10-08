@@ -78,7 +78,8 @@ infixl 6 _+_
 +-test3 = refl
 
 _*_ : ℕ → ℕ → ℕ
-_*_ = {!!}
+zero * k = zero
+suc n * k = k + n * k
 infixl 7 _*_
 
 *-test1 : 3 * 4 ≡ 12
@@ -91,7 +92,9 @@ infixl 7 _*_
 *-test4 = refl
 
 _^_ : ℕ → ℕ → ℕ
-_^_ = {!!}
+n ^ zero = 1
+zero ^ suc k = 0
+n ^ suc k = n * n ^ k
 infixr 8 _^_
 
 ^-test1 : 3 ^ 4 ≡ 81
@@ -106,7 +109,9 @@ infixr 8 _^_
 ^-test5 = refl
 
 _! : ℕ → ℕ
-_! = {!!}
+zero ! = 1
+suc x ! = (suc x) * x !
+
 
 !-test1 : 3 ! ≡ 6
 !-test1 = refl
@@ -116,7 +121,9 @@ _! = {!!}
 !-test3 = refl
 
 _-_ : ℕ → ℕ → ℕ
-_-_ = {!!}
+zero - k = 0
+n - zero = n
+suc n - suc k = n - k
 infixl 6 _-_
 
 -test1 : 3 - 2 ≡ 1
@@ -127,7 +134,9 @@ infixl 6 _-_
 -test3 = refl
 
 _≥_ : ℕ → ℕ → Bool
-_≥_ = {!!}
+zero ≥ suc k = false
+n ≥ zero = true
+suc n ≥ suc k = n ≥ k
 
 ≥test1 : 3 ≥ 2 ≡ true
 ≥test1 = refl
@@ -138,7 +147,7 @@ _≥_ = {!!}
 
 -- ne hasznalj rekurziot, hanem hasznald _≥_-t!
 _>_ : ℕ → ℕ → Bool
-_>_ = {!!}
+n > k = (n ≥ k) ∧ (not (k ≥ n))
 
 >test1 : 3 > 2 ≡ true
 >test1 = refl
@@ -148,7 +157,7 @@ _>_ = {!!}
 >test3 = refl
 
 _<_ : ℕ → ℕ → Bool
-_<_ = {!!}
+n < k = k > n
 
 <test1 : 3 < 2 ≡ false
 <test1 = refl
@@ -158,7 +167,9 @@ _<_ = {!!}
 <test3 = refl
 
 min : ℕ → ℕ → ℕ
-min = {!!}
+min zero k = 0
+min n zero = 0
+min (suc n) (suc k) = suc (min n k)
 
 min-test1 : min 3 2 ≡ 2
 min-test1 = refl
@@ -168,7 +179,10 @@ min-test3 : min 3 3 ≡ 3
 min-test3 = refl
 
 comp : {A : Set} → ℕ → ℕ → A → A → A → A
-comp m n m<n m=n m>n = {!!}
+comp zero zero m<n m=n m>n = m=n
+comp zero (suc n) m<n m=n m>n = m<n
+comp (suc m) zero m<n m=n m>n = m>n
+comp (suc m) (suc n) m<n m=n m>n = comp m n m<n m=n m>n
 
 comp-test1 : comp {ℕ} 10 10 0 1 2 ≡ 1
 comp-test1 = refl
@@ -300,20 +314,23 @@ length-test2 : length {ℕ} (1 ∷ []) ≡ 1
 length-test2 = refl
 
 sumList : List ℕ → ℕ
-sumList = {!!}
+sumList [] = zero
+sumList (x ∷ xs) = x + sumList xs
 
 sumList-test : sumList (1 ∷ 2 ∷ 3 ∷ []) ≡ 6
 sumList-test = refl
 
 _++_ : {A : Set} → List A → List A → List A
-_++_ = {!!}
+[] ++ ys = ys
+(x ∷ xs) ++ ys = x ∷ (xs ++ ys)
 infixr 5 _++_
 
 ++-test : the ℕ 3 ∷ 2 ∷ [] ++ 1 ∷ 4 ∷ [] ≡ 3 ∷ 2 ∷ 1 ∷ 4 ∷ []
 ++-test = refl
 
 map : {A B : Set} → (A → B) → List A → List B
-map = {!!}
+map f [] = []
+map f (x ∷ xs) = f x ∷ map f xs
 
 map-test : map (_+ 2) (3 ∷ 9 ∷ []) ≡ (5 ∷ 11 ∷ [])
 map-test = refl
@@ -325,6 +342,9 @@ iteList n c (a ∷ as) = c a (iteList n c as)
 
 length' : {A : Set} → List A → ℕ
 length' x = iteList 0 (λ _ len → suc len) x
+
+map' : {A B : Set} → (A → B) → List A → List B
+map' f = iteList [] (λ x xs → f x ∷ xs)
 
 -- FEL: add meg a fenti fuggvenyeket (length, ..., map) iteList segitsegevel!
 
