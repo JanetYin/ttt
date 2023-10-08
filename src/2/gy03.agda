@@ -11,6 +11,27 @@ data Maybe (A : Set) : Set where
   nothing : Maybe A
 -}
 
+
+{- -- űbN
+data ℕ : Set where
+  zero : ℕ
+  suc : ℕ → ℕ
+-}
+
+plus0 : {A B : Set} → (A ↔ B) ↔ ((A ⊎ ⊥) ↔ (B ⊎ ⊥))
+fst (fst plus0 (fst₁ , snd₁)) (inl a) = inl (fst₁ a)
+snd (fst plus0 x) (inl a) = inl (snd x a)
+fst (snd plus0 (fst₁ , snd₁)) x₁ = case (fst₁ (inl x₁)) (λ z → z) exfalso
+snd (snd plus0 x) = {!!}
+
+---
+four : ℕ
+four = suc (suc (suc (suc zero)))
+
+double' : ℕ → ℕ
+double' zero = zero
+double' (suc x) = suc (suc (double' x))
+
 pred : ℕ → Maybe ℕ
 pred = {!!}
 
@@ -33,7 +54,9 @@ double-test3 : double 10 ≡ 20
 double-test3 = refl
 
 half : ℕ → ℕ
-half = {!!}
+half zero = zero
+half (suc zero) = zero
+half (suc (suc x)) = suc (half x)
 
 half-test1 : half 10 ≡ 5
 half-test1 = refl
@@ -43,7 +66,8 @@ half-test3 : half 12 ≡ 6
 half-test3 = refl
 
 _+_ : ℕ → ℕ → ℕ
-_+_ = {!!}
+zero + k = k
+suc n + k = suc (n + k)
 infixl 6 _+_
 
 +-test1 : 3 + 5 ≡ 8
@@ -267,7 +291,8 @@ infixr 5 _∷_
 -}
 
 length : {A : Set} → List A → ℕ
-length = {!!}
+length [] = 0
+length (x ∷ x₁) = suc (length x₁)
 
 length-test1 : length {ℕ} (1 ∷ 2 ∷ 3 ∷ []) ≡ 3
 length-test1 = refl
@@ -296,6 +321,10 @@ map-test = refl
 iteList : {A B : Set} → B → (A → B → B) → List A → B
 iteList n c [] = n
 iteList n c (a ∷ as) = c a (iteList n c as)
+
+
+length' : {A : Set} → List A → ℕ
+length' x = iteList 0 (λ _ len → suc len) x
 
 -- FEL: add meg a fenti fuggvenyeket (length, ..., map) iteList segitsegevel!
 
