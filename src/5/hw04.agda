@@ -13,7 +13,8 @@ open import Lib.Empty
 -- Írd meg az alábbi izomorfizmusokat.
 -- Vigyázz, hogy ténylegesen bijekciók legyenek.
 
-hw01 : ⊥ × ⊤ ⊎ ⊤ × ⊥ ↔ Bool
+-- ezt kijavítottam; rossz volt
+hw01 : (⊥ ⊎ ⊤) × (⊤ ⊎ ⊥) ↔ ⊤
 hw01 = {!!}
 
 hw02 : Bool × Bool ↔ ⊤ ⊎ ⊤ ⊎ ⊤ ⊎ ⊤
