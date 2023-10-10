@@ -262,7 +262,9 @@ gcd'-test5 = refl
 ```agda
 
 even? : ℕ → Bool
-even? = {!!}
+even? zero = true
+even? (suc zero) = false
+even? (suc (suc x)) = even? x
 
 even?-test1 : even? 3 ≡ false
 even?-test1 = refl
@@ -270,7 +272,9 @@ even?-test2 : even? 200 ≡ true
 even?-test2 = refl
 
 fib : ℕ → ℕ
-fib = {!!}
+fib zero = 1
+fib (suc zero) = 1
+fib (suc (suc x)) = (fib (suc x)) + (fib x)
 
 fib-test1 : fib 6 ≡ 13
 fib-test1 = refl
@@ -278,7 +282,10 @@ fib-test2 : fib 3 ≡ 3
 fib-test2 = refl
 
 eq? : ℕ → ℕ → Bool
-eq? = {!!}
+eq? zero zero = true
+eq? zero (suc y) = false
+eq? (suc x) zero = false
+eq? (suc x) (suc y) = eq? x y
 
 eq?-test1 : eq? 4 3 ≡ false
 eq?-test1 = refl
@@ -289,9 +296,17 @@ eq?-test2 = refl
 
 ```agda
 
+isNotZero : ℕ → Set
+isNotZero zero = ⊥
+isNotZero (suc _) = ⊤
+
 -- rem m n = a maradek, ha elosztjuk m-et (suc n)-el
-rem : ℕ → ℕ → ℕ
-rem a b = {!!}
+{-# TERMINATING #-}
+rem : (a : ℕ) → (b : ℕ) → .{isNotZero b} → ℕ
+rem zero b@(suc _) = zero
+rem a@(suc _) b@(suc _) = comp a b a zero {! (rem (a - b) b)  !}
+
+
 rem-test1 : rem 5 1 ≡ 1
 rem-test1 = refl
 rem-test2 : rem 11 2 ≡ 2
@@ -310,7 +325,7 @@ div-test2 = refl
 ```agda
 
 iteNat : {A : Set} → A → (A → A) → ℕ → A
-iteNat z s zero = z
+iteNat z _ zero = z
 iteNat z s (suc n) = s (iteNat z s n)
 
 recNat : {A : Set} → A → (ℕ → A → A) → ℕ → A
@@ -319,7 +334,7 @@ recNat z s (suc n) = s n (recNat z s n)
 
 -- FEL: add meg iteNat-ot mintaillesztes nelkul, recNat segitsegevel
 iteNat' : {A : Set} → A → (A → A) → ℕ → A
-iteNat' = {!!}
+iteNat' z f n = recNat z (λ _ → f) n
 
 iteNat'-test1 : {A : Set}{z : A}{s : A → A} → iteNat' z s zero ≡ z
 iteNat'-test1 = refl
@@ -328,7 +343,7 @@ iteNat'-test2 = refl
 
 -- FEL: add meg recNat-ot mintaillesztes nelkul, iteNat segitsegevel (lasd eloadas)
 recNat' : {A : Set} → A → (ℕ → A → A) → ℕ → A
-recNat' = {!!}
+recNat' z f n = iteNat {!   !} (λ x → {!  !}) n
 
 recNat'-test1 : {A : Set}{z : A}{s : ℕ → A → A} → recNat' z s zero ≡ z
 recNat'-test1 = refl
@@ -342,16 +357,19 @@ recNat'-test2 = refl
 ## Listák
 
 ```plaintext
+
 data List (A : Set) : Set where
   [] : List A
   _∷_ : A → List A → List A
 infixr 5 _∷_
+
 ```
 
 ```agda
 
 length : {A : Set} → List A → ℕ
-length = {!!}
+length [] = zero
+length (_ ∷ x) = suc (length x)
 
 length-test1 : length {ℕ} (1 ∷ 2 ∷ 3 ∷ []) ≡ 3
 length-test1 = refl
@@ -359,13 +377,15 @@ length-test2 : length {ℕ} (1 ∷ []) ≡ 1
 length-test2 = refl
 
 sumList : List ℕ → ℕ
-sumList = {!!}
+sumList [] = zero
+sumList (x ∷ xs) = x + sumList xs
 
 sumList-test : sumList (1 ∷ 2 ∷ 3 ∷ []) ≡ 6
 sumList-test = refl
 
 _++_ : {A : Set} → List A → List A → List A
-_++_ = {!!}
+xs ++ [] = xs
+xs ++ x ∷ ys = x ∷ xs ++ ys
 infixr 5 _++_
 
 ++-test : the ℕ 3 ∷ 2 ∷ [] ++ 1 ∷ 4 ∷ [] ≡ 3 ∷ 2 ∷ 1 ∷ 4 ∷ []
@@ -376,7 +396,8 @@ infixr 5 _++_
 ```agda
 
 map : {A B : Set} → (A → B) → List A → List B
-map = {!!}
+map f [] = []
+map f (x ∷ xs) = f x ∷ map f xs
 
 map-test : map (_+ 2) (3 ∷ 9 ∷ []) ≡ (5 ∷ 11 ∷ [])
 map-test = refl
@@ -414,7 +435,9 @@ e = const 2 [*] (const 3 [+] const 4)
 -}
 
 eval : Expr → ℕ
-eval = {!!}
+eval (const 🤡) = 🤡
+eval (🤡₁ [+] 🤡₂) = eval 🤡₁ + eval 🤡₂
+eval (🤡₁ [*] 🤡₂) = eval 🤡₁ * eval 🤡₂
 
 eval-test : eval e ≡ 14
 eval-test = refl
