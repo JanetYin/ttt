@@ -58,8 +58,8 @@ f4-1 = {!!}
 f4-2 = {!!}
 f4-3 = {!!}
 
--- Lib-ben a unicode ‼ az indexelés.
-infixl 9 _!!_
+-- Lib-ben a unicode ‼ az indexelés. \!! = ‼
+infixl 10 _!!_
 _!!_ : {A : Set}{n : ℕ} → {!   !}
 xs !! n = {!!}
 
@@ -75,6 +75,7 @@ fromℕ = {!!}
 test-fromℕ : fromℕ 3 ≡ suc (suc (suc zero))
 test-fromℕ = refl
 
+-- Ez egy jó házi feladat, nem egyszerű!
 tabulate : {n : ℕ}{A : Set} → (Fin n → A) → Vec A n
 tabulate = {!!}
 
@@ -86,7 +87,7 @@ filter = {!!}
 test-filter : filter {ℕ} (3 <ᵇ_) (4 ∷ 3 ∷ 2 ∷ 5 ∷ []) ≡ (2 , 4 ∷ 5 ∷ [])
 test-filter = refl
 
-smarterLength : ∀{i}{A : Set i}{n : ℕ} → Vec A n → Σ ℕ (λ k → n ≡ k)
+smarterLength : ∀{i}{A : Set i}{n : ℕ} → Vec A n → ?
 smarterLength = {!   !}
 
 minMax' : ℕ → ℕ → ℕ × ℕ
@@ -95,5 +96,5 @@ minMax' n m = {!   !}
 -- Ugyanez sokkal jobban, de leginkább pontosabban.
 -- Az előző változatban vissza tudok adni csúnya dolgokat is.
 -- Pl. konstans (0 , 0)-t.
-minMax : (n m : ℕ) → Σ (ℕ × ℕ) (λ (a , b) → a ≤ℕ b × (n ≤ℕ m × n ≡ a × m ≡ b ⊎ m ≤ℕ n × n ≡ b × m ≡ a))
+minMax : (n m : ℕ) → ?
 minMax n m = {!   !}
