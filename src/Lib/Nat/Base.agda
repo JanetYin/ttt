@@ -133,9 +133,7 @@ ind-ℕ {A = A} (suc n) a0 ak = ak {suc n} {n} refl (ind-ℕ {A = A} n a0 ak)
 minMax : (n k : ℕ) → Σ (ℕ × ℕ) (λ (a , b) → (n ≤ℕ k × n ≡ℕ a × k ≡ℕ b) ⊎ (k ≤ℕ n × k ≡ℕ a × n ≡ℕ b))
 minMax zero k = (zero , k) , inl (tt , tt , reflℕ k)
 minMax (suc n) zero = (zero , suc n) , inr (tt , tt , reflℕ n)
-minMax (suc n) (suc k) with minMax n k
-... | (a , b) , inl x = (suc a , suc b) , inl x
-... | (a , b) , inr x = (suc a , suc b) , inr x
+minMax (suc n) (suc k) = let ((a , b) , c) = minMax n k in (suc a , suc b) , c
 
 min : ℕ → ℕ → ℕ
 min n m = fst (fst (minMax n m))
