@@ -115,7 +115,7 @@ take = ?
 take-test1 : take {ℕ} 4 (1 ∷ 2 ∷ 3 ∷ 4 ∷ 5 ∷ 6 ∷ []) ≡ 1 ∷ 2 ∷ 3 ∷ 4 ∷ []
 take-test1 = refl
 
-take-test2 : (λ xs → take {Bool} {10} 0 xs) ≡ (λ xs → [])
+take-test2 : (λ (xs : Vec Bool 10) → take {Bool} {10} 0 xs) ≡ (λ xs → [])
 take-test2 = refl
 
 take-test3 : take 3 (true ∷ false ∷ false ∷ true ∷ []) ≡ true ∷ false ∷ false ∷ []
@@ -130,7 +130,7 @@ drop = ?
 drop-test1 : drop {ℕ} 0 [] ≡ []
 drop-test1 = refl
 
-drop-test2 : (λ xs → drop {ℕ} {10} 0 xs) ≡ (λ xs → xs)
+drop-test2 : (λ (xs : Vec ℕ 10) → drop {ℕ} {10} 0 xs) ≡ (λ xs → xs)
 drop-test2 = refl
 
 drop-test3 : drop 2 (true ∷ false ∷ true ∷ []) ≡ true ∷ []
@@ -181,16 +181,16 @@ Definiáld a splitAt függvényt, amely az n. indexű elemnél ketté bontja a v
 splitAt : {A : Set}{m : ℕ} → ? → Vec A ? → ?
 splitAt = ?
 
-splitAt-test1 : {A : Set} → (λ xs → splitAt {A} {10} 0 xs) ≡ (λ xs → [] , xs)
+splitAt-test1 : {A : Set} → (λ (xs : Vec A 10) → splitAt {A} {10} 0 xs) ≡ (λ xs → [] , xs)
 splitAt-test1 = refl
 
-splitAt-test2 : splitAt 2 (1 ∷ 2 ∷ []) ≡ (1 ∷ 2 ∷ [] , [])
+splitAt-test2 : splitAt {ℕ} 2 (1 ∷ 2 ∷ []) ≡ (1 ∷ 2 ∷ [] , [])
 splitAt-test2 = refl
 
-splitAt-test3 : splitAt 3 (1 ∷ 2 ∷ 3 ∷ []) ≡ (1 ∷ 2 ∷ 3 ∷ [] , [])
+splitAt-test3 : splitAt {ℕ} 3 (1 ∷ 2 ∷ 3 ∷ []) ≡ (1 ∷ 2 ∷ 3 ∷ [] , [])
 splitAt-test3 = refl
 
-splitAt-test4 : splitAt 3 (1 ∷ 2 ∷ 3 ∷ 4 ∷ []) ≡ (1 ∷ 2 ∷ 3 ∷ [] , (4 ∷ []))
+splitAt-test4 : splitAt {ℕ} 3 (1 ∷ 2 ∷ 3 ∷ 4 ∷ []) ≡ (1 ∷ 2 ∷ 3 ∷ [] , (4 ∷ []))
 splitAt-test4 = refl
 
 {-
