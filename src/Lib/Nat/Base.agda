@@ -80,6 +80,14 @@ suc x ≢ℕᵗ suc y = x ≢ℕᵗ y
 _≢ℕ_ : ℕ → ℕ → Set
 x ≢ℕ y = fst (x ≢ℕᵗ y)
 
+reflℕ : ∀ n → n ≡ℕ n
+reflℕ zero    = tt
+reflℕ (suc n) = reflℕ n
+
+symℕ : ∀ n m → n ≡ℕ m → m ≡ℕ n
+symℕ zero    zero    _ = tt
+symℕ (suc n) (suc m)   = symℕ n m
+
 substℕ : ∀{i}(P : ℕ → Set i){x y : ℕ} → .(x ≡ℕ y) → P x → P y
 substℕ P {zero} {zero} e px = px
 substℕ P {suc x} {suc y} = substℕ (λ z → P (suc z)) {x} {y}
@@ -121,3 +129,16 @@ elim-ℕ {A = A} (suc n) a0 f = f (elim-ℕ {A = A} n a0 f)
 ind-ℕ : ∀{i}{A : ℕ → Set i}(n : ℕ) → ({k : ℕ} → k ≡ 0 → A 0) → ({m k : ℕ} → m ≡ suc k → A k → A (suc k)) → A n
 ind-ℕ {A = A} zero    a0 ak = a0 {0} refl
 ind-ℕ {A = A} (suc n) a0 ak = ak {suc n} {n} refl (ind-ℕ {A = A} n a0 ak)
+
+minMax : (n k : ℕ) → Σ (ℕ × ℕ) (λ (a , b) → (n ≤ℕ k × n ≡ℕ a × k ≡ℕ b) ⊎ (k ≤ℕ n × k ≡ℕ a × n ≡ℕ b))
+minMax zero k = (zero , k) , inl (tt , tt , reflℕ k)
+minMax (suc n) zero = (zero , suc n) , inr (tt , tt , reflℕ n)
+minMax (suc n) (suc k) with minMax n k
+... | (a , b) , inl x = (suc a , suc b) , inl x
+... | (a , b) , inr x = (suc a , suc b) , inr x
+
+min : ℕ → ℕ → ℕ
+min n m = fst (fst (minMax n m))
+
+max : ℕ → ℕ → ℕ
+max n m = snd (fst (minMax n m))
