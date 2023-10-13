@@ -96,8 +96,9 @@ hw07 = {!!}
 hw08 : {A : Set} -> (⊤ -> A) ↔ A × ⊤
 hw08 = {!!}
 
-hw09 : {A : Set} -> (A -> ⊥) ↔ ⊤
-hw09 = {!!}
+hw09 : {A : Set} -> (⊥ -> A) ↔ ⊤
+fst hw09 f = tt
+snd hw09 tt = λ {()}
 
 {-
 tfh. A = {a1; a2}
@@ -133,6 +134,25 @@ inr a2
 hw095 : {A : Set} -> (⊤ -> A ⊎ A) ↔ A ⊎ A
 fst hw095 f = f tt
 snd hw095 ava = λ {tt -> ava}
+
+{-
+tfh. A = {a1, a2}
+
+A × A × A
+a1 , a1 , a1
+a1 , a1 , a2
+a1 , a2 , a1
+...
+a2 , a2 , a2
+
+λ {(inl false) -> a1; (inl true) -> a1; (inr tt) -> a1}
+λ {(inl false) -> a1; (inl true) -> a1; (inr tt) -> a2}
+λ {(inl false) -> a1; (inl true) -> a2; (inr tt) -> a1}
+λ {(inl false) -> a1; (inl true) -> a2; (inr tt) -> a2}
+...
+λ {(inl false) -> a2; (inl true) -> a2; (inr tt) -> a2}
+
+-}
 
 hw10 : {A : Set} -> A × A × A ↔ ((Bool ⊎ ⊤) -> A)
 fst hw10 (x , y , z) = λ {(inl false) -> x; (inl true) -> y; (inr tt) -> z}
