@@ -25,7 +25,7 @@ pred' : ℕ → ℕ
 pred' 0 = 0
 pred' (suc n) = n
 
-pred : (n : ℕ) → .⦃ IsNotZero n ⦄ → ℕ
+pred : (n : ℕ) → .⦃ nonZero : IsNotZero n ⦄ → ℕ
 pred (suc n) = n
 
 infix 4 _≤ℕᵗ_ _<ℕᵗ_ _>ℕᵗ_ _≥ℕᵗ_ _≡ℕᵗ_ _≢ℕᵗ_ _≤ℕ_ _<ℕ_ _>ℕ_ _≥ℕ_ _≡ℕ_ _≢ℕ_
@@ -93,7 +93,7 @@ substℕ P {zero} {zero} e px = px
 substℕ P {suc x} {suc y} = substℕ (λ z → P (suc z)) {x} {y}
 
 infixr 6 _-_
-_-_ : (x y : ℕ) → .⦃ x ≥ℕ y ⦄ → ℕ
+_-_ : (x y : ℕ) → .⦃ nonZero : x ≥ℕ y ⦄ → ℕ
 zero - zero = zero
 suc x - zero = suc x
 suc x - suc y = x - y
@@ -104,7 +104,7 @@ x ^' zero  = 1
 x ^' suc n = x * x ^' n
 
 infixr 8 _^_
-_^_ : (x y : ℕ) → .⦃ y + x ≢ℕ 0 ⦄ → ℕ
+_^_ : (x y : ℕ) → .⦃ nonZero : y + x ≢ℕ 0 ⦄ → ℕ
 x ^ zero = 1
 x ^ suc zero = x
 x ^ suc (suc y) = x * (x ^ suc y)
@@ -130,7 +130,7 @@ ind-ℕ : ∀{i}{A : ℕ → Set i}(n : ℕ) → ({k : ℕ} → k ≡ 0 → A 0)
 ind-ℕ {A = A} zero    a0 ak = a0 {0} refl
 ind-ℕ {A = A} (suc n) a0 ak = ak {suc n} {n} refl (ind-ℕ {A = A} n a0 ak)
 
-minMax : (n k : ℕ) → Σ (ℕ × ℕ) (λ (a , b) → (n ≤ℕ k × n ≡ℕ a × k ≡ℕ b) ⊎ (k ≤ℕ n × k ≡ℕ a × n ≡ℕ b))
+minMax : (n k : ℕ) → Σ (ℕ × ℕ) (λ {(a , b) → (n ≤ℕ k × n ≡ℕ a × k ≡ℕ b) ⊎ (k ≤ℕ n × k ≡ℕ a × n ≡ℕ b)})
 minMax zero k = (zero , k) , inl (tt , tt , reflℕ k)
 minMax (suc n) zero = (zero , suc n) , inr (tt , tt , reflℕ n)
 minMax (suc n) (suc k) = let ((a , b) , c) = minMax n k in (suc a , suc b) , c
