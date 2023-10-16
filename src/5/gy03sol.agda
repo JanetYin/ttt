@@ -1,56 +1,49 @@
-# 3. Gyakorlat
+open import Agda.Builtin.Nat renaming (Nat to ℕ) hiding (_+_; _*_; _-_; _<_)
+-- open import Lib.Containers.List hiding (length; _++_; map; iteList)
+open import Lib.Equality
+open import Lib.Bool
 
-## Természetes számok
 
-```agda
+---------------------------------------------------------
+-- natural numbers
+---------------------------------------------------------
 
-open import Lib hiding (_+_; _*_; _-_; _^_; _!; pred)
-open import Lib.Containers.List hiding (length; _++_; map; iteList)
-
-```
-
-Első lépés, hogy feltesszük a kérdést: Hogyan tudunk saját típust létrehozni?
-A gyakorlaton, és a vizsgán nem kell majd sajátot készítenünk, azonban jó ha tudjuk: a `data` kulcsszó egy adat szerkezetet hooz létre, amihez annyi konstruktoert rendelünk, amenyiit nem szégyenlünk.  
-Ez gyakorlatilag a Haskellből jól ismert `data`. A különbség viszont annyi, hogy itt pontosan meg kell határoznunk a konstruktor típusát!
-
-Nézzük az alábbi példát:
-
-```plaintext
+{-
 data ℕ : Set where
   zero : ℕ
   suc  : ℕ → ℕ
-```
+-}
 
-Létrehoztuk a `ℕ` típust, aminek kettő konstruktora van: `zero` ami a 0-t jelöli, továbbá a `suc` amivel fel tudjuk építeni az összes többi számot. Mint a leírásban látható, ezeknek is meg van határozva specifikusan a típusuk.
-
-```plaintext
+-- mintát így lehet illeszteni rá:
+isZero : ℕ -> Bool
+isZero zero = true
+isZero (suc n) = false
 
 data Maybe (A : Set) : Set where
   just : A → Maybe A
   nothing : Maybe A
 
-```
-
-A haskellből már jól megszokott `Maybe` típus. Teljesen ugyanúgy m̨ödik.
-
-```agda
-
+-- 0-ra adjon nothingot;
+-- többire meg justba csomagolva az előzőjét
 pred : ℕ → Maybe ℕ
 pred zero = nothing
-pred (suc x) = just x
+pred (suc n) = just n
 
+-- a pred inverze
 zerosuc : Maybe ℕ → ℕ
-zerosuc (just x) = suc x
+zerosuc (just n) = suc n
 zerosuc nothing = zero
 
+-- tesztek
 pred↔zerosuc-test1 : pred (zerosuc nothing) ≡ nothing
 pred↔zerosuc-test1 = refl
 pred↔zerosuc-test2 : {n : ℕ} → pred (zerosuc (just n)) ≡ just n
 pred↔zerosuc-test2 = refl
 
+-- adja vissza a paraméter kétszeresét
 double : ℕ → ℕ
 double zero = zero
-double (suc x) = suc (suc (double x))
+double (suc n) = suc (suc (double n))     -- 2 * (1 + n) = 2 + 2 * n = suc (suc (double n))
 
 double-test1 : double 2 ≡ 4
 double-test1 = refl
@@ -59,14 +52,12 @@ double-test2 = refl
 double-test3 : double 10 ≡ 20
 double-test3 = refl
 
-```
-
-```agda
-
+-- ez izgalmasabb:
+-- adja vissza a paraméter felét; lefelé kerekítve
 half : ℕ → ℕ
 half zero = zero
 half (suc zero) = zero
-half (suc (suc x)) = suc (half x)
+half (suc (suc n)) = suc (half n)
 
 half-test1 : half 10 ≡ 5
 half-test1 = refl
@@ -75,14 +66,20 @@ half-test2 = refl
 half-test3 : half 12 ≡ 6
 half-test3 = refl
 
-```
-
-```agda
-
 _+_ : ℕ → ℕ → ℕ
-zero + y = y
-suc x + y = suc (x + y)
+zero + m = m
+-- n + zero = n   -- hatékonyságot javítja
+suc n + m = suc (n + m)
 infixl 6 _+_
+
+{-
+2 + 3 =
+= suc (suc zero) + suc (suc (suc zero))
+= suc (suc zero + suc (suc (suc zero)))
+= suc (suc (zero + suc (suc (suc zero))))
+= suc (suc (suc (suc (suc zero))))
+= 5
+-}
 
 +-test1 : 3 + 5 ≡ 8
 +-test1 = refl
@@ -92,8 +89,8 @@ infixl 6 _+_
 +-test3 = refl
 
 _*_ : ℕ → ℕ → ℕ
-zero * y = zero
-suc x * y = y + x * y -- (x+1) * y = x * y + y
+zero * m = zero
+suc n * m = m + n * m     -- (1 + n) * m = 1 * m + n * m = m + n * m
 infixl 7 _*_
 
 *-test1 : 3 * 4 ≡ 12
@@ -106,8 +103,8 @@ infixl 7 _*_
 *-test4 = refl
 
 _^_ : ℕ → ℕ → ℕ
-x ^ zero = suc zero
-x ^ suc y = x * x ^ y -- x ^ (y + 1) = x * x ^ y
+n ^ zero = 1
+n ^ suc m = n * n ^ m    -- n ^ (1 + m) = n * n ^ m
 infixr 8 _^_
 
 ^-test1 : 3 ^ 4 ≡ 81
@@ -121,13 +118,8 @@ infixr 8 _^_
 ^-test5 : 0 ^ 0 ≡ 1 -- csúnya dolog
 ^-test5 = refl
 
-```
-
-```agda
-
 _! : ℕ → ℕ
-zero ! = 1
-🤙@(suc x) ! = 🤙 * (x !)
+_! = {!!}
 
 !-test1 : 3 ! ≡ 6
 !-test1 = refl
@@ -136,13 +128,8 @@ zero ! = 1
 !-test3 : 6 ! ≡ 720
 !-test3 = refl
 
-🤡 : Set
-🤡 = ℕ
-
-_-_ : 🤡 → 🤡 → 🤡
-zero - x₁ = zero
-suc x - zero = suc x
-suc x - suc x₁ = x - x₁
+_-_ : ℕ → ℕ → ℕ
+_-_ = {!!}
 infixl 6 _-_
 
 -test1 : 3 - 2 ≡ 1
@@ -152,14 +139,8 @@ infixl 6 _-_
 -test3 : 3 - 4 ≡ 0 -- csúnya dolog
 -test3 = refl
 
-```
-
-```agda
-
 _≥_ : ℕ → ℕ → Bool
-x ≥ zero = true
-zero ≥ suc y = false
-suc x ≥ suc y = x ≥ y
+_≥_ = {!!}
 
 ≥test1 : 3 ≥ 2 ≡ true
 ≥test1 = refl
@@ -170,9 +151,7 @@ suc x ≥ suc y = x ≥ y
 
 -- ne hasznalj rekurziot, hanem hasznald _≥_-t!
 _>_ : ℕ → ℕ → Bool
-zero > x₁ = false
-suc x > zero = true
-suc x > y@(suc _) = x ≥ y -- @ = bind, vagyis megkötöm a mintaillesztést
+_>_ = {!!}
 
 >test1 : 3 > 2 ≡ true
 >test1 = refl
@@ -182,7 +161,7 @@ suc x > y@(suc _) = x ≥ y -- @ = bind, vagyis megkötöm a mintaillesztést
 >test3 = refl
 
 _<_ : ℕ → ℕ → Bool
-x < x₁ = x₁ > x
+_<_ = {!!}
 
 <test1 : 3 < 2 ≡ false
 <test1 = refl
@@ -191,14 +170,8 @@ x < x₁ = x₁ > x
 <test3 : 3 < 4 ≡ true
 <test3 = refl
 
-```
-
-```agda
-
 min : ℕ → ℕ → ℕ
-min zero y = zero
-min (suc x) zero = zero
-min (suc x) (suc y) = suc (min x y)
+min = {!!}
 
 min-test1 : min 3 2 ≡ 2
 min-test1 = refl
@@ -208,10 +181,7 @@ min-test3 : min 3 3 ≡ 3
 min-test3 = refl
 
 comp : {A : Set} → ℕ → ℕ → A → A → A → A
-comp zero zero m<n m=n m>n = m=n
-comp zero (suc n) m<n m=n m>n = m<n
-comp (suc m) zero m<n m=n m>n = m>n
-comp (suc m) (suc n) = comp m n
+comp m n m<n m=n m>n = {!!}
 
 comp-test1 : comp {ℕ} 10 10 0 1 2 ≡ 1
 comp-test1 = refl
@@ -220,9 +190,6 @@ comp-test2 = refl
 comp-test3 : comp {ℕ} 12 11 0 1 2 ≡ 2
 comp-test3 = refl
 
-```
-
-```agda
 -- hasznald comp-ot!
 gcd : ℕ → ℕ → ℕ
 {-# TERMINATING #-}
@@ -257,14 +224,8 @@ gcd'-test4 = refl
 gcd'-test5 : gcd' 19 17 ≡ 1
 gcd'-test5 = refl
 
-```
-
-```agda
-
 even? : ℕ → Bool
-even? zero = true
-even? (suc zero) = false
-even? (suc (suc x)) = even? x
+even? = {!!}
 
 even?-test1 : even? 3 ≡ false
 even?-test1 = refl
@@ -272,9 +233,7 @@ even?-test2 : even? 200 ≡ true
 even?-test2 = refl
 
 fib : ℕ → ℕ
-fib zero = 1
-fib (suc zero) = 1
-fib (suc (suc x)) = (fib (suc x)) + (fib x)
+fib = {!!}
 
 fib-test1 : fib 6 ≡ 13
 fib-test1 = refl
@@ -282,31 +241,16 @@ fib-test2 : fib 3 ≡ 3
 fib-test2 = refl
 
 eq? : ℕ → ℕ → Bool
-eq? zero zero = true
-eq? zero (suc y) = false
-eq? (suc x) zero = false
-eq? (suc x) (suc y) = eq? x y
+eq? = {!!}
 
 eq?-test1 : eq? 4 3 ≡ false
 eq?-test1 = refl
 eq?-test2 : eq? 4 4 ≡ true
 eq?-test2 = refl
 
-```
-
-```agda
-
-isNotZero : ℕ → Set
-isNotZero zero = ⊥
-isNotZero (suc _) = ⊤
-
 -- rem m n = a maradek, ha elosztjuk m-et (suc n)-el
-{-# TERMINATING #-}
-rem : (a : ℕ) → (b : ℕ) → .{isNotZero b} → ℕ
-rem zero b@(suc _) = zero
-rem a@(suc _) b@(suc _) = comp a b a zero {! (rem (a - b) b)  !}
-
-
+rem : ℕ → ℕ → ℕ
+rem a b = {!!}
 rem-test1 : rem 5 1 ≡ 1
 rem-test1 = refl
 rem-test2 : rem 11 2 ≡ 2
@@ -320,12 +264,8 @@ div-test1 = refl
 div-test2 : div 11 2 ≡ 3
 div-test2 = refl
 
-```
-
-```agda
-
 iteNat : {A : Set} → A → (A → A) → ℕ → A
-iteNat z _ zero = z
+iteNat z s zero = z
 iteNat z s (suc n) = s (iteNat z s n)
 
 recNat : {A : Set} → A → (ℕ → A → A) → ℕ → A
@@ -334,7 +274,7 @@ recNat z s (suc n) = s n (recNat z s n)
 
 -- FEL: add meg iteNat-ot mintaillesztes nelkul, recNat segitsegevel
 iteNat' : {A : Set} → A → (A → A) → ℕ → A
-iteNat' z f n = recNat z (λ _ → f) n
+iteNat' = {!!}
 
 iteNat'-test1 : {A : Set}{z : A}{s : A → A} → iteNat' z s zero ≡ z
 iteNat'-test1 = refl
@@ -343,7 +283,7 @@ iteNat'-test2 = refl
 
 -- FEL: add meg recNat-ot mintaillesztes nelkul, iteNat segitsegevel (lasd eloadas)
 recNat' : {A : Set} → A → (ℕ → A → A) → ℕ → A
-recNat' z f n = iteNat {!   !} (λ x → {!  !}) n
+recNat' = {!!}
 
 recNat'-test1 : {A : Set}{z : A}{s : ℕ → A → A} → recNat' z s zero ≡ z
 recNat'-test1 = refl
@@ -352,24 +292,19 @@ recNat'-test2 = refl
 
 -- FEL: add meg ujra az osszes fent fuggvenyt mintaillesztes nelkul, iteNat es/vagy recNat hasznalataval!
 
-```
+---------------------------------------------------------
+-- lists
+---------------------------------------------------------
 
-## Listák
-
-```plaintext
-
+{-
 data List (A : Set) : Set where
   [] : List A
   _∷_ : A → List A → List A
 infixr 5 _∷_
-
-```
-
-```agda
-
+-}
+{-
 length : {A : Set} → List A → ℕ
-length [] = zero
-length (_ ∷ x) = suc (length x)
+length = {!!}
 
 length-test1 : length {ℕ} (1 ∷ 2 ∷ 3 ∷ []) ≡ 3
 length-test1 = refl
@@ -377,27 +312,20 @@ length-test2 : length {ℕ} (1 ∷ []) ≡ 1
 length-test2 = refl
 
 sumList : List ℕ → ℕ
-sumList [] = zero
-sumList (x ∷ xs) = x + sumList xs
+sumList = {!!}
 
 sumList-test : sumList (1 ∷ 2 ∷ 3 ∷ []) ≡ 6
 sumList-test = refl
 
 _++_ : {A : Set} → List A → List A → List A
-xs ++ [] = xs
-xs ++ x ∷ ys = x ∷ xs ++ ys
+_++_ = {!!}
 infixr 5 _++_
 
-++-test : the ℕ 3 ∷ 2 ∷ [] ++ 1 ∷ 4 ∷ [] ≡ 3 ∷ 2 ∷ 1 ∷ 4 ∷ []
+++-test : 3 ∷ 2 ∷ [] ++ 1 ∷ 4 ∷ [] ≡ 3 ∷ 2 ∷ 1 ∷ 4 ∷ []
 ++-test = refl
 
-```
-
-```agda
-
 map : {A B : Set} → (A → B) → List A → List B
-map f [] = []
-map f (x ∷ xs) = f x ∷ map f xs
+map = {!!}
 
 map-test : map (_+ 2) (3 ∷ 9 ∷ []) ≡ (5 ∷ 11 ∷ [])
 map-test = refl
@@ -410,13 +338,11 @@ iteList n c (a ∷ as) = c a (iteList n c as)
 
 -- FEL: add meg recNat-ot, es vezesd vissza iteNat-ra!
 
-```
-
-## Fák
+---------------------------------------------------------
+-- trees
+---------------------------------------------------------
 
 -- a datatype of expressions
-
-```agda
 
 data Expr : Set where
   const : ℕ → Expr
@@ -435,9 +361,7 @@ e = const 2 [*] (const 3 [+] const 4)
 -}
 
 eval : Expr → ℕ
-eval (const 🤡) = 🤡
-eval (🤡₁ [+] 🤡₂) = eval 🤡₁ + eval 🤡₂
-eval (🤡₁ [*] 🤡₂) = eval 🤡₁ * eval 🤡₂
+eval = {!!}
 
 eval-test : eval e ≡ 14
 eval-test = refl
@@ -587,4 +511,4 @@ test-tI'3 : tI' ! 3 ≡ node λ _ → node λ _ → node λ _ → leaf
 test-tI'3 = refl
 test-tI'4 : tI' ! 5 ≡ node λ _ → node λ _ → node λ _ → node λ _ → node λ _ → leaf
 test-tI'4 = refl
-```
+-}
