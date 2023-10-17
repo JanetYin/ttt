@@ -20,7 +20,7 @@ data Tm : Set where
   lam : (Tm → Tm) → Tm
 
 app : Tm → (Tm → Tm)
-app = {!   !}
+app x (lam f) = f x
 
 self-apply : Tm
 self-apply = lam (λ t → app t t)
