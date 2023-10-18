@@ -1,7 +1,7 @@
 module gy06 where
 
 open import Lib
-  hiding (∞; _+∞_; IsZero∞; coiteℕ∞)
+  hiding (∞; _+∞_; IsNotZero∞; coiteℕ∞)
 open import Lib.Containers.CoVector
   hiding ([]; repeat; replicate; map)
 
@@ -38,8 +38,8 @@ n +∞ k = {!   !}
 coiteℕ∞ : ∀{i}{B : Set i} → (B → Maybe B) → B → ℕ∞
 coiteℕ∞ = {!   !}
 
-IsZero∞ : ℕ∞ → Set
-IsZero∞ n = {!   !}
+IsNotZero∞ : ℕ∞ → Set
+IsNotZero∞ n = {!   !}
 
 ------------------------------------------------------
 -- CoVec -- NEM lesz vizsgában, csak érdekesség most.
@@ -55,8 +55,11 @@ record CoVec {ℓ}(A : Set ℓ) (n : ℕ∞) : Set ℓ where
     tail : .⦃ IsNotZero∞ n ⦄ → CoVec A (pred∞'' (pred∞ n))
 -}
 
-[] : ∀{i}{A : Set i} → CoVec A 0
+[] : ∀{i}{A : Set i} → CoVec A ?
 [] = {!   !}
+
+[1] : CoVec ℕ ?
+[1] = ?
 
 replicate : ∀{i}{A : Set i} → {!   !}
 replicate = {!   !}
