@@ -4,7 +4,9 @@ module Lib.Containers.CoVector.Base where
 
 open import Lib.Containers.CoVector.Type
 open import Lib.Conat renaming (_+_ to _+∞_)
+open import Lib.Conat.PatternSynonym
 open import Lib.Nat
+open import Lib.Maybe
 
 open import Lib.Unit
 open import Lib.Empty
@@ -42,7 +44,7 @@ tail (_++_ {n = n} {m} xs ys) | zero∞ | _ | suc∞ b | ty = ty tt
 tail (_++_ {n = n} {m} xs ys) | suc∞ b | tx = tx tt ++ ys
 
 substCoVec : ∀{i}{A : Set i}{n m : ℕ∞} → n ≈ℕ∞ m → CoVec A n → CoVec A m
-substCoVec' : ∀{i}{A : Set i}{n m : ℕ∞'} → n ≈ℕ∞′′ m → CoVec A (pred∞'' n) → CoVec A (pred∞'' m)
+substCoVec' : ∀{i}{A : Set i}{n m : Maybe ℕ∞} → n ≈ℕ∞′′ m → CoVec A (pred∞'' n) → CoVec A (pred∞'' m)
 substCoVec' {n = zero∞} {zero∞} e xs = xs
 substCoVec' {n = suc∞ a} {suc∞ b} e xs = substCoVec {n = a} {pred∞'' (suc∞ b)} e xs
 head (substCoVec {n = n} {m} e xs) ⦃ eq ⦄ with pred∞ n in eq1 | pred∞ m in eq2 | head xs

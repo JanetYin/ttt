@@ -2,7 +2,6 @@ open import Lib hiding (_+∞_; coiteℕ∞)
 
 open import Lib.Containers.List hiding (zipWith; head; tail)
 open import Lib.Containers.Stream hiding (zipWith; coiteStream)
-open import Lib.Nat
 
 ---------------------------------------------------------
 -- positivity
@@ -13,7 +12,7 @@ data Tm : Set where
   lam : (Tm → Tm) → Tm
 
 app : Tm → (Tm → Tm)
-app (lam f) x = f x
+app = {!!}
 
 self-apply : Tm
 self-apply = lam (λ t → app t t)
@@ -27,10 +26,10 @@ data Weird : Set where
   foo : (Weird → ⊥) → Weird
 
 unweird : Weird → ⊥
-unweird (foo x) = x (foo x)
+unweird = {!!}
 
 bad : ⊥
-bad = unweird (foo unweird)
+bad = {!!}
 
 ---------------------------------------------------------
 -- coinductive types
@@ -47,9 +46,8 @@ open Stream
 -- check that the type of head : Stream A → A
 --                        tail : Stream A → Stream A
 
-zeroes : Stream ℕ -- C-c C-c ENTER
-head zeroes = 0
-tail zeroes = zeroes
+zeroes : Stream ℕ
+zeroes = {!!}
 
 -- by pattern match on n
 countDownFrom : ℕ → List ℕ
@@ -57,19 +55,14 @@ countDownFrom n = {!!}
 
 -- from n is not by pattern match on n
 from : ℕ → Stream ℕ
-head (from n) = n
-tail (from n) = from (suc n)
+from n = {!!}
 
 -- pointwise addition
 zipWith : {A B C : Set} → (A → B → C) → Stream A → Stream B → Stream C
-head (zipWith A→B→C sA sB) = A→B→C (head sA) (head sB)
-tail (zipWith A→B→C sA sB) = zipWith A→B→C (tail sA) (tail sB)
+zipWith = {!!}
 
 filterL : {A : Set} → (A → Bool) → List A → List A
-filterL p [] = []
-filterL p (x ∷ ls) with (p x)
-... | false = filterL p ls
-... | true = x ∷ filterL p ls
+filterL = {!!}
 
 -- this cannot be defined:
 -- filterS : {A : Set} → (A → Bool) → Stream A → Stream A
@@ -77,19 +70,15 @@ filterL p (x ∷ ls) with (p x)
 
 -- one element from the first stream, then from the second stream, then from the first, and so on
 interleave : {A : Set} → Stream A → Stream A → Stream A
-head (interleave s₁ s₂) = head s₁
-head (tail (interleave s₁ s₂)) = head s₂
-tail (tail (interleave s₁ s₂)) = interleave (tail s₁) (tail s₂)
+interleave = {!!}
 
 -- get the n^th element of the stream
 get : {A : Set} → ℕ → Stream A → A
-get zero s = head s
-get (suc x) s = get x (tail s)
+get = {!!}
 
 -- byIndices [0,2,3,2,...] [1,2,3,4,5,...] = [1,3,4,2,...]
 byIndices : {A : Set} → Stream ℕ → Stream A → Stream A
-head (byIndices sI sE) = get (head sI) sE
-tail (byIndices sI sE) = byIndices (tail sI) sE
+byIndices = {!!}
 
 -- iteℕ : (A : Set) → A → (A → A)  → ℕ → A
 --        \______________________/
@@ -135,19 +124,8 @@ record ℕ∞ : Set where
 open ℕ∞
 -}
 
-∞' : ℕ∞
-pred∞ ∞' = just ∞'
-
-co0 : ℕ∞
-pred∞ co0 = nothing
-
-co1 : ℕ∞
-pred∞ co1 = just co0
-
 _+∞_ : ℕ∞ → ℕ∞ → ℕ∞
-pred∞ (n +∞ k) with pred∞ n
-... | just x = just (x +∞ k)
-... | nothing = pred∞ k
+_+∞_ = {!!}
 
 -- Ez a függvény létezik, ezzel lehet megnézni
 -- egy conat tényleges értékét.
@@ -164,15 +142,7 @@ pred∞ (n +∞ k) with pred∞ n
 ... | just x = just (suc x)
 -}
 
-get2nd : {A : Set} → Stream A → A
-get2nd x = head (tail (tail x))
-
 coiteℕ∞ : {B : Set} → (B → Maybe B) → B → ℕ∞
 coiteℕ∞ = {!!}
 
 -- TODO, further exercises: network protocols, simple machines: chocolate machine (input: coin, getChocolate, getBackCoins, output: error, chocolate, money back), some Turing machines, animations, IO, repl, shell
-
-
--- zipStream : {A B : Set} → Stream A → Stream B → Stream (A × B)
--- every2nd : {A : Set} → Stream A → Stream A
--- iterate : {A : Set} → (A → A) → A → Stream A

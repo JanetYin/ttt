@@ -15,14 +15,6 @@ suc-injective refl = refl
 pred-injective : ∀{n m} → .⦃ eq1 : IsNotZero n ⦄ → .⦃ eq2 : IsNotZero m ⦄ → pred n ≡ pred m → n ≡ m
 pred-injective {suc n} {suc m} refl = refl
 
-reflℕ : ∀ n → n ≡ℕ n
-reflℕ zero    = tt
-reflℕ (suc n) = reflℕ n
-
-symℕ : ∀ n m → n ≡ℕ m → m ≡ℕ n
-symℕ zero    zero    _ = tt
-symℕ (suc n) (suc m)   = symℕ n m
-
 0≢sucn : ∀ {n} → 0 ≢ suc n
 0≢sucn ()
 
