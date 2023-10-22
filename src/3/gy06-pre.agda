@@ -55,8 +55,11 @@ record CoVec {ℓ}(A : Set ℓ) (n : ℕ∞) : Set ℓ where
     tail : .⦃ IsNotZero∞ n ⦄ → CoVec A (pred∞'' (pred∞ n))
 -}
 
-[] : ∀{i}{A : Set i} → CoVec A 0
+[] : ∀{i}{A : Set i} → CoVec A ?
 [] = {!   !}
+
+[1] : CoVec ℕ ?
+[1] = ?
 
 replicate : ∀{i}{A : Set i} → {!   !}
 replicate = {!   !}

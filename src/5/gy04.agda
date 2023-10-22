@@ -1,26 +1,18 @@
-# 4. Gyakorlat
-
-```agda
-
 open import Lib hiding (_+∞_; coiteℕ∞)
 
 open import Lib.Containers.List hiding (zipWith; head; tail)
 open import Lib.Containers.Stream hiding (zipWith; coiteStream)
 
-```
-
-## Pozitivítás
-
-Pozitivítás: Létezik-e ez a dolog?
-
-```agda
+---------------------------------------------------------
+-- positivity
+---------------------------------------------------------
 
 {-# NO_POSITIVITY_CHECK #-}
 data Tm : Set where
   lam : (Tm → Tm) → Tm
 
 app : Tm → (Tm → Tm)
-app x (lam f) = f x
+app = {!!}
 
 self-apply : Tm
 self-apply = lam (λ t → app t t)
@@ -34,88 +26,59 @@ data Weird : Set where
   foo : (Weird → ⊥) → Weird
 
 unweird : Weird → ⊥
-unweird (foo x) = x (foo x)
+unweird = {!!}
 
 bad : ⊥
-bad = unweird (foo (λ x → unweird x))
+bad = {!!}
 
-```
+---------------------------------------------------------
+-- coinductive types
+---------------------------------------------------------
 
-## Koinduktivítás
-
-Koninduktivitás: Induktivítás duálisa/párja
-
-Induktivítás: Hogyan tudom egy alap elemből konstruálni a 
-többit?
-
-Koninduktivitás: Hogyan tudok egy elemből destruálni 
-(szét bontani) újabb elemet?
-
-Stream: végtelen adatfolyam
-
-```plaintext
-
+{-
 record Stream (A : Set) : Set where
   coinductive
   field
     head : A
     tail : Stream A
 open Stream
-
-```
-Nézd meg, hogy a konstruktoroknak a következő a típusa 
-        head : Stream A → A
-        tail : Stream A → Stream A
-
-```agda
+-}
+-- check that the type of head : Stream A → A
+--                        tail : Stream A → Stream A
 
 zeroes : Stream ℕ
-head zeroes = 0
-tail zeroes = zeroes
+zeroes = {!!}
 
 -- by pattern match on n
 countDownFrom : ℕ → List ℕ
-countDownFrom zero = []
-countDownFrom (suc n) = (suc n) ∷ countDownFrom n
+countDownFrom n = {!!}
 
 -- from n is not by pattern match on n
 from : ℕ → Stream ℕ
-head (from n) = n
-tail (from zero) = from zero
-tail (from (suc n)) = from n
+from n = {!!}
 
 -- pointwise addition
 zipWith : {A B C : Set} → (A → B → C) → Stream A → Stream B → Stream C
-head (zipWith f a b) = f (head a) (head b)
-tail (zipWith f a b) = zipWith f (tail a) (tail b)
+zipWith = {!!}
 
 filterL : {A : Set} → (A → Bool) → List A → List A
-filterL {A} f [] = []
-filterL {A} f (x ∷ ls) with f x
-filterL {A} f (x ∷ ls) | false = filterL f ls
-filterL {A} f (x ∷ ls) | true = x ∷ filterL f ls
+filterL = {!!}
 
 -- this cannot be defined:
 -- filterS : {A : Set} → (A → Bool) → Stream A → Stream A
--- head (filterS P xs) with P (head xs)
--- ... | false = {!   !}
--- ... | true = {!   !}
--- tail (filterS P xs) = {!   !}
+-- filterS P xs = ?
 
 -- one element from the first stream, then from the second stream, then from the first, and so on
 interleave : {A : Set} → Stream A → Stream A → Stream A
-head (interleave a b) = head a
-tail (interleave a b) = interleave b a
+interleave = {!!}
 
 -- get the n^th element of the stream
 get : {A : Set} → ℕ → Stream A → A
-get zero s = head s
-get (suc n) s = get n (tail s)
+get = {!!}
 
 -- byIndices [0,2,3,2,...] [1,2,3,4,5,...] = [1,3,4,2,...]
 byIndices : {A : Set} → Stream ℕ → Stream A → Stream A
-head (byIndices ns s) = get (head ns) s
-tail (byIndices ns s) = byIndices (tail ns) s
+byIndices = {!!}
 
 -- iteℕ : (A : Set) → A → (A → A)  → ℕ → A
 --        \______________________/
@@ -142,10 +105,7 @@ record Machine : Set where
 open Machine
 
 calculatorFrom : ℕ → Machine
-getNumber (calculatorFrom n) = n
-add (calculatorFrom n) x = calculatorFrom (n + x)
-mul (calculatorFrom n) x = calculatorFrom (n * x)
-reset (calculatorFrom n) = calculatorFrom 0
+calculatorFrom n = {!!}
 
 c0 c1 c2 c3 c4 c5 : Machine
 c0 = calculatorFrom 0
@@ -164,18 +124,8 @@ record ℕ∞ : Set where
 open ℕ∞
 -}
 
-0∞ : ℕ∞
-pred∞ 0∞ = nothing
-1∞ : ℕ∞
-pred∞ 1∞ = just 0∞
-
-∞∞ : ℕ∞
-pred∞ ∞∞ = just ∞∞
-
 _+∞_ : ℕ∞ → ℕ∞ → ℕ∞
-pred∞ (x +∞ x₁) with pred∞ x
-... | nothing = pred∞ x₁
-... | just x = just (x +∞ x₁)
+_+∞_ = {!!}
 
 -- Ez a függvény létezik, ezzel lehet megnézni
 -- egy conat tényleges értékét.
@@ -195,7 +145,4 @@ pred∞ (x +∞ x₁) with pred∞ x
 coiteℕ∞ : {B : Set} → (B → Maybe B) → B → ℕ∞
 coiteℕ∞ = {!!}
 
-```
-
 -- TODO, further exercises: network protocols, simple machines: chocolate machine (input: coin, getChocolate, getBackCoins, output: error, chocolate, money back), some Turing machines, animations, IO, repl, shell
-  
