@@ -34,10 +34,10 @@ data Weird : Set where
   foo : (Weird → ⊥) → Weird
 
 unweird : Weird → ⊥
-unweird = {!   !}
+unweird (foo x) = x (foo x)
 
 bad : ⊥
-bad = {!   !}
+bad = unweird (foo (λ x → unweird x))
 
 ```
 
@@ -70,38 +70,52 @@ Nézd meg, hogy a konstruktoroknak a következő a típusa
 ```agda
 
 zeroes : Stream ℕ
-zeroes = {!!}
+head zeroes = 0
+tail zeroes = zeroes
 
 -- by pattern match on n
 countDownFrom : ℕ → List ℕ
-countDownFrom n = {!!}
+countDownFrom zero = []
+countDownFrom (suc n) = (suc n) ∷ countDownFrom n
 
 -- from n is not by pattern match on n
 from : ℕ → Stream ℕ
-from n = {!!}
+head (from n) = n
+tail (from zero) = from zero
+tail (from (suc n)) = from n
 
 -- pointwise addition
 zipWith : {A B C : Set} → (A → B → C) → Stream A → Stream B → Stream C
-zipWith = {!!}
+head (zipWith f a b) = f (head a) (head b)
+tail (zipWith f a b) = zipWith f (tail a) (tail b)
 
 filterL : {A : Set} → (A → Bool) → List A → List A
-filterL = {!!}
+filterL {A} f [] = []
+filterL {A} f (x ∷ ls) with f x
+filterL {A} f (x ∷ ls) | false = filterL f ls
+filterL {A} f (x ∷ ls) | true = x ∷ filterL f ls
 
 -- this cannot be defined:
 -- filterS : {A : Set} → (A → Bool) → Stream A → Stream A
--- filterS P xs = ?
+-- head (filterS P xs) with P (head xs)
+-- ... | false = {!   !}
+-- ... | true = {!   !}
+-- tail (filterS P xs) = {!   !}
 
 -- one element from the first stream, then from the second stream, then from the first, and so on
 interleave : {A : Set} → Stream A → Stream A → Stream A
-interleave = {!!}
+head (interleave a b) = head a
+tail (interleave a b) = interleave b a
 
 -- get the n^th element of the stream
 get : {A : Set} → ℕ → Stream A → A
-get = {!!}
+get zero s = head s
+get (suc n) s = get n (tail s)
 
 -- byIndices [0,2,3,2,...] [1,2,3,4,5,...] = [1,3,4,2,...]
 byIndices : {A : Set} → Stream ℕ → Stream A → Stream A
-byIndices = {!!}
+head (byIndices ns s) = get (head ns) s
+tail (byIndices ns s) = byIndices (tail ns) s
 
 -- iteℕ : (A : Set) → A → (A → A)  → ℕ → A
 --        \______________________/
@@ -128,7 +142,10 @@ record Machine : Set where
 open Machine
 
 calculatorFrom : ℕ → Machine
-calculatorFrom n = {!!}
+getNumber (calculatorFrom n) = n
+add (calculatorFrom n) x = calculatorFrom (n + x)
+mul (calculatorFrom n) x = calculatorFrom (n * x)
+reset (calculatorFrom n) = calculatorFrom 0
 
 c0 c1 c2 c3 c4 c5 : Machine
 c0 = calculatorFrom 0
@@ -147,8 +164,18 @@ record ℕ∞ : Set where
 open ℕ∞
 -}
 
+0∞ : ℕ∞
+pred∞ 0∞ = nothing
+1∞ : ℕ∞
+pred∞ 1∞ = just 0∞
+
+∞∞ : ℕ∞
+pred∞ ∞∞ = just ∞∞
+
 _+∞_ : ℕ∞ → ℕ∞ → ℕ∞
-_+∞_ = {!!}
+pred∞ (x +∞ x₁) with pred∞ x
+... | nothing = pred∞ x₁
+... | just x = just (x +∞ x₁)
 
 -- Ez a függvény létezik, ezzel lehet megnézni
 -- egy conat tényleges értékét.
