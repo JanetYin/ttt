@@ -4,7 +4,7 @@ open import Lib.Containers.List hiding (zipWith; head; tail)
 open import Lib.Containers.Stream hiding (zipWith; coiteStream)
 
 ---------------------------------------------------------
--- positivity
+-- positivity (vizsgán ne, kell)
 ---------------------------------------------------------
 
 {-# NO_POSITIVITY_CHECK #-}
@@ -25,11 +25,19 @@ self-apply = lam (λ t → app t t)
 data Weird : Set where
   foo : (Weird → ⊥) → Weird
 
-unweird : Weird → ⊥
-unweird = {!!}
+noweird : Weird → ⊥
+noweird = {!!}
 
 bad : ⊥
 bad = {!!}
+
+{-
+Positivity checking rules out datatypes such as Weird. In general, the (strict) positivity criterion says that each constructor c of a datatype D should have a type of the form
+
+c : (x1 : A1)(x2 : A2) ... (xn : An) → D xs
+
+where the type Ai of each argument is either non-recursive (i.e. it doesn't refer to D) or of the form (y1 : B1)(y2 : B2) ... (ym : Bm) → D ys where each Bj doesn't refer to D. 
+-}
 
 ---------------------------------------------------------
 -- coinductive types
@@ -46,8 +54,18 @@ open Stream
 -- check that the type of head : Stream A → A
 --                        tail : Stream A → Stream A
 
+-- an infinite list filled with zeroes:
+zeroesList : List ℕ
+zeroesList = {!!}
+
+-- now with a stream:
 zeroes : Stream ℕ
 zeroes = {!!}
+
+{-
+Coinduction is the mathematical dual to structural induction. Coinductively defined types are known as codata and are typically infinite data structures, such as streams.
+As a definition or specification, coinduction describes how an object may be "observed", "broken down" or "destructed" into simpler objects.
+-}
 
 -- by pattern match on n
 countDownFrom : ℕ → List ℕ
@@ -76,7 +94,8 @@ interleave = {!!}
 get : {A : Set} → ℕ → Stream A → A
 get = {!!}
 
--- byIndices [0,2,3,2,...] [1,2,3,4,5,...] = [1,3,4,2,...]
+-- the first stream contains the indices
+-- byIndices [0,2,3,2,...] [1,2,3,4,5,...] = [1,3,4,3,...]
 byIndices : {A : Set} → Stream ℕ → Stream A → Stream A
 byIndices = {!!}
 
@@ -91,8 +110,6 @@ head (coiteStream B h t b) = h b
 tail (coiteStream B h t b) = coiteStream B h t (t b)
 
 -- ex: redefine the above functions using coiteStream
-
--- ex: look at conatural numbers in Thorsten's book and do the exercises about them
 
 -- simple calculator (internally a number, you can ask for the number, add to that number, multiply that number, make it zero (reset))
 record Machine : Set where
@@ -124,7 +141,16 @@ record ℕ∞ : Set where
 open ℕ∞
 -}
 
-_+∞_ : ℕ∞ → ℕ∞ → ℕ∞
+co0 co1 : ℕ∞
+co0 = {!!}
+co1 = {!!}
+
+{-
+∞ : ℕ∞
+pred∞ ∞ = just ∞
+-}
+
+_+∞_ : ℕ∞ -> ℕ∞ -> ℕ∞
 _+∞_ = {!!}
 
 -- Ez a függvény létezik, ezzel lehet megnézni

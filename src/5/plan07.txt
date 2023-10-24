@@ -1,0 +1,32 @@
+0:00-0:10	röpi
+0:10-0:15	megbeszélés, ha kell
+0:15-0:20	positivityről mese (de ez nem lesz vizsgán)
+0:20-0:23	koinduktívról kis mese
+0:23-0:25	zeroesListet próbálják meg
+0:25-0:27	én megmutatom a zeroest
+0:27-0:35	koinduktívról nagyobb mese
+		- szövegek
+		- nem konstruktorok, hanem destruktorok vannak
+		- induktívak dobozok, amikben vannak dolgok
+		- ezek meg inkább olyanok, mint egy játéktábla mezői (lépések vannak megadva)
+		- végtelennel dolgozhatunk; úgy, hogy garantáltan terminálunk
+		- kell hozzá a guardedness és a coinductive
+0:35-0:38	from: megadás kétféleképpen (külön head és tail;
+		vagy konstruktorral, amire viszont nem lehet mintát illeszteni)
+0:38-0:42	filterL-ig önállóan
+0:42-0:47	megbeszélés
+0:47-0:50	filterS miért nem lehet?
+
+0:50-0:55	picit coiteStreamről
+0:55-1:03	Machine-mese és az elmutogatás (lesz vizsgán hasonló?)
+1:03-1:05	conat-mese (elmutogatással)
+1:05-1:10	összeadás (C-c C-c Enter és with)
+1:10-1:12	ℕ∞→ℕ gyorsan elmagyarázva
+1:12-1:17	koiterátor elmutogatva
+1:17-1:22	Vec (és itt jön be, ami miatt igazán jó az Agda)
+1:22-1:25	függő típusokról általában
+1:25-1:28	tail; ott látszik (nem üreset nem is tudsz megadni – nincs több 42-zés)
+1:28-1:30	házi; röpi témája
+
+otthonra:
+interleave, get, byIndices
