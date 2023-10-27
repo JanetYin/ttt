@@ -7,28 +7,35 @@ open import Lib
 ------------------------------------------------------
 
 subt-prod : {A A' B B' : Set} → (A → A') → (B → B') → A × B → A' × B'
-subt-prod = {!   !}
+subt-prod f g (a , b) = (f a) , (g b)
 
 subt-fun : {A A' B B' : Set} → (A → A') → (B → B') → (A' → B) → (A → B')
-subt-fun = {!   !}
+subt-fun f g h a = g (h (f a))
 
 anything : {X Y : Set} → ¬ X → X → Y
-anything = {!   !}
+anything ¬x x = exfalso (¬x x)
 
 ret : {X : Set} → X → ¬ ¬ X
-ret = {!   !}
+ret x ¬x = ¬x x
 
+-- \neg = ¬
 -- Próbáljuk meg bizonyítani:
+{-
 stab : {X : Set} → ¬ ¬ X → X
-stab = {!   !}
+stab ¬¬x = exfalso (¬¬x (λ x → ¬¬x λ x₁ → ¬¬x (λ x₂ → ¬¬x (λ x₃ → NEM FOG MENNI))))
+-}
+-- Konstruktív logika
 
 fun : {X Y : Set} → (¬ X) ⊎ Y → (X → Y)
-fun = {!   !}
+fun (inl ¬x) x = contradiction x ¬x -- contradiction x ¬x = exfalso (¬x x)
+fun (inr y) x = y
 
 -- De Morgan
 
 dm1 : {X Y : Set} →  ¬ (X ⊎ Y) ↔ ¬ X × ¬ Y
-dm1 = {!   !}
+fst dm1 ¬xy = (λ x → ¬xy (inl x)) , λ y → ¬xy (inr y)
+snd dm1 (¬x , ¬y) (inl x) = ¬x x
+snd dm1 (¬x , ¬y) (inr y) = ¬y y
 
 dm2 : {X Y : Set} → ¬ X ⊎ ¬ Y → ¬ (X × Y)
 dm2 = {!   !}
@@ -48,7 +55,7 @@ nocontra = {!   !}
 ¬¬invol₂ = {!   !}
 
 nnlem : {X : Set} → ¬ ¬ (X ⊎ ¬ X)
-nnlem = {!   !}
+nnlem f = f (inr λ x → f (inl x))
 
 nndnp : {X : Set} → ¬ ¬ (¬ ¬ X → X)
 nndnp = {!   !}
@@ -64,11 +71,15 @@ Dec A = A ⊎ ¬ A
 
 open import Lib.Dec.PatternSynonym
 
+
+-- yes ≡ inl
+-- no ≡ inr
 ee1 : {X Y : Set} → Dec (X ⊎ Y → ¬ ¬ (Y ⊎ X))
-ee1 = {!   !}
+ee1 = yes λ where (inl x) ¬yx → ¬yx (inr x)
+                  (inr y) ¬yx → ¬yx (inl y)
 
 ee2 : {X : Set} → Dec (¬ (X ⊎ ¬ X))
-ee2 = {!   !}
+ee2 = no nnlem  
 
 e3 : {X : Set} → Dec (¬ (X → (¬ X → X)))
 e3 = {!   !}
