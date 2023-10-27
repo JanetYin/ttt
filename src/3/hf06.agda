@@ -165,7 +165,9 @@ span-test4 = refl
 ΣΣ=Σ× P = {!   !}
 
 -- Ezt a feladatot érdemes megcsinálni!
--- Definiáld a half∞ függvényt, amely egy kotermészetes számot megfelez, annak az alsó egész részét visszaadva.
+-- Definiáld a half∞ függvényt,
+-- amely egy kotermészetes számot megfelez,
+-- annak az alsó egész részét visszaadva.
 half∞ : ℕ∞ → ℕ∞
 half∞ = ?
 
