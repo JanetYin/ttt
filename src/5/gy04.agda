@@ -4,7 +4,7 @@ open import Lib.Containers.List hiding (zipWith; head; tail)
 open import Lib.Containers.Stream hiding (zipWith; coiteStream)
 
 ---------------------------------------------------------
--- positivity (vizsgán ne, kell)
+-- positivity (vizsgán nem kell)
 ---------------------------------------------------------
 
 {-# NO_POSITIVITY_CHECK #-}
