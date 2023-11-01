@@ -1,4 +1,5 @@
 open import Lib hiding (_+∞_)
+open import Lib.Containers.List hiding (head; tail)
 open import Lib.Containers.Stream hiding (coiteStream)
 
 -- Összegezd egy Stream ℕ első n elemét.
@@ -27,6 +28,12 @@ interleave = {!!}
 -- az első Stream második eleme stb.
 interleave3 : {A : Set} → Stream A → Stream A → Stream A → Stream A
 interleave3 = {!!}
+
+-- Írd ki a Stream első n elemét egy listába,
+-- a maradékot pedig egy Streambe.
+-- Segítség: használj segédfüggvényt!
+takeToList : {A : Set} → ℕ → Stream A → List A × Stream A
+takeToList = {!!}
 
 -- Miért nem lehet az alábbit definiálni?
 -- (A dropWhile eldobja az elemeket
