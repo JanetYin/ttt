@@ -1,26 +1,18 @@
-# 4. Gyakorlat
-
-```agda
-
 open import Lib hiding (_+∞_; coiteℕ∞)
 
 open import Lib.Containers.List hiding (zipWith; head; tail)
 open import Lib.Containers.Stream hiding (zipWith; coiteStream)
 
-```
-
-## Pozitivítás
-
-Pozitivítás: Létezik-e ez a dolog?
-
-```agda
+---------------------------------------------------------
+-- positivity (vizsgán nem kell)
+---------------------------------------------------------
 
 {-# NO_POSITIVITY_CHECK #-}
 data Tm : Set where
   lam : (Tm → Tm) → Tm
 
 app : Tm → (Tm → Tm)
-app x (lam f) = f x
+app = {!!}
 
 self-apply : Tm
 self-apply = lam (λ t → app t t)
@@ -33,89 +25,96 @@ self-apply = lam (λ t → app t t)
 data Weird : Set where
   foo : (Weird → ⊥) → Weird
 
-unweird : Weird → ⊥
-unweird (foo x) = x (foo x)
+noweird : Weird → ⊥
+noweird (foo x) = x (foo x)
+
+weird : Weird
+weird = foo noweird
 
 bad : ⊥
-bad = unweird (foo (λ x → unweird x))
+bad = noweird weird
 
-```
+{-
+Positivity checking rules out datatypes such as Weird. In general, the (strict) positivity criterion says that each constructor c of a datatype D should have a type of the form
 
-## Koinduktivítás
+c : (x1 : A1)(x2 : A2) ... (xn : An) → D xs
 
-Koninduktivitás: Induktivítás duálisa/párja
+where the type Ai of each argument is either non-recursive (i.e. it doesn't refer to D) or of the form (y1 : B1)(y2 : B2) ... (ym : Bm) → D ys where each Bj doesn't refer to D. 
+-}
 
-Induktivítás: Hogyan tudom egy alap elemből konstruálni a 
-többit?
+---------------------------------------------------------
+-- coinductive types
+---------------------------------------------------------
 
-Koninduktivitás: Hogyan tudok egy elemből destruálni 
-(szét bontani) újabb elemet?
-
-Stream: végtelen adatfolyam
-
-```plaintext
-
+{-
 record Stream (A : Set) : Set where
   coinductive
   field
     head : A
     tail : Stream A
 open Stream
+-}
+-- check that the type of head : Stream A → A
+--                        tail : Stream A → Stream A
 
-```
-Nézd meg, hogy a konstruktoroknak a következő a típusa 
-        head : Stream A → A
-        tail : Stream A → Stream A
+-- an infinite list filled with zeroes:
+-- zeroesList : List ℕ
+-- zeroesList = 0 ∷ zeroesList       -- ∷ is \::
 
-```agda
-
+-- now with a stream:
 zeroes : Stream ℕ
 head zeroes = 0
 tail zeroes = zeroes
 
+{-
+Coinduction is the mathematical dual to structural induction. Coinductively defined types are known as codata and are typically infinite data structures, such as streams.
+As a definition or specification, coinduction describes how an object may be "observed", "broken down" or "destructed" into simpler objects.
+-}
+
 -- by pattern match on n
+-- [n,n-1,...,0]
 countDownFrom : ℕ → List ℕ
 countDownFrom zero = []
-countDownFrom (suc n) = (suc n) ∷ countDownFrom n
+countDownFrom (suc n) = suc n ∷ (countDownFrom n)
+
+-- [n,n+1,...]
+-- fromList : ℕ -> List ℕ
+-- fromList n = n ∷ (fromList (suc n))
 
 -- from n is not by pattern match on n
 from : ℕ → Stream ℕ
 head (from n) = n
-tail (from zero) = from zero
-tail (from (suc n)) = from n
+tail (from n) = from (suc n)
 
 -- pointwise addition
 zipWith : {A B C : Set} → (A → B → C) → Stream A → Stream B → Stream C
-head (zipWith f a b) = f (head a) (head b)
-tail (zipWith f a b) = zipWith f (tail a) (tail b)
+head (zipWith f as bs) = f (head as) (head bs)
+tail (zipWith f as bs) = zipWith f (tail as) (tail bs)
 
 filterL : {A : Set} → (A → Bool) → List A → List A
-filterL {A} f [] = []
-filterL {A} f (x ∷ ls) with f x
-filterL {A} f (x ∷ ls) | false = filterL f ls
-filterL {A} f (x ∷ ls) | true = x ∷ filterL f ls
+filterL p [] = []
+filterL p (x ∷ xs) = if p x then x ∷ filterL p xs else filterL p xs
 
 -- this cannot be defined:
 -- filterS : {A : Set} → (A → Bool) → Stream A → Stream A
--- head (filterS P xs) with P (head xs)
--- ... | false = {!   !}
--- ... | true = {!   !}
--- tail (filterS P xs) = {!   !}
+-- head (filterS p xs) = if p (head xs) then head xs else head (filterS p (tail xs))
+-- tail (filterS p xs) = {!!}
 
 -- one element from the first stream, then from the second stream, then from the first, and so on
+-- házi
 interleave : {A : Set} → Stream A → Stream A → Stream A
-head (interleave a b) = head a
-tail (interleave a b) = interleave b a
+interleave = {!!}
 
 -- get the n^th element of the stream
 get : {A : Set} → ℕ → Stream A → A
-get zero s = head s
-get (suc n) s = get n (tail s)
+get zero xs = head xs
+get (suc n) xs = get n (tail xs)
 
--- byIndices [0,2,3,2,...] [1,2,3,4,5,...] = [1,3,4,2,...]
-byIndices : {A : Set} → Stream ℕ → Stream A → Stream A
-head (byIndices ns s) = get (head ns) s
-tail (byIndices ns s) = byIndices (tail ns) s
+-- the first stream contains the indices
+-- byIndices [0,2,3,2,...] [1,2,3,4,5,...] = [1,3,4,3,...]
+-- házi
+-- byIndices : {A : Set} → Stream ℕ → Stream A → Stream A
+-- byIndices = {!!}
 
 -- iteℕ : (A : Set) → A → (A → A)  → ℕ → A
 --        \______________________/
@@ -129,8 +128,6 @@ tail (coiteStream B h t b) = coiteStream B h t (t b)
 
 -- ex: redefine the above functions using coiteStream
 
--- ex: look at conatural numbers in Thorsten's book and do the exercises about them
-
 -- simple calculator (internally a number, you can ask for the number, add to that number, multiply that number, make it zero (reset))
 record Machine : Set where
   coinductive
@@ -143,8 +140,8 @@ open Machine
 
 calculatorFrom : ℕ → Machine
 getNumber (calculatorFrom n) = n
-add (calculatorFrom n) x = calculatorFrom (n + x)
-mul (calculatorFrom n) x = calculatorFrom (n * x)
+add (calculatorFrom n) m = calculatorFrom (n + m)
+mul (calculatorFrom n) m = calculatorFrom (n * m)
 reset (calculatorFrom n) = calculatorFrom 0
 
 c0 c1 c2 c3 c4 c5 : Machine
@@ -157,25 +154,26 @@ c5 = add c4 2
 
 -- conatural numbers
 {-
-record ℕ∞ : Set where
+record ℕ∞ : Set where          -- ∞ is \inf
   coinductive
   field
     pred∞ : Maybe ℕ∞
 open ℕ∞
 -}
 
-0∞ : ℕ∞
-pred∞ 0∞ = nothing
-1∞ : ℕ∞
-pred∞ 1∞ = just 0∞
+co0 co1 : ℕ∞
+pred∞ co0 = nothing
+pred∞ co1 = just co0
 
-∞∞ : ℕ∞
-pred∞ ∞∞ = just ∞∞
+{-
+∞ : ℕ∞
+pred∞ ∞ = just ∞
+-}
 
-_+∞_ : ℕ∞ → ℕ∞ → ℕ∞
-pred∞ (x +∞ x₁) with pred∞ x
-... | nothing = pred∞ x₁
-... | just x = just (x +∞ x₁)
+_+∞_ : ℕ∞ -> ℕ∞ -> ℕ∞
+pred∞ (n +∞ m) with (pred∞ n)
+pred∞ (n +∞ m) | nothing  = pred∞ m
+pred∞ (n +∞ m) | just n-1 = just (n-1 +∞ m)
 
 -- Ez a függvény létezik, ezzel lehet megnézni
 -- egy conat tényleges értékét.
@@ -195,7 +193,4 @@ pred∞ (x +∞ x₁) with pred∞ x
 coiteℕ∞ : {B : Set} → (B → Maybe B) → B → ℕ∞
 coiteℕ∞ = {!!}
 
-```
-
 -- TODO, further exercises: network protocols, simple machines: chocolate machine (input: coin, getChocolate, getBackCoins, output: error, chocolate, money back), some Turing machines, animations, IO, repl, shell
-  
