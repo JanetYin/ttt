@@ -1,6 +1,6 @@
 open import Lib hiding (fromℕ)
-open import Lib.Containers.Vector hiding (head; tail; map; length; _++_)
-open import Lib.Containers.List hiding (head; tail; map; length; _++_; filter)
+open import Lib.Containers.Vector.Type
+open import Lib.Containers.List.Type
 
 -- Vec and Fin
 {-
@@ -103,3 +103,43 @@ filter f (x ∷ xs) with f x
 
 test-filter : filter {ℕ} (3 <ᵇ_) (4 ∷ 3 ∷ 2 ∷ 5 ∷ []) ≡ (2 , 4 ∷ 5 ∷ [])
 test-filter = refl
+
+
+-- Mégtöbb gyakorló feladat
+-- splitAt függvény haskellből
+-- n-edik indexnél elválasztja
+-- pl splitAt 2 [4,5,6] == ([4,5] , [6])
+-- Ez a feladat modellezési szempontból is érdekes
+splitAt : {A : Set}{k : ℕ} → (n : ℕ) → Vec A (n + k) → (Vec A n) × (Vec A k)
+splitAt = {!!}
+
+-- Hajtogatás haskellből
+-- pl foldr (+) 0 [1,2,3,4] == 1 + (2 + (3 + (4 + 0)))
+foldr : {A B : Set}{n : ℕ} → (A → B → B) → B → Vec A n → B
+foldr = {!!}
+
+-- Minden elem közé beszúrunk egy elemet
+-- pl intersperse 10 [1,2,3] == [1,10,2,10,3]
+intersperse : {A : Set}{n : ℕ} → A → Vec A (suc n) → Vec A (suc (n * 2))
+intersperse = {!!}
+
+
+
+
+
+
+
+
+
+-- MEGOLDÁSOK
+{-
+splitAt zero xs = [] , xs
+splitAt (suc n) (x ∷ xs) with splitAt n xs
+... | l , r = (x ∷ l) , r
+
+foldr f b [] = b
+foldr f b (x ∷ xs) = f x (foldr f b xs)
+
+intersperse a (x ∷ []) = x ∷ []
+intersperse a (x ∷ y ∷ vs) = x ∷ a ∷ (intersperse a (y ∷ vs))
+-}
