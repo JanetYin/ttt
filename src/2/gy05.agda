@@ -10,13 +10,14 @@ data Vec (A : Set) : ℕ → Set where
   _∷_ : {n : ℕ} → A → Vec A n → Vec A (suc n)
 -}
 head : {A : Set}{n : ℕ} → Vec A (suc n) → A
-head = {!!}
+head (x ∷ xs) = x
 
 tail : {A : Set}{n : ℕ} → Vec A (suc n) → Vec A n
-tail = {!!}
+tail (x ∷ xs)  = xs
 
 countDownFrom : (n : ℕ) → Vec ℕ n
-countDownFrom = {!!}
+countDownFrom zero = []
+countDownFrom (suc n) = suc n ∷ countDownFrom n
 
 test-countDownFrom : countDownFrom 3 ≡ 3 ∷ 2 ∷ 1 ∷ []
 test-countDownFrom = refl
@@ -30,11 +31,11 @@ f0 : Fin 0 → ⊥
 f0 ()
 
 f1-0 : Fin 1
-f1-0 = {!!}
+f1-0 = zero
 
 f2-0 f2-1 : Fin 2
-f2-0 = {!!}
-f2-1 = {!!}
+f2-0 = zero
+f2-1 = suc zero
 
 f3-0 f3-1 f3-2 : Fin 3
 f3-0 = {!!}
@@ -59,13 +60,15 @@ test2-!! : (the ℕ 3 ∷ 4 ∷ 1 ∷ 0 ∷ 10 ∷ []) !! 3 ≡ 0 -- 3-as liter�
 test2-!! = refl
 
 fromℕ : (n : ℕ) → Fin (suc n)
-fromℕ = {!!}
+fromℕ zero = zero
+fromℕ (suc n) = suc (fromℕ n)
 
 test-fromℕ : fromℕ 3 ≡ suc (suc (suc zero))
 test-fromℕ = refl
 
 map : {A B : Set}(f : A → B){n : ℕ} → Vec A n → Vec B n
-map f as = {!!}
+map f [] = []
+map f (x ∷ as) = f x ∷ map f as
 
 {-
 data List (A : Set) : Set where
@@ -74,21 +77,29 @@ data List (A : Set) : Set where
 -}
 
 length : {A : Set} → List A → ℕ
-length = {!!}
+length [] = 0
+length (x ∷ xs) = suc (length xs)
 
 fromList : {A : Set}(as : List A) → Vec A (length as)
-fromList = {!!}
+fromList [] = []
+fromList (x ∷ as) = x ∷ fromList as
 
 _++_ : {A : Set}{m n : ℕ} → Vec A m → Vec A n → Vec A (m + n)
-_++_ = {!!}
+[] ++ xs = xs
+(x ∷ ys) ++ xs = x ∷ (ys ++ xs)
 
 tabulate : {n : ℕ}{A : Set} → (Fin n → A) → Vec A n
-tabulate = {!!}
+tabulate {zero} f = []
+tabulate {suc n} f = f zero ∷ tabulate (λ x → f (suc x))
 
 -- Sigma types
 
 filter : {A : Set}{n : ℕ}(f : A → Bool) → Vec A n → Σ ℕ (Vec A)
-filter = {!!}
+filter f [] = zero , []
+filter f (x ∷ xs) with f x
+... | false = filter f xs
+... | true with filter f xs
+... | n , vs = suc n , (x ∷ vs)
 
 test-filter : filter {ℕ} (3 <ᵇ_) (4 ∷ 3 ∷ 2 ∷ 5 ∷ []) ≡ (2 , 4 ∷ 5 ∷ [])
 test-filter = refl
