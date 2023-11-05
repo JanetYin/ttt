@@ -18,7 +18,7 @@
 0:47-0:50	filterS miért nem lehet?
 
 0:50-0:55	picit coiteStreamről
-0:55-1:03	Machine-mese és az elmutogatás (lesz vizsgán hasonló?)
+0:55-1:03	Machine-mese és az elmutogatás (vizsgán nem lesz, ahogy nézem; de a megértéshez jó)
 1:03-1:05	conat-mese (elmutogatással)
 1:05-1:10	összeadás (C-c C-c Enter és with)
 1:10-1:12	ℕ∞→ℕ gyorsan elmagyarázva
