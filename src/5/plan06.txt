@@ -1,0 +1,32 @@
+0:00-0:10	röpi
+	aki készen van, mehet tovább listákkal, akár fákkal
+0:10-0:15	megbeszélés (akár röpi, akár házi)
+0:15-0:18	sikerült mindenkinek a Lib-átírás?
+0:18-0:21	_-_-t közösen
+0:21-0:31	_≥_-t, _>_-t, _<_-t és compot próbálják meg önállóan
+	compot picit elmutogatom előtte
+0:28-0:33	megbeszélés
+0:33-0:35	mese a gcd-ről
+0:35-0:40	próbálják meg
+0:40-0:43	megbeszélés
+0:43-0:50	mese a termination checkerről és a fuelről
+0:50-0:54	remet megmutatom; div ez alapján házi
+0:54-1:00	iteNatról, recNatról mesélek, ha kell
+	de vizsgán nem lesz, ugye?
+1:00-1:03	Listről mese
+1:03-1:05	lengthet elmutogatom; eszerint a legtöbb házi
+1:05-1:10	mapet próbálják meg önállóan
+1:10-1:12	megbeszélés
+1:12-1:15	iteList (ez gyakorlatilag a foldr)
+1:15-1:18	Expr-nél az evalt azért megmutatom
+1:18-1:23	Tree, RoseTree, TreeInf
+1:23-1:28	positivityről mese
+1:28-1:30	röpi témája; házi
+
+házinak:
+_!
+min
+even?, fib, eq?
+div
+(akinek van kedve, iteNat' és recNat')
+sumList, _++_

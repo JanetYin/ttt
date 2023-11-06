@@ -197,19 +197,19 @@ infixl 6 _[_]%=_
 _[_]%=_ : {A : Set}{n : ℕ} → Vec A ? → Fin ? → (A → A) → Vec A ?
 xs [ i ]%= f = ?
 
-update-test1 : _[_]≔_ {ℕ} (1 ∷ 2 ∷ 3 ∷ 4 ∷ 5 ∷ []) zero (10 *_) ≡ (10 ∷ 2 ∷ 3 ∷ 4 ∷ 5 ∷ [])
+update-test1 : _[_]%=_ {ℕ} (1 ∷ 2 ∷ 3 ∷ 4 ∷ 5 ∷ []) zero (10 *_) ≡ (10 ∷ 2 ∷ 3 ∷ 4 ∷ 5 ∷ [])
 update-test1 = refl
 
-update-test2 : _[_]≔_ {ℕ} (1 ∷ 2 ∷ 3 ∷ 4 ∷ 5 ∷ []) (suc zero) (10 *_) ≡ (1 ∷ 20 ∷ 3 ∷ 4 ∷ 5 ∷ [])
+update-test2 : _[_]%=_ {ℕ} (1 ∷ 2 ∷ 3 ∷ 4 ∷ 5 ∷ []) (suc zero) (10 *_) ≡ (1 ∷ 20 ∷ 3 ∷ 4 ∷ 5 ∷ [])
 update-test2 = refl
 
-update-test3 : _[_]≔_ {ℕ} (1 ∷ 2 ∷ 3 ∷ 4 ∷ 5 ∷ []) (suc (suc zero)) (10 +_) ≡ (1 ∷ 2 ∷ 13 ∷ 4 ∷ 5 ∷ [])
+update-test3 : _[_]%=_ {ℕ} (1 ∷ 2 ∷ 3 ∷ 4 ∷ 5 ∷ []) (suc (suc zero)) (10 +_) ≡ (1 ∷ 2 ∷ 13 ∷ 4 ∷ 5 ∷ [])
 update-test3 = refl
 
-update-test4 : _[_]≔_ {ℕ} (1 ∷ 2 ∷ 3 ∷ 4 ∷ 5 ∷ []) (suc (suc (suc zero))) (10 +_) ≡ (1 ∷ 2 ∷ 3 ∷ 14 ∷ 5 ∷ [])
+update-test4 : _[_]%=_ {ℕ} (1 ∷ 2 ∷ 3 ∷ 4 ∷ 5 ∷ []) (suc (suc (suc zero))) (10 +_) ≡ (1 ∷ 2 ∷ 3 ∷ 14 ∷ 5 ∷ [])
 update-test4 = refl
 
-update-test5 : _[_]≔_ {ℕ} (1 ∷ 2 ∷ 3 ∷ 4 ∷ 5 ∷ []) (suc (suc (suc (suc zero)))) (10 +_) ≡ (1 ∷ 2 ∷ 3 ∷ 4 ∷ 15 ∷ [])
+update-test5 : _[_]%=_ {ℕ} (1 ∷ 2 ∷ 3 ∷ 4 ∷ 5 ∷ []) (suc (suc (suc (suc zero)))) (10 +_) ≡ (1 ∷ 2 ∷ 3 ∷ 4 ∷ 15 ∷ [])
 update-test5 = refl
 {-
 Definiáld a _[_]≔_ függvényt, amely egy adott indexű helyen lévő

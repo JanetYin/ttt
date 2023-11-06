@@ -1,7 +1,8 @@
 open import Agda.Builtin.Nat renaming (Nat to ℕ) hiding (_+_; _*_; _-_; _<_)
--- open import Lib.Containers.List hiding (length; _++_; map; iteList)
+open import Lib.Containers.List hiding (length; _++_; map; iteList)
 open import Lib.Equality
 open import Lib.Bool
+open import Lib.Empty
 
 
 ---------------------------------------------------------
@@ -129,7 +130,9 @@ _! = {!!}
 !-test3 = refl
 
 _-_ : ℕ → ℕ → ℕ
-_-_ = {!!}
+zero - m = zero
+suc n - zero = suc n
+suc n - suc m = n - m
 infixl 6 _-_
 
 -test1 : 3 - 2 ≡ 1
@@ -140,7 +143,9 @@ infixl 6 _-_
 -test3 = refl
 
 _≥_ : ℕ → ℕ → Bool
-_≥_ = {!!}
+n ≥ zero = true
+zero ≥ suc m = false
+suc n ≥ suc m = n ≥ m      -- \ge
 
 ≥test1 : 3 ≥ 2 ≡ true
 ≥test1 = refl
@@ -151,7 +156,7 @@ _≥_ = {!!}
 
 -- ne hasznalj rekurziot, hanem hasznald _≥_-t!
 _>_ : ℕ → ℕ → Bool
-_>_ = {!!}
+n > m = n ≥ (suc m)
 
 >test1 : 3 > 2 ≡ true
 >test1 = refl
@@ -161,8 +166,7 @@ _>_ = {!!}
 >test3 = refl
 
 _<_ : ℕ → ℕ → Bool
-_<_ = {!!}
-
+n < m = m > n
 <test1 : 3 < 2 ≡ false
 <test1 = refl
 <test2 : 3 < 3 ≡ false
@@ -171,7 +175,9 @@ _<_ = {!!}
 <test3 = refl
 
 min : ℕ → ℕ → ℕ
-min = {!!}
+min zero m = zero
+min (suc n) zero = zero
+min (suc n) (suc m) = suc (min n m)
 
 min-test1 : min 3 2 ≡ 2
 min-test1 = refl
@@ -181,7 +187,10 @@ min-test3 : min 3 3 ≡ 3
 min-test3 = refl
 
 comp : {A : Set} → ℕ → ℕ → A → A → A → A
-comp m n m<n m=n m>n = {!!}
+comp zero zero m<n m=n m>n = m=n
+comp zero (suc n) m<n m=n m>n = m<n
+comp (suc m) zero m<n m=n m>n = m>n
+comp (suc m) (suc n) m<n m=n m>n = comp m n m<n m=n m>n
 
 comp-test1 : comp {ℕ} 10 10 0 1 2 ≡ 1
 comp-test1 = refl
@@ -191,9 +200,26 @@ comp-test3 : comp {ℕ} 12 11 0 1 2 ≡ 2
 comp-test3 = refl
 
 -- hasznald comp-ot!
+{-
+10 8
+2   8
+2   6
+2   4
+2   2
+-}
 gcd : ℕ → ℕ → ℕ
 {-# TERMINATING #-}
-gcd m n = {!!}
+gcd zero zero = 42 -- itt valójában nincs értelme
+gcd zero m     = m
+gcd m     zero = m
+gcd m n = comp m n
+                    (gcd m (n - m))    -- m<n
+                    m                        -- m
+                    (gcd (m - n) n)     -- m>n
+
+b : ⊥
+{-# TERMINATING #-}
+b = b
 
 gcd-test1 : gcd 6 9 ≡ 3
 gcd-test1 = refl
@@ -208,8 +234,13 @@ gcd-test5 = refl
 
 -- hasznald ugyanazt a definiciot, mint gcd-nel, de most fuel szerinti rekurzio
 gcd-helper : ℕ → ℕ → ℕ → ℕ
+-- gcd-helper _ zero zero = ?
+-- zero-kat le kéne kezelni
 gcd-helper zero m n = 42
-gcd-helper (suc fuel) m n = {!!}
+gcd-helper (suc fuel) m n = comp m n
+                                              (gcd-helper fuel m (n - m))
+                                              m
+                                              (gcd-helper fuel (m - n) n)
 gcd' : ℕ → ℕ → ℕ
 gcd' m n = gcd-helper (m + n) m n
 
@@ -235,9 +266,14 @@ even?-test2 = refl
 fib : ℕ → ℕ
 fib = {!!}
 
-fib-test1 : fib 6 ≡ 13
+{-
+1 2 3 4 5 6 7
+1 1 2 3 5 8 13
+-}
+
+fib-test1 : fib 7 ≡ 13
 fib-test1 = refl
-fib-test2 : fib 3 ≡ 3
+fib-test2 : fib 4 ≡ 3
 fib-test2 = refl
 
 eq? : ℕ → ℕ → Bool
@@ -250,10 +286,17 @@ eq?-test2 = refl
 
 -- rem m n = a maradek, ha elosztjuk m-et (suc n)-el
 rem : ℕ → ℕ → ℕ
-rem a b = {!!}
-rem-test1 : rem 5 1 ≡ 1
+rem a zero = 444444444   -- ezt majd egyszer elegánsabban megoldjuk
+-- rem a b = if b ≥ a then a else {!rem (a - b) b!}
+rem a b = rem-helper (suc a) a b
+  where
+  rem-helper : ℕ -> ℕ -> ℕ -> ℕ
+  rem-helper 0 a b = 42
+  rem-helper (suc fuel) a b = if a ≥ b then rem-helper fuel (a - b) b else a
+
+rem-test1 : rem 5 1 ≡ 0
 rem-test1 = refl
-rem-test2 : rem 11 2 ≡ 2
+rem-test2 : rem 11 2 ≡ 1
 rem-test2 = refl
 
 -- div m n = m-ben hanyszor van meg (suc n)
@@ -299,12 +342,13 @@ recNat'-test2 = refl
 {-
 data List (A : Set) : Set where
   [] : List A
-  _∷_ : A → List A → List A
+  _∷_ : A → List A → List A            \:: (backslash kettőspont kettőspont)
 infixr 5 _∷_
 -}
-{-
+
 length : {A : Set} → List A → ℕ
-length = {!!}
+length [] = {!!}
+length (x ∷ xs) = {!!}
 
 length-test1 : length {ℕ} (1 ∷ 2 ∷ 3 ∷ []) ≡ 3
 length-test1 = refl
@@ -330,6 +374,7 @@ map = {!!}
 map-test : map (_+ 2) (3 ∷ 9 ∷ []) ≡ (5 ∷ 11 ∷ [])
 map-test = refl
 
+-- foldr
 iteList : {A B : Set} → B → (A → B → B) → List A → B
 iteList n c [] = n
 iteList n c (a ∷ as) = c a (iteList n c as)
@@ -361,7 +406,9 @@ e = const 2 [*] (const 3 [+] const 4)
 -}
 
 eval : Expr → ℕ
-eval = {!!}
+eval (const x) = x
+eval (t [+] t₁) = eval t + eval t₁
+eval (t [*] t₁) = eval t * eval t₁
 
 eval-test : eval e ≡ 14
 eval-test = refl
@@ -392,7 +439,8 @@ t = node (node leaf 1 (node leaf 2 leaf)) 5 leaf
 
 
 tree2List : {A : Set} → Tree A → List A
-tree2List = {!!}
+tree2List leaf = []
+tree2List (node t₁ x t₂) = tree2List t₁ ++ x ∷ tree2List t₂
 
 tree2List-test : tree2List t ≡ 1 ∷ 2 ∷ 5 ∷ []
 tree2List-test = refl
@@ -511,4 +559,3 @@ test-tI'3 : tI' ! 3 ≡ node λ _ → node λ _ → node λ _ → leaf
 test-tI'3 = refl
 test-tI'4 : tI' ! 5 ≡ node λ _ → node λ _ → node λ _ → node λ _ → node λ _ → leaf
 test-tI'4 = refl
--}

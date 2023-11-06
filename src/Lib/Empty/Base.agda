@@ -31,3 +31,6 @@ contradiction p ¬p = exfalso (¬p p)
 
 contraposition : ∀{i j}{P : Set i}{Q : Set j} → (P → Q) → ¬ Q → ¬ P
 contraposition f ¬q p = contradiction (f p) ¬q
+
+weaken : {X : Set} → X → ¬ ¬ X
+weaken x = λ ¬x → ¬x x
