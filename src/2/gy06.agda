@@ -1,20 +1,27 @@
 open import Lib
 
 Σ=⊎ : {A B : Set} → Σ Bool (if_then A else B) ↔ A ⊎ B
-Σ=⊎ = {!!}
+fst Σ=⊎ (false , b) = inr b
+fst Σ=⊎ (true , a) = inl a
+snd Σ=⊎ (inl a) = true , a
+snd Σ=⊎ (inr b) = false , b
 
 Σ=× : {A B : Set} → Σ A (λ _ → B) ↔ A × B
-Σ=× = {!!}
+fst Σ=× (f , s) = f , s
+snd Σ=× (f , s) = f , s
 
-Π=→ : {A B : Set} → ((a : A) → (λ _ → B) a) ≡ (A → B)
-Π=→ = {!!}
+--Π=→ : {A B : Set} → ((a : A) → (λ _ → B) a) ≡ (A → B)
+--Π=→ = {!!}
 
 →=× : {A B : Set} → ((b : Bool) → if b then A else B) ↔ A × B
-→=× = {!!}
+fst →=× x = (x true) , (x false)
+snd →=× (f , s) false = s
+snd →=× (f , s) true = f
 
 dependentCurry : {A : Set}{B : A → Set}{C : (a : A) → B a → Set} →
   ((a : A)(b : B a) → C a b) ↔ ((w : Σ A B) → C (fst w) (snd w))
-dependentCurry = {!!}
+fst dependentCurry x (f , s) = x f s
+snd dependentCurry x a b = x (a , b)
 
 ∀×-distr  : {A : Set}{P : A → Set}{Q : A → Set} → ((a : A) → P a × Q a)  ↔ ((a : A) → P a) × ((a : A) → Q a)
 ∀×-distr = {!!}
