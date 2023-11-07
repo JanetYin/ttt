@@ -170,6 +170,16 @@ pred∞ co1 = just co0
 pred∞ ∞ = just ∞
 -}
 
+{-
+_+∞_ : ℕ∞ -> ℕ∞ -> ℕ∞
+(n +∞ m) with (pred∞ n)
+(n +∞ m) | nothing = m
+(n +∞ m) | just n-1 = suc∞ (n-1 +∞ m)
+  where
+  suc∞ : ℕ∞ -> ℕ∞
+  pred∞ (suc∞ n) = just n
+-}
+
 _+∞_ : ℕ∞ -> ℕ∞ -> ℕ∞
 pred∞ (n +∞ m) with (pred∞ n)
 pred∞ (n +∞ m) | nothing  = pred∞ m
