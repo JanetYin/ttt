@@ -26,6 +26,7 @@ data Fin : ℕ → Set where  -- Fin n = n-elemu halmaz
   zero : {n : ℕ} → Fin (suc n)
   suc  : {n : ℕ} → Fin n → Fin (suc n)
 -}
+
 f0 : Fin 0 → ⊥
 f0 ()
 
@@ -50,7 +51,7 @@ f4-3 = {!!}
 -- Lib-ben a unicode ‼ az indexelés.
 infixl 9 _!!_
 _!!_ : {A : Set}{n : ℕ} → Vec A n → Fin n → A
-xs !! n = {!!}
+_!!_ = ?
 
 test-!! : (the ℕ 3 ∷ 4 ∷ 1 ∷ []) !! (suc (suc zero)) ≡ 1
 test-!! = refl
@@ -74,10 +75,19 @@ data List (A : Set) : Set where
 -}
 
 length : {A : Set} → List A → ℕ
-length = {!!}
+length [] = zero
+length (x ∷ xs) = suc (length xs)
 
 fromList : {A : Set}(as : List A) → Vec A (length as)
 fromList = {!!}
+
+{-
+Similarly, zero refers to one of two constructors.
+Due to how it does type inference, Agda does not allow overloading of defined names,
+but does allow overloading of constructors.
+It is recommended that one restrict overloading to related meanings, as we have done here,
+but it is not required.
+-}
 
 _++_ : {A : Set}{m n : ℕ} → Vec A m → Vec A n → Vec A (m + n)
 _++_ = {!!}
@@ -85,7 +95,14 @@ _++_ = {!!}
 tabulate : {n : ℕ}{A : Set} → (Fin n → A) → Vec A n
 tabulate = {!!}
 
+test-tabulate : tabulate (the (Fin 3 -> ℕ) (λ {zero -> 6; (suc zero) -> 9; (suc (suc zero)) -> 2}))
+                  ≡ 6 ∷ 9 ∷ 2 ∷ []
+test-tabulate = refl
+
 -- Sigma types
+
+what : Σ ℕ (Vec Bool)
+what = 10 , {!!}
 
 filter : {A : Set}{n : ℕ}(f : A → Bool) → Vec A n → Σ ℕ (Vec A)
 filter = {!!}
