@@ -64,7 +64,7 @@ module People
   AK : ¬ (Σ Person λ y → y childOf Ann) → ¬ (Kate childOf Ann)
   AK = {!!}
 
-  -- Prove that if there is no person who is his own parent than no one is the parent of everyone.
+  -- Prove that if there is no person who is his own parent then no one is the parent of everyone.
   ¬NOPE : ¬ (Σ Person λ x → x parentOf x) → NOPE
   ¬NOPE = {!!}
 
