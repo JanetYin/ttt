@@ -5,14 +5,25 @@ open import Lib.Dec.PatternSynonym
 -- higher order logic
 ------------------------------------------------------
 
+{-
+| matematika |    logika    |   agda |
+|   1 - 0    | true - false | ⊤ - ⊥ |
+|     +      |   v (vagy)   |   ⊎    |
+|     *      |   ^ (és)     |   ×    |
+| ^ (hatvány)|      ⊃       |   →    |
+| (1 -_)     |      ¬       |  _→ ⊥ |
+
+
+-}
+
 f4 : Dec ((X Y : Set) → X ⊎ Y → Y)
-f4 = {!!}
+f4 = no λ x → x ⊤ ⊥ (inl tt)
 
 f5 : Dec ((X Y Z : Set) → (X → Z) ⊎ (Y → Z) → (X ⊎ Y → Z))
-f5 = {!!}
+f5 = no λ x → x ⊤ ⊥ ⊥ (no (λ h → h)) (yes tt)
 
 f6 : Dec ((X Y Z : Set) → (X → Z) × (Y → Z) → (X × Y → Z))
-f6 = {!!}
+f6 = yes (λ where X Y Z (fs , sn) (f , s) → sn s)
 
 f7 : Dec ((X Y Z : Set) → (X × Y → Z) → (X → Z) × (Y → Z))
 f7 = {!!}
@@ -41,15 +52,15 @@ module People
 
   -- Define the _hasChild predicate.
   _hasChild : Person → Set
-  x hasChild = {!!}
+  x hasChild = Σ Person λ p → p childOf x
 
   -- Formalise: Ann is not a child of Kate.
   ANK : Set
-  ANK = {!!}
+  ANK = ¬ (Ann childOf Kate)
 
   -- Formalise: there is someone with exactly one child.
   ONE : Set
-  ONE = {!!}
+  ONE = Σ Person λ p → Σ Person λ x → Σ Person λ y → x childOf p × y childOf p → x sameAs y
 
   -- Define the relation _parentOf_.
   _parentOf_ : Person → Person → Set
@@ -98,3 +109,4 @@ module People
 Σ∀ = {!!}
 AC       : (A B : Set)(R : A → B → Set)        → ((x : A) → Σ B λ y → R x y) → Σ (A → B) λ f → (x : A) → R x (f x)
 AC = {!!}
+ 
