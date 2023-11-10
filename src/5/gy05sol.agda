@@ -10,15 +10,23 @@ data Vec (A : Set) : ℕ → Set where
   _∷_ : {n : ℕ} → A → Vec A n → Vec A (suc n)
 -}
 head : {A : Set}{n : ℕ} → Vec A (suc n) → A
-head = {!!}
+head (x ∷ xs) = x
+
+-- C++: array<int, 9>
+{-
+class hsdjfhkjshfd {
+  int r[9];
+}
+-}
 
 tail : {A : Set}{n : ℕ} → Vec A (suc n) → Vec A n
-tail = {!!}
+tail (x ∷ xs) = xs
 
 countDownFrom : (n : ℕ) → Vec ℕ n
-countDownFrom = {!!}
+countDownFrom zero = []
+countDownFrom (suc n) = suc n ∷ countDownFrom n
 
-test-countDownFrom : countDownFrom 3 ≡ 3 ∷ 2 ∷ 1 ∷ []
+test-countDownFrom : countDownFrom 3 ≡ 3 ∷ (2 ∷ (1 ∷ ([])))
 test-countDownFrom = refl
 
 {-

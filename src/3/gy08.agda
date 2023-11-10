@@ -7,19 +7,27 @@ open import Lib
 ---------------------------------------------------------
 
 f4 : Dec ((X Y : Set) → X ⊎ Y → Y)
-f4 = {!!}
+f4 = inr λ f → f ⊤ ⊥ (inl tt)
 
+
+-- i h h
+-- h i h
 f5 : Dec ((X Y Z : Set) → (X → Z) ⊎ (Y → Z) → (X ⊎ Y → Z))
-f5 = {!!}
+f5 = inr (λ f → f ⊤ ⊥ ⊥ (inr (λ x → x)) (inl tt))
 
 f6 : Dec ((X Y Z : Set) → (X → Z) × (Y → Z) → (X × Y → Z))
-f6 = {!!}
+f6 = inl (λ _ _ _ (xz , yz) (x , y) → yz y)
 
 f7 : Dec ((X Y Z : Set) → (X × Y → Z) → (X → Z) × (Y → Z))
-f7 = {!!}
+f7 = inr λ f → snd (f ⊥ ⊤ ⊥ fst) tt
 
 f8 : Dec ((X Y Z : Set) → (X ⊎ Y × Z) → (X ⊎ Y) × (X ⊎ Z))
-f8 = {!!}
+f8 = inl (λ _ _ _ → λ where (inl x) → inl x , inl x
+                            (inr (y , z)) → inr y , inr z)
+
+f16 : Dec ((P Q : Set) → P × Q ↔ ((P → Q) ↔ P))
+f16 = inl (λ _ _ → (λ where (p , q) → (λ _ → p) , λ _ _ → q) , 
+                    λ where (pqp , ppq) → let p = pqp (λ p' → ppq p' p') in p , ppq p p)
 
 f9 : Dec ((X Y Z : Set) → (X ⊎ Y) × (X ⊎ Z) → (X ⊎ Y × Z))
 f9 = {!!}
@@ -42,15 +50,16 @@ module People
 
   -- Define the _hasChild predicate.
   _hasChild : Person → Set
-  x hasChild = {!!}
+  x hasChild = Σ Person (λ c → c childOf x)
 
   -- Formalise: Ann is not a child of Kate.
   ANK : Set
-  ANK = {!!}
+  ANK = ¬ (Ann childOf Kate)
 
   -- Formalise: there is someone with exactly one child.
+  -- ∃!
   ONE : Set
-  ONE = {!!}
+  ONE = Σ Person (λ p → Σ Person (λ c → c childOf p × (∀ s → s childOf p → s sameAs c)))
 
   -- Define the relation _parentOf_.
   _parentOf_ : Person → Person → Set
@@ -64,7 +73,7 @@ module People
   AK : ¬ (Σ Person λ y → y childOf Ann) → ¬ (Kate childOf Ann)
   AK = {!!}
 
-  -- Prove that if there is no person who is his own parent than no one is the parent of everyone.
+  -- Prove that if there is no person who is his own parent then no one is the parent of everyone.
   ¬NOPE : ¬ (Σ Person λ x → x parentOf x) → NOPE
   ¬NOPE = {!!}
 
