@@ -25,5 +25,8 @@ levelOfTerm {a} _ = a
 the : ∀{a}(A : Set a) → A → A
 the _ a = a
 
+id : ∀{a}{A : Set a} → A → A
+id {A = A} a = the A a
+
 typeOf : ∀{a}{A : Set a} → A → Set a
 typeOf {A = A} _ = A
