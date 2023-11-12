@@ -25,6 +25,13 @@ f5 = no λ x → x ⊤ ⊥ ⊥ (no (λ h → h)) (yes tt)
 f6 : Dec ((X Y Z : Set) → (X → Z) × (Y → Z) → (X × Y → Z))
 f6 = yes (λ where X Y Z (fs , sn) (f , s) → sn s)
 
+demorgen : {A B : Set } → ¬ ¬ (¬ (A × B) → ¬ A ⊎ ¬ B) -- Konstruktív logikában vagyunk, így a dupla tagadás (¬ (¬ (A × B) → ¬ A ⊎ ¬ B)) itt nem működne. Azért, hogy ezt kiküszöböljük, még ráteszünk tagadást, amit így már tudunk bizonyítani.
+demorgen f = f 
+  λ x → yes         -- Menjünk el az egyik irányba!
+    (λ a → f        -- Sajnos még csak egy "A"-m van, honnan szerzek "B"-t? Mi lenne, ha elmennénk a másik irányba? Próbáljuk ki!
+    (λ _ → no       -- Mivel újra meghívtam f-et, így el tudtam menni a másik irányba! Ezt logikában "időutazásnak" hívják, mivel egy előző hibát (információ vesztést) kijavítunk azzal, hogy visszatérünk oda, ahol hibáztunk (információt vesztettünk)
+      (λ b → x (a , b)))) -- Itt már meg tudom hívni "x"-et, mivel van "A" típusú értékem is, és "B" típusú értékem is.
+
 f7 : Dec ((X Y Z : Set) → (X × Y → Z) → (X → Z) × (Y → Z))
 f7 = {!!}
 
