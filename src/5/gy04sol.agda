@@ -1,4 +1,4 @@
-open import Lib hiding (_+∞_; coiteℕ∞)
+open import Lib hiding (_+∞_; coiteℕ∞; ℕ∞→ℕ)
 
 open import Lib.Containers.List hiding (zipWith; head; tail)
 open import Lib.Containers.Stream hiding (zipWith; coiteStream)
@@ -170,27 +170,43 @@ pred∞ co1 = just co0
 pred∞ ∞ = just ∞
 -}
 
+{-
+_+∞_ : ℕ∞ -> ℕ∞ -> ℕ∞     -- \bN \inf
+(n +∞ m) with (pred∞ n)
+(n +∞ m) | nothing = m
+(n +∞ m) | just n-1 = suc∞ (n-1 +∞ m)
+  where
+  suc∞ : ℕ∞ -> ℕ∞
+  pred∞ (suc∞ n) = just n
+-}
+
 _+∞_ : ℕ∞ -> ℕ∞ -> ℕ∞
-pred∞ (n +∞ m) with (pred∞ n)
-pred∞ (n +∞ m) | nothing  = pred∞ m
-pred∞ (n +∞ m) | just n-1 = just (n-1 +∞ m)
+pred∞ (n +∞ m) with pred∞ n
+... | just n-1 = just (n-1 +∞ m)
+... | nothing = pred∞ m
 
 -- Ez a függvény létezik, ezzel lehet megnézni
 -- egy conat tényleges értékét.
 -- Az első paraméter a fuel, maximum ezt a természetes számot tudja visszaadni.
 -- Második paraméter a conat, amire kíváncsiak vagyunk.
 -- Értelemszerűen ∞-re mindig nothing az eredmény.
-{-
+
+
+
 ℕ∞→ℕ : ℕ → ℕ∞ → Maybe ℕ
 ℕ∞→ℕ zero _ = nothing
 ℕ∞→ℕ (suc n) c with pred∞ c
-... | zero∞ = just 0
-... | suc∞ b with ℕ∞→ℕ n b
-... | nothing = nothing
-... | just x = just (suc x)
--}
+ℕ∞→ℕ (suc n) c | just c-1 with ℕ∞→ℕ n c-1
+ℕ∞→ℕ (suc n) c | just c-1 | just x = just (suc x)
+ℕ∞→ℕ (suc n) c | just c-1 | nothing = nothing
+ℕ∞→ℕ (suc n) c | nothing = just zero
+
+-- ℕ∞→ℕ 4 co3 = just 3
+-- ℕ∞→ℕ 4 co4 = just 4
+-- ℕ∞→ℕ 4 co5 = nothing
+-- ℕ∞→ℕ 4 ∞   = nothing
 
 coiteℕ∞ : {B : Set} → (B → Maybe B) → B → ℕ∞
-coiteℕ∞ = {!!}
+coiteℕ∞ f b = {!!}
 
 -- TODO, further exercises: network protocols, simple machines: chocolate machine (input: coin, getChocolate, getBackCoins, output: error, chocolate, money back), some Turing machines, animations, IO, repl, shell
