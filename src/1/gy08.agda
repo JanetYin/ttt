@@ -5,14 +5,32 @@ open import Lib.Dec.PatternSynonym
 -- higher order logic
 ------------------------------------------------------
 
+{-
+| matematika |    logika    |   agda |
+|   1 - 0    | true - false | ⊤ - ⊥ |
+|     +      |   v (vagy)   |   ⊎    |
+|     *      |   ^ (és)     |   ×    |
+| ^ (hatvány)|      ⊃       |   →    |
+| (1 -_)     |      ¬       |  _→ ⊥ |
+
+
+-}
+
 f4 : Dec ((X Y : Set) → X ⊎ Y → Y)
-f4 = {!!}
+f4 = no λ x → x ⊤ ⊥ (inl tt)
 
 f5 : Dec ((X Y Z : Set) → (X → Z) ⊎ (Y → Z) → (X ⊎ Y → Z))
-f5 = {!!}
+f5 = no λ x → x ⊤ ⊥ ⊥ (no (λ h → h)) (yes tt)
 
 f6 : Dec ((X Y Z : Set) → (X → Z) × (Y → Z) → (X × Y → Z))
-f6 = {!!}
+f6 = yes (λ where X Y Z (fs , sn) (f , s) → sn s)
+
+demorgen : {A B : Set } → ¬ ¬ (¬ (A × B) → ¬ A ⊎ ¬ B) -- Konstruktív logikában vagyunk, így a dupla tagadás (¬ (¬ (A × B) → ¬ A ⊎ ¬ B)) itt nem működne. Azért, hogy ezt kiküszöböljük, még ráteszünk tagadást, amit így már tudunk bizonyítani.
+demorgen f = f 
+  λ x → yes         -- Menjünk el az egyik irányba!
+    (λ a → f        -- Sajnos még csak egy "A"-m van, honnan szerzek "B"-t? Mi lenne, ha elmennénk a másik irányba? Próbáljuk ki!
+    (λ _ → no       -- Mivel újra meghívtam f-et, így el tudtam menni a másik irányba! Ezt logikában "időutazásnak" hívják, mivel egy előző hibát (információ vesztést) kijavítunk azzal, hogy visszatérünk oda, ahol hibáztunk (információt vesztettünk)
+      (λ b → x (a , b)))) -- Itt már meg tudom hívni "x"-et, mivel van "A" típusú értékem is, és "B" típusú értékem is.
 
 f7 : Dec ((X Y Z : Set) → (X × Y → Z) → (X → Z) × (Y → Z))
 f7 = {!!}
@@ -41,15 +59,15 @@ module People
 
   -- Define the _hasChild predicate.
   _hasChild : Person → Set
-  x hasChild = {!!}
+  x hasChild = Σ Person λ p → p childOf x
 
   -- Formalise: Ann is not a child of Kate.
   ANK : Set
-  ANK = {!!}
+  ANK = ¬ (Ann childOf Kate)
 
   -- Formalise: there is someone with exactly one child.
   ONE : Set
-  ONE = {!!}
+  ONE = Σ Person λ p → Σ Person λ x → Σ Person λ y → x childOf p × y childOf p → x sameAs y
 
   -- Define the relation _parentOf_.
   _parentOf_ : Person → Person → Set
@@ -98,3 +116,4 @@ module People
 Σ∀ = {!!}
 AC       : (A B : Set)(R : A → B → Set)        → ((x : A) → Σ B λ y → R x y) → Σ (A → B) λ f → (x : A) → R x (f x)
 AC = {!!}
+ 
