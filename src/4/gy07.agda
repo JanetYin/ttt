@@ -77,19 +77,19 @@ ee2 : {X : Set} → Dec (¬ (X ⊎ ¬ X))
 ee2 = no λ f → f (no (λ x → f (inl x)))
 
 e3 : {X : Set} → Dec (¬ (X → (¬ X → X)))
-e3 = {!!}
+e3 = inr λ x → x (λ x₁ x₂ → x₁)
 
 e4 : Dec ℕ
-e4 = {!!}
+e4 = inl zero
 
 e5 : Dec ⊥
-e5 = {!!}
+e5 = inr λ x → x
 
 e6 : {X : Set} → Dec (⊥ → X ⊎ ¬ X)
 e6 = {!!}
 
 e7 : {X : Set} → Dec (X × ¬ X → ¬ X ⊎ X)
-e7 = {!!}
+e7 = inl λ where (x , ¬x) → inr x
 
 e8 : {X : Set} → Dec ((X → X) → ⊥)
 e8 = {!!}

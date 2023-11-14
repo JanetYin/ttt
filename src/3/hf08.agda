@@ -1,9 +1,6 @@
 module hf08 where
 
-open import lib
-
-Dec : ∀{i} → Set i → Set i
-Dec A = A ⊎ ¬ A
+open import Lib
 
 f9 : Dec ((X Y Z : Set) → (X ⊎ Y) × (X ⊎ Z) → (X ⊎ Y × Z))
 f9 = {!!}

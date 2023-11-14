@@ -76,16 +76,16 @@ ee1 : {X Y : Set} → Dec (X ⊎ Y → ¬ ¬ (Y ⊎ X))
 ee1 = {!!}
 
 ee2 : {X : Set} → Dec (¬ (X ⊎ ¬ X))
-ee2 = no λ ¬[x∨¬x] → ¬[x∨¬x] (no (λ x → ¬[x∨¬x] (yes x)))
+ee2 = ?
 
 e3 : {X : Set} → Dec (¬ (X → (¬ X → X)))
 e3 = {!!}
 
 e4 : Dec ℕ
-e4 = inl zero
+e4 = ?
 
 e5 : Dec ⊥
-e5 = no (λ x → x)
+e5 = ?
 
 e6 : {X : Set} → Dec (⊥ → X ⊎ ¬ X)
 e6 = {!!}
