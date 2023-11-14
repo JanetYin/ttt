@@ -6,9 +6,14 @@ open import Lib
 Σ=× : {A B : Set} → Σ A (λ _ → B) ↔ A × B
 Σ=× = {!!}
 
+-- Π A F is essentially (a : A) → F a
+-- what döes this mean?
+
+                    -- Π A (λ _ → B)
 Π=→ : {A B : Set} → ((a : A) → (λ _ → B) a) ≡ (A → B)
 Π=→ = {!!}
 
+                    -- Π Bool (if_then A else B)
 →=× : {A B : Set} → ((b : Bool) → if b then A else B) ↔ A × B
 →=× = {!!}
 
