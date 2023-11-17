@@ -47,7 +47,7 @@ AC = {!   !}
 Döntsd el, hogy két azonos kvantor változói felcserélhetők-e vagy nem.
 -}
 ∀∀ : Dec ((A B : Set)(R : A → B → Set) → (∀ a → ∀ b → R a b) → (∀ b → ∀ a → R a b))
-∀∀ = inl λ _ _ _ → λ r b a → r a b
+∀∀ = {!   !}
 
 ΣΣ : Dec ((A B : Set)(R : A → B → Set) → (Σ A λ a → Σ B λ b → R a b) → Σ B λ b → Σ A λ a → R a b)
 ΣΣ = {!   !}
