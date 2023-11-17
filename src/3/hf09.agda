@@ -67,7 +67,7 @@ Döntsd el, hogy az alábbi állítások igazak-e vagy sem.
 Bizonyítsd vagy cáfold!
 -}
 →∀ : Dec ((A : Set)(P : A → Set)(Q : A → Set) → ((∀ x → P x) → (∀ x → Q x)) → ∀ x → P x → Q x)
-→∀ = inr λ f → f Bool P Q (λ p b → p false) true tt where
+→∀ = {! !}
 
 ∀→ : Dec ((A : Set)(P : A → Set)(Q : A → Set) → (∀ x → P x → Q x) → (∀ x → P x) → ∀ x → Q x)
 ∀→ = {!   !}
