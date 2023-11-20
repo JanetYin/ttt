@@ -6,9 +6,14 @@ open import Lib
 Σ=× : {A B : Set} → Σ A (λ _ → B) ↔ A × B
 Σ=× = {!!}
 
+-- Π A F is essentially (a : A) → F a
+-- what döes this mean?
+
+                    -- Π A (λ _ → B)
 Π=→ : {A B : Set} → ((a : A) → (λ _ → B) a) ≡ (A → B)
 Π=→ = {!!}
 
+                    -- Π Bool (if_then A else B)
 →=× : {A B : Set} → ((b : Bool) → if b then A else B) ↔ A × B
 →=× = {!!}
 
@@ -29,13 +34,13 @@ Fin1+3=Fin4 = {!!}
 -- relating Fin m ⊎ Fin n and Fin (m + n)
 
 inj₁f : {m n : ℕ} → Fin m → Fin (m + n)
-inj₁f i = {!!}
+inj₁f = {!!}
 
 test-inj₁f : inj₁f {3}{4} (suc (suc zero)) ≡ suc (suc zero)
 test-inj₁f = refl
 
 inj₂f : {m n : ℕ} → Fin n → Fin (m + n)
-inj₂f {m}  i = {!!}
+inj₂f {m} i = {!!}
 
 test-inj₂f : inj₂f {3}{4} (suc (suc zero)) ≡ suc (suc (suc (suc (suc zero))))
 test-inj₂f = refl
@@ -44,8 +49,14 @@ f : {m n : ℕ} → Fin m ⊎ Fin n → Fin (m + n)
 f (inl i) = inj₁f i
 f (inr i) = inj₂f i
 
+-- now backwards
+f⁻¹ : {m n : ℕ} → Fin (m + n) → Fin m ⊎ Fin n   -- \^- \^1
+f⁻¹ {m} i = {!!}
+
+-- use f⁻¹
+-- this essentially merges finite sequences
 casef : {m n : ℕ}{C : Set} → (Fin m → C) → (Fin n → C) → Fin (m + n) → C
-casef {m}  f g i       = {!!}
+casef {m}  g h i   = {!!}
 
 test-casef : casef {3}{3} (λ i → i) (λ i → i) (suc (suc zero)) ≡ suc (suc zero)
 test-casef = refl
@@ -54,9 +65,9 @@ test-casef' = refl
 test-casef'' : casef {3}{3} (λ i → i) (λ i → i) (suc (suc (suc (suc zero)))) ≡ suc zero
 test-casef'' = refl
 
--- use inj₁f,inj₂f in one direction and "casef inj₁ inj₂" in the other direction
 Fin+ : {m n : ℕ} → Fin (m + n) ↔ Fin m ⊎ Fin n
-Fin+ = {!!}
+fst Fin+ = f⁻¹
+snd Fin+ = f
 
 -- this might be hard
 Fin* : {m n : ℕ} → Fin (m * n) ↔ Fin m × Fin n
