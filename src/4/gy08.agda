@@ -16,12 +16,14 @@ f6 = inl λ X Y Z (xz , yz) (x , y) → xz x
 
 f7 : Dec ((X Y Z : Set) → (X × Y → Z) → (X → Z) × (Y → Z))
 f7 = inr λ x → fst (x ⊤ ⊥ ⊥ λ x₁ → snd x₁) tt
+e8 : {X : Set} → Dec ((X → X) → ⊥)
+e8 = {!!}
 
-f8 : Dec ((X Y Z : Set) → (X ⊎ Y × Z) → (X ⊎ Y) × (X ⊎ Z))
-f8 = {!!}
+f1 : {X Y : Set} → ¬ ¬ X ⊎ ¬ ¬ Y → ¬ ¬ (X ⊎ Y)
+f1 = {!!}
 
-f9 : Dec ((X Y Z : Set) → (X ⊎ Y) × (X ⊎ Z) → (X ⊎ Y × Z))
-f9 = {!!}
+f2 : ({X Y : Set} → ¬ (X × Y) → ¬ X ⊎ ¬ Y) → {X Y : Set} → ¬ ¬ (X ⊎ Y) → ¬ ¬ X ⊎ ¬ ¬ Y
+f2 = {!!}
 
 f10 : Dec ((X Y Z : Set) → (X ⊎ Y) × (X ⊎ Z) → ((X ⊎ Y) × Z))
 f10 = inr λ x → snd (x ⊤ Bool ⊥ ((inr false) , (inl tt)))
