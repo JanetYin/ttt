@@ -185,25 +185,22 @@ pred∞ (n +∞ m) with pred∞ n
 ... | just n-1 = just (n-1 +∞ m)
 ... | nothing = pred∞ m
 
--- Ez a függvény létezik, ezzel lehet megnézni
+-- Ez a függvény létezik a Libben; ezzel lehet megnézni
 -- egy conat tényleges értékét.
--- Az első paraméter a fuel, maximum ezt a természetes számot tudja visszaadni.
+-- Az első paraméter a fuel, ennél kisebbet tud csak visszaadni.
 -- Második paraméter a conat, amire kíváncsiak vagyunk.
 -- Értelemszerűen ∞-re mindig nothing az eredmény.
-
-
-
 ℕ∞→ℕ : ℕ → ℕ∞ → Maybe ℕ
 ℕ∞→ℕ zero _ = nothing
 ℕ∞→ℕ (suc n) c with pred∞ c
+ℕ∞→ℕ (suc n) c | nothing = just zero
 ℕ∞→ℕ (suc n) c | just c-1 with ℕ∞→ℕ n c-1
 ℕ∞→ℕ (suc n) c | just c-1 | just x = just (suc x)
 ℕ∞→ℕ (suc n) c | just c-1 | nothing = nothing
-ℕ∞→ℕ (suc n) c | nothing = just zero
 
+-- ℕ∞→ℕ 4 co2 = just 2
 -- ℕ∞→ℕ 4 co3 = just 3
--- ℕ∞→ℕ 4 co4 = just 4
--- ℕ∞→ℕ 4 co5 = nothing
+-- ℕ∞→ℕ 4 co4 = nothing
 -- ℕ∞→ℕ 4 ∞   = nothing
 
 coiteℕ∞ : {B : Set} → (B → Maybe B) → B → ℕ∞
