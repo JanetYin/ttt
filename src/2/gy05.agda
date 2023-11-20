@@ -51,7 +51,8 @@ f4-3 = {!!}
 -- Lib-ben a unicode ‼ az indexelés.
 infixl 9 _!!_
 _!!_ : {A : Set}{n : ℕ} → Vec A n → Fin n → A
-xs !! n = {!!}
+(x ∷ xs) !! zero = x
+(x ∷ xs) !! suc n = xs !! n
 
 test-!! : (the ℕ 3 ∷ 4 ∷ 1 ∷ []) !! (suc (suc zero)) ≡ 1
 test-!! = refl
@@ -122,9 +123,6 @@ foldr = {!!}
 -- pl intersperse 10 [1,2,3] == [1,10,2,10,3]
 intersperse : {A : Set}{n : ℕ} → A → Vec A (suc n) → Vec A (suc (n * 2))
 intersperse = {!!}
-
-
-
 
 
 
