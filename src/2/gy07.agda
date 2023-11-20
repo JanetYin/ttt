@@ -72,32 +72,35 @@ Dec A = A ⊎ ¬ A
 
 open import Lib.Dec.PatternSynonym
 
+wk : {X : Set} → X → ¬ ¬ X
+wk x ¬x = ¬x x
+
 ee1 : {X Y : Set} → Dec (X ⊎ Y → ¬ ¬ (Y ⊎ X))
-ee1 = {!!}
+ee1 = yes λ { (yes a) ¬y∨x → ¬y∨x (inr a) ; (no b) ¬y∨x → ¬y∨x (inl b)} --(λ x → case x (λ x₁ → wk (inr x₁)) λ x₁ → wk (inl x₁))
 
 ee2 : {X : Set} → Dec (¬ (X ⊎ ¬ X))
-ee2 = ?
+ee2 = no (λ ¬[x∨¬x] → ¬[x∨¬x] (no (λ x → ¬[x∨¬x] (inl x))))
 
 e3 : {X : Set} → Dec (¬ (X → (¬ X → X)))
-e3 = {!!}
+e3 = no (λ ¬[x⊃¬x¬⊃x] → ¬[x⊃¬x¬⊃x] (λ z _ → z))
 
 e4 : Dec ℕ
-e4 = ?
+e4 = yes zero
 
 e5 : Dec ⊥
-e5 = ?
+e5 = no (λ x → x)
 
 e6 : {X : Set} → Dec (⊥ → X ⊎ ¬ X)
-e6 = {!!}
+e6 = yes (λ x → exfalso x)
 
 e7 : {X : Set} → Dec (X × ¬ X → ¬ X ⊎ X)
-e7 = {!!}
+e7 = yes (λ { (x , ¬x) → exfalso (¬x x)})
 
 e8 : {X : Set} → Dec ((X → X) → ⊥)
-e8 = {!!}
+e8 = no (λ f → f (λ x → x))
 
 f1 : {X Y : Set} → ¬ ¬ X ⊎ ¬ ¬ Y → ¬ ¬ (X ⊎ Y)
 f1 = {!!}
 
 f2 : ({X Y : Set} → ¬ (X × Y) → ¬ X ⊎ ¬ Y) → {X Y : Set} → ¬ ¬ (X ⊎ Y) → ¬ ¬ X ⊎ ¬ ¬ Y
-f2 = {!!}
+f2 biz ¬¬[x∨y] = biz (λ { (¬x , ¬y) → ¬¬[x∨y] (λ x∨y → {!!})})
