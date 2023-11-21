@@ -56,10 +56,13 @@ f4-1 = {!!}
 f4-2 = {!!}
 f4-3 = {!!}
 
--- Lib-ben a unicode ‼ az indexelés.
+-- Lib-ben a unicode ‼ az indexelés. (\!!)
 infixl 9 _!!_
 _!!_ : {A : Set}{n : ℕ} → Vec A n → Fin n → A
-_!!_ = {!!}
+(x ∷ xs) !! zero = x
+(x ∷ xs) !! suc i = xs !! i
+
+-- a `the ℕ` a haskelles (3 :: Int) megfelelője
 
 test-!! : (the ℕ 3 ∷ 4 ∷ 1 ∷ []) !! (suc (suc zero)) ≡ 1
 test-!! = refl
@@ -67,8 +70,9 @@ test-!! = refl
 test2-!! : (the ℕ 3 ∷ 4 ∷ 1 ∷ 0 ∷ 10 ∷ []) !! 3 ≡ 0 -- 3-as literál a !! után valójában Fin 5 típusú.
 test2-!! = refl
 
-fromℕ : (n : ℕ) → Fin (suc n)
-fromℕ = {!!}
+fromℕ : (n : ℕ) → Fin (suc n)     -- \bN
+fromℕ zero = zero {0}
+fromℕ (suc n) = suc (fromℕ n)
 
 test-fromℕ : fromℕ 3 ≡ suc (suc (suc zero))
 test-fromℕ = refl
@@ -101,19 +105,40 @@ _++_ : {A : Set}{m n : ℕ} → Vec A m → Vec A n → Vec A (m + n)
 _++_ = {!!}
 
 tabulate : {n : ℕ}{A : Set} → (Fin n → A) → Vec A n
-tabulate = {!!}
+tabulate {zero} f = []
+tabulate {suc n} f = f zero ∷ tabulate λ i -> f (suc i)
 
 test-tabulate : tabulate (the (Fin 3 -> ℕ) (λ {zero -> 6; (suc zero) -> 9; (suc (suc zero)) -> 2}))
                   ≡ 6 ∷ 9 ∷ 2 ∷ []
 test-tabulate = refl
 
 -- Sigma types
-
+-- Kísérletezz.
 what : Σ ℕ (Vec Bool)
-what = 10 , {!!}
+what = 1 , {!!}
+
+-- (if_then ℕ else Bool) ≡ (λ b -> if b then ℕ else Bool)
+what2 : Σ Bool (if_then ℕ else Bool)
+what2 = false , {!!}
 
 filter : {A : Set}{n : ℕ}(f : A → Bool) → Vec A n → Σ ℕ (Vec A)
-filter = {!!}
+filter f [] = 0 , []
+filter {A} f (x ∷ xs) = if (f x)
+                        then suc (fst rec) , x ∷ snd rec
+                        else rec
+  where   -- \GS
+  rec : Σ ℕ (Vec A)
+  rec = filter f xs
+
+filter' : {A : Set}{n : ℕ}(f : A → Bool) → Vec A n → Σ ℕ (Vec A)
+fst (filter' f []) = zero
+snd (filter' f []) = []
+fst (filter' f (x ∷ xs)) with f x
+... | true = suc (fst (filter' f xs))
+... | false = fst (filter' f xs)
+snd (filter' f (x ∷ xs)) with f x
+... | true = x ∷ (snd (filter' f xs))
+... | false = snd (filter' f xs)
 
 test-filter : filter {ℕ} (3 <ᵇ_) (4 ∷ 3 ∷ 2 ∷ 5 ∷ []) ≡ (2 , 4 ∷ 5 ∷ [])
 test-filter = refl

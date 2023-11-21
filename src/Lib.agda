@@ -7,6 +7,7 @@ module Lib where
 -- because there are a lot of functions that have the same name.
 
 open import Lib.Level public
+open import Lib.Function public
 open import Lib.Unit public
   renaming (_≟_ to _≟⊤_)
 open import Lib.Empty public

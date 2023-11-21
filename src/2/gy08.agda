@@ -5,17 +5,19 @@ open import Lib.Dec.PatternSynonym
 -- higher order logic
 ------------------------------------------------------
 
+-- űtop
+-- űbot
 f4 : Dec ((X Y : Set) → X ⊎ Y → Y)
-f4 = {!!}
+f4 = no (λ f → f ⊤ ⊥ (inl tt))
 
 f5 : Dec ((X Y Z : Set) → (X → Z) ⊎ (Y → Z) → (X ⊎ Y → Z))
-f5 = {!!}
+f5 = no (λ f → f ⊤ ⊥ ⊥ (inr (λ x → x)) (inl tt))
 
 f6 : Dec ((X Y Z : Set) → (X → Z) × (Y → Z) → (X × Y → Z))
-f6 = {!!}
+f6 = yes (λ X Y Z X→Z×Y→Z X×Y → fst X→Z×Y→Z (fst X×Y))
 
 f7 : Dec ((X Y Z : Set) → (X × Y → Z) → (X → Z) × (Y → Z))
-f7 = {!!}
+f7 = no (λ f → snd (f ⊥ ⊤ ⊥ fst) tt)
 
 f8 : Dec ((X Y Z : Set) → (X ⊎ Y × Z) → (X ⊎ Y) × (X ⊎ Z))
 f8 = {!!}
@@ -24,7 +26,7 @@ f9 : Dec ((X Y Z : Set) → (X ⊎ Y) × (X ⊎ Z) → (X ⊎ Y × Z))
 f9 = {!!}
 
 f10 : Dec ((X Y Z : Set) → (X ⊎ Y) × (X ⊎ Z) → ((X ⊎ Y) × Z))
-f10 = {!!}
+f10 = no (λ x → snd (x ⊤ ⊥ ⊥ (yes tt , yes tt)))
 
 ---------------------------------------------------------
 -- predicate (first order) logic example
