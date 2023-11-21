@@ -61,6 +61,7 @@ module Safari
   -- predikátumok
   (isInMatingSeason : Animal → Set) -- isInMatingSeason X ≡ X párzási időszakában van
   (_mates_ : Animal → Animal → Set) -- X mates Y ≡ Y párja X-nek
+  (_same_ : Animal → Animal → Set) -- Két állat ugyanaz.
   where
 
     -- Formalizáljuk az alábbi kifejezéseket
@@ -69,11 +70,11 @@ module Safari
     -- ha az az állat éppen nincsen párzási időszakában,
     -- akkor létezik egy másik állat, aki a párja.
     ∃mate : Set
-    ∃mate = {!   !}
+    ∃mate = ∀ a → (isInMatingSeason a → Σ Animal (λ b → ¬ (a same b) × a mates b))
 
     -- A zebrának nincsen párja.
     noMate4Zebras : Set
-    noMate4Zebras = {!   !}
+    noMate4Zebras = ¬ (Σ Animal λ a → Zebra mates a)
 
     -- Bizonyítsd be az alábbi kifejezést!
     -- Amennyiben minden állat esetén, ha az az állat nincsen párzási időszakában,
@@ -88,13 +89,39 @@ module Safari
 ---------------------------------------------------------
 
 ∀×-distr : (A : Set)(P : A → Set)(Q : A → Set) → ((a : A) → P a × Q a)  ↔ ((a : A) → P a) × ((a : A) → Q a)
-∀×-distr = {!!}
+∀×-distr A P Q = (λ apq → (λ a → fst (apq a)) , λ a → snd (apq a))
+               , λ {(pa , qa) a → pa a , qa a}
 
 ∀⊎-distr : (A : Set)(P : A → Set)(Q : A → Set) → ((a : A) → P a) ⊎ ((a : A) → Q a) → ((a : A) → P a ⊎ Q a)
-∀⊎-distr = {!!}
+∀⊎-distr A P Q (inl pa) a = inl (pa a)
+∀⊎-distr A P Q (inr qa) a = inr (qa a)
+
+∀⊎-distr' : ¬ ((A : Set)(P : A → Set)(Q : A → Set) → (((a : A) → P a ⊎ Q a) → ((a : A) → P a) ⊎ ((a : A) → Q a)))
+∀⊎-distr' = λ f → case (f (Fin 2) P Q λ {zero → inr tt; (suc a) → inl tt}) (λ pa → pa 0) λ qa → qa 1 where
+  P : Fin 2 → Set
+  P zero = ⊥
+  P (suc _) = ⊤
+
+  Q : Fin 2 → Set
+  Q zero = ⊤
+  Q (suc _) = ⊥
 
 Σ×-distr : (A : Set)(P : A → Set)(Q : A → Set) → (Σ A λ a → P a × Q a)  → Σ A P × Σ A Q
 Σ×-distr = {!!}
+
+Σ×-distr' : ¬ ((A : Set)(P : A → Set)(Q : A → Set) → (Σ A P × Σ A Q → Σ A λ a → P a × Q a))
+Σ×-distr' = λ f → p (f Bool P Q ((true , tt) , false , tt)) where
+  P : Bool → Set
+  P true = ⊤
+  P false = ⊥
+
+  Q : Bool → Set
+  Q true = ⊥
+  Q false = ⊤
+
+  p : Σ Bool (λ a → P a × Q a) → ⊥
+  p (false , x) = fst x
+  p (true , x) = snd x
 
 Σ⊎-distr : (A : Set)(P : A → Set)(Q : A → Set) → (Σ A λ a → P a ⊎ Q a)  ↔ Σ A P ⊎ Σ A Q
 Σ⊎-distr = {!!}
@@ -110,12 +137,6 @@ module Safari
 
 ¬¬∀-nat : (A : Set)(P : A → Set) → ¬ ¬ ((x : A) → P x) → (x : A) → ¬ ¬ (P x)
 ¬¬∀-nat = {!!}
-
-∀⊎-distr' : ¬ ((A : Set)(P : A → Set)(Q : A → Set) → (((a : A) → P a ⊎ Q a) → ((a : A) → P a) ⊎ ((a : A) → Q a)))
-∀⊎-distr' = {!!}
-
-Σ×-distr' : ¬ ((A : Set)(P : A → Set)(Q : A → Set) → (Σ A P × Σ A Q → Σ A λ a → P a × Q a))
-Σ×-distr' w = {!!}
  
 Σ∀ : (A B : Set)(R : A → B → Set) → (Σ A λ x → (y : B) → R x y) → (y : B) → Σ A λ x → R x y
 Σ∀ = {!!}
