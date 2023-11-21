@@ -1,8 +1,19 @@
 open import Lib
 open import Lib.Dec.PatternSynonym
 
----------------------------------------------------------
--- higher order logic
+------------------------------------------------------
+-- statements as parameters
+------------------------------------------------------
+
+blowUp : ((A : Set) -> ¬ A) -> ⊥
+blowUp f = f ⊤ tt
+-- what's the difference with this?
+-- (A : Set) -> ¬ A -> ⊥
+
+-- something like this may appear in the exam
+
+------------------------------------------------------
+-- practicing
 ------------------------------------------------------
 
 f4 : Dec ((X Y : Set) → X ⊎ Y → Y)
@@ -29,6 +40,11 @@ f10 = {!!}
 ---------------------------------------------------------
 -- predicate (first order) logic example
 ---------------------------------------------------------
+
+-- erre mindjárt visszatérünk
+notExists↔noneOf : ∀{i}{A : Set i} -> (P : A -> Set) ->
+                        (∀ x -> ¬ (P x)) ↔ ¬ (Σ A (λ x -> P x))
+notExists↔noneOf = {!!}
 
 module People
   (Person    : Set)
@@ -64,8 +80,8 @@ module People
   AK = {!!}
 
   -- Prove that if there is no person who is his own parent than no one is the parent of everyone.
-  ¬NOPE : ¬ (Σ Person λ x → x parentOf x) → NOPE
-  ¬NOPE = {!!}
+  ¬xpopxthenNOPE : ¬ (Σ Person λ x → x parentOf x) → NOPE
+  ¬xpopxthenNOPE = {!!}
 
 ---------------------------------------------------------
 -- predicate (first order) logic laws
@@ -75,6 +91,7 @@ module People
 ∀×-distr = {!!}
 ∀⊎-distr  :    (A : Set)(P : A → Set)(Q : A → Set) → ((a : A) → P a) ⊎ ((a : A) → Q a) → ((a : A) → P a ⊎ Q a)
 ∀⊎-distr = {!!}
+-- ez miért csak odafelé?
 Σ×-distr  :    (A : Set)(P : A → Set)(Q : A → Set) → (Σ A λ a → P a × Q a)  → Σ A P × Σ A Q
 Σ×-distr = {!!}
 Σ⊎-distr  :    (A : Set)(P : A → Set)(Q : A → Set) → (Σ A λ a → P a ⊎ Q a)  ↔ Σ A P ⊎ Σ A Q
