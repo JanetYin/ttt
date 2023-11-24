@@ -98,8 +98,8 @@ replicate (suc n) x = x ∷ replicate n x
 
 infixl 10 _‼_
 _‼_ : ∀{i}{A : Set i}(xs : List A) → Fin (length xs) → A
-(x ∷ _) ‼ zero    = x
-(_ ∷ xs) ‼ (suc i) = xs ‼ i
+(x ∷ _) ‼ fzero    = x
+(_ ∷ xs) ‼ (fsuc i) = xs ‼ i
 
 head : ∀{i}{A : Set i} → List A → Maybe A
 head []      = nothing

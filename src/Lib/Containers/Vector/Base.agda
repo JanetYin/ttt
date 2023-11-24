@@ -15,8 +15,8 @@ open import Lib.Equality.Base using (cong)
 
 infixl 6 _[_]%=_
 _[_]%=_ : ∀{i}{A : Set i}{n : ℕ} → Vec A n → Fin n → (A → A) → Vec A n
-(x ∷ xs) [ zero ]%= f = f x ∷ xs
-(x ∷ xs) [ suc i ]%= f = x ∷ xs [ i ]%= f
+(x ∷ xs) [ fzero ]%= f = f x ∷ xs
+(x ∷ xs) [ fsuc i ]%= f = x ∷ xs [ i ]%= f
 
 infixl 6 _[_]≔_
 _[_]≔_ : ∀{i}{A : Set i}{n : ℕ} → Vec A n → Fin n → A → Vec A n
@@ -58,8 +58,8 @@ init (x ∷ xs@(_ ∷ _)) = x ∷ init xs
 
 infixl 10 _‼_
 _‼_ : ∀{i}{A : Set i}{n : ℕ} → Vec A n → Fin n → A
-_‼_ (x ∷ xs) zero    = x
-_‼_ (x ∷ xs) (suc i) = _‼_ xs i
+_‼_ (x ∷ xs) fzero    = x
+_‼_ (x ∷ xs) (fsuc i) = _‼_ xs i
 
 iterateVec : ∀{i}{A : Set i} → (A → A) → A → ∀ {n} → Vec A n
 iterateVec s z {zero}  = []
