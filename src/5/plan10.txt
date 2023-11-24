@@ -1,0 +1,50 @@
+0:00-0:03	izomorfizmusok; elsőt elmutogatom (nézzétek, típusokra is lehet if_then_else_)
+0:03-0:07	mi a Π? miért Σ meg Π? és ott miért _≡_ van?
+0:07-0:09	dependentCurry megértése (de valójában ugyanúgy kell megírni)
+0:09-0:12	∀×-distr
+		(igazából itt látszik, hogy a függő típus valójában nem is bonyolítja meg annyira)
+		meg is lehet önállóan otthon vagy itt
+0:12-0:15	Bool=Fin2 (itt véges sok elem van; simán összepárosítjuk őket)
+0:15-0:18	Fin1+3=Fin4 önállóan (az 1 + 3 ≡ 4-et kitalálja)
+0:18-0:20	megbeszélés
+0:20-0:25	Σℕ önállóan
+0:25-0:27	megbeszélés
+0:27-0:32	mese a Curry–Howardról
+0:32-0:34	subt-prod együtt (igazából mint az izomorfizmus, csak itt a tartalomra nem kell ügyelni)
+0:34-0:36	anything együtt
+0:36-0:41	önálló munka dm2b-ig
+0:41-0:44	megbeszélés
+0:44-0:48	mese a konstruktív logikáról (lehetne posztulálni a lemet, de van értelme anélkül)
+0:48-0:52	nocontra és ¬¬invol₁ együtt
+0:52-0:55	nnlem önállóan
+0:55-0:57	megbeszélés
+0:57-0:58	Dec elmagyarázása
+0:58-1:00	ee1, e4 együtt
+1:00-1:02	f1 együtt
+1:02-1:04	gy06-ban f9 együtt
+1:04-1:09	_hasChild, ANK, ONE, _parentOf_ együtt
+1:09-1:12	NOPE-on gondolkodjanak piciz
+1:12-1:13	megbeszélés (van más megoldás is?)
+1:13-1:15	notExists↔noneOf elmutogatása
+1:15-1:18	bizonyítások együtt
+1:18-1:20	∀×-distr együtt
+1:20-1:23	Σ×-distr együtt (miért csak odafelé?)
+1:23-1:26	blowUp közösen
+1:26-1:28	ha nagyon marad időnk, kicsit az egyenlőségtípust elmutogatom
+1:28-1:30	röpi témája; házi
+
+
+otthonra:
+Πℕ
+¬¬invol₂
+nndnp
+dec2stab
+e3, ee2, e3, e5, e6, e7, e8, f2
+f4, f5, f6, f7, f8, f10
+
+ez nem lesz vizsgán, de akit érdekel:
+inj₁f
+inj₂f
+f⁻¹
+casef
+Fin*
