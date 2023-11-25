@@ -101,6 +101,7 @@ A Tao könyv fejezetei vannak hivatkozva.
 |      |                                                                   | pigeonhole principle             |
 |      | delay monad                                                       | delay monad                      |
 |      | oszthatosag, ha `d|x` es `d|y`, akkor `d|x+y`                     |                                  |
+|      | ⊤ ≠ ⊤ ⊎ ⊤                                                         |                                  |
 
 ## Bevezető és kivezető szabályok
 

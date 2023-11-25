@@ -117,6 +117,10 @@ test-tabulate = refl
 what : Σ ℕ (Vec Bool)
 what = 1 , {!!}
 
+-- (if_then ℕ else Bool) ≡ (λ b -> if b then ℕ else Bool)
+what2 : Σ Bool (if_then ℕ else Bool)
+what2 = false , {!!}
+
 filter : {A : Set}{n : ℕ}(f : A → Bool) → Vec A n → Σ ℕ (Vec A)
 filter f [] = 0 , []
 filter {A} f (x ∷ xs) = if (f x)
