@@ -54,7 +54,7 @@ f $- = f _
 λ- f = λ _ → f
 {-# INLINE λ- #-}
 
-it : ∀{a}{A : Set a} → ⦃ A ⦄ → A
+it : ∀{a}{A : Set a} → ⦃ a : A ⦄ → A
 it ⦃ x ⦄ = x
 
 flip' : ∀{a b c}{A : Set a}{B : Set b}{C : Set c} → (A → B → C) → (B → A → C)

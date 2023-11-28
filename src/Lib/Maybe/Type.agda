@@ -2,4 +2,6 @@
 
 module Lib.Maybe.Type where
 
-open import Agda.Builtin.Maybe public
+data Maybe {a} (A : Set a) : Set a where
+  just : A → Maybe A
+  nothing : Maybe A
