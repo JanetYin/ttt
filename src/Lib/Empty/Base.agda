@@ -16,13 +16,16 @@ exfalso ()
 exfalso-irrelevant : ∀ {w} {Whatever : Set w} → .⊥ → Whatever
 exfalso-irrelevant ()
 
-infixl 30 ¬_
+infixl 30 ¬_ ¬ᵢ_
 ¬_ : ∀{i} → Set i → Set i
 ¬ A = A → ⊥
 
+¬ᵢ_ : ∀{i} → Set i → Set i
+¬ᵢ A = ⦃ A ⦄ → ⊥
+
 infixl 30 ¬ᵗ_
 ¬ᵗ_ : (t : Σ Set (λ A → A ≡ ⊤ ⊎ A ≡ ⊥)) →
-      Σ {level 1} {level 1} Set (λ A → case (snd t) (λ {refl → A ≡ ⊥}) (λ {refl → A ≡ ⊤}))
+      Σ {_} {level 1} Set (λ A → case (snd t) (λ {refl → A ≡ ⊥}) (λ {refl → A ≡ ⊤}))
 ¬ᵗ (.⊤ , inl refl) = ⊥ , refl
 ¬ᵗ (.⊥ , inr refl) = ⊤ , refl
 

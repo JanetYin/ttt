@@ -11,4 +11,4 @@ open import Lib.Nat
 ¬Fin0 ()
 
 Fin1-η : (a b : Fin 1) → a ≡ b
-Fin1-η zero zero = refl
+Fin1-η fzero fzero = refl
