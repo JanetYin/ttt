@@ -1,0 +1,35 @@
+0:00-0:25	röpik
+
+0:25-0:27	gy06-ban f9 együtt
+0:27-0:32	_hasChild, ANK, ONE, _parentOf_ együtt
+0:32-0:35	NOPE-on gondolkodjanak picit
+0:35-0:36	megbeszélés (van más megoldás is?)
+0:36-0:38	notExists↔noneOf elmutogatása
+0:38-0:41	bizonyítások együtt
+0:41-0:43	∀×-distr együtt
+0:43-0:46	Σ×-distr együtt (miért csak odafelé?)
+0:46-0:48	¬∀ miért csak odafelé?
+0:46-0:48	blowUp együtt (kvázi egy ∀-kvantor van ott)
+0:48-0:52	egyenlőséges alapok (igazából a substtal meg lehet a többit csinálni; ez fontos lesz)
+0:52-0:53	idl+ gyors; idr+ nem – miért?
+0:53-0:55	idr+ rekurzívan, sucr+ is
+0:55-1:02	itt igazából dist+*-ig végig közösen
+1:02-1:06	comm*-helpert és comm*-ot közösen
+1:06-1:08	p4 együtt
+1:08-1:11	[m+n]^2=... együtt
+		(ilyen nehéz nem lesz; de ha ezt meg tudjátok csinálni, jó esélyetek van)
+1:11-1:15	p1-re kis időt hagyok
+1:15-1:16	mi az ötlet? aztán ezt már befejezhetitek otthon
+1:16-1:17	^+-nál az ötletet elmondom
+1:17-1:20	*^, ^* közösen
+1:20-1:23	sucinj (fura pred helyett kapcsos lambda)
+1:23-1:28	egyenlőtlenségek
+1:28-1:30	házi, röpi
+
+otthonra:
+szorzással a hasonlók
+p3, p2
+hatványokkal az utolsó kettőt leszámítva minden
+
+akinek kedve van:
+fák

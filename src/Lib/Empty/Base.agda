@@ -21,7 +21,7 @@ infixl 30 ¬_ ¬ᵢ_
 ¬ A = A → ⊥
 
 ¬ᵢ_ : ∀{i} → Set i → Set i
-¬ᵢ A = ⦃ A ⦄ → ⊥
+¬ᵢ A = ⦃ a : A ⦄ → ⊥
 
 infixl 30 ¬ᵗ_
 ¬ᵗ_ : (t : Σ Set (λ A → A ≡ ⊤ ⊎ A ≡ ⊥)) →
