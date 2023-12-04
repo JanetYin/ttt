@@ -72,31 +72,33 @@ Dec A = A ⊎ ¬ A
 open import Lib.Dec.PatternSynonym
 
 ee1 : {X Y : Set} → Dec (X ⊎ Y → ¬ ¬ (Y ⊎ X))
-ee1 = {!!}
+ee1 = inl λ xvy -> λ f -> f (case xvy (λ x -> inr x) λ y -> inl y)           -- C-u C-u C-c C-,
 
 ee2 : {X : Set} → Dec (¬ (X ⊎ ¬ X))
-ee2 = {!!}
+ee2 = inr λ f -> f (inr λ x -> f (inl x))
 
 e3 : {X : Set} → Dec (¬ (X → (¬ X → X)))
-e3 = {!!}
+e3 = inr λ f -> f λ x nx -> exfalso (nx x)
 
 e4 : Dec ℕ
-e4 = {!!}
+e4 = inl 42
 
 e5 : Dec ⊥
-e5 = {!!}
+e5 = inr λ b -> b
 
 e6 : {X : Set} → Dec (⊥ → X ⊎ ¬ X)
-e6 = {!!}
+e6 = inl λ b -> exfalso b
 
 e7 : {X : Set} → Dec (X × ¬ X → ¬ X ⊎ X)
-e7 = {!!}
+e7 = inl λ {(x , nx) -> inr x}
 
 e8 : {X : Set} → Dec ((X → X) → ⊥)
-e8 = {!!}
+e8 = inr λ f -> f λ x -> x
 
 f1 : {X Y : Set} → ¬ ¬ X ⊎ ¬ ¬ Y → ¬ ¬ (X ⊎ Y)
-f1 = {!!}
+f1 = λ nnxvnny n[xvy] -> case nnxvnny (λ nnx -> nnx λ x -> n[xvy] (inl x))
+                                       λ nny -> nny λ y -> n[xvy] (inr y)
 
 f2 : ({X Y : Set} → ¬ (X × Y) → ¬ X ⊎ ¬ Y) → {X Y : Set} → ¬ ¬ (X ⊎ Y) → ¬ ¬ X ⊎ ¬ ¬ Y
-f2 = {!!}
+f2 = λ f {X} {Y} nn[xvy] -> f {¬ X} {¬ Y} λ {(nx , ny) -> nn[xvy] λ xvy ->
+                                                                   case xvy nx ny}
