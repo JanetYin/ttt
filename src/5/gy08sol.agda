@@ -8,7 +8,7 @@ open import Lib.Dec.PatternSynonym
 blowUp : ((A : Set) -> ¬ A) -> ⊥
 blowUp f = f ⊤ tt
 -- what's the difference with this?
--- (A : Set) -> ¬ A -> ⊥
+-- (A : Set) -> (¬ A -> ⊥)
 
 -- something like this may appear in the exam
 
@@ -17,25 +17,32 @@ blowUp f = f ⊤ tt
 ------------------------------------------------------
 
 f4 : Dec ((X Y : Set) → X ⊎ Y → Y)
-f4 = {!!}
+f4 = inr λ f -> f ⊤ ⊥ (inl tt)
 
 f5 : Dec ((X Y Z : Set) → (X → Z) ⊎ (Y → Z) → (X ⊎ Y → Z))
-f5 = {!!}
+f5 = inr λ f -> f ⊥ ⊤ ⊥ (inl (λ b -> b)) (inr tt)
 
 f6 : Dec ((X Y Z : Set) → (X → Z) × (Y → Z) → (X × Y → Z))
-f6 = {!!}
+f6 = inl λ {_ _ _ (xtoz , ytoz) (x , y) -> xtoz x}
 
 f7 : Dec ((X Y Z : Set) → (X × Y → Z) → (X → Z) × (Y → Z))
-f7 = {!!}
+f7 = inr λ f -> fst (f ⊤ ⊥ ⊥ snd) tt
 
 f8 : Dec ((X Y Z : Set) → (X ⊎ Y × Z) → (X ⊎ Y) × (X ⊎ Z))
-f8 = {!!}
+f8 = inl λ _ _ _ xvyaz -> case xvyaz (λ x -> inl x , inl x)
+                                      λ {(y , z) -> inr y , inr z}
 
 f9 : Dec ((X Y Z : Set) → (X ⊎ Y) × (X ⊎ Z) → (X ⊎ Y × Z))
-f9 = {!!}
+f9 = inl λ {_ _ _ (xvy , xvz) -> case xvy (λ x -> inl x)
+                                          (λ y -> case xvz (λ x -> inl x)
+                                                           (λ z -> inr (y , z)))}
 
 f10 : Dec ((X Y Z : Set) → (X ⊎ Y) × (X ⊎ Z) → ((X ⊎ Y) × Z))
-f10 = {!!}
+f10 = inr λ f -> snd (f ⊤ ⊤ ⊥ (inl tt , inl tt))
+
+-- ezt nem lehet sem bizonyítani, sem cáfolni
+f+ : Dec ((X Y Z : Set) → (X × Y → Z) → (X → Z) ⊎ (Y → Z))
+f+ = inr λ f -> case (f {!!} {!!} ⊥ {!!}) {!!} {!!}
 
 ---------------------------------------------------------
 -- predicate (first order) logic example
@@ -113,7 +120,7 @@ module People
 Σ×-distr = {!!}
 Σ⊎-distr  :    (A : Set)(P : A → Set)(Q : A → Set) → (Σ A λ a → P a ⊎ Q a)  ↔ Σ A P ⊎ Σ A Q
 Σ⊎-distr = {!!}
--- fordítva ez sem (ez picit nehezebb)
+-- fordítva ez sem (az viszont nem is hamis)
 ¬∀        :    (A : Set)(P : A → Set)              → (Σ A λ a → ¬ P a)      → ¬ ((a : A) → P a)
 ¬∀ = {!!}
 ⊎↔ΣBool   :    (A B : Set)                         → (A ⊎ B)                ↔ Σ Bool (λ b → if b then A else B)
