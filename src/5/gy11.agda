@@ -46,14 +46,13 @@ true≠false ()
 
 -- prove this without pattern matching in this function on e! (use subst!)
 true≠false' : true ≢ false
-true≠false' e = subst (λ {true -> ⊤; false -> ⊥}) e tt
+true≠false' = {!!}
 
 zero≠sucn : {n : ℕ} → zero ≢ ℕ.suc n
 zero≠sucn = {!!}
 
 n≠sucn : (n : ℕ) → n ≢ suc n
-n≠sucn zero = zero≠sucn
-n≠sucn (suc n) e = n≠sucn n (cong (λ {zero -> zero; (suc n) -> n}) e)
+n≠sucn = {!!}
 
 -- prove this using induction on n!
 n≠sucn' : (n : ℕ) → n ≢ suc n

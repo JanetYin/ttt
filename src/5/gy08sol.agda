@@ -120,7 +120,7 @@ module People
 Σ×-distr = {!!}
 Σ⊎-distr  :    (A : Set)(P : A → Set)(Q : A → Set) → (Σ A λ a → P a ⊎ Q a)  ↔ Σ A P ⊎ Σ A Q
 Σ⊎-distr = {!!}
--- fordítva ez sem (ez picit nehezebb)
+-- fordítva ez sem (az viszont nem is hamis)
 ¬∀        :    (A : Set)(P : A → Set)              → (Σ A λ a → ¬ P a)      → ¬ ((a : A) → P a)
 ¬∀ = {!!}
 ⊎↔ΣBool   :    (A B : Set)                         → (A ⊎ B)                ↔ Σ Bool (λ b → if b then A else B)
