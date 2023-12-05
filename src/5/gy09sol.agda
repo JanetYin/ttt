@@ -1,30 +1,33 @@
 open import Lib hiding (sym; trans; cong; subst; idl+; idr+; sucr+; ass+; comm+; dist+*; nullr*; idl*; idr*; sucr*; ass*; comm*)
 
 ---------------------------------------------------------
--- equality
+-- equality      -- \equiv
 ------------------------------------------------------
 
 sym : ∀{i}{A : Set i}{x y : A} → x ≡ y → y ≡ x
-sym = {!!}
+sym {x = x} {y = .x} refl = refl
 
 trans : ∀{i}{A : Set i}{x y z : A} → x ≡ y → y ≡ z → x ≡ z
-trans = {!!}
+trans refl refl = refl
 
 cong : ∀{i j}{A : Set i}{B : Set j}(f : A → B){x y : A} → x ≡ y → f x ≡ f y
-cong = {!!}
+cong f refl = refl
 
 subst : ∀{i j}{A : Set i}(P : A → Set j){x y : A} → x ≡ y → P x → P y
-subst = {!!}
+subst P refl Px = Px
 
 ---------------------------------------------------------
 -- properties of +,*
 ------------------------------------------------------
 
 idl+ : (n : ℕ) → zero + n ≡ n
-idl+ = {!!}
+idl+ n = refl
 
+-- suc (n + zero) ≡ suc n
+-- suc n + zero   ≡ suc n
 idr+ : (n : ℕ) → n + zero ≡ n
-idr+ = {!!}
+idr+ zero = refl
+idr+ (suc n) = cong suc (idr+ n)
 
 sucr+ : (n m : ℕ) → n + suc m ≡ suc (n + m)
 sucr+ = {!!}
