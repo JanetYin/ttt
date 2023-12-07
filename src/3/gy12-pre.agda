@@ -57,11 +57,15 @@ p12 = {!   !}
 p13 : ¬ Σ ℕ (λ n → ∀ x → x + suc n ≡ x)
 p13 = {!   !}
 
-----------------------------
--- Nehezebb eset, de példát mondani továbbra is egyszerű.
-p14 : ¬ ((n k : ℕ) → 2 ^' suc n ≡ 3 ^' suc k)
+p14 : ¬ Σ ℕ (λ n → n + n ≢ 2 * n) 
 p14 = {!   !}
 
--- Na de ha minden n,k-ra kell bizonyítani...!
-p15 : (n k : ℕ) → 2 ^' suc n ≢ 3 ^' suc k
+----------------------------
+
+-- Nehezebb eset, de példát mondani továbbra is egyszerű.
+p15 : ¬ ((n k : ℕ) → 2 ^' suc n ≡ 3 ^' suc k)
 p15 = {!   !}
+
+-- Na de ha minden n,k-ra kell bizonyítani...!
+p16 : (n k : ℕ) → 2 ^' suc n ≢ 3 ^' suc k
+p16 = {!   !}
