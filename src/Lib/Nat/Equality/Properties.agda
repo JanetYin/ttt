@@ -1,54 +1,64 @@
 {-# OPTIONS --safe #-}
 
-module Lib.Nat.Properties where
+module Lib.Nat.Equality.Properties where
 
-open import Lib.Nat.Type
+open import Lib.Nat.Literals
+open import Lib.Nat.Equality.Base
 open import Lib.Nat.Base
-open import Lib.Nat.Equality
-open import Lib.Unit.Type
-open import Lib.Equality
-open import Lib.Dec
-open import Lib.Dec.PatternSynonym
+open import Lib.Nat.Type
+open import Lib.Unit
+open import Lib.Empty
 open import Lib.Sigma.Type
+open import Lib.Sum.Type
+open import Lib.Equality
 
-suc-injective : ∀{n m} → suc n ≡ suc m → n ≡ m
-suc-injective refl = refl
+suc-injective≡ℕ : ∀{n m} → suc n ≡ℕ suc m → n ≡ℕ m
+suc-injective≡ℕ e = e
 
-pred-injective : ∀{n m} → .⦃ eq1 : IsNotZero n ⦄ → .⦃ eq2 : IsNotZero m ⦄ → pred n ≡ pred m → n ≡ m
-pred-injective {suc n} {suc m} refl = refl
+pred-injective≡ℕ : ∀{n m} → .⦃ eq1 : IsNotZero n ⦄ → .⦃ eq2 : IsNotZero m ⦄ → pred n ≡ℕ pred m → n ≡ℕ m
+pred-injective≡ℕ {suc n} {suc m} e = e
 
-0≢sucn : ∀ {n} → 0 ≢ suc n
-0≢sucn ()
+0≢ℕsucn : ∀ {n} → 0 ≢ℕ suc n
+0≢ℕsucn = tt
 
-sucn≢0 : ∀ {n} → suc n ≢ 0
-sucn≢0 ()
+sucn≢ℕ0 : ∀ {n} → suc n ≢ℕ 0
+sucn≢ℕ0 = tt
 
-sucn≢n : ∀ {n} → suc n ≢ n
-sucn≢n ()
+sucn≢ℕn : ∀ {n} → suc n ≢ℕ n
+sucn≢ℕn {zero} = tt
+sucn≢ℕn {suc n} = sucn≢ℕn {n}
 
-n≢sucn : ∀ {n} → n ≢ suc n
-n≢sucn ()
+n≢ℕsucn : ∀ {n} → n ≢ℕ suc n
+n≢ℕsucn {zero} = tt
+n≢ℕsucn {suc n} = n≢ℕsucn {n}
 
-idr+ : (n : ℕ) → n + zero ≡ n
-idr+ zero = refl
-idr+ (suc n) = cong suc (idr+ n)
+idr+ℕ : (n : ℕ) → n + zero ≡ℕ n
+idr+ℕ zero = tt
+idr+ℕ (suc n) = idr+ℕ n
 
-sucr+ : (n m : ℕ) → n + suc m ≡ suc (n + m)
-sucr+ zero m = refl
-sucr+ (suc n) m = cong suc (sucr+ n m)
+sucr+ℕ : (n m : ℕ) → n + suc m ≡ℕ suc (n + m)
+sucr+ℕ zero m = reflℕ m
+sucr+ℕ (suc n) m = sucr+ℕ n m
 
-ass+ : (m n o : ℕ) → (m + n) + o ≡ m + (n + o)
-ass+ zero n o = refl
-ass+ (suc m) n o = cong suc (ass+ m n o)
+ass+ℕ : (m n o : ℕ) → (m + n) + o ≡ℕ m + (n + o)
+ass+ℕ zero n o = reflℕ (n + o)
+ass+ℕ (suc m) n o = ass+ℕ m n o
 
-comm+ : (m n : ℕ) → m + n ≡ n + m
-comm+ zero n = sym (idr+ n)
-comm+ (suc m) n = trans (cong suc (comm+ m n)) (sym (sucr+ n m))
+comm+ℕ : (m n : ℕ) → m + n ≡ℕ n + m
+comm+ℕ zero n = symℕ (n + 0) ((idr+ℕ n))
+comm+ℕ (suc m) n = 
+  suc m + n , suc (n + m) , n + suc m
+  ≡ℕ⟨ congℕ suc (m + n) (comm+ℕ m n) ⟩ 
+  suc n + m , n + suc m , _
+  ≡ℕ⟨ symℕ (n + suc m) (sucr+ℕ n m) ⟩ 
+  n + suc m ∎ℕ
 
-dist+* : (m n o : ℕ) → (m + n) * o ≡ m * o + n * o
-dist+* zero n o = refl
-dist+* (suc m) n o = trans (cong (o +_) (dist+* m n o)) (sym (ass+ o (m * o) (n * o)))
-
+{-
+dist+*ℕ : (m n o : ℕ) → (m + n) * o ≡ℕ m * o + n * o
+dist+*ℕ zero n o = {!   !}
+dist+*ℕ (suc m) n o = {!   !}
+-}
+{-
 dist*+ : (m n o : ℕ) → m * (n + o) ≡ m * n + m * o
 dist*+ zero n o = refl
 dist*+ (suc m) n o =
@@ -67,18 +77,22 @@ dist*+ (suc m) n o =
   n + m * n + (m * o + o)
   ≡⟨ cong ((n + m * n) +_) (comm+ (m * o) o) ⟩
   n + m * n + (o + m * o) ∎
-
+-}
+{-
 nullr* : (n : ℕ) → n * 0 ≡ 0
 nullr* zero = refl
 nullr* (suc n) = nullr* n
-
+-}
+{-
 idl* : (n : ℕ) → 1 * n ≡ n
 idl* = idr+ 
-
+-}
+{-
 idr* : (n : ℕ) → n * 1 ≡ n
 idr* zero = refl
 idr* (suc n) = cong suc (idr* n)
-
+-}
+{-
 sucr* : (n m : ℕ) → n * suc m ≡ n + n * m
 sucr* zero m = refl
 sucr* (suc n) m =
@@ -91,7 +105,8 @@ sucr* (suc n) m =
   suc (n + (n * m + m))
   ≡⟨ cong (λ x → suc (n + x)) (comm+ (n * m) m) ⟩
   suc (n + (m + n * m)) ∎
-
+-}
+{-
 ass* : (m n o : ℕ) → (m * n) * o ≡ m * (n * o)
 ass* zero n o = refl
 ass* (suc m) n o =
@@ -100,7 +115,8 @@ ass* (suc m) n o =
   n * o + m * n * o 
   ≡⟨ cong (n * o +_) (ass* m n o) ⟩
   n * o + m * (n * o) ∎
-
+-}
+{-
 comm* : (m n : ℕ) → m * n ≡ n * m
 comm* zero n = sym (nullr* n)
 comm* (suc m) n =
@@ -109,21 +125,22 @@ comm* (suc m) n =
   n + n * m
   ≡⟨ sym (sucr* n m) ⟩
   n * suc m ∎
-{-
-nulll^ :  (n : ℕ) → (1 ^ n) ⦃ {! substℕ (_≢ℕ 0) (comm+ 1 n)  !} ⦄ ≡ 1
-nulll^ n = {!   !}
 -}
+{-
 nulll^' : (n : ℕ) → 1 ^' n ≡ 1
 nulll^' zero = refl
 nulll^' (suc n) = trans (idr+ (1 ^' n)) (nulll^' n)
-
+-}
+{-
 idr^ : (a : ℕ) → a ^' 1 ≡ a
 idr^ = idr*
-
+-}
+{-
 dist^+ : (m n o : ℕ) → m ^' (n + o) ≡ m ^' n * m ^' o
 dist^+ m zero o = sym (idr+ (m ^' o))
 dist^+ m (suc n) o = trans (cong (m *_) (dist^+ m n o)) (sym (ass* m (m ^' n) (m ^' o)))
-
+-}
+{-
 dist^* : (a m n : ℕ) → a ^' (m * n) ≡ (a ^' m) ^' n
 dist^* a 0 n = sym (nulll^' n)
 dist^* a (suc m) zero = cong (a ^'_) (nullr* m)
@@ -147,7 +164,8 @@ dist^* a (suc m) (suc n) =
   a * a ^' m * a ^' (n + m * n)
   ≡⟨ cong (a ^' suc m *_) (dist^* a (suc m) n) ⟩
   a ^' suc m * (a ^' suc m) ^' n ∎
-
+-}
+{-
 dist*^ : (a b n : ℕ) → (a * b) ^' n ≡ a ^' n * b ^' n
 dist*^ a b zero = refl
 dist*^ a b (suc n) =
@@ -164,12 +182,14 @@ dist*^ a b (suc n) =
   a * (a ^' n * (b * b ^' n))
   ≡⟨ sym (ass* a (a ^' n) (b * b ^' n)) ⟩
   a * a ^' n * (b * b ^' n) ∎
-
-infix 4 _≟_
-_≟_ : DecidableEquality ℕ
-_≟_ zero zero = yes refl
-_≟_ zero (suc y) = no (λ ())
-_≟_ (suc x) zero = no (λ ())
-_≟_ (suc x) (suc y) with _≟_ x y
+-}
+{-
+infix 4 _ℕ≟_
+_ℕ≟_ : DecidableEquality ℕ
+_ℕ≟_ zero zero = yes refl
+_ℕ≟_ zero (suc y) = no (λ ())
+_ℕ≟_ (suc x) zero = no (λ ())
+_ℕ≟_ (suc x) (suc y) with _ℕ≟_ x y
 ... | yes refl = yes refl
 ... | no p = no λ a → p (suc-injective a)
+-}

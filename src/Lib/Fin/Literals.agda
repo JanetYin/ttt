@@ -7,6 +7,7 @@ open import Lib.Fin.Type
 open import Lib.Nat.Type
 open import Lib.Nat.Base
 open import Lib.Nat.Literals
+open import Lib.Nat.Equality
 open import Lib.Unit.Type public
 
 instance
