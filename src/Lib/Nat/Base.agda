@@ -9,17 +9,10 @@ open import Lib.Empty
 open import Lib.Sigma.Type
 open import Lib.Sum.Type
 open import Lib.Equality
+open import Lib.Nat.Equality.Base
 open import Agda.Builtin.Nat public
   hiding (Nat ; suc ; zero)
   renaming (_<_ to _<ᵇ_ ; _==_ to _==ᵇ_ ; _-_ to _-'_)
-
-IsZero : ℕ → Set
-IsZero 0 = ⊤
-IsZero (suc _) = ⊥
-
-IsNotZero : ℕ → Set
-IsNotZero 0 = ⊥
-IsNotZero (suc _) = ⊤
 
 pred' : ℕ → ℕ
 pred' 0 = 0
@@ -27,70 +20,6 @@ pred' (suc n) = n
 
 pred : (n : ℕ) → .⦃ nonZero : IsNotZero n ⦄ → ℕ
 pred (suc n) = n
-
-infix 4 _≤ℕᵗ_ _<ℕᵗ_ _>ℕᵗ_ _≥ℕᵗ_ _≡ℕᵗ_ _≢ℕᵗ_ _≤ℕ_ _<ℕ_ _>ℕ_ _≥ℕ_ _≡ℕ_ _≢ℕ_
-
-_≤ℕᵗ_ : ℕ → ℕ → Σ Set (λ A → A ≡ ⊤ ⊎ A ≡ ⊥)
-zero ≤ℕᵗ _ = ⊤ , inl refl
-suc x ≤ℕᵗ zero = ⊥ , inr refl
-suc x ≤ℕᵗ suc y = x ≤ℕᵗ y
-
-_≤ℕ_ : ℕ → ℕ → Set
-x ≤ℕ y = fst (x ≤ℕᵗ y)
-
-_<ℕᵗ_ : ℕ → ℕ → Σ Set (λ A → A ≡ ⊤ ⊎ A ≡ ⊥)
-_ <ℕᵗ zero = ⊥ , inr refl
-zero <ℕᵗ suc y = ⊤ , inl refl
-suc x <ℕᵗ suc y = x <ℕᵗ y
-
-_<ℕ_ : ℕ → ℕ → Set
-x <ℕ y = fst (x <ℕᵗ y)
-
-_>ℕᵗ_ : ℕ → ℕ → Σ Set (λ A → A ≡ ⊤ ⊎ A ≡ ⊥)
-zero >ℕᵗ _ = ⊥ , inr refl
-suc x >ℕᵗ zero = ⊤ , inl refl
-suc x >ℕᵗ suc y = x >ℕᵗ y
-
-_>ℕ_ : ℕ → ℕ → Set
-x >ℕ y = fst (x >ℕᵗ y)
-
-_≥ℕᵗ_ : ℕ → ℕ → Σ Set (λ A → A ≡ ⊤ ⊎ A ≡ ⊥)
-_ ≥ℕᵗ zero = ⊤ , inl refl
-zero ≥ℕᵗ suc y = ⊥ , inr refl
-suc x ≥ℕᵗ suc y = x ≥ℕᵗ y
-
-_≥ℕ_ : ℕ → ℕ → Set
-x ≥ℕ y = fst (x ≥ℕᵗ y)
-
-_≡ℕᵗ_ : ℕ → ℕ → Σ Set (λ A → A ≡ ⊤ ⊎ A ≡ ⊥)
-zero ≡ℕᵗ zero = ⊤ , inl refl
-zero ≡ℕᵗ suc y = ⊥ , inr refl
-suc x ≡ℕᵗ zero = ⊥ , inr refl
-suc x ≡ℕᵗ suc y = x ≡ℕᵗ y
-
-_≡ℕ_ : ℕ → ℕ → Set
-x ≡ℕ y = fst (x ≡ℕᵗ y)
-
-_≢ℕᵗ_ : ℕ → ℕ → Σ Set (λ A → A ≡ ⊤ ⊎ A ≡ ⊥)
-zero ≢ℕᵗ zero = ⊥ , inr refl
-zero ≢ℕᵗ suc y = ⊤ , inl refl
-suc x ≢ℕᵗ zero = ⊤ , inl refl
-suc x ≢ℕᵗ suc y = x ≢ℕᵗ y
-
-_≢ℕ_ : ℕ → ℕ → Set
-x ≢ℕ y = fst (x ≢ℕᵗ y)
-
-reflℕ : ∀ n → n ≡ℕ n
-reflℕ zero    = tt
-reflℕ (suc n) = reflℕ n
-
-symℕ : ∀ n m → n ≡ℕ m → m ≡ℕ n
-symℕ zero    zero    _ = tt
-symℕ (suc n) (suc m)   = symℕ n m
-
-substℕ : ∀{i}(P : ℕ → Set i){x y : ℕ} → .(x ≡ℕ y) → P x → P y
-substℕ P {zero} {zero} e px = px
-substℕ P {suc x} {suc y} = substℕ (λ z → P (suc z)) {x} {y}
 
 infixr 6 _-_
 _-_ : (x y : ℕ) → .⦃ nonZero : x ≥ℕ y ⦄ → ℕ

@@ -93,7 +93,8 @@ module People
 
   -- Formalise: No one is the parent of everyone.
   NOPE : Set
-  NOPE = {!!}
+  NOPE = ¬ Σ Person (λ poe -> ∀ (c : Person) -> poe parentOf c)
+  -- NOPE = ∀ (p : Person) -> ¬ (∀ (c : Person) -> p parentOf c)
 
   -----------
   -- Proofs
@@ -101,28 +102,30 @@ module People
 
   -- Prove that if Ann has no children then Kate is not the child of Ann.
   AK : ¬ (Σ Person λ y → y childOf Ann) → ¬ (Kate childOf Ann)
-  AK = {!!}
+  AK f kca = f (Kate , kca)
 
   -- Prove that if there is no person who is his own parent than no one is the parent of everyone.
   ¬xpopxthenNOPE : ¬ (Σ Person λ x → x parentOf x) → NOPE
-  ¬xpopxthenNOPE = {!!}
+  ¬xpopxthenNOPE nxpx (p , ppOfE) = nxpx (p , ppOfE p)
 
 ---------------------------------------------------------
 -- predicate (first order) logic laws
 ---------------------------------------------------------
 
 ∀×-distr  :    (A : Set)(P : A → Set)(Q : A → Set) → ((a : A) → P a × Q a)  ↔ ((a : A) → P a) × ((a : A) → Q a)
-∀×-distr = {!!}
+fst (∀×-distr A P Q) f = (λ a -> fst (f a)) , λ a -> snd (f a)
+snd (∀×-distr A P Q) (f , g) a = f a , g a
 ∀⊎-distr  :    (A : Set)(P : A → Set)(Q : A → Set) → ((a : A) → P a) ⊎ ((a : A) → Q a) ↔ ((a : A) → P a ⊎ Q a)
 ∀⊎-distr = {!!}
 -- ez miért csak odafelé? gondold meg
 Σ×-distr  :    (A : Set)(P : A → Set)(Q : A → Set) → (Σ A λ a → P a × Q a)  → Σ A P × Σ A Q
-Σ×-distr = {!!}
+Σ×-distr A P Q (a , pa , qa) = (a , pa) , a , qa
 Σ⊎-distr  :    (A : Set)(P : A → Set)(Q : A → Set) → (Σ A λ a → P a ⊎ Q a)  ↔ Σ A P ⊎ Σ A Q
 Σ⊎-distr = {!!}
--- fordítva ez sem (ez picit nehezebb)
-¬∀        :    (A : Set)(P : A → Set)              → (Σ A λ a → ¬ P a)      → ¬ ((a : A) → P a)
-¬∀ = {!!}
+-- fordítva ez sem (az viszont nem is hamis)
+¬∀ : (A : Set)(P : A → Set) → (Σ A λ a → ¬ P a)
+                             → ¬ ((a : A) → P a)
+¬∀ A P (a , npa) f = npa (f a)
 ⊎↔ΣBool   :    (A B : Set)                         → (A ⊎ B)                ↔ Σ Bool (λ b → if b then A else B)
 ⊎↔ΣBool = {!!}
 ¬¬∀-nat   :    (A : Set)(P : A → Set)              → ¬ ¬ ((x : A) → P x)    → (x : A) → ¬ ¬ (P x)

@@ -89,3 +89,7 @@ demorgan∨ {true} = refl
 demorgan∧ : ∀{a b} → not (a ∧ b) ≡ not a ∨ not b
 demorgan∧ {false} = refl
 demorgan∧ {true} = refl
+
+Boolη : ∀{x} → (if x then true else false) ≡ x
+Boolη {false} = refl
+Boolη {true} = refl

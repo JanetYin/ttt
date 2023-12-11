@@ -33,19 +33,34 @@ x ^ suc (suc y) = x * (x ^ suc y)
 -}
 
 p1 : (a b : ℕ) → (a + b) ^' 2 ≡ a ^' 2 + 2 * a * b + b ^' 2
-p1 = {!!}
+p1 a b rewrite ass+ (a * a) (a * b) (a * b) = trans (cong (λ x → (a + b) * x) (idr* (a + b))) 
+    (trans 
+    (trans 
+    (trans 
+    (trans 
+    (trans 
+    (dist+* a b (a + b)) 
+    (trans 
+    (cong₂ (λ x y → x + y) (trans (comm* a (a + b)) (dist+* a b a)) (trans (comm* b (a + b)) (dist+* a b b))) 
+    {!   !})) 
+    (cong (λ x → a * a + x + b * b) (sym (dist+*  a a b)))) 
+    (cong (λ x → a * a + (a + a) * b + b * x) (sym (idr* b)))) 
+    (cong (λ x → a * a + (a + x) * b + b * (b * 1)) (sym (idr+ a)))) 
+    (cong (λ x → ( a * x) + (a + (a + zero)) * b + b * (b * 1)) 
+        (sym (idr* a))))
 
 0^ : (n : ℕ) → 0 ^' (suc n) ≡ 0
-0^ = {!!}
+0^ n = refl
 
 ^0 : (a : ℕ) → a ^' 0 ≡ 1
-^0 = {!!}
+^0 a = refl
 
 1^ : (n : ℕ) → 1 ^' n ≡ 1
-1^ = {!!}
+1^ zero = refl
+1^ (suc n) = trans (idr+ (1 ^' n)) (1^ n)
 
 ^1 : (a : ℕ) → a ^' 1 ≡ a
-^1 = {!!}
+^1 a = idr* a
 
 ^+ : (a m n : ℕ) → a ^' (m + n) ≡ a ^' m * a ^' n
 ^+ = {!!}
