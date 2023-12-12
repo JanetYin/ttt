@@ -26,8 +26,7 @@ idl+ n = refl
 -- suc (n + zero) ≡ suc n
 -- suc n + zero   ≡ suc n
 idr+ : (n : ℕ) → n + zero ≡ n
-idr+ zero = refl
-idr+ (suc n) = cong suc (idr+ n)
+idr+ = ?
 
 sucr+ : (n m : ℕ) → n + suc m ≡ suc (n + m)
 sucr+ = {!!}

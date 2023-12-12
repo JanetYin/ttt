@@ -1,0 +1,24 @@
+0:00-0:02	idr+ rekurzívan, sucr+ is
+0:02-0:07	itt igazából dist+*-ig végig közösen
+0:07-0:13	comm*-helpert és comm*-ot közösen
+0:13-0:15	p4 együtt
+0:15-0:18	[m+n]^2=... együtt
+		(ilyen nehéz nem lesz; de ha ezt meg tudjátok csinálni, jó esélyetek van)
+0:18-0:22	p1-re kis időt hagyok
+0:22-0:23	mi az ötlet? aztán ezt már befejezhetitek otthon
+0:23-0:24	^+-nál az ötletet elmondom
+0:24-0:27	*^, ^* közösen
+0:27-0:30	sucinj (fura pred helyett kapcsos lambda)
+0:30-0:35	egyenlőtlenségek
+0:35-0:39	eldönthető egyenlőségek
+0:39-0:43	mi van a példában? (megkérdeztem, ez ugyanaz-e)
+0:43-	riiiiide, 'til I can't keep on
+
+otthonra:
+szorzással a hasonlók
+p3, p2
+hatványokkal az utolsó kettőt leszámítva minden
+meg hát nézzék a mintavizsgát ők is
+
+akinek kedve van:
+fák

@@ -166,7 +166,7 @@ test-b1-b2 ()
 -- BEGIN FIX
 weirdLogicalEquiv : (A B C : Set) → (B → A → (⊥ ⊎ C)) ↔ (A → (B → C × A))
 -- END FIX
-weirdLogicalEquiv = ?
+weirdLogicalEquiv = {!!}
 
 -- BEGIN FIX
 cocΣ : (A : Set)(B : A → Set) → Σ A B ↔ ((C : Set) → ((a : A) → B a → C) → C)
