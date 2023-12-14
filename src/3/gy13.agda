@@ -120,12 +120,3 @@ f > (x ∷ xs) ≟List (y ∷ ys) with f x y | f > xs ≟List ys
 ... | inr b | e2 = inr λ e → b (∷inj1 e)
 ... | inl a | inl a' = inl (cong₂ _∷_ a a')
 ... | inl a | inr b = inr λ e → b (∷inj2 e)
-
--------------------------------------------
--- Típusosztályok (esetleg szabályokkal is)
--------------------------------------------
-
--- Eq
--- Ord
--- Semigroup
--- Monoid
