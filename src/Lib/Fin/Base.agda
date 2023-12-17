@@ -21,3 +21,11 @@ cast-Fin {suc m} {suc n} eq (fsuc k) = fsuc (cast-Fin (cong pred' eq) k)
 fromℕ : (n : ℕ) → Fin (suc n)
 fromℕ zero    = fzero
 fromℕ (suc n) = fsuc (fromℕ n)
+
+raiseᵣ : {m : ℕ}(n : ℕ) → Fin m → Fin (n + m)
+raiseᵣ zero m' = m'
+raiseᵣ (suc n) m' = fsuc (raiseᵣ n m')
+
+raiseₗ : {m : ℕ} → Fin m → (n : ℕ) → Fin (m + n)
+raiseₗ {suc m} fzero n = fzero
+raiseₗ {suc m} (fsuc m') n = fsuc (raiseₗ {m} m' n)
