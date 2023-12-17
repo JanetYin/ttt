@@ -47,7 +47,7 @@ elim-Bool : ∀{i}{A : Bool → Set i} → (b : Bool) → A true → A false →
 elim-Bool false t f = f
 elim-Bool true t f = t
 
-ind-Bool : ∀{i}{A : Bool → Set i} → (b : Bool) → ({k : Bool} → k ≡ true → A true) → ({k : Bool} → k ≡ false → A false) → A b
+ind-Bool : ∀{i}{A : Bool → Set i} → (b : Bool) → (b ≡ true → A b) → (b ≡ false → A b) → A b
 ind-Bool false t f = f refl
 ind-Bool true t f = t refl
 
