@@ -1,4 +1,4 @@
-# Típuselmélet (Agda) tantárgy, ELTE, 2023 ősz
+# Típuselmélet (Agda) tantárgy, ELTE, 2024 tavasz
 
 Fontos, hogy megfelelő kóddal vedd fel a tárgyat:
 
@@ -12,15 +12,14 @@ Gyakorlatok oktatói:
 
 | kurzus kód     | időpont               | helyszín                          | gyakorlatvezető név | ______@inf.elte.hu |
 |----------------|-----------------------|-----------------------------------|---------------------|--------------------|
-| 1              | Kedd 19:30-21:00      | Déli Tömb 00-410 (PC 1)           | Török Bálint Bence  | fcjylp             |
-| 2              | Hétfo 17:45-19:15     | Déli Tömb 2-218 (komp. alg.)      | Petes Márton        | tx0lwm             |
-| 3              | Csütörtök 17:45-19:15 | Déli Tömb 2-124 (Microsoft Labor) | Bense Viktor        | qils07             |
-| 4              | Hétfo 19:30-21:00     | Déli Tömb 2-218 (komp. alg.)      | Merth Borbála       | f6tnix             |
-| 5              | Kedd 19:30-21:00      | Déli Tömb 2-124 (Microsoft Labor) | Csimma Viktor       | midffj             |
+| 1              | Szerda 17:45-19:15    | Déli Tömb 2-124 (Microsoft Labor) | Bense Viktor        | qils07             |
+| 2              | Kedd 17:45-19:15      | Déli Tömb 00-411 (PC7)            | Merth Borbála       | f6tnix             |
+| 3              | Csütörtök 16:00-17:30 | Déli Tömb 00-503 (PC8)            | Török Bálint Bence  | fcjylp             |
+| 4              | Csütörtök 17:45-19:15 | Déli Tömb 2-124 (Microsoft Labor) | Petes Márton        | tx0lwm             |
 
 Nagyon fontos, hogy azt a gyakorlatot vedd fel a Neptunban, amelyikre ténylegesen jársz, mert a Canvas automatikusan veszi át az infót a Neptunból.
 
-Létezik egy Típuselmélet 2023 ősz nevű MS Teams csoport, ahol érdemes a típuselméletről beszélgetni, a csatlakozáshoz a kód: 2my8f96. A gyakorlatvezetőknek való email írás helyett itt érdemes kérdéseket feltenni (mások is látják a kérdést/választ, hamarabb kap az ember választ).
+Létezik egy Típuselmélet 2024 tavasz nevű MS Teams csoport, ahol érdemes a típuselméletről beszélgetni, a csatlakozáshoz a kód: wbgq7ec. A gyakorlatvezetőknek való email írás helyett itt érdemes kérdéseket feltenni (mások is látják a kérdést/választ, hamarabb kap az ember választ).
 
 Követelmények:
 
