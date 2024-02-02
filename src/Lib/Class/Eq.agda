@@ -3,31 +3,39 @@
 module Lib.Class.Eq where
 
 open import Agda.Primitive
+
+open import Lib.Empty.Type
 open import Lib.Empty.Base
+
+open import Lib.Maybe.Type
+open import Lib.Maybe.Base
+
+open import Lib.Sigma.Type
+
+open import Lib.Sum.Type
+
+open import Lib.Equality
+
+open import Lib.Unit.Type
+
+open import Lib.Bool.Type
 
 record Eq {i} (A : Set i) : Set (lsuc i) where
   inductive
   field
-    _≡ᵗ_ : A → A → Σ Set (λ A → A ≡ ⊤ ⊎ A ≡ ⊥)
-    
-  _≡ⁱ_ : A → A → Set
-  a ≡ⁱ b = fst (a ≡ᵗ b)
+    _≡ᵗ_ : (a b : A) → Σ (Maybe (a ≡ b)) (λ x → Σ Set (IsJust x ≡_))
 
-  _≢ᵗ_ : A → A → Set
-  a ≢ᵗ b = ?
-  infix 4 _≡ᵗ_ _≡ⁱ_ _≢ᵗ_
+  _≡ⁱ_ : (a b : A) → Set
+  a ≡ⁱ b = fst (snd (a ≡ᵗ b))
+
+  _≡ₚᵣ_ : (a b : A) → Maybe (a ≡ b)
+  a ≡ₚᵣ b = fst (a ≡ᵗ b)
+
+  _==_ : (a b : A) → Bool
+  a == b with a ≡ₚᵣ b
+  ... | just _  = true
+  ... | nothing = false
+
+  infix 4 _≡ᵗ_ _≡ⁱ_ _≡ₚᵣ_ _==_
 
 open Eq {{...}} public
-
-open import Lib.Bool.Type
-open import Lib.Bool.Base
-
-record Eqᵇ {i} (A : Set i) : Set i where
-  inductive
-  field
-    _≡ᵇ_ : A → A → Bool
-  _≢ᵇ_ : A → A → Bool
-  a ≢ᵇ b = not (a ≡ᵇ b)
-  infix 4 _≡ᵇ_ _≢ᵇ_
-
-open Eqᵇ {{...}} public

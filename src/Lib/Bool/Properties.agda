@@ -15,6 +15,10 @@ false ≟ false = yes refl
 true  ≟ false = no λ ()
 false ≟ true  = no λ ()
 
+instance
+  DecEqBool : DecidableEquality Bool
+  DecEqBool = DecProof _≟_
+
 reduce-notnot : ∀{b} → not (not b) ≡ b
 reduce-notnot {false} = refl
 reduce-notnot {true} = refl

@@ -29,6 +29,10 @@ open import Lib.Empty
 ∷-dec (yes p) (no q) = no λ e → q (∷-injectiveʳ e)
 ∷-dec (yes refl) (yes refl) = yes refl
 
-≡-dec-Vec : ∀{i}{A : Set i}{n : ℕ} → DecidableEquality A → DecidableEquality (Vec A n)
+≡-dec-Vec : ∀{i}{A : Set i}{n : ℕ} → ((a b : A) → Dec (a ≡ b)) → (a b : Vec A n) → Dec (a ≡ b)
 ≡-dec-Vec _≟_ []       []       = yes refl
 ≡-dec-Vec _≟_ (x ∷ xs) (y ∷ ys) = ∷-dec (x ≟ y) (≡-dec-Vec _≟_ xs ys)
+
+instance
+  DecEqVec : ∀{i}{A : Set i}{n} → ⦃ DecidableEquality A ⦄ → DecidableEquality (Vec A n)
+  DecEqVec ⦃ i1 ⦄ = DecProof (≡-dec-Vec (decide i1))

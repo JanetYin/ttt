@@ -3,7 +3,25 @@
 module Lib.Maybe.Base where
 
 open import Lib.Maybe.Type
+open import Lib.Sigma.Type
+open import Lib.Sum.Type
+open import Lib.Unit.Type
+open import Lib.Empty.Type
 open import Lib.Equality
+
+IsJustᵗ : ∀{i}{A : Set i} → Maybe A → Σ Set (λ B → B ≡ ⊤ ⊎ B ≡ ⊥)
+IsJustᵗ (just x) = ⊤ , inl refl
+IsJustᵗ nothing = ⊥ , inr refl
+
+IsJust : ∀{i}{A : Set i} → Maybe A → Set
+IsJust n = fst (IsJustᵗ n)
+
+IsNothingᵗ : ∀{i}{A : Set i} → Maybe A → Σ Set (λ B → B ≡ ⊤ ⊎ B ≡ ⊥)
+IsNothingᵗ (just x) = ⊥ , inr refl
+IsNothingᵗ nothing = ⊤ , inl refl
+
+IsNothing : ∀{i}{A : Set i} → Maybe A → Set
+IsNothing n = fst (IsNothingᵗ n)
 
 elim-Maybe : ∀{a b}{A : Set a}{B : Maybe A → Set b} →
         ((x : A) → B (just x)) → B nothing → (x : Maybe A) → B x

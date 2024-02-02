@@ -27,16 +27,10 @@ zero - zero = zero
 suc x - zero = suc x
 suc x - suc y = x - y
 
-infixr 8 _^'_
-_^'_ : ℕ → ℕ → ℕ
-x ^' zero  = 1
-x ^' suc n = x * x ^' n
-
 infixr 8 _^_
-_^_ : (x y : ℕ) → .⦃ nonZero : y + x ≢ℕ 0 ⦄ → ℕ
-x ^ zero = 1
-x ^ suc zero = x
-x ^ suc (suc y) = x * (x ^ suc y)
+_^_ : ℕ → ℕ → ℕ
+x ^ zero  = 1
+x ^ suc n = x * x ^ n
 
 infixl 50 _!
 _! : ℕ → ℕ
@@ -52,12 +46,12 @@ rec-ℕ zero    a f = a
 rec-ℕ (suc n) a f = f (rec-ℕ n a f)
 
 elim-ℕ : ∀{i}{A : ℕ → Set i} → (n : ℕ) → A 0 → ({k : ℕ} → A k → A (suc k)) → A n
-elim-ℕ zero    a0 f = a0
+elim-ℕ         zero    a0 f = a0
 elim-ℕ {A = A} (suc n) a0 f = f (elim-ℕ {A = A} n a0 f)
 
 ind-ℕ : ∀{i}{A : ℕ → Set i}(n : ℕ) → ({k : ℕ} → k ≡ 0 → A 0) → ({m k : ℕ} → m ≡ suc k → A k → A (suc k)) → A n
-ind-ℕ {A = A} zero    a0 ak = a0 {0} refl
-ind-ℕ {A = A} (suc n) a0 ak = ak {suc n} {n} refl (ind-ℕ {A = A} n a0 ak)
+ind-ℕ {A = A} zero    a0 ak = a0 refl
+ind-ℕ {A = A} (suc n) a0 ak = ak refl (ind-ℕ {A = A} n a0 ak)
 
 minMax : (n k : ℕ) → Σ (ℕ × ℕ) (λ {(a , b) → (n ≤ℕ k × n ≡ℕ a × k ≡ℕ b) ⊎ (k ≤ℕ n × k ≡ℕ a × n ≡ℕ b)})
 minMax zero k = (zero , k) , inl (tt , tt , reflℕ k)

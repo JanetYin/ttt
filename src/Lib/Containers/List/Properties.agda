@@ -25,8 +25,12 @@ open import Lib.Unit
 ∷-dec (yes p) (no q) = no λ e → q (∷-injectiveʳ e)
 ∷-dec (yes refl) (yes refl) = yes refl
 
-≡-dec-List : ∀{i}{A : Set i} → DecidableEquality A → DecidableEquality (List A)
+≡-dec-List : ∀{i}{A : Set i} → ((a b : A) → Dec (a ≡ b)) → (a b : List A) → Dec (a ≡ b)
 ≡-dec-List _≟_ []       []       = yes refl
-≡-dec-List _≟_ (x ∷ xs) []       = no λ()
-≡-dec-List _≟_ []       (y ∷ ys) = no λ()
+≡-dec-List _≟_ (x ∷ xs) []       = no λ ()
+≡-dec-List _≟_ []       (y ∷ ys) = no λ ()
 ≡-dec-List _≟_ (x ∷ xs) (y ∷ ys) = ∷-dec (x ≟ y) (≡-dec-List _≟_ xs ys)
+
+instance
+  DecEqList : ∀{i}{A : Set i} → ⦃ DecidableEquality A ⦄ → DecidableEquality (List A)
+  DecEqList ⦃ i1 ⦄ = DecProof (≡-dec-List (decide i1))

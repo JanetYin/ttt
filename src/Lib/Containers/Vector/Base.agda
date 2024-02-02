@@ -39,8 +39,11 @@ concat : ∀{i}{A : Set i}{m n : ℕ} → Vec (Vec A m) n → Vec A (n * m)
 concat []         = []
 concat (xs ∷ xss) = xs ++ concat xss
 
+lengthᵗ : ∀{i}{A : Set i}{n : ℕ} → Vec A n → Σ ℕ (n ≡_)
+lengthᵗ {n = n} _ = (n , refl)
+
 length : ∀{i}{A : Set i}{n : ℕ} → Vec A n → ℕ
-length {n = n} _ = n
+length xs = fst (lengthᵗ xs)
 
 head : ∀{i}{A : Set i}{n : ℕ} → Vec A (suc n) → A
 head (x ∷ xs) = x

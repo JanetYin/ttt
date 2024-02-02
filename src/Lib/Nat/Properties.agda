@@ -109,67 +109,68 @@ comm* (suc m) n =
   n + n * m
   ≡⟨ sym (sucr* n m) ⟩
   n * suc m ∎
-{-
-nulll^ :  (n : ℕ) → (1 ^ n) ⦃ {! substℕ (_≢ℕ 0) (comm+ 1 n)  !} ⦄ ≡ 1
-nulll^ n = {!   !}
--}
-nulll^' : (n : ℕ) → 1 ^' n ≡ 1
-nulll^' zero = refl
-nulll^' (suc n) = trans (idr+ (1 ^' n)) (nulll^' n)
 
-idr^ : (a : ℕ) → a ^' 1 ≡ a
+nulll^ : (n : ℕ) → 1 ^ n ≡ 1
+nulll^ zero = refl
+nulll^ (suc n) = trans (idr+ (1 ^ n)) (nulll^ n)
+
+idr^ : (a : ℕ) → a ^ 1 ≡ a
 idr^ = idr*
 
-dist^+ : (m n o : ℕ) → m ^' (n + o) ≡ m ^' n * m ^' o
-dist^+ m zero o = sym (idr+ (m ^' o))
-dist^+ m (suc n) o = trans (cong (m *_) (dist^+ m n o)) (sym (ass* m (m ^' n) (m ^' o)))
+dist^+ : (m n o : ℕ) → m ^ (n + o) ≡ m ^ n * m ^ o
+dist^+ m zero o = sym (idr+ (m ^ o))
+dist^+ m (suc n) o = trans (cong (m *_) (dist^+ m n o)) (sym (ass* m (m ^ n) (m ^ o)))
 
-dist^* : (a m n : ℕ) → a ^' (m * n) ≡ (a ^' m) ^' n
-dist^* a 0 n = sym (nulll^' n)
-dist^* a (suc m) zero = cong (a ^'_) (nullr* m)
+dist^* : (a m n : ℕ) → a ^ (m * n) ≡ (a ^ m) ^ n
+dist^* a 0 n = sym (nulll^ n)
+dist^* a (suc m) zero = cong (a ^_) (nullr* m)
 dist^* a (suc m) (suc n) =
-  a * a ^' (n + m * suc n)
+  a * a ^ (n + m * suc n)
   ≡⟨ cong (a *_) (dist^+ a n (m * suc n)) ⟩
-  a * (a ^' n * a ^' (m * suc n))
-  ≡⟨ cong (λ x → a * (a ^' n * x)) (dist^* a m (suc n)) ⟩
-  a * (a ^' n * (a ^' m * (a ^' m) ^' n))
-  ≡⟨ cong (λ x → a * (a ^' n * (a ^' m * x))) (sym (dist^* a m n)) ⟩
-  a * (a ^' n * (a ^' m * a ^' (m * n)))
-  ≡⟨ cong (a *_) (sym (ass* (a ^' n) (a ^' m) (a ^' (m * n)))) ⟩
-  a * (a ^' n * a ^' m * a ^' (m * n))
-  ≡⟨ cong (λ x → a * (x * a ^' (m * n))) (comm* (a ^' n) (a ^' m)) ⟩
-  a * (a ^' m * a ^' n * a ^' (m * n))
-  ≡⟨ cong (a *_) (ass* (a ^' m) (a ^' n) (a ^' (m * n))) ⟩
-  a * (a ^' m * (a ^' n * a ^' (m * n)))
-  ≡⟨ sym (ass* a (a ^' m) (a ^' n * a ^' (m * n))) ⟩
-  a * a ^' m * (a ^' n * a ^' (m * n))
-  ≡⟨ cong (a * a ^' m *_) (sym (dist^+ a n (m * n))) ⟩
-  a * a ^' m * a ^' (n + m * n)
-  ≡⟨ cong (a ^' suc m *_) (dist^* a (suc m) n) ⟩
-  a ^' suc m * (a ^' suc m) ^' n ∎
+  a * (a ^ n * a ^ (m * suc n))
+  ≡⟨ cong (λ x → a * (a ^ n * x)) (dist^* a m (suc n)) ⟩
+  a * (a ^ n * (a ^ m * (a ^ m) ^ n))
+  ≡⟨ cong (λ x → a * (a ^ n * (a ^ m * x))) (sym (dist^* a m n)) ⟩
+  a * (a ^ n * (a ^ m * a ^ (m * n)))
+  ≡⟨ cong (a *_) (sym (ass* (a ^ n) (a ^ m) (a ^ (m * n)))) ⟩
+  a * (a ^ n * a ^ m * a ^ (m * n))
+  ≡⟨ cong (λ x → a * (x * a ^ (m * n))) (comm* (a ^ n) (a ^ m)) ⟩
+  a * (a ^ m * a ^ n * a ^ (m * n))
+  ≡⟨ cong (a *_) (ass* (a ^ m) (a ^ n) (a ^ (m * n))) ⟩
+  a * (a ^ m * (a ^ n * a ^ (m * n)))
+  ≡⟨ sym (ass* a (a ^ m) (a ^ n * a ^ (m * n))) ⟩
+  a * a ^ m * (a ^ n * a ^ (m * n))
+  ≡⟨ cong (a * a ^ m *_) (sym (dist^+ a n (m * n))) ⟩
+  a * a ^ m * a ^ (n + m * n)
+  ≡⟨ cong (a ^ suc m *_) (dist^* a (suc m) n) ⟩
+  a ^ suc m * (a ^ suc m) ^ n ∎
 
-dist*^ : (a b n : ℕ) → (a * b) ^' n ≡ a ^' n * b ^' n
+dist*^ : (a b n : ℕ) → (a * b) ^ n ≡ a ^ n * b ^ n
 dist*^ a b zero = refl
 dist*^ a b (suc n) =
-  a * b * (a * b) ^' n
+  a * b * (a * b) ^ n
   ≡⟨ cong (a * b *_) (dist*^ a b n) ⟩
-  a * b * (a ^' n * b ^' n)
-  ≡⟨ ass* a b (a ^' n * b ^' n) ⟩
-  a * (b * (a ^' n * b ^' n))
-  ≡⟨ cong (a *_) (sym (ass* b (a ^' n) (b ^' n))) ⟩
-  a * (b * a ^' n * b ^' n)
-  ≡⟨ cong (λ x → a * (x * b ^' n)) (comm* b (a ^' n)) ⟩
-  a * (a ^' n * b * b ^' n)
-  ≡⟨ cong (a *_) (ass* (a ^' n) b (b ^' n)) ⟩
-  a * (a ^' n * (b * b ^' n))
-  ≡⟨ sym (ass* a (a ^' n) (b * b ^' n)) ⟩
-  a * a ^' n * (b * b ^' n) ∎
+  a * b * (a ^ n * b ^ n)
+  ≡⟨ ass* a b (a ^ n * b ^ n) ⟩
+  a * (b * (a ^ n * b ^ n))
+  ≡⟨ cong (a *_) (sym (ass* b (a ^ n) (b ^ n))) ⟩
+  a * (b * a ^ n * b ^ n)
+  ≡⟨ cong (λ x → a * (x * b ^ n)) (comm* b (a ^ n)) ⟩
+  a * (a ^ n * b * b ^ n)
+  ≡⟨ cong (a *_) (ass* (a ^ n) b (b ^ n)) ⟩
+  a * (a ^ n * (b * b ^ n))
+  ≡⟨ sym (ass* a (a ^ n) (b * b ^ n)) ⟩
+  a * a ^ n * (b * b ^ n) ∎
 
 infix 4 _≟_
-_≟_ : DecidableEquality ℕ
+_≟_ : (x y : ℕ) → Dec (x ≡ y)
 _≟_ zero zero = yes refl
 _≟_ zero (suc y) = no (λ ())
 _≟_ (suc x) zero = no (λ ())
 _≟_ (suc x) (suc y) with _≟_ x y
 ... | yes refl = yes refl
 ... | no p = no λ a → p (suc-injective a)
+
+instance
+  DecEqℕ : DecidableEquality ℕ
+  DecEqℕ = DecProof _≟_

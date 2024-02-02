@@ -45,7 +45,7 @@ foldl f n (x ∷ xs) = foldl f (f n x) xs
 
 filter : ∀{i j}{A : Set i}{P : A → Set j} → Decidable P → List A → List A
 filter p [] = []
-filter p (x ∷ xs) with p x
+filter p (x ∷ xs) with decide p x
 ... | yes f = x ∷ filter p xs
 ... | no f = filter p xs
 
