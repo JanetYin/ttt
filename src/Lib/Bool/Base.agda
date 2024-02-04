@@ -7,9 +7,9 @@ open import Lib.Equality
 open import Lib.Unit.Type
 open import Lib.Empty.Type
 
-infixr 7 _∧_
-infixr 6 _∨_ _xor_
-infixr 5 _⊃_
+infixr 3 _∧_
+infixr 2 _∨_ _xor_
+infixr 1 _⊃_
 
 not : Bool → Bool
 not true  = false

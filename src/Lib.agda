@@ -6,6 +6,7 @@ module Lib where
 -- They have to be imported manually,
 -- because there are a lot of functions that have the same name.
 
+open import Lib.Class public
 open import Lib.Level public
 open import Lib.Function public
 open import Lib.Unit public

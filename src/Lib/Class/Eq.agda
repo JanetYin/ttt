@@ -36,6 +36,11 @@ record Eq {i} (A : Set i) : Set (lsuc i) where
   ... | just _  = true
   ... | nothing = false
 
-  infix 4 _≡ᵗ_ _≡ⁱ_ _≡ₚᵣ_ _==_
+  _/=_ : (a b : A) → Bool
+  a /= b with a ≡ₚᵣ b
+  ... | just _  = false
+  ... | nothing = true
+
+  infix 4 _≡ᵗ_ _≡ⁱ_ _≡ₚᵣ_ _==_ _/=_
 
 open Eq {{...}} public

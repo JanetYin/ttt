@@ -15,7 +15,7 @@ suc-injective : ∀{n m} → suc n ≡ suc m → n ≡ m
 suc-injective refl = refl
 
 pred-injective : ∀{n m} → .⦃ eq1 : IsNotZero n ⦄ → .⦃ eq2 : IsNotZero m ⦄ → pred n ≡ pred m → n ≡ m
-pred-injective {suc n} {suc m} refl = refl
+pred-injective {suc n} {suc m} = cong suc
 
 0≢sucn : ∀ {n} → 0 ≢ suc n
 0≢sucn ()
@@ -170,7 +170,3 @@ _≟_ (suc x) zero = no (λ ())
 _≟_ (suc x) (suc y) with _≟_ x y
 ... | yes refl = yes refl
 ... | no p = no λ a → p (suc-injective a)
-
-instance
-  DecEqℕ : DecidableEquality ℕ
-  DecEqℕ = DecProof _≟_

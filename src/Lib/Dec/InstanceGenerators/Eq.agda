@@ -1,6 +1,6 @@
 {-# OPTIONS --safe #-}
 
-module Lib.Dec.Instances.Eq where
+module Lib.Dec.InstanceGenerators.Eq where
 
 open import Lib.Dec.Type
 open import Lib.Dec.Base
@@ -19,6 +19,5 @@ open import Lib.Unit.Type
 
 open import Lib.Empty.Type
 
-instance
-  DecEq→Eq : ∀{i}{A : Set i} → ⦃ DecidableEquality A ⦄ → Eq A
-  DecEq→Eq ⦃ inst ⦄ = record { _≡ᵗ_ = λ a b → case (decide inst a b) (λ e → just e , ⊤ , refl) (λ e → nothing , ⊥ , refl) }
+DecidableEquality→Eq : ∀{i}{A : Set i} → DecidableEquality A → Eq A
+DecidableEquality→Eq inst = record { _≡ᵗ_ = λ a b → case (decide inst a b) (λ e → just e , ⊤ , refl) (λ e → nothing , ⊥ , refl) }

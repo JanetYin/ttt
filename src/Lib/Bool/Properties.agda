@@ -23,74 +23,74 @@ reduce-notnot : ∀{b} → not (not b) ≡ b
 reduce-notnot {false} = refl
 reduce-notnot {true} = refl
 
-ass∧ : ∀{a b c} → (a ∧ b) ∧ c ≡ a ∧ (b ∧ c)
+ass∧ : ∀{a b c} → ((a ∧ b) ∧ c) ≡ (a ∧ (b ∧ c))
 ass∧ {false} = refl
 ass∧ {true} = refl
 
-comm∧ : ∀{a b} → a ∧ b ≡ b ∧ a
+comm∧ : ∀{a b} → (a ∧ b) ≡ (b ∧ a)
 comm∧ {false} {false} = refl
 comm∧ {false} {true} = refl
 comm∧ {true} {false} = refl
 comm∧ {true} {true} = refl
 
-idem∧ : ∀{b} → b ∧ b ≡ b
+idem∧ : ∀{b} → (b ∧ b) ≡ b
 idem∧ {false} = refl
 idem∧ {true} = refl
 
-ass∨ : ∀{a b c} → (a ∨ b) ∨ c ≡ a ∨ (b ∨ c)
+ass∨ : ∀{a b c} → ((a ∨ b) ∨ c) ≡ (a ∨ (b ∨ c))
 ass∨ {false} = refl
 ass∨ {true} = refl
 
-comm∨ : ∀{a b} → a ∨ b ≡ b ∨ a
+comm∨ : ∀{a b} → (a ∨ b) ≡ (b ∨ a)
 comm∨ {false} {false} = refl
 comm∨ {false} {true} = refl
 comm∨ {true} {false} = refl
 comm∨ {true} {true} = refl
 
-idem∨ : ∀{b} → b ∨ b ≡ b
+idem∨ : ∀{b} → (b ∨ b) ≡ b
 idem∨ {false} = refl
 idem∨ {true} = refl
 
-dist∨∧ : ∀{a b c} → (a ∨ b) ∧ c ≡ a ∧ c ∨ b ∧ c
+dist∨∧ : ∀{a b c} → ((a ∨ b) ∧ c) ≡ (a ∧ c ∨ b ∧ c)
 dist∨∧ {false} = refl
 dist∨∧ {true} {_} {false} = comm∧ {false}
 dist∨∧ {true} {_} {true} = refl
 
-dist∧∨ : ∀{a b c} → (a ∧ b) ∨ c ≡ (a ∨ c) ∧ (b ∨ c)
+dist∧∨ : ∀{a b c} → ((a ∧ b) ∨ c) ≡ ((a ∨ c) ∧ (b ∨ c))
 dist∧∨ {false} {_} {false} = refl
 dist∧∨ {false} {_} {true} = comm∨ {true}
 dist∧∨ {true} = refl
 
-⊃→∨ : ∀{a b} → a ⊃ b ≡ not a ∨ b
+⊃→∨ : ∀{a b} → (a ⊃ b) ≡ (not a ∨ b)
 ⊃→∨ {false} = refl
 ⊃→∨ {true} = refl
 
-null⊃ : ∀{a} → a ⊃ true ≡ true
+null⊃ : ∀{a} → (a ⊃ true) ≡ true
 null⊃ {false} = refl
 null⊃ {true} = refl
 
-pierce : ∀{a b} → ((a ⊃ b) ⊃ a) ⊃ a ≡ true
+pierce : ∀{a b} → (((a ⊃ b) ⊃ a) ⊃ a) ≡ true
 pierce {false} = refl
 pierce {true} = null⊃
 
-lem : ∀{a} → a ∨ not a ≡ true
+lem : ∀{a} → (a ∨ not a) ≡ true
 lem {false} = refl
 lem {true} = refl
 
-contradiction : ∀{a} → a ∧ not a ≡ false
+contradiction : ∀{a} → (a ∧ not a) ≡ false
 contradiction {false} = refl
 contradiction {true} = refl
 
-contraposition : ∀{a b} → a ⊃ b ≡ not b ⊃ not a
+contraposition : ∀{a b} → (a ⊃ b) ≡ (not b ⊃ not a)
 contraposition {false} = sym null⊃
 contraposition {true} {false} = refl
 contraposition {true} {true} = refl
 
-demorgan∨ : ∀{a b} → not (a ∨ b) ≡ not a ∧ not b
+demorgan∨ : ∀{a b} → not (a ∨ b) ≡ (not a ∧ not b)
 demorgan∨ {false} = refl
 demorgan∨ {true} = refl
 
-demorgan∧ : ∀{a b} → not (a ∧ b) ≡ not a ∨ not b
+demorgan∧ : ∀{a b} → not (a ∧ b) ≡ (not a ∨ not b)
 demorgan∧ {false} = refl
 demorgan∧ {true} = refl
 

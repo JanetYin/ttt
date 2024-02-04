@@ -8,6 +8,7 @@ open import Lib
 -- Emacs key bindings (C = Ctrl, M = Alt):
 --  C-x C-f : create or open a file
 --  C-x C-w : save (write) file
+--  C-x C-s : save already named file
 --  C-x C-c : close Emacs
 --  C-space : start selecting text
 --  M-w : Copy
@@ -36,6 +37,7 @@ open import Lib
 --  base type ℕ
 --  function types   A → B
 --   where A and B are any types
+--   definitional equality
 
 add3 : ℕ → ℕ
 add3 = {!!}
@@ -76,6 +78,7 @@ add3' = {!!}
 
 -- test it with C-c C-n!
 
+-- Partial application, just like in haskell (kind of)
 add4 : ℕ → ℕ
 add4 = {!!}
 
