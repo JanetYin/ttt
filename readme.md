@@ -10,12 +10,12 @@ Előadás oktatója: Kaposi Ambrus (akaposi kukac inf.elte.hu).
 
 Gyakorlatok oktatói:
 
-| kurzus kód     | időpont               | helyszín                          | gyakorlatvezető név | ______@inf.elte.hu |
-|----------------|-----------------------|-----------------------------------|---------------------|--------------------|
-| 1              | Szerda 17:45-19:15    | Déli Tömb 2-124 (Microsoft Labor) | Bense Viktor        | qils07             |
-| 2              | Kedd 17:45-19:15      | Déli Tömb 00-411 (PC7)            | Merth Borbála       | f6tnix             |
-| 3              | Csütörtök 16:00-17:30 | Déli Tömb 00-503 (PC8)            | Török Bálint Bence  | fcjylp             |
-| 4              | Csütörtök 17:45-19:15 | Déli Tömb 2-124 (Microsoft Labor) | Petes Márton        | tx0lwm             |
+| kurzus kód     | időpont               | helyszín                          | gyakorlatvezető név | ______@inf.elte.hu |         |
+|----------------|-----------------------|-----------------------------------|---------------------|--------------------|---------|
+| 1              | Szerda 17:45-19:15    | Déli Tömb 2-124 (Microsoft Labor) | Bense Viktor        | qils07             | ENGLISH |
+| 2              | Kedd 17:45-19:15      | Déli Tömb 00-411 (PC7)            | Merth Borbála       | f6tnix             |         |
+| 3              | Csütörtök 16:00-17:30 | Déli Tömb 00-503 (PC8)            | Török Bálint Bence  | fcjylp             |         |
+| 4              | Csütörtök 17:45-19:15 | Déli Tömb 2-124 (Microsoft Labor) | Petes Márton        | tx0lwm             |         |
 
 Nagyon fontos, hogy azt a gyakorlatot vedd fel a Neptunban, amelyikre ténylegesen jársz, mert a Canvas automatikusan veszi át az infót a Neptunból.
 
