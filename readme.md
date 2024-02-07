@@ -6,7 +6,11 @@ Important that you register the course with the code appropriate to your studies
  * MSc: IPM-18sztKVTE[E|G]
  * MSc evening course: IPM-18EsztKVTE[E|G]
 
-Lectures are given by Ambrus Kaposi (akaposi at inf.elte.hu). THIS SEMESTER THE LECTURES ARE IN ENGLISH!
+Lectures:
+
+| time            | place                                | teacher             | ______@inf.elte.hu | Language |
+|-----------------|--------------------------------------|---------------------|--------------------|----------|
+| Mon 16:00-17:30 | South Building 0-805 (Fejér Lipót)   | Ambrus Kaposi       | akaposi            | EN       |
 
 Teachers of tutorials:
 
