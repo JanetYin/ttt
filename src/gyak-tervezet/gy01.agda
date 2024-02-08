@@ -99,6 +99,7 @@ bNum = add3 (add3 (add3 2))
 
 -- lambda notation
 
+-- Meaning of defintional equality
 add3' : ℕ → ℕ
 add3' = {!!}
 -- add3 x = x + 3
@@ -173,6 +174,8 @@ f1 = {!!}
 f2 f3 : (ℕ → ℕ) → ℕ
 f2 = {!!}
 f3 = {!!}
+
+
 
 tw : {A : Set} → (A → A) → A → A
 tw f n = f (f n)
