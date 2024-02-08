@@ -33,28 +33,60 @@ open import Lib
 --    ℕ       \bN           'b'lackboard 'N', there is also \bZ for ℤ, etc
 --    λ       \Gl           'G'reek 'l', there is also \GG for Γ, etc
 
+{-
+Már elvárt ismeret, tárgyhoz előkövetelmények:
+
+Haskell szintaxisa, Haskell nyelv, típusok
+  + létező alapvető függvények, operátorok
+    + Számokon: _+_, _*_
+    + Bool-okon: not, (&&), (||), elágazások
+    + Listákon: head, tail, length, replicate, (!!), take, drop, map, filter, zip, zipWith, takeWhile, dropWhile
+    + Rendezett párok: (,), fst, snd
+    + Either típus: Left, Right -- Ha nem ismerős, nem gond, haskellben :i-vel meg lehet nézni.
+  + operátorok kötési erőssége
+  + rekurzió!
+  + mintaillesztés!!
+    + konstruktorok
+      + adatkonstruktorok: Just, Nothing, True, False, [], (:), (,), Left, Right
+      + típuskonstruktorok: Maybe, Either, (->)
+  + parciális applikálás, pl. (1 +), (+ 2), (+) 3, (`mod` 5), (mod 5)
+  + névtelen függvények (lesz róla rövid ismétlés): \x -> x + 1; \x y -> x * 2 - y
+  + Típusrendszer:
+    + Alapvető típusok jelölése, pl. Int -> Int; a -> b -> a; Eq a => a -> [a] -> Bool
+    + Polimorfizmus -> Parametrikus specifikusan; ad-hoc-ról kevés szó lesz.
+    + Magasabb rendű függvények jelölése, pl. (a -> b) -> [a] -> [b]; (a -> Bool) -> [a] -> [a]
+
+Fogalmak:
+  + paricális/**totális** függvény
+  + rekurzió
+  + parcális/totális applikálás
+  + Curry-zés elve, minden függvény egyparaméteres, \x y -> x + 2 * y ≡ \x -> \y -> x + 2 * y
+-}
+
 -- TODAY:
+-- ismétlés; how to haskell in agda
+-- learning agda's keycombinations
 --  base type ℕ
 --  function types   A → B
 --   where A and B are any types
 --   definitional equality
 
-add3 : ℕ → ℕ
-add3 = {!!}
+add3 : {!   !}
+add3 = {!   !}
 
--- try add3 x = x+3, spaces matter!
+-- spaces matter!
 
 -- C-c C-n  add3 4
 
 aNum : ℕ
-aNum = add3 4
+aNum = {! add3 4 !}
 
 -- equational reasoning
 -- aNum = add3 4
 --      = 4 + 3
 --      = 7
 
--- no need to write brackets in "add3(4)"
+-- DO NOT write brackets in "add3(4)"
 
 -- C-c C-n aNum
 
@@ -156,4 +188,3 @@ first = {!!}
 
 second : {A : Set} → A → A → A
 second = {!!}
-
