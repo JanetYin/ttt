@@ -46,14 +46,26 @@ open Stream
 -- check that the type of head : Stream A → A
 --                        tail : Stream A → Stream A
 
+-- Ez a típus lényegében a végtelen listákat kódolja el.
+-- Ebben véges lista nincs benne, csak végtelen!
+
+
+-- Copattern matching!
+-- FELADAT: Add meg azt a végtelen listát, amely csak 0-kból áll.
 zeroes : Stream ℕ
 zeroes = {!!}
+-- Honnan tudja agda, hogy ez totális?
+-- Termination checker nem tud futni, hiszen a lista végtelen.
+-- Productivity checker
 
 -- by pattern match on n
+-- FELADAT: Add meg azt a listát, amely n-től 0-ig számol vissza egyesével.
 countDownFrom : ℕ → List ℕ
 countDownFrom n = {!!}
 
 -- from n is not by pattern match on n
+-- copattern match on Stream
+-- FELADAT: Adjuk meg azt a végtelen listát, amely n-től 1-esével felfelé számol!
 from : ℕ → Stream ℕ
 from n = {!!}
 
@@ -61,12 +73,13 @@ from n = {!!}
 zipWith : {A B C : Set} → (A → B → C) → Stream A → Stream B → Stream C
 zipWith = {!!}
 
+-- Definiálható-e a filter sima listákon?
 filterL : {A : Set} → (A → Bool) → List A → List A
 filterL = {!!}
 
--- this cannot be defined:
--- filterS : {A : Set} → (A → Bool) → Stream A → Stream A
--- filterS P xs = ?
+-- Definiálható-e a filter Stream-eken?
+filterS : {A : Set} → (A → Bool) → Stream A → Stream A
+filterS P xs = ?
 
 -- one element from the first stream, then from the second stream, then from the first, and so on
 interleave : {A : Set} → Stream A → Stream A → Stream A

@@ -1,32 +1,51 @@
-open import Lib hiding (_+_; _*_; _-_; _^_; _!; pred)
+open import Lib hiding (_+_; _*_; _-_; _^_; _!; pred; pred')
 open import Lib.Containers.List hiding (length; _++_; map; iteList)
 
 ---------------------------------------------------------
 -- natural numbers
 ---------------------------------------------------------
 
+-- A természetes számok a diszkrét matekról ismert módon vannak megadva,
+-- tehát van a 0 és van rákövetkezője.
 {-
 data ℕ : Set where
   zero : ℕ
   suc  : ℕ → ℕ
 -}
 
+-- Haskellből ismert Maybe típus.
 {-
 data Maybe (A : Set) : Set where
   just : A → Maybe A
   nothing : Maybe A
 -}
 
-pred : ℕ → Maybe ℕ
-pred = {!!}
+-- FELADAT: Csökkents eggyel egy megadott természetes számot, ha lehet.
+pred' : ℕ → Maybe ℕ
+pred' = {!!}
 
+-- FELADAT: Ha lehet, akkor adj hozzá a számhoz egyet, egyébként az eredmény legyen 0.
 zerosuc : Maybe ℕ → ℕ
 zerosuc = {!!}
 
-pred↔zerosuc-test1 : pred (zerosuc nothing) ≡ nothing
+pred↔zerosuc-test1 : pred' (zerosuc nothing) ≡ nothing
 pred↔zerosuc-test1 = refl
-pred↔zerosuc-test2 : {n : ℕ} → pred (zerosuc (just n)) ≡ just n
+pred↔zerosuc-test2 : {n : ℕ} → pred' (zerosuc (just n)) ≡ just n
 pred↔zerosuc-test2 = refl
+
+-- Csúnya pred, mert matematikailag nem azt csinálja, a 0-nak nincs megelőzője, az nem lehet 0.
+pred'' : ℕ → ℕ
+pred'' zero = zero
+pred'' (suc n) = n
+
+-- Ennél sokkal jobb pred-et lehet megadni; Maybe nélkül is lehet.
+-- Errefelé halad a tárgy; fontos a pontos specifikáció!
+-- Kell egy függvény, ami típust ad vissza.
+-- Majd utána rendes pred.
+
+----------------------------------------------------------------------------------------
+-- Rekurzió, termination checker
+-- Agda CSAK totális függvényeket fogad el.
 
 double : ℕ → ℕ
 double = {!!}
@@ -84,7 +103,7 @@ infixr 8 _^_
 ^-test3 = refl
 ^-test4 : 1 ^ 3 ≡ 1
 ^-test4 = refl
-^-test5 : 0 ^ 0 ≡ 1 -- csúnya dolog
+^-test5 : 0 ^ 0 ≡ 1
 ^-test5 = refl
 
 _! : ℕ → ℕ
@@ -107,7 +126,9 @@ infixl 6 _-_
 -test2 = refl
 -test3 : 3 - 4 ≡ 0 -- csúnya dolog
 -test3 = refl
+-- Kivonásból is lehet jobb verziójút írni.
 
+-- FELADAT: Határozd meg, hogy az első szám nagyobb vagy egyenlő-e, mint a második.
 _≥_ : ℕ → ℕ → Bool
 _≥_ = {!!}
 
@@ -119,6 +140,7 @@ _≥_ = {!!}
 ≥test3 = refl
 
 -- ne hasznalj rekurziot, hanem hasznald _≥_-t!
+-- FELADAT: Remélhetőleg értelemszerű.
 _>_ : ℕ → ℕ → Bool
 _>_ = {!!}
 
@@ -129,6 +151,8 @@ _>_ = {!!}
 >test3 : 3 > 4 ≡ false
 >test3 = refl
 
+-- ne hasznalj rekurziot
+-- FELADAT: Remélhetőleg értelemszerű.
 _<_ : ℕ → ℕ → Bool
 _<_ = {!!}
 
@@ -139,6 +163,7 @@ _<_ = {!!}
 <test3 : 3 < 4 ≡ true
 <test3 = refl
 
+-- FELADAT: Két szám közül add vissza a kisebbet.
 min : ℕ → ℕ → ℕ
 min = {!!}
 
@@ -149,6 +174,7 @@ min-test2 = refl
 min-test3 : min 3 3 ≡ 3
 min-test3 = refl
 
+-- FELADAT: Hasonlíts össze két számot! Ha az első kisebb, mint a második, akkor a harmadik paramétert add vissza; ha egyenlők, akkor a negyediket; ha nagyobb, akkor az ötödiket.
 comp : {A : Set} → ℕ → ℕ → A → A → A → A
 comp m n m<n m=n m>n = {!!}
 
@@ -159,9 +185,10 @@ comp-test2 = refl
 comp-test3 : comp {ℕ} 12 11 0 1 2 ≡ 2
 comp-test3 = refl
 
--- hasznald comp-ot!
+-- FELADAT: Határozd meg két szám legnagyobb közös osztóját.
+-- Segítség: Használd a comp-ot!
 gcd : ℕ → ℕ → ℕ
-{-# TERMINATING #-}
+-- {-# TERMINATING #-} -- Csalás! De ezt a függvényt nem egyszerű jól definiálni ahhoz, hogy agda lássa, hogy terminál.
 gcd m n = {!!}
 
 gcd-test1 : gcd 6 9 ≡ 3
@@ -182,6 +209,8 @@ gcd-helper (suc fuel) m n = {!!}
 gcd' : ℕ → ℕ → ℕ
 gcd' m n = gcd-helper (m + n) m n
 
+-- Ezt miért fogadja el agda?
+
 gcd'-test1 : gcd' 6 9 ≡ 3
 gcd'-test1 = refl
 gcd'-test2 : gcd' 100 150 ≡ 50
@@ -193,6 +222,7 @@ gcd'-test4 = refl
 gcd'-test5 : gcd' 19 17 ≡ 1
 gcd'-test5 = refl
 
+-- FELADAT: Páros-e egy szám?
 even? : ℕ → Bool
 even? = {!!}
 
@@ -201,6 +231,7 @@ even?-test1 = refl
 even?-test2 : even? 200 ≡ true
 even?-test2 = refl
 
+-- FELADAT: Határozd meg a Fibonacci-sorozat n. elemét; a 0. eleme legyen 1.
 fib : ℕ → ℕ
 fib = {!!}
 
@@ -209,6 +240,7 @@ fib-test1 = refl
 fib-test2 : fib 3 ≡ 3
 fib-test2 = refl
 
+-- FELADAT: Vizsgáld meg, hogy két szám egyenlő-e! Ne használj rekurziót!
 eq? : ℕ → ℕ → Bool
 eq? = {!!}
 
@@ -218,6 +250,7 @@ eq?-test2 : eq? 4 4 ≡ true
 eq?-test2 = refl
 
 -- rem m n = a maradek, ha elosztjuk m-et (suc n)-el
+-- FELADAT: Két számot osszunk el, az eredmény legyen az egész osztás maradéka.
 rem : ℕ → ℕ → ℕ
 rem a b = {!!}
 rem-test1 : rem 5 1 ≡ 1
@@ -226,6 +259,7 @@ rem-test2 : rem 11 2 ≡ 2
 rem-test2 = refl
 
 -- div m n = m-ben hanyszor van meg (suc n)
+-- FELADAT: Két számot egész osszunk!
 div : ℕ → ℕ → ℕ
 div a b = {!!}
 div-test1 : div 5 1 ≡ 2
@@ -233,6 +267,7 @@ div-test1 = refl
 div-test2 : div 11 2 ≡ 3
 div-test2 = refl
 
+-- Miért ite-vel kezdődik a neve?
 iteNat : {A : Set} → A → (A → A) → ℕ → A
 iteNat z s zero = z
 iteNat z s (suc n) = s (iteNat z s n)
@@ -272,6 +307,7 @@ data List (A : Set) : Set where
 infixr 5 _∷_
 -}
 
+-- FELADAT: Határozzuk meg egy lista elemszámát!
 length : {A : Set} → List A → ℕ
 length = {!!}
 
@@ -280,12 +316,14 @@ length-test1 = refl
 length-test2 : length {ℕ} (1 ∷ []) ≡ 1
 length-test2 = refl
 
+-- FELADAT: Adjuk össze egy lista számait.
 sumList : List ℕ → ℕ
 sumList = {!!}
 
 sumList-test : sumList (1 ∷ 2 ∷ 3 ∷ []) ≡ 6
 sumList-test = refl
 
+-- FELADAT: Fűzzünk össze két listát!
 _++_ : {A : Set} → List A → List A → List A
 _++_ = {!!}
 infixr 5 _++_
@@ -293,19 +331,24 @@ infixr 5 _++_
 ++-test : the ℕ 3 ∷ 2 ∷ [] ++ 1 ∷ 4 ∷ [] ≡ 3 ∷ 2 ∷ 1 ∷ 4 ∷ []
 ++-test = refl
 
+-- FELADAT: Alkalmazzunk egy függvényt egy lista minden elemén!
 map : {A B : Set} → (A → B) → List A → List B
 map = {!!}
 
 map-test : map (_+ 2) (3 ∷ 9 ∷ []) ≡ (5 ∷ 11 ∷ [])
 map-test = refl
 
+-- FELADAT: Definiáld a lista destruktorát! Dolgozzunk fel egy listát:
+-- ha üres a lista, akkor csak adjunk vissza egy alapértéket
+-- ha a listában van elem, akkor alkalmazzunk rá egy függvényt az alapértékkel úgy, hogy az kifejezés jobbra legyen zárójelezve.
+-- Haskell-ben foldr
 iteList : {A B : Set} → B → (A → B → B) → List A → B
-iteList n c [] = n
-iteList n c (a ∷ as) = c a (iteList n c as)
+iteList n c as = ?
+
+iteList-test : iteList 3 _^_ (2 ∷ 3 ∷ []) ≡ 2 ^ 27
+iteList-test = refl
 
 -- FEL: add meg a fenti fuggvenyeket (length, ..., map) iteList segitsegevel!
-
--- FEL: add meg recNat-ot, es vezesd vissza iteNat-ra!
 
 ---------------------------------------------------------
 -- trees
@@ -329,12 +372,14 @@ e = const 2 [*] (const 3 [+] const 4)
   3   4
 -}
 
+-- FELADAT: Értékeljünk ki egy kifejezést!
 eval : Expr → ℕ
 eval = {!!}
 
 eval-test : eval e ≡ 14
 eval-test = refl
 
+-- FELADAT: Határozzuk meg egy kifejezésfa (szintaxisfa, AST) magasságát. Levél magassága 0.
 height : Expr → ℕ
 height = {!!}
 
@@ -359,20 +404,15 @@ t = node (node leaf 1 (node leaf 2 leaf)) 5 leaf
    / \
 -}
 
-
+-- FELADAT: Csináljuk meg egy fa inorder bejárását!
 tree2List : {A : Set} → Tree A → List A
 tree2List = {!!}
 
 tree2List-test : tree2List t ≡ 1 ∷ 2 ∷ 5 ∷ []
 tree2List-test = refl
 
-_≤?_ : ℕ → ℕ → Bool
-zero ≤? m = true
-suc n ≤? zero = false
-suc n ≤? suc m = n ≤? m
-
 -- egy fa rendezett, ha minden csomopontnal levo erteknel a bal reszfaban kisebb, a kobb reszfaban pedig nagyobb ertekek vannak. peldaul t rendezett
-
+-- segítség: használjuk a _≤_ függvényt.
 -- ez a fuggveny egy rendezett faba illeszt be egy uj erteket ugy,
 -- hogy a fa rendezett maradjon
 insert : ℕ → Tree ℕ → Tree ℕ
@@ -392,10 +432,11 @@ t' = node (node (node leaf 0 leaf) 1 (node leaf 2 leaf)) 5 leaf
 insert-test : insert 0 t ≡ t'
 insert-test = refl
 
--- egy listat egy rendezett fara alakit.
+-- FELADAT: egy listát egy rendezett fara alakít.
 list2tree : List ℕ → Tree ℕ
-list2tree = λ _ → leaf
+list2tree = ?
 
+-- FELADAT: Rendezzünk egy listát úgy, hogy azt fává alakítjuk megfelelően, majd inorder bejárjuk!
 tree-sort : List ℕ → List ℕ
 tree-sort = {!!}
 
@@ -417,6 +458,7 @@ tR = node (node (node [] ∷ []) ∷ node [] ∷ node (node [] ∷ node [] ∷ [
  |  /\
 -}
 
+-- FELADAT: Számoljuk meg egy rózsafa csomópontjait.
 countNodes     : RoseTree → ℕ
 countNodesList : List RoseTree → ℕ
 countNodes = {!!}
@@ -436,6 +478,7 @@ max-test2 = refl
 max-test3 : max 20 20 ≡ 20
 max-test3 = refl
 
+-- FELADAT: Határozzuk meg egy rózsafa magasságát.
 heightRoseTree : RoseTree → ℕ
 heightRoseTreeList : List RoseTree → ℕ
 heightRoseTree = {!!}

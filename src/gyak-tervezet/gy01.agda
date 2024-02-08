@@ -61,6 +61,9 @@ Fogalmak:
   + rekurzió
   + parcális/totális applikálás
   + Curry-zés elve, minden függvény egyparaméteres, \x y -> x + 2 * y ≡ \x -> \y -> x + 2 * y
+
+(Lesz róla szó) Csoport elmélet nagyon eleje: félcsoport, egységelemes félcsoport
+(Lesz róla szó, ezeket a tárgy végére kell tudni) Tulajdnoságok: asszociativitás, kommutativitás, egység, disztributivitás
 -}
 
 -- TODAY:

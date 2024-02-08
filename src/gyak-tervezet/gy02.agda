@@ -4,17 +4,30 @@ open import Lib hiding (comm⊎)
 -- simple finite types
 ------------------------------------------------------
 
+-- Feladat: Fordítsuk meg egy rendezett pár két komponensét
 flip : ℕ × Bool → Bool × ℕ
 flip = {!!}
 
+-- Feladat: Fordítsuk meg egy rendezett pár két komponensét
 flipback : Bool × ℕ → ℕ × Bool
 flipback = {!!}
 
+-- Vegyük észre, hogy az előző két függvényben bármilyen más csúnya dolgot is lehetne csinálni.
+-- Írj rá példát itt!
+
+
+
+-- Feladat: Fordítsuk meg egy rendezett pár két komponensét
 comm× : {A B : Set} → A × B → B × A
 comm× = {!!}
 
 comm×back : {A B : Set} → B × A → A × B
-comm×back = comm×
+comm×back = ?
+-- Ezekben lehetetlen hülyeséget csinálni.
+-- Hányféleképpen lehetséges implementálni ezt a két fenti függvényt?
+
+
+-- ALGEBRAI ADATTÍPUSOK ELEMSZÁMAI:
 
 b1 b2 : Bool × ⊤
 b1 = {!!}
@@ -44,7 +57,26 @@ ee = {!!}
 
 d : (⊤ ⊎ (⊤ × ⊥)) × (⊤ ⊎ ⊥)
 d = {!!}
+-- Ezek alapján hogy lehet megállapítani, hogy melyik típus hány elemű?
+-- | ⊤ | =
+-- | ⊥ | =
+-- | Bool | =
+-- | Bool ⊎ ⊤ | =
+-- | A ⊎ B | =
+-- | A × B | =
+-- | Bool × Bool × Bool | =
+-- | ⊤ → ⊥ | =
+-- | ⊥ → ⊤ | =
+-- | ⊥ → ⊥ | =
+-- | Bool → ⊥ | =
+-- | Bool → ⊤ | =
+-- | ⊤ → Bool | =
+-- | A → B | =
+-- | Bool → Bool → Bool | =
 
+
+-- Ezek alapján milyen matematikai állítást mond ki és bizonyít a lenti állítás?
+-- Válasz:
 from' : {A : Set} → A × A → (Bool → A)
 from' = {!!}
 to' : {A : Set} → (Bool → A) → A × A
@@ -118,6 +150,7 @@ law1^ = {!!}
 -- random isomorphisms
 ------------------------------------------------------
 
+-- Milyen algebrai állítást mond ki az alábbi típus?
 iso1 : {A B : Set} → (Bool → (A ⊎ B)) ↔ ((Bool → A) ⊎ Bool × A × B ⊎ (Bool → B))
 iso1 = {!!}
 
