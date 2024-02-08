@@ -191,3 +191,10 @@ first = {!!}
 
 second : {A : Set} → A → A → A
 second = {!!}
+
+----------------------------------------------
+
+-- Show definitional equality meaning on Bools:
+-- constTrue with pattern matching
+-- constTrue normally
+-- C-c C-n try (λ x → constTrue x), see what happens in each case!
