@@ -38,7 +38,7 @@ open import Lib
 {-
 Már elvárt ismeret, tárgyhoz előkövetelmények:
 
-Haskell szintaxisa, Haskell nyelv, típusok
+Haskell szintaxisa, Haskell nyelv, típusok, ghci használata
   + létező alapvető függvények, operátorok
     + Számokon: _+_, _*_
     + Bool-okon: not, (&&), (||), elágazások
