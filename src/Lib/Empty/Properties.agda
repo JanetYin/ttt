@@ -10,7 +10,3 @@ open import Lib.Equality
 infix 4 _≟_
 _≟_ : (a b : ⊥) → Dec (a ≡ b)
 _ ≟ _ = yes refl
-
-instance
-  DecEq⊥ : DecidableEquality ⊥
-  DecEq⊥ = DecProof _≟_
