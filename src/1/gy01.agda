@@ -56,12 +56,13 @@ Haskell szintaxisa, Haskell nyelv, típusok, ghci használata
   + Típusrendszer:
     + Alapvető típusok jelölése, pl. Int -> Int; a -> b -> a; Eq a => a -> [a] -> Bool
     + Polimorfizmus -> Parametrikus specifikusan; ad-hoc-ról kevés szó lesz.
-    + Magasabb rendű függvények jelölése, pl. (a -> b) -> [a] -> [b]; (a -> Bool) -> [a] -> [a]
+    + Magasabbrendű függvények jelölése, pl. (a -> b) -> [a] -> [b]; (a -> Bool) -> [a] -> [a]
 
 Fogalmak:
   + paricális/**totális** függvény
   + rekurzió
   + parcális/totális applikálás
+  + magasabbrendű függvény
   + Curry-zés elve, minden függvény egyparaméteres, \x y -> x + 2 * y ≡ \x -> \y -> x + 2 * y
 
 (Lesz róla szó) Csoport elmélet nagyon eleje: félcsoport, egységelemes félcsoport
