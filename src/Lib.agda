@@ -27,6 +27,7 @@ open import Lib.Fin public
 open import Lib.Equality public
 open import Lib.Dec public
 open import Lib.Maybe public
+open import Lib.Ordering public
 
 ------------------------------------------------------------
 -- Change when needed
