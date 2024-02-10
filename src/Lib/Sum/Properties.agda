@@ -31,7 +31,3 @@ dec-⊎ e1 e2 (inl a) (inl b) = case (e1 a b) (λ e → yes (cong inl e)) (λ e 
 dec-⊎ e1 e2 (inl a) (inr b) = no λ ()
 dec-⊎ e1 e2 (inr a) (inl b) = no λ ()
 dec-⊎ e1 e2 (inr a) (inr b) = case (e2 a b) (λ e → yes (cong inr e)) (λ e → no λ e3 → e (inr-injective e3))
-
-instance
-  DecEq⊎ : ∀{i j}{A : Set i}{B : Set j} → ⦃ DecidableEquality A ⦄ → ⦃ DecidableEquality B ⦄ → DecidableEquality (A ⊎ B)
-  DecEq⊎ ⦃ i1 ⦄ ⦃ i2 ⦄ = DecProof (dec-⊎ (decide i1) (decide i2))
