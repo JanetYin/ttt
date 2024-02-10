@@ -28,6 +28,7 @@ open import Lib.Equality public
 open import Lib.Dec public
 open import Lib.Maybe public
 open import Lib.Ordering public
+  renaming (_≟_ to _≟Ordering_)
 
 ------------------------------------------------------------
 -- Change when needed
