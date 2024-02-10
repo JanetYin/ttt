@@ -1,3 +1,5 @@
+module gy06 where
+
 open import Lib
 
 Σ=⊎ : {A B : Set} → Σ Bool (if_then A else B) ↔ A ⊎ B

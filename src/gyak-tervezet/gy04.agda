@@ -1,3 +1,5 @@
+module gy04 where
+
 open import Lib hiding (_+∞_; coiteℕ∞)
 
 open import Lib.Containers.List hiding (zipWith; head; tail)
@@ -7,10 +9,13 @@ open import Lib.Containers.Stream hiding (zipWith; coiteStream)
 -- positivity
 ---------------------------------------------------------
 
+-- Miért nem enged agda bizonyos típusokat definiálni? Pl. alapesetben az alábbit sem.
+
 {-# NO_POSITIVITY_CHECK #-}
 data Tm : Set where
   lam : (Tm → Tm) → Tm
 
+-- FELADAT: Tm-ből adjuk vissza a lam értékét.
 app : Tm → (Tm → Tm)
 app = {!!}
 
@@ -24,10 +29,12 @@ self-apply = lam (λ t → app t t)
 {-# NO_POSITIVITY_CHECK #-}
 data Weird : Set where
   foo : (Weird → ⊥) → Weird
+  -- Hogy kell elolvasni magyarul a "foo" konstruktort?
 
 unweird : Weird → ⊥
 unweird = {!!}
 
+-- ⊥ típusú értéknek TILOS léteznie, ellenkező esetben a rendszer inkonzisztens, nem használható SEMMIRE.
 bad : ⊥
 bad = {!!}
 
@@ -127,6 +134,15 @@ c2 = add c1 5
 c3 = mul c2 2
 c4 = reset c3
 c5 = add c4 2
+
+-- FELADAT: Készítsünk egy csokiautomatát.
+-- A gépbe tudunk pénzt dobálni (ez legyen ℕ, ennyit adjunk hozzá a jelenlegi kreditünhöz).
+-- A tranzakciót meg tudjuk szakítani, a kredit 0 lesz és visszaadja a pénzünket.
+-- Legyen 3 termékünk, ezek egyenként kerülnek valamennyibe és van belőlük a gépben valamennyi.
+-- + Twix: 350-be kerül, kezdetben van a gépben 50 darab.
+-- + Croissant: 400-ba kerül, kezdetben van 75 darab.
+-- + Snickers: 375-be kerül, kezdetben van 60 darab.
+-- Tudunk 1 terméket vásárolni, ha van elég bedobott pénzünk, ekkor a darabszámból vonjunk le egyet (ha lehet) és adjuk vissza a visszajárót, a kreditet nullázzuk le.
 
 -- conatural numbers
 {-
