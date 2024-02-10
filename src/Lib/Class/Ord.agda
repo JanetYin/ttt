@@ -3,7 +3,7 @@
 module Lib.Class.Ord where
 
 open import Lib.Level
-open import Lib.Bool
+open import Lib.Bool.Type
 open import Lib.Class.Eq
 open import Lib.Ordering.Type
 open import Lib.Equality.Type
