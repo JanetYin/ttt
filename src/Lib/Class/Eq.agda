@@ -21,9 +21,11 @@ open import Lib.Unit.Type
 open import Lib.Bool.Type
 
 record Eq {i} (A : Set i) : Set (lsuc i) where
+  constructor EqInstance
   inductive
   field
     _≡ᵗ_ : (a b : A) → Σ (Maybe (a ≡ b)) (λ x → Σ Set (IsJust x ≡_))
+    eqIsJust : {a b : A} → a ≡ b → IsJust (fst (a ≡ᵗ b))
 
   _≡ⁱ_ : (a b : A) → Set
   a ≡ⁱ b = fst (snd (a ≡ᵗ b))
