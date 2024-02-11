@@ -17,7 +17,3 @@ just-injective refl = refl
 ≡-dec-Maybe _ (just x) nothing = no λ ()
 ≡-dec-Maybe _ nothing (just y) = no λ ()
 ≡-dec-Maybe _ nothing nothing  = yes refl
-
-instance
-  DecEqMaybe : ∀{i}{A : Set i} → ⦃ DecidableEquality A ⦄ → DecidableEquality (Maybe A)
-  DecEqMaybe {i} {A} ⦃ inst ⦄ = DecProof (≡-dec-Maybe {i} {A} (decide inst))
