@@ -17,8 +17,8 @@ open import Lib.Dec.PatternSynonym
 Fin1-η : (a b : Fin 1) → a ≡ b
 Fin1-η fzero fzero = refl
 
-finsuc-injective : {n : ℕ}{x y : Fin n} → fsuc x ≡ fsuc y → x ≡ y
-finsuc-injective {x = x} e = cong (p x) e where
+fsuc-injective : {n : ℕ}{x y : Fin n} → fsuc x ≡ fsuc y → x ≡ y
+fsuc-injective {x = x} e = cong (p x) e where
   p : {k : ℕ} → Fin k → Fin (suc k) → Fin k
   p k fzero = k
   p _ (fsuc x) = x
@@ -30,8 +30,4 @@ fzero ≟ fsuc b = no λ ()
 fsuc a ≟ fzero = no λ ()
 fsuc a ≟ fsuc b with a ≟ b
 ... | yes ab = yes (cong fsuc ab)
-... | no ¬ab = no λ x → ¬ab (finsuc-injective x)
-
-instance
-  DecEqFin : ∀{n} → DecidableEquality (Fin n)
-  DecEqFin = DecProof _≟_
+... | no ¬ab = no λ x → ¬ab (fsuc-injective x)
