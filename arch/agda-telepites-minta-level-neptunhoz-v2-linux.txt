@@ -1,0 +1,29 @@
+Kedves Hallgatók!
+
+A Típuselmélet nevű tárgy keretei között az Agda programozási nyelvet fogjuk használni. A benti gépeken van Agda telepítve (2.6.2.2), de az már 2 éves, előfordulhatnak problémák, ezért javallott a saját gép használata, és azzal jöjjenek az első gyakorlatra, amelyre már legyen telepítve az Agda 2.6.4.1-es verziója, mert a teljes kódbázis a legfrissebb verzióra épül.
+
+Telepítés menete:
+Az Agda működéséhez szükséges a GHC (legalább 9.4.8) és Cabal (legalább 3.10.2.1) megléte a számítógépen. Ha van a számítógépen ilyen, akkor ezen üzenet [2]-es lépéséhez szükséges menni. A telepítés menete remélhetőleg OS X-en, Linuxon és Windowson is egyaránt megy. Ha valamiért mégsem, akkor Teams-en keresztül akár a csoportban lehet nyugodtan írni és ilyeneket megbeszélni, lehet kérdezni, megpróbálok válaszolni a felmerülő kérdésekre.
+
+[1] GHC és Cabal telepítése:
+Mindenkire rábízom, hogy milyen módon telepíti ezeket, azonban javaslom a ghcup (https://www.haskell.org/ghcup/) telepítését, ez egy kezelő környezet, amin keresztül egyszerű feltelepíteni mind a GHC-t, mind a Cabal-t. A fenti linken (angol nyelven) található információ, hogy hogyan kell telepíteni és használni. Ha a ghcup telepítése megvan az alapértelmezett beállításokkal, akkor GHC és Cabal is kell legyen telepítve. Ezt ellenőrizni a "ghcup list" paranccsal lehet, a parancs sok piros X-et, néhol zöld IS feliratot kell írjon; ha található IS egy GHC verzió mellett (alapértelmezetten 9.4.8-nál), illetve egy Cabal verzió mellett (alapértelmezetten 3.10.2.1-nél), akkor a telepítés rendben ment és lehet folytatni a [2]-es lépéssel. Győződjünk meg róla, hogy a "cabal" és a "ghc" programok a PATH környezeti változóban szerepelnek!
+
+[2] Előkövetelmények: alex, happy
+Agda telepítéséhez szükségesek az "alex" (ez egy lexikális elemző) és a "happy" (parser generátor) programok meglétei, amelyeket cabal-ból lehet telepíteni. Először szükséges frissíteni az elérhető Cabal package-ek listáját a "cabal update" parancs futtatásával. Ha ez rendben ment, akkor az említett programok a "cabal install alex happy" parancs futtatásával telepíthetők.
+
+[3] Agda telepítése:
+Ha van fent GHC és Cabal, akkor egy terminálban vagy konzolban a "cabal install -j3 Agda" (ez 3 szálon fogja a telepítést csinálni, lehet nagyobb számot is választani, ha a cpu bírja) paranccsal lehet az Agda nyelv fordítóját telepíteni. Ez a telepítés bő 10 percig fog futni, ezt türelmesen szükséges végig várni. Ha minden jól végig ment, akkor lesz Agda a gépen, a futtatható állomány a telepített Cabal helyének bin mappájában lesz. Ez legyen benne a PATH-ban az egyszerűség kedvéért.
+
+[4] agda-mode:
+Agda interaktív bizonyító is, így az agda-mode (az Agda telepítésével jön) is szükséges. Az agda-mode használatához különböző editorokban különböző plugin-ek szükségesek.
+
+Előfordulhat, hogy saját rendszeren az Agdát sikerül közvetlen telepíteni a rendszer csomagkezelőjéből, akár "apt install Agda", akár "brew install Agda"; csomagkezelőkön keresztül nem feltétlen a legfrissebb Agda települ fel (ez az apt-re különösen igaz), 2.6.4.1-es verzió alatt nem tudjuk garantálni, hogy a kód, amit használni fogunk a gyakorlatokon, működni fog, így ha valaki ilyen módon telepíti az Agdát, kérem, ellenőrizze, hogy 2.6.4.1-es verziójú Agda települt-e.
+
+A tárgyon elsősorban Linux-ot fogunk használni Emacs editorral, azzal működik teljes körűen helyesen az Agda nyelv. Bármi más operációs rendszeren nem feltétlenül tudok segíteni.
+
+Az első óra tervei már megtalálhatók a repóban (https://bitbucket.org/akaposi/ttt/src/master/), amit a félévben használni fogunk folyamatosan. A miénk az 1-es csoport, tehát az 1-es mappában lesz található az ezen csoporthoz tartozó anyag (természetesen másét is meg lehet nézni, nagyjából azonosak, emellett érdemes másét is megnézni, hátha valami máshogy hangzik el, esetleg van plusz információ máshol), a mappában található egy gy01.agda fájl, ebben már látható jó néhány információ, többek között előzetes tudásra vonatkozó követelmény is. Erről természetesen az első órán mesélek részletesebben.
+
+Köszönöm mindenkinek az együttműködését!
+
+Üdvözlettel:
+Bense Viktor
