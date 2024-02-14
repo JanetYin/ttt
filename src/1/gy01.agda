@@ -69,6 +69,15 @@ Fogalmak:
 (Lesz róla szó, ezeket a tárgy végére kell tudni) Tulajdnoságok: asszociativitás, kommutativitás, egységelem, disztributivitás, szimmetria, reflexivitás, tranzitivitás
 -}
 
+{-
+tárgy weboldala: bitbucket.org/akaposi/ttt
+
+ZH nincs
++/-: 10 db, elméleti ÉS gyakorlati minden alkalommal 0.5-0.5 pont beosztással.
+            elmélet papíron, gyakorlat gépen.
+Házik nem kötelezőek, gyakorlás a +/--ra. (Anélkül elég nehéz 2-est elérni.)
+-}
+
 -- TODAY:
 -- ismétlés; how to haskell in agda
 -- learning agda's keycombinations
@@ -77,15 +86,15 @@ Fogalmak:
 --   where A and B are any types
 --   definitional equality
 
-add3 : {!   !}
-add3 = {!   !}
+add3 : ℕ → ℕ 
+add3 x = x + 3
 
 -- spaces matter!
 
 -- C-c C-n  add3 4
 
 aNum : ℕ
-aNum = {! add3 4 !}
+aNum =  add3 4 
 
 -- equational reasoning
 -- aNum = add3 4
@@ -107,19 +116,28 @@ bNum = add3 (add3 (add3 2))
 
 -- Meaning of defintional equality
 add3' : ℕ → ℕ
-add3' = {!!}
+add3' = λ x → x + 3
 -- add3 x = x + 3
 
 -- add3' 4 = (λ x → x + 3) 4
---         = (x + 3)[x := 4]
+--         = (x + 3)[x := 4] β-szabály/β-redukció
 --         = (4 + 3)
 --         = 7
 
 -- test it with C-c C-n!
+-- if (x > 3) then 5 else 10
+if'_then_else_ : Bool → ℕ → ℕ → ℕ
+if' false then n else m = m
+if' true then n else m = n
 
 -- Partial application, just like in haskell (kind of)
+-- _+_
+
 add4 : ℕ → ℕ
-add4 = {!!}
+add4 = 4 +_
+
+add4' : ℕ
+add4' = (4 +_) 3
 
 -- Goal type and context:             C-c C-,
 -- Goal type, context, inferred type: C-c C-.
@@ -128,8 +146,8 @@ add4 = {!!}
 
 -- functions with multiple arguments
 
-add : ℕ → ℕ → ℕ
-add = {!!}
+add : ℕ → (ℕ → ℕ)
+add x y =  x + y
 
 -- ℕ → (ℕ → ℕ) = ℕ → ℕ → ℕ
 --             ≠ (ℕ → ℕ) → ℕ
@@ -164,13 +182,21 @@ num1' = (add 3) 4
 num4 : ℕ
 num4 = add 3 (add 4 2)
 
+{-
+add 3 (add 4 2) ≝
+3 + (add 4 2) ≝
+3 + (4 + 2) ≝
+3 + 6 ≝
+9
+-}
+
 -- Higher-order functions: functions with functions as arguments
 -- e.g. in Haskell:   map :: (a -> b) -> [a] -> [b]
 
 -- write a function of the following type:
 
 f1 : (ℕ → ℕ) → ℕ
-f1 = {!!}
+f1 δ = δ 1
 
 -- test it with f1 add3, f1 add4. is the result the same?
 
@@ -178,8 +204,8 @@ f1 = {!!}
 --   f2 add3 ≠ f2 add4 ≠ f3 add4 ≠ f3 add3
 
 f2 f3 : (ℕ → ℕ) → ℕ
-f2 = {!!}
-f3 = {!!}
+f2 f = f 2
+f3 f = f 12
 
 
 
@@ -192,11 +218,14 @@ t = tw tw add3 1
 -- what is the type of this and why? ask Agda too (C-c C-d).
 -- what is its value?  guess, and ask Agda too (C-c C-n).
 
+-- Hány olyan függvényt tudok írni, aminek a típusa A → A ?
+-- 1
+
 first : {A : Set} → A → A → A
-first = {!!}
+first a b = a
 
 second : {A : Set} → A → A → A
-second = {!!}
+second a b = b
 
 ----------------------------------------------
 
@@ -204,3 +233,9 @@ second = {!!}
 -- constTrue with pattern matching
 -- constTrue normally
 -- C-c C-n try (λ x → constTrue x), see what happens in each case!
+constTrue : Bool → Bool
+constTrue false = true
+constTrue true = true
+
+constTrue' : Bool → Bool
+constTrue' _ = true
