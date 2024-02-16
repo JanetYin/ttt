@@ -2,6 +2,14 @@ module gy02 where
 
 open import Lib hiding (comm⊎)
 
+-- α-konverzió, renaming
+id= : ∀{i}{A : Set i} → (λ (x : A) → x) ≡ (λ y → y)
+id= = {!   !}
+
+-- Mesélni róla:
+-- Függvények β-szabálya, η-szabálya -- ha nem volt még.
+-- Esetleg konkrét példán megmutatni.
+
 ------------------------------------------------------
 -- simple finite types
 ------------------------------------------------------
