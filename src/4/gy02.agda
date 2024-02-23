@@ -2,25 +2,36 @@ module gy02 where
 
 open import Lib hiding (comm⊎)
 
--- α-konverzió, renaming
-id= : ∀{i}{A : Set i} → (λ (x : A) → x) ≡ (λ y → y)
-id= = {!   !}
-
--- Mesélni róla:
--- Függvények β-szabálya, η-szabálya -- ha nem volt még.
--- Esetleg konkrét példán megmutatni.
-
 ------------------------------------------------------
 -- simple finite types
 ------------------------------------------------------
 
+-- Boolean = true, false
+
+f1 : Bool
+f1 = false
+
+-- C-c C-c
+-- ?
+ifThenElse : Bool → ℕ → ℕ → ℕ
+ifThenElse false n k = k
+ifThenElse true n k = n
+
+
+-- Tuple
+
+
 -- Feladat: Fordítsuk meg egy rendezett pár két komponensét
+-- \times \x
+-- \_1
+-- fst :: (a,b) -> a
+-- snd :: (a,b) -> b
 flip'' : ℕ × Bool → Bool × ℕ
-flip'' = {!!}
+flip'' x = snd x , fst x
 
 -- Feladat: Fordítsuk meg egy rendezett pár két komponensét
 flipback : Bool × ℕ → ℕ × Bool
-flipback = {!!}
+flipback x = snd x , fst x
 
 -- Vegyük észre, hogy az előző két függvényben bármilyen más csúnya dolgot is lehetne csinálni.
 -- Írj rá példát itt!
@@ -29,7 +40,7 @@ flipback = {!!}
 
 -- Feladat: Fordítsuk meg egy rendezett pár két komponensét
 comm× : {A B : Set} → A × B → B × A
-comm× = {!!}
+comm× (fst₁ , snd₁) = snd₁ , fst₁
 
 comm×back : {A B : Set} → B × A → A × B
 comm×back = {!!}
@@ -38,29 +49,55 @@ comm×back = {!!}
 
 
 -- ALGEBRAI ADATTÍPUSOK ELEMSZÁMAI:
+-- \top = ⊤
+
+-- |⊤| = 1
+-- |Bool| = 2
+-- |⊥| = 0
+-- |A×B| = |A| * |B|
+-- |A⊎B| = |A| + |B|
+
+-- the sum type, Either
+--
 
 b1 b2 : Bool × ⊤
-b1 = {!!}
-b2 = {!!}
+b1 = true , tt
+b2 = false , tt
+b3 : Bool × ⊤
+b3 = {!!} , tt
 b1≠b2 : b1 ≡ b2 → ⊥
 b1≠b2 ()
 
+-- \u+
 t1 t2 : ⊤ ⊎ ⊤
-t1 = {!!}
-t2 = {!!}
+t1 = inl tt
+t2 = inr tt -- inr
 t1≠t2 : t1 ≡ t2 → ⊥
 t1≠t2 ()
 
+-- \bot
+b : ⊥ ⊎ Bool
+b = inr true
+
 bb1 bb2 bb3 : Bool ⊎ ⊤
-bb1 = {!!}
-bb2 = {!!}
-bb3 = {!!}
+bb1 = inl true
+bb2 = inl false
+bb3 = inr tt
 bb1≠bb2 : bb1 ≡ bb2 → ⊥
 bb1≠bb2 ()
 bb1≠bb3 : bb1 ≡ bb3 → ⊥
 bb1≠bb3 ()
 bb2≠bb3 : bb2 ≡ bb3 → ⊥
 bb2≠bb3 ()
+
+f : ⊥ → ⊤
+f ()
+
+f' : ⊥ → ⊤
+f' _ = tt
+
+exfalso' : {A : Set} → ⊥ → A
+exfalso' ()
 
 ee : (⊤ → ⊥) ⊎ (⊥ → ⊤)
 ee = {!!}
@@ -105,15 +142,25 @@ testfromto4 = refl
 ------------------------------------------------------
 
 -- (⊎, ⊥) form a commutative monoid (kommutativ egysegelemes felcsoport)
+-- \lr
+-- ↔
+
+-- bijection A B = (A → B) × (B → A)
 
 assoc⊎ : {A B C : Set} → (A ⊎ B) ⊎ C ↔ A ⊎ (B ⊎ C)
 assoc⊎ = {!!}
 
 idl⊎ : {A : Set} → ⊥ ⊎ A ↔ A
-idl⊎ = {!!}
+fst idl⊎ = {!!}
+snd idl⊎ = {!!}
+
+-- case
+case' : {A B C : Set} → A ⊎ B → (A → C) → (B → C) → C
+case' (inl a) a→c b→c = a→c a
+case' (inr b') a→c b→c = b→c b'
 
 idr⊎ : {A : Set} → A ⊎ ⊥ ↔ A
-idr⊎ = {!!}
+idr⊎ = (λ x → case x (λ z → z) exfalso) , λ a → inl a
 
 comm⊎ : {A B : Set} → A ⊎ B ↔ B ⊎ A
 comm⊎ = {!!}
