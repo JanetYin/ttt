@@ -2,52 +2,29 @@ module gy02 where
 
 open import Lib hiding (comm⊎)
 
--- (λ x → t) y ≝ t [x ↦ y] -- függvény β-szabálya
--- (λ x → f x) ≝ f -- függvény η-szabálya | η = \eta
-
--- α-konverzió, renaming
-id= : ∀{i}{A : Set i} → (λ (x : A) → x) ≡ (λ y → y)
-id= = refl
-
--- Mesélni róla:
--- Függvények β-szabálya, η-szabálya -- ha nem volt még.
--- Esetleg konkrét példán megmutatni.
-
 ------------------------------------------------------
 -- simple finite types
 ------------------------------------------------------
 
-{-
--- új típusok:
-false true : Bool
-× = \x = \times
-_×_ rendezett pár; konstruktor _,_
-⊤ = \top; konstruktor tt
-⊥ = \bot; nincs konstruktor
-⊎ = \u+; 2 konstruktor: inl, inr
-↔ = \<->; A ↔ B = (A → B) × (B → A)
--}
-
 -- Feladat: Fordítsuk meg egy rendezett pár két komponensét
-flip'' : ℕ × Bool → Bool × ℕ
-flip'' x = snd x , fst x
+flip : ℕ × Bool → Bool × ℕ
+flip = {!!}
 
 -- Feladat: Fordítsuk meg egy rendezett pár két komponensét
 flipback : Bool × ℕ → ℕ × Bool
-flipback (x , y) = y , x
+flipback = {!!}
 
 -- Vegyük észre, hogy az előző két függvényben bármilyen más csúnya dolgot is lehetne csinálni.
 -- Írj rá példát itt!
 
-flip-csúnya : Bool × ℕ → ℕ × Bool
-flip-csúnya _ = 1 , true
+
 
 -- Feladat: Fordítsuk meg egy rendezett pár két komponensét
 comm× : {A B : Set} → A × B → B × A
-comm× (x , y) = y , x
+comm× = {!!}
 
 comm×back : {A B : Set} → B × A → A × B
-comm×back = comm× 
+comm×back = ?
 -- Ezekben lehetetlen hülyeséget csinálni.
 -- Hányféleképpen lehetséges implementálni ezt a két fenti függvényt?
 
@@ -55,14 +32,14 @@ comm×back = comm×
 -- ALGEBRAI ADATTÍPUSOK ELEMSZÁMAI:
 
 b1 b2 : Bool × ⊤
-b1 = false , tt
-b2 = true , tt
+b1 = {!!}
+b2 = {!!}
 b1≠b2 : b1 ≡ b2 → ⊥
 b1≠b2 ()
 
 t1 t2 : ⊤ ⊎ ⊤
-t1 = inl tt
-t2 = inr tt
+t1 = {!!}
+t2 = {!!}
 t1≠t2 : t1 ≡ t2 → ⊥
 t1≠t2 ()
 
@@ -76,19 +53,6 @@ bb1≠bb3 : bb1 ≡ bb3 → ⊥
 bb1≠bb3 ()
 bb2≠bb3 : bb2 ≡ bb3 → ⊥
 bb2≠bb3 ()
-
-t : Bool → ⊤
-t _ = tt
-
-t' : Bool → ⊤
-t' false = tt
-t' true = tt
-
--- ⊤ η-szabálya: (a : ⊤) → a ≡ tt
--- | Bool → ⊤ | = 1²
-
-eqqq : t ≡ t'
-eqqq = refl
 
 ee : (⊤ → ⊥) ⊎ (⊥ → ⊤)
 ee = {!!}
@@ -138,7 +102,7 @@ assoc⊎ : {A B C : Set} → (A ⊎ B) ⊎ C ↔ A ⊎ (B ⊎ C)
 assoc⊎ = {!!}
 
 idl⊎ : {A : Set} → ⊥ ⊎ A ↔ A
-idl⊎ = (λ x → case x (λ t → exfalso t) id) , λ a → inr a
+idl⊎ = {!!}
 
 idr⊎ : {A : Set} → A ⊎ ⊥ ↔ A
 idr⊎ = {!!}
