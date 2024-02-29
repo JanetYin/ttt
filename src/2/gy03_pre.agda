@@ -37,15 +37,13 @@ tehát mivel a Bool-nak két értéke van, ezért a destruktornak PONTOSAN két 
 
 Melyik ez a függvény a Bool-ok felett, ami false-ra, illetve true-ra egyértelműen két különböző dolgot ad eredményül? (Akár haskell-ből, akár más oop nyelvekből ismert konstrukció.)
 Mi a destruktora?
-Válasz: if_then_else_
+Válasz:
 
 Hány β-szabályra van szükség a Bool esetén?
-Válasz: 2
+Válasz:
 
 Mik lesznek ezek a β-szabályok?
 Válasz:
-if false then u else v ≡ v
-if true then u else v ≡ u
 ---------------------------------------------------------
 Ha írunk egy 3 elemű típust (lényegében csak egy enumot):
 
@@ -53,18 +51,10 @@ data 𝟛 : Set where
   a1 a2 a3 : 𝟛
 
 Mi lesz a 𝟛 típus destruktora?
-Válasz: ite𝟛 : A → A → A → 𝟛 → A
+Válasz:
 
 Akkor ennek a típusnak mik lesznek a β-szabályai?
 Válasz:
-ite𝟛 a b c a1 ≡ a
-ite𝟛 a b c a2 ≡ b
-ite𝟛 a b c a3 ≡ c
-
-ite𝟛 : {A : Set} → A → A → A → 𝟛 → A
-ite𝟛 a b c a1 = a
-ite𝟛 a b c a2 = b
-ite𝟛 a b c a3 = c
 ----
 4 elemre:
 
@@ -98,13 +88,10 @@ data Alma : Set where
 Természetesen semmi különleges, pontosan ugyanaz fog a destruktorban szerepelni, mint a konstruktorok továbbra is.
 
 Mi lesz a destruktora?
-Válasz: iteAlma : A → (Bool → A) → Alma → A
+Válasz:
 
 Mik lesznek a β-szabályai?
 Válasz:
-iteAlma a f c1 ≡ a
-iteAlma a f (c2 true) ≡ f true
-iteAlma a f (c2 false) ≡ f false
 -----------------------------------------------------------
 Mi történik, ha van legalább két paramétere egy konstruktornak?
 
@@ -152,7 +139,6 @@ data ℕ : Set where
   suc  : ℕ → ℕ
 -}
 
--- 2 = suc (suc zero)
 -- Haskellből ismert Maybe típus.
 {-
 data Maybe (A : Set) : Set where
@@ -162,13 +148,11 @@ data Maybe (A : Set) : Set where
 
 -- FELADAT: Csökkents eggyel egy megadott természetes számot, ha lehet.
 pred' : ℕ → Maybe ℕ
-pred' zero = nothing
-pred' (suc n) = just n
+pred' = {!!}
 
 -- FELADAT: Ha lehet, akkor adj hozzá a számhoz egyet, egyébként az eredmény legyen 0.
 zerosuc : Maybe ℕ → ℕ
-zerosuc (just x) = suc x
-zerosuc nothing = 0
+zerosuc = {!!}
 
 pred↔zerosuc-test1 : pred' (zerosuc nothing) ≡ nothing
 pred↔zerosuc-test1 = refl
@@ -185,23 +169,12 @@ pred'' (suc n) = n
 -- Kell egy függvény, ami típust ad vissza.
 -- Majd utána rendes pred.
 
-NotZero? : ℕ → Set
-NotZero? zero = ⊥
-NotZero? (suc n) = ⊤
-
-pred : (n : ℕ) → .⦃ NotZero? n ⦄ → ℕ
-pred (suc n) = n
-
-nm : ℕ
-nm = pred 1
-
 ----------------------------------------------------------------------------------------
 -- Rekurzió, termination checker
 -- Agda CSAK totális függvényeket fogad el.
 
 double : ℕ → ℕ
-double zero = 0
-double (suc n) = suc (suc (double n))
+double = {!!}
 
 double-test1 : double 2 ≡ 4
 double-test1 = refl
@@ -221,8 +194,7 @@ half-test3 : half 12 ≡ 6
 half-test3 = refl
 
 _+_ : ℕ → ℕ → ℕ
-zero + y = y
-suc x + y = suc (x + y)
+_+_ = {!!}
 infixl 6 _+_
 
 +-test1 : 3 + 5 ≡ 8
@@ -233,8 +205,7 @@ infixl 6 _+_
 +-test3 = refl
 
 _*_ : ℕ → ℕ → ℕ
-zero * y = 0
-suc x * y = y + x * y
+_*_ = {!!}
 infixl 7 _*_
 
 *-test1 : 3 * 4 ≡ 12
@@ -247,8 +218,7 @@ infixl 7 _*_
 *-test4 = refl
 
 _^_ : ℕ → ℕ → ℕ
-x ^ zero = 1
-x ^ suc y = x * x ^ y
+_^_ = {!!}
 infixr 8 _^_
 
 ^-test1 : 3 ^ 4 ≡ 81
@@ -273,9 +243,7 @@ _! = {!!}
 !-test3 = refl
 
 _-_ : ℕ → ℕ → ℕ
-x - zero = x
-zero - suc y = 0
-suc x - suc y = x - y
+_-_ = {!!}
 infixl 6 _-_
 
 -test1 : 3 - 2 ≡ 1
@@ -288,9 +256,7 @@ infixl 6 _-_
 
 -- FELADAT: Határozd meg, hogy az első szám nagyobb vagy egyenlő-e, mint a második.
 _≥_ : ℕ → ℕ → Bool
-x ≥ zero = true
-zero ≥ suc y = false
-suc x ≥ suc y = x ≥ y -- \>= = ≥
+_≥_ = {!!}
 
 ≥test1 : 3 ≥ 2 ≡ true
 ≥test1 = refl
@@ -302,7 +268,7 @@ suc x ≥ suc y = x ≥ y -- \>= = ≥
 -- ne hasznalj rekurziot, hanem hasznald _≥_-t!
 -- FELADAT: Remélhetőleg értelemszerű.
 _>_ : ℕ → ℕ → Bool
-x > y = not (y ≥ x)
+_>_ = {!!}
 
 >test1 : 3 > 2 ≡ true
 >test1 = refl
@@ -325,9 +291,7 @@ _<_ = {!!}
 
 -- FELADAT: Két szám közül add vissza a kisebbet.
 min : ℕ → ℕ → ℕ
-min zero y = zero
-min (suc x) zero = zero
-min (suc x) (suc y) = suc (min x y)
+min = {!!}
 
 min-test1 : min 3 2 ≡ 2
 min-test1 = refl
@@ -338,10 +302,7 @@ min-test3 = refl
 
 -- FELADAT: Hasonlíts össze két számot! Ha az első kisebb, mint a második, akkor a harmadik paramétert add vissza; ha egyenlők, akkor a negyediket; ha nagyobb, akkor az ötödiket.
 comp : {A : Set} → ℕ → ℕ → A → A → A → A
-comp zero zero m<n m=n m>n = m=n
-comp zero (suc n) m<n m=n m>n = m<n
-comp (suc m) zero m<n m=n m>n = m>n
-comp (suc m) (suc n) m<n m=n m>n = comp m n m<n m=n m>n
+comp m n m<n m=n m>n = {!!}
 
 comp-test1 : comp {ℕ} 10 10 0 1 2 ≡ 1
 comp-test1 = refl
@@ -353,8 +314,8 @@ comp-test3 = refl
 -- FELADAT: Határozd meg két szám legnagyobb közös osztóját.
 -- Segítség: Használd a comp-ot!
 gcd : ℕ → ℕ → ℕ
-{-# TERMINATING #-} -- Csalás! De ezt a függvényt nem egyszerű jól definiálni ahhoz, hogy agda lássa, hogy terminál.
-gcd m n = comp m n (gcd m (n - m)) m (gcd (m - n) n)
+-- {-# TERMINATING #-} -- Csalás! De ezt a függvényt nem egyszerű jól definiálni ahhoz, hogy agda lássa, hogy terminál.
+gcd m n = {!!}
 
 gcd-test1 : gcd 6 9 ≡ 3
 gcd-test1 = refl
@@ -369,8 +330,8 @@ gcd-test5 = refl
 
 -- hasznald ugyanazt a definiciot, mint gcd-nel, de most fuel szerinti rekurzio
 gcd-helper : ℕ → ℕ → ℕ → ℕ
-gcd-helper zero m n = 0
-gcd-helper (suc fuel) m n = comp m n (gcd-helper fuel m (n - m)) m (gcd-helper fuel (m - n) n)
+gcd-helper zero m n = 42
+gcd-helper (suc fuel) m n = {!!}
 gcd' : ℕ → ℕ → ℕ
 gcd' m n = gcd-helper (m + n) m n
 
@@ -509,10 +470,10 @@ map-test = refl
 -- Haskell-ben foldr
 iteList : {A B : Set} → B → (A → B → B) → List A → B
 iteList n c as = {!!}
-{-
+
 iteList-test : iteList 3 _^_ (2 ∷ 3 ∷ []) ≡ 2 ^ 27
 iteList-test = refl
--}
+
 -- FEL: add meg a fenti fuggvenyeket (length, ..., map) iteList segitsegevel!
 
 ---------------------------------------------------------

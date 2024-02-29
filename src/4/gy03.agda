@@ -1,147 +1,10 @@
 module gy03 where
 
-open import Lib hiding (_+_; _*_; _-_; _^_; _!; pred; pred'; _>_; _<_; min; max)
+open import Lib hiding (_+_; _*_; _-_; _^_; _!; pred; pred'; _>_; _<_; min; max; const)
 open import Lib.Containers.List hiding (length; _++_; map; iteList)
 
--- η = \eta = \Gh
-
---------------------------------------------------------
--- β, η szabályok egyszerűen megfogalmazva
---------------------------------------------------------
-{-
-A β-szabályok lényegében azt határozzák meg, hogy hogy kell számolni az értékeimmel; tehát hogy mit kell csinálni, ha egy konstruktorra alkalmazok egy destruktort.
-Pl. függvények esetén (λ n → n + 2) 3, ebben a kifejezésben a λ a konstruktor, a függvényalkalmazás a destruktor; ekkor csak be kell helyettesíteni az értéket a megfelelő helyére,
-majd ki kell számolni az értékét.
-
-Az η-szabályok azt határozzák meg, hogy mit kell tenni ha egy destruktorra alkalmazok egy konstruktort.
-Pl. függvények esetén (λ x → (1 +_) x), ebben a lambda alatt található egy függvényalkalmazás, amiről az előbb volt szó, hogy az egy destruktor; a λ a konstruktor,
-ekkor tudjuk specifikusan függvények esetében, hogy a λ elhagyható az átadott x-szel együtt (λ x → (1 +_) x) ≡ (1 +_)
--}
-
---------------------------------------------------------
--- típusok β szabályai
---------------------------------------------------------
-{-
-Minden típusnak megadható a β szabálya a típus alapján.
-
-β-szabályok azt mondják meg, hogy egy típus egy adott értékével mit kell csinálni, hogy megkülönböztessük a típus többi értékétől.
-
-Egyszerűbb ezt az ötletet talán Bool-on szemléltetni:
-
-data Bool : Set where
-  false true : Bool
-
-Hogyan lehet megkülönböztetni a false-ot a true-tól?
-Kell egy függvény (destruktor), amely különböző Bool értékekre különböző eredményt ad szintaxis szerint, és CSAK és PONTOSAN a Bool értékeit kezeli,
-tehát mivel a Bool-nak két értéke van, ezért a destruktornak PONTOSAN két elemet kell kezelnie, nem többet, nem kevesebbet.
-
-Melyik ez a függvény a Bool-ok felett, ami false-ra, illetve true-ra egyértelműen két különböző dolgot ad eredményül? (Akár haskell-ből, akár más oop nyelvekből ismert konstrukció.)
-Mi a destruktora?
-Válasz: if_then_else_
-
-Hány β-szabályra van szükség a Bool esetén?
-Válasz: 2
-
-Mik lesznek ezek a β-szabályok?
-Válasz:
-if false then u else v ≡ v
-if true then u else v ≡ u
 ---------------------------------------------------------
-Ha írunk egy 3 elemű típust (lényegében csak egy enumot):
-
-data 𝟛 : Set where
-  a1 a2 a3 : 𝟛
-
-Mi lesz a 𝟛 típus destruktora?
-Válasz: ite𝟛 : A → A → A → 𝟛 → A
-
-Akkor ennek a típusnak mik lesznek a β-szabályai?
-Válasz:
-ite𝟛 a b c a1 ≡ a
-ite𝟛 a b c a2 ≡ b
-ite𝟛 a b c a3 ≡ c
-
-ite𝟛 : {A : Set} → A → A → A → 𝟛 → A
-ite𝟛 a b c a1 = a
-ite𝟛 a b c a2 = b
-ite𝟛 a b c a3 = c
-----
-4 elemre:
-
-data 𝟜 : Set where
-  b1 b2 b3 b4 : 𝟜
-
-Mi lesz a destruktora?
-Válasz:
-
-Mik lesznek ennek a β-szabályai?
-Válasz:
-----
-Mi a ⊤ típus destruktora?
-Válasz:
-
-Mi lesz a ⊤ típus β-szabálya?
-Válasz:
-----
-Mi a ⊥ destruktora?
-Válasz:
-
-Mi lesz a ⊥ típus β-szabálya?
-Válasz:
-----------------------------------------------------------
-Mi történik abban az esetben, ha vannak a típusoknak paramétereik?
-
-data Alma : Set where
-  c1 : Alma
-  c2 : Bool → Alma
-
-Természetesen semmi különleges, pontosan ugyanaz fog a destruktorban szerepelni, mint a konstruktorok továbbra is.
-
-Mi lesz a destruktora?
-Válasz: iteAlma : A → (Bool → A) → Alma → A
-
-Mik lesznek a β-szabályai?
-Válasz:
-iteAlma a f c1 ≡ a
-iteAlma a f (c2 true) ≡ f true
-iteAlma a f (c2 false) ≡ f false
------------------------------------------------------------
-Mi történik, ha van legalább két paramétere egy konstruktornak?
-
-Pl. rendezett pár: _,_ : A → B → A × B
-
-Semmi, a destruktor továbbra is ugyanúgy generálható (ez természetesen nem azt jelenti, hogy csak az az egy jó van).
-Mi lesz a rendezett párok egy destruktora?
-
-Amelyik generálható az eddigiek alapján: uncurry : (A → B → C) → A × B → C
-
-Más destruktorok is jók, pl. ezzel az eggyel ekvivalens az alábbi kettő együtt:
-- fst : A × B → A
-- snd : A × B → B
-
-Ezek alapján mik a β-szabályok?
-Az uncurry-vel csak egy szabály szükséges: uncurry f (a , b) ≡ f a b
-Az fst, snd-vel kettő (hiszen két destruktor van egy konstruktorral, 2 ∙ 1 = 2): fst (a , b) ≡ a; snd (a , b) ≡ b
-------------------------------------------------------------
-data Körte : Set where
-  d1 : Körte
-  d2 : Bool → Körte
-  d3 : Bool → 𝟛 → Körte
-
-Mi lesz ezen típus destruktora?
-Válasz:
-
-És a β-szabályai?
-Válasz:
--}
-
----------------------------------------------------------
--- típusok η-szabályai
----------------------------------------------------------
--- Ezt majd a következő gyakorlat elejére rakom be, így is van itt elég tenni való.
-
----------------------------------------------------------
--- natural numbers, no cheating anymore
+-- natural numbers
 ---------------------------------------------------------
 
 -- A természetes számok a diszkrét matekról ismert módon vannak megadva,
@@ -152,7 +15,6 @@ data ℕ : Set where
   suc  : ℕ → ℕ
 -}
 
--- 2 = suc (suc zero)
 -- Haskellből ismert Maybe típus.
 {-
 data Maybe (A : Set) : Set where
@@ -162,13 +24,11 @@ data Maybe (A : Set) : Set where
 
 -- FELADAT: Csökkents eggyel egy megadott természetes számot, ha lehet.
 pred' : ℕ → Maybe ℕ
-pred' zero = nothing
-pred' (suc n) = just n
+pred' = {!!}
 
 -- FELADAT: Ha lehet, akkor adj hozzá a számhoz egyet, egyébként az eredmény legyen 0.
 zerosuc : Maybe ℕ → ℕ
-zerosuc (just x) = suc x
-zerosuc nothing = 0
+zerosuc = {!!}
 
 pred↔zerosuc-test1 : pred' (zerosuc nothing) ≡ nothing
 pred↔zerosuc-test1 = refl
@@ -185,23 +45,12 @@ pred'' (suc n) = n
 -- Kell egy függvény, ami típust ad vissza.
 -- Majd utána rendes pred.
 
-NotZero? : ℕ → Set
-NotZero? zero = ⊥
-NotZero? (suc n) = ⊤
-
-pred : (n : ℕ) → .⦃ NotZero? n ⦄ → ℕ
-pred (suc n) = n
-
-nm : ℕ
-nm = pred 1
-
 ----------------------------------------------------------------------------------------
 -- Rekurzió, termination checker
 -- Agda CSAK totális függvényeket fogad el.
 
 double : ℕ → ℕ
-double zero = 0
-double (suc n) = suc (suc (double n))
+double = {!!}
 
 double-test1 : double 2 ≡ 4
 double-test1 = refl
@@ -221,8 +70,7 @@ half-test3 : half 12 ≡ 6
 half-test3 = refl
 
 _+_ : ℕ → ℕ → ℕ
-zero + y = y
-suc x + y = suc (x + y)
+_+_ = {!!}
 infixl 6 _+_
 
 +-test1 : 3 + 5 ≡ 8
@@ -233,8 +81,7 @@ infixl 6 _+_
 +-test3 = refl
 
 _*_ : ℕ → ℕ → ℕ
-zero * y = 0
-suc x * y = y + x * y
+_*_ = {!!}
 infixl 7 _*_
 
 *-test1 : 3 * 4 ≡ 12
@@ -247,8 +94,7 @@ infixl 7 _*_
 *-test4 = refl
 
 _^_ : ℕ → ℕ → ℕ
-x ^ zero = 1
-x ^ suc y = x * x ^ y
+_^_ = {!!}
 infixr 8 _^_
 
 ^-test1 : 3 ^ 4 ≡ 81
@@ -259,7 +105,7 @@ infixr 8 _^_
 ^-test3 = refl
 ^-test4 : 1 ^ 3 ≡ 1
 ^-test4 = refl
-^-test5 : 0 ^ 0 ≡ 1 -- Természetes számok felett ez működik, valós számokon problémás.
+^-test5 : 0 ^ 0 ≡ 1
 ^-test5 = refl
 
 _! : ℕ → ℕ
@@ -273,9 +119,7 @@ _! = {!!}
 !-test3 = refl
 
 _-_ : ℕ → ℕ → ℕ
-x - zero = x
-zero - suc y = 0
-suc x - suc y = x - y
+_-_ = {!!}
 infixl 6 _-_
 
 -test1 : 3 - 2 ≡ 1
@@ -288,9 +132,7 @@ infixl 6 _-_
 
 -- FELADAT: Határozd meg, hogy az első szám nagyobb vagy egyenlő-e, mint a második.
 _≥_ : ℕ → ℕ → Bool
-x ≥ zero = true
-zero ≥ suc y = false
-suc x ≥ suc y = x ≥ y -- \>= = ≥
+_≥_ = {!!}
 
 ≥test1 : 3 ≥ 2 ≡ true
 ≥test1 = refl
@@ -302,7 +144,7 @@ suc x ≥ suc y = x ≥ y -- \>= = ≥
 -- ne hasznalj rekurziot, hanem hasznald _≥_-t!
 -- FELADAT: Remélhetőleg értelemszerű.
 _>_ : ℕ → ℕ → Bool
-x > y = not (y ≥ x)
+_>_ = {!!}
 
 >test1 : 3 > 2 ≡ true
 >test1 = refl
@@ -325,9 +167,7 @@ _<_ = {!!}
 
 -- FELADAT: Két szám közül add vissza a kisebbet.
 min : ℕ → ℕ → ℕ
-min zero y = zero
-min (suc x) zero = zero
-min (suc x) (suc y) = suc (min x y)
+min = {!!}
 
 min-test1 : min 3 2 ≡ 2
 min-test1 = refl
@@ -338,10 +178,7 @@ min-test3 = refl
 
 -- FELADAT: Hasonlíts össze két számot! Ha az első kisebb, mint a második, akkor a harmadik paramétert add vissza; ha egyenlők, akkor a negyediket; ha nagyobb, akkor az ötödiket.
 comp : {A : Set} → ℕ → ℕ → A → A → A → A
-comp zero zero m<n m=n m>n = m=n
-comp zero (suc n) m<n m=n m>n = m<n
-comp (suc m) zero m<n m=n m>n = m>n
-comp (suc m) (suc n) m<n m=n m>n = comp m n m<n m=n m>n
+comp m n m<n m=n m>n = {!!}
 
 comp-test1 : comp {ℕ} 10 10 0 1 2 ≡ 1
 comp-test1 = refl
@@ -353,8 +190,8 @@ comp-test3 = refl
 -- FELADAT: Határozd meg két szám legnagyobb közös osztóját.
 -- Segítség: Használd a comp-ot!
 gcd : ℕ → ℕ → ℕ
-{-# TERMINATING #-} -- Csalás! De ezt a függvényt nem egyszerű jól definiálni ahhoz, hogy agda lássa, hogy terminál.
-gcd m n = comp m n (gcd m (n - m)) m (gcd (m - n) n)
+-- {-# TERMINATING #-} -- Csalás! De ezt a függvényt nem egyszerű jól definiálni ahhoz, hogy agda lássa, hogy terminál.
+gcd m n = {!!}
 
 gcd-test1 : gcd 6 9 ≡ 3
 gcd-test1 = refl
@@ -369,8 +206,8 @@ gcd-test5 = refl
 
 -- hasznald ugyanazt a definiciot, mint gcd-nel, de most fuel szerinti rekurzio
 gcd-helper : ℕ → ℕ → ℕ → ℕ
-gcd-helper zero m n = 0
-gcd-helper (suc fuel) m n = comp m n (gcd-helper fuel m (n - m)) m (gcd-helper fuel (m - n) n)
+gcd-helper zero m n = 42
+gcd-helper (suc fuel) m n = {!!}
 gcd' : ℕ → ℕ → ℕ
 gcd' m n = gcd-helper (m + n) m n
 
@@ -508,11 +345,11 @@ map-test = refl
 -- ha a listában van elem, akkor alkalmazzunk rá egy függvényt az alapértékkel úgy, hogy az kifejezés jobbra legyen zárójelezve.
 -- Haskell-ben foldr
 iteList : {A B : Set} → B → (A → B → B) → List A → B
-iteList n c as = {!!}
-{-
+iteList n c as = ?
+
 iteList-test : iteList 3 _^_ (2 ∷ 3 ∷ []) ≡ 2 ^ 27
 iteList-test = refl
--}
+
 -- FEL: add meg a fenti fuggvenyeket (length, ..., map) iteList segitsegevel!
 
 ---------------------------------------------------------
@@ -522,13 +359,13 @@ iteList-test = refl
 -- a datatype of expressions
 
 data Expr : Set where
-  value : ℕ → Expr
+  const : ℕ → Expr
   _[+]_ : Expr → Expr → Expr
   _[*]_ : Expr → Expr → Expr
 
 -- 2 * (3 + 4) reprezentacioja:
 e : Expr
-e = value 2 [*] (value 3 [+] value 4)
+e = const 2 [*] (const 3 [+] const 4)
 {-
   *
  / \
@@ -599,7 +436,7 @@ insert-test = refl
 
 -- FELADAT: egy listát egy rendezett fara alakít.
 list2tree : List ℕ → Tree ℕ
-list2tree = {!!}
+list2tree = ?
 
 -- FELADAT: Rendezzünk egy listát úgy, hogy azt fává alakítjuk megfelelően, majd inorder bejárjuk!
 tree-sort : List ℕ → List ℕ

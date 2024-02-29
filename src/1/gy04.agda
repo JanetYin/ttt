@@ -99,6 +99,61 @@ bad : ⊥
 bad = {!!}
 
 ---------------------------------------------------------
+-- lists
+---------------------------------------------------------
+
+{-
+data List (A : Set) : Set where
+  [] : List A
+  _∷_ : A → List A → List A
+infixr 5 _∷_
+-}
+
+-- FELADAT: Határozzuk meg egy lista elemszámát!
+length : {A : Set} → List A → ℕ
+length = {!!}
+
+length-test1 : length {ℕ} (1 ∷ 2 ∷ 3 ∷ []) ≡ 3
+length-test1 = refl
+length-test2 : length {ℕ} (1 ∷ []) ≡ 1
+length-test2 = refl
+
+-- FELADAT: Adjuk össze egy lista számait.
+sumList : List ℕ → ℕ
+sumList = {!!}
+
+sumList-test : sumList (1 ∷ 2 ∷ 3 ∷ []) ≡ 6
+sumList-test = refl
+
+-- FELADAT: Fűzzünk össze két listát!
+_++_ : {A : Set} → List A → List A → List A
+_++_ = {!!}
+infixr 5 _++_
+
+++-test : the ℕ 3 ∷ 2 ∷ [] ++ 1 ∷ 4 ∷ [] ≡ 3 ∷ 2 ∷ 1 ∷ 4 ∷ []
+++-test = refl
+
+-- FELADAT: Alkalmazzunk egy függvényt egy lista minden elemén!
+map : {A B : Set} → (A → B) → List A → List B
+map = {!!}
+
+map-test : map (_+ 2) (3 ∷ 9 ∷ []) ≡ (5 ∷ 11 ∷ [])
+map-test = refl
+
+-- FELADAT: Definiáld a lista destruktorát! Dolgozzunk fel egy listát:
+-- ha üres a lista, akkor csak adjunk vissza egy alapértéket
+-- ha a listában van elem, akkor alkalmazzunk rá egy függvényt az alapértékkel úgy, hogy az kifejezés jobbra legyen zárójelezve.
+-- Haskell-ben foldr
+iteList : {A B : Set} → B → (A → B → B) → List A → B
+iteList n c as = {!!}
+{-
+iteList-test : iteList 3 _^_ (2 ∷ 3 ∷ []) ≡ 2 ^ 27
+iteList-test = refl
+-}
+
+-- FEL: add meg a fenti fuggvenyeket (length, ..., map) iteList segitsegevel!
+
+---------------------------------------------------------
 -- coinductive types
 ---------------------------------------------------------
 
@@ -165,16 +220,16 @@ byIndices = {!!}
 --         ℕ - algebra
 
 -- Mi lesz a Stream konstruktora?
-coiteStream : ?
+coiteStream : {!!}
 --                       \____________________________/
 --                        Stream A - coalgebra
-coiteStream = ?
+coiteStream = {!!}
 
 -- ex: redefine the above functions using coiteStream
 
 -- A fájl tetején lévő leírás alapján természetesen a Stream-nek is megadható az η-szabálya.
-Stream-η : ?
-Stream-η = ?
+Stream-η : {!!}
+Stream-η = {!!}
 
 -- ex: look at conatural numbers in Thorsten's book and do the exercises about them
 
