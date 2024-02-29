@@ -1,6 +1,6 @@
 module hf03 where
 
-open import Lib
+open import Lib hiding (minMax)
 
 {-
 Állapítsd meg, hogy mely kifejezések normálformák!
