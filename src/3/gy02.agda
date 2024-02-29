@@ -1,6 +1,6 @@
 module gy02 where
 
-open import Lib hiding (comm⊎; flip; _∘_)
+open import Lib hiding (comm⊎; flip)
 
 ------------------------------------------------------
 -- simple finite types
@@ -127,52 +127,66 @@ idl⊎ : {A : Set} → ⊥ ⊎ A ↔ A
 fst idl⊎ (inr b) = b
 snd idl⊎ = inr
 
-_∘_ : {A B C : Set} → (B → C) → (A → B) → (A → C)
-_∘_ f g = (λ g → f {!   !})
-
 idr⊎ : {A : Set} → A ⊎ ⊥ ↔ A
-idr⊎ = {!!}
+fst idr⊎ (inl a) = a
+snd idr⊎ x = inl x
 
 comm⊎ : {A B : Set} → A ⊎ B ↔ B ⊎ A
-comm⊎ = {!!}
+fst comm⊎ (inl a) = inr a
+fst comm⊎ (inr b) = inl b
+snd comm⊎ (inl a) = inr a
+snd comm⊎ (inr b) = inl b
 
 -- (×, ⊤) form a commutative monoid (kommutativ egysegelemes felcsoport)
 
 assoc× : {A B C : Set} → (A × B) × C ↔ A × (B × C)
-assoc× = {!!}
+fst assoc× ((x , z) , y) = x , z , y
+snd assoc× (x , y , z) = (x , y) , z
 
 idl× : {A : Set} → ⊤ × A ↔ A
-idl× = {!!}
+idl× {A} = (λ { (fst₁ , snd₁) → snd₁ }) , f where
+  f : A → ⊤ × A
+  f x = tt , x
 
 idr× : {A : Set} → A × ⊤ ↔ A
-idr× = {!!}
+fst idr× x = fst x
+snd idr× x = x , tt -- _, tt
 
 -- ⊥ is a null element
 
 null× : {A : Set} → A × ⊥ ↔ ⊥
-null× = {!!}
+fst null× ()
+snd null× ()
 
 -- distributivity of × and ⊎
 
 dist : {A B C : Set} → A × (B ⊎ C) ↔ (A × B) ⊎ (A × C)
-dist = {!!}
+fst dist (😘 , inl a) = inl (😘 , a)
+fst dist (😘 , inr b) = inr (😘 , b)
+snd dist (inl a) = fst a , inl (snd a)
+snd dist (inr b) = (fst b) , inr (snd b)
 
 -- exponentiation laws
 
 curry : ∀{A B C : Set} → (A × B → C) ↔ (A → B → C)
-curry = {!!}
+fst curry x c 😘 = x (c , 😘)
+snd curry x y = x (fst y) (snd y)
 
 ⊎×→ : {A B C D : Set} → ((A ⊎ B) → C) ↔ (A → C) × (B → C)
-⊎×→ = {!!}
+fst ⊎×→ x = (λ y → x (inl y)) ,  (λ y → x (inr y)) -- x ∘ inr
+snd ⊎×→ x z = case z (fst x) (snd x)
 
 law^0 : {A : Set} → (⊥ → A) ↔ ⊤
-law^0 = {!!}
+fst law^0 _ = tt
+snd law^0 _ x = exfalso x
 
 law^1 : {A : Set} → (⊤ → A) ↔ A
-law^1 = {!!}
+fst law^1 x = x tt
+snd law^1 x _ = x
 
 law1^ : {A : Set} → (A → ⊤) ↔ ⊤
-law1^ = {!!}
+fst law1^ _ = tt
+snd law1^ x _ = x
 
 ---------------------------------------------------------
 -- random isomorphisms
