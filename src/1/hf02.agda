@@ -211,7 +211,7 @@ p₁₁ : {A B : Set} → A ⊎ (⊤ × A) → (A → B) × ℕ → A × B
 p₁₁ = {!   !}
 
 p₁₂ : {A B : Set} → (A → A → B) → ((A → B) → A) → B
-p₁₂ = {!   !}
+p₁₂ = {!!}
 
 -- Új billentyűkombinációk
 -- (Ha hole-ba fv kell) C-c C-c ENTER = felveszi a paramétereket
@@ -589,3 +589,9 @@ Bool ↔ Bool
 (Bool ⊎ ⊤ × ⊥) ↔ (Bool × ⊤)
 (⊤ × ⊥ × Bool ⊎ Bool ⊎ (Bool → ⊤)) → ((Bool ⊎ ⊥) × (⊤ ⊎ Bool))
 -}
+
+alma : Bool → ℕ
+alma false = 1
+alma true = 1
+-- 0 + x = x
+-- suc x + y = suc (x + y)
