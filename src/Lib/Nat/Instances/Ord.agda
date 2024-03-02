@@ -6,7 +6,7 @@ open import Lib.Nat.Type
 open import Lib.Nat.Properties
 open import Lib.Nat.Instances.Eq
 
-open import Lib.Ordering
+open import Lib.Ordering.Type
 open import Lib.Class.Ord
 
 open import Lib.Sigma.Type
