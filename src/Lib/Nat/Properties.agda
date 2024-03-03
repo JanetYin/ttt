@@ -4,7 +4,7 @@ module Lib.Nat.Properties where
 
 open import Lib.Nat.Type
 open import Lib.Nat.Base
-open import Lib.Nat.Equality
+open import Lib.Nat.Equality.Base
 open import Lib.Unit.Type
 open import Lib.Equality
 open import Lib.Dec

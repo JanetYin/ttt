@@ -3,6 +3,7 @@
 module Lib.Fin.Instances.Ord where
 
 open import Lib.Fin.Type
+open import Lib.Class.Eq
 open import Lib.Class.Ord
 open import Lib.Ordering.Type
 
@@ -32,5 +33,5 @@ instance
   Ord.equality OrdFin {fzero} = refl
   Ord.equality OrdFin {fsuc x} = equality ⦃ OrdFin ⦄ {x}
   Ord.consistencyWithEq OrdFin {fzero} {fzero} _ = refl
-  Ord.consistencyWithEq OrdFin {fsuc x} {fsuc y} e with x ≟ y in eq1
-  ... | inl eq2 = consistencyWithEq ⦃ OrdFin ⦄ {x} {y} (subst₃ (λ a b c → fst (snd (elim-⊎ {C = λ _ → Σ (Maybe (x ≡ y)) (λ a → Σ Set (IsJust a ≡_))} a b c))) (sym eq1) refl refl tt)
+  Ord.consistencyWithEq OrdFin {fsuc x} {fsuc y} e with x ≡ᵗ y in eq1
+  ... | just p , t , r = Ord.consistencyWithEq OrdFin {x} {y} (cast (trans r (sym (cong (λ a → fst (snd a)) eq1))) tt)

@@ -7,6 +7,7 @@ open import Lib.Nat.Properties
 open import Lib.Nat.Instances.Eq
 
 open import Lib.Ordering.Type
+open import Lib.Class.Eq
 open import Lib.Class.Ord
 
 open import Lib.Sigma.Type
@@ -37,5 +38,5 @@ instance
   Ord.consistencyWithEq Ordℕ {zero} {zero} = λ _ → refl
   Ord.consistencyWithEq Ordℕ {zero} {suc y} = λ ()
   Ord.consistencyWithEq Ordℕ {suc x} {zero} = λ ()
-  Ord.consistencyWithEq Ordℕ {suc x} {suc y} e with x ≟ y in eq1
-  ... | inl eq2 = consistencyWithEq ⦃ Ordℕ ⦄ {x = x} {y} (subst₃ (λ a b c → fst (snd (elim-⊎ {C = λ _ → Σ (Maybe (x ≡ y)) (λ a → Σ Set (IsJust a ≡_))} a b c))) (sym eq1) refl refl tt)
+  Ord.consistencyWithEq Ordℕ {suc x} {suc y} e with x ≡ᵗ y in eq1
+  ... | just p , t , r = Ord.consistencyWithEq Ordℕ {x} {y} (cast (trans r (sym (cong (λ a → fst (snd a)) eq1))) tt)
