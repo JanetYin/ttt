@@ -11,9 +11,7 @@ open import Lib.Empty.Type
 
 open import Lib.Sigma.Type
 
-open import Lib.Equality
-
-open import Lib.Dec
+open import Lib.Equality.Type
 
 instance
   Ord⊥ : Ord ⊥

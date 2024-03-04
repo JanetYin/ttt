@@ -2,8 +2,8 @@ module gy04 where
 
 open import Lib hiding (_+∞_; coiteℕ∞)
 
-open import Lib.Containers.List hiding (zipWith; head; tail)
-open import Lib.Containers.Stream hiding (zipWith; coiteStream)
+open import Lib.Containers.List hiding (zipWith; head; tail; length; map; _++_; iteList)
+open import Lib.Containers.Stream hiding (zipWith; coiteStream; map; _++_)
 
 ---------------------------------------------------------
 -- típusok η-szabályai
@@ -140,16 +140,20 @@ map = {!!}
 map-test : map (_+ 2) (3 ∷ 9 ∷ []) ≡ (5 ∷ 11 ∷ [])
 map-test = refl
 
--- FELADAT: Definiáld a lista destruktorát! Dolgozzunk fel egy listát:
+-- FELADAT: Definiáld a lista eliminátorát! Dolgozzunk fel egy listát:
 -- ha üres a lista, akkor csak adjunk vissza egy alapértéket
 -- ha a listában van elem, akkor alkalmazzunk rá egy függvényt az alapértékkel úgy, hogy az kifejezés jobbra legyen zárójelezve.
 -- Haskell-ben foldr
-iteList : {A B : Set} → B → (A → B → B) → List A → B
-iteList n c as = {!!}
+-- Hány paraméteres lesz a függvény?
+iteList : {A B : Set} → {!    !}
+iteList = {!!}
 {-
-iteList-test : iteList 3 _^_ (2 ∷ 3 ∷ []) ≡ 2 ^ 27
-iteList-test = refl
+iteList-test1 : iteList 3 _^_ (2 ∷ 3 ∷ []) ≡ 2 ^ 27
+iteList-test1 = refl
 -}
+
+iteList-test2 : iteList {ℕ} [] _∷_ (1 ∷ 2 ∷ 3 ∷ []) ≡ 1 ∷ 2 ∷ 3 ∷ []
+iteList-test2 = refl
 
 -- FEL: add meg a fenti fuggvenyeket (length, ..., map) iteList segitsegevel!
 
@@ -220,15 +224,18 @@ byIndices = {!!}
 --         ℕ - algebra
 
 -- Mi lesz a Stream konstruktora?
-coiteStream : {!!}
---                       \____________________________/
+coiteStream : {A B : Set} → (B → A) → (B → B) → B → Stream A
+--               \______________________________/
 --                        Stream A - coalgebra
-coiteStream = {!!}
+head (coiteStream h t s) = h s
+tail (coiteStream h t s) = coiteStream h t (t s)
 
 -- ex: redefine the above functions using coiteStream
 
 -- A fájl tetején lévő leírás alapján természetesen a Stream-nek is megadható az η-szabálya.
-Stream-η : {!!}
+-- Megjegyzés: Típuselméleti "gondok" miatt MLTT-ben ez már egy nem bizonyítható állítás lesz.
+-- (Teljesül, csak az MLTT képtelen a bizonyítására, ez abban látszódik meg, hogy se bizonyítani, se cáfolni nem lehet.)
+Stream-η : {A : Set}(s : Stream A) → {!   !}
 Stream-η = {!!}
 
 -- ex: look at conatural numbers in Thorsten's book and do the exercises about them
@@ -264,7 +271,11 @@ c5 = add c4 2
 -- Tudunk 1 terméket vásárolni, ha van elég bedobott pénzünk, ekkor a darabszámból vonjunk le egyet (ha lehet) és adjuk vissza a visszajárót, a kreditet nullázzuk le.
 -- A gép tartalmát újra tudjuk tölteni, ekkor twix-ből legyen újra 50 darab, croissant-ból 75, snickers-ből pedig 60.
 
+
+
+-----------------------------------------------------
 -- conatural numbers
+-----------------------------------------------------
 {-
 record ℕ∞ : Set where
   coinductive
