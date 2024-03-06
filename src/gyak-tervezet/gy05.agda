@@ -91,15 +91,6 @@ length (x ∷ xs) = suc (length xs)
 fromList : {A : Set}(as : List A) → {!    !}
 fromList = {!!}
 
-{-
-Similarly, zero refers to one of two constructors.
-Due to how it does type inference, Agda does not allow overloading of defined names,
-but does allow overloading of constructors.
-It is recommended that one restrict overloading to related meanings, as we have done here,
-but it is not required.
--}
-
-
 tabulate : {n : ℕ}{A : Set} → (Fin n → A) → Vec A n
 tabulate = {!!}
 
