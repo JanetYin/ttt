@@ -79,6 +79,11 @@ weakenℕ∞ : (a b : ℕ∞) → .(e : IsNotZero∞ a) → IsNotZero∞ (a + b)
 weakenℕ∞ a b e with pred∞ a
 ... | suc∞ _ = tt
 
+instance
+  JustIsNotZero∞ : {n n' : ℕ∞} → .⦃ pred∞ n ≈ℕ∞′′ just n' ⦄ → IsNotZero∞ n
+  JustIsNotZero∞ {n} with pred∞ n
+  ... | suc∞ _ = tt
+
 +-injectiveʳ : (a b c : ℕ∞) → a ≈ℕ∞ b → a + c ≈ℕ∞ b + c
 +-injectiveʳ' : (a b : Maybe ℕ∞)(c : ℕ∞) → a ≈ℕ∞′′ b → a +' c ≈ℕ∞′′ b +' c
 +-injectiveʳ' zero∞ zero∞ c e = reflℕ∞' (pred∞ c)
