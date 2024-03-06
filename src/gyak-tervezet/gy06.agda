@@ -9,7 +9,7 @@ open import Lib
 Σ=× = {!!}
 
 -- Π A F is essentially (a : A) → F a
--- what döes this mean?
+-- what does this mean?
 
                     -- Π A (λ _ → B)
 Π=→ : {A B : Set} → ((a : A) → (λ _ → B) a) ≡ (A → B)
