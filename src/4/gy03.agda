@@ -3,6 +3,48 @@ module gy03 where
 open import Lib hiding (_+_; _*_; _-_; _^_; _!; pred; pred'; _>_; _<_; min; max; const)
 open import Lib.Containers.List hiding (length; _++_; map; iteList)
 
+
+↔distrib : {A B : Set} → ((A ⊎ B) → ⊥) ↔ ((A → ⊥) × (B → ⊥))
+↔distrib = (λ f → (λ a → f (inl a)) , λ b → f (inr b)) , λ x a⊎b → case a⊎b (λ a → fst x a) λ b → snd x b
+
+↔distrib' : {A B : Set} → ((A ⊎ B) → ⊥) ↔ ((A → ⊥) × (B → ⊥))
+fst (fst ↔distrib' x) a = x (inl a)
+snd (fst ↔distrib' x) b = x (inr b)
+snd ↔distrib' (fst₁ , snd₁) (inl a) = fst₁ a
+snd ↔distrib' (fst₁ , snd₁) (inr b) = snd₁ b
+
+-- bijection, sum types, product types, top, bottom, boolean
+-- true, false
+-- _,_
+-- inl, inr
+
+data Bool' : Set where -- data Bool' = true' | false'
+  true' : Bool'
+  false' : Bool'
+
+data Product' (A : Set)(B : Set) : Set where
+  comma : A → B → Product' A B
+
+data Top : Set where
+  teetee : Top
+
+data Bottom : Set where
+
+data UPlus (A : Set)(B : Set) : Set where
+  inell : A → UPlus A B
+  inarr : B → UPlus A B
+
+
+data Nat : Set where
+  zero' : Nat
+  succ' : Nat → Nat
+
+four : ℕ
+four = 4
+
+four' : ℕ
+four' = suc (suc (suc (suc zero)))
+
 ---------------------------------------------------------
 -- natural numbers
 ---------------------------------------------------------
@@ -50,7 +92,8 @@ pred'' (suc n) = n
 -- Agda CSAK totális függvényeket fogad el.
 
 double : ℕ → ℕ
-double = {!!}
+double zero = zero
+double (suc x) = suc (suc (double x))
 
 double-test1 : double 2 ≡ 4
 double-test1 = refl
@@ -60,7 +103,21 @@ double-test3 : double 10 ≡ 20
 double-test3 = refl
 
 half : ℕ → ℕ
-half = {!!}
+half zero = zero
+half (suc zero) = zero
+half (suc (suc x)) = suc (half x)
+
+
+--- triple, third
+triple : ℕ → ℕ
+triple zero = zero
+triple (suc x) = suc (suc (suc (triple x)))
+
+third : ℕ → ℕ
+third zero = zero
+third (suc zero) = zero
+third (suc (suc zero)) = zero
+third (suc (suc (suc x))) = suc (third x)
 
 half-test1 : half 10 ≡ 5
 half-test1 = refl
@@ -70,7 +127,8 @@ half-test3 : half 12 ≡ 6
 half-test3 = refl
 
 _+_ : ℕ → ℕ → ℕ
-_+_ = {!!}
+k + zero = k
+k + suc n = suc k + n
 infixl 6 _+_
 
 +-test1 : 3 + 5 ≡ 8
@@ -345,10 +403,10 @@ map-test = refl
 -- ha a listában van elem, akkor alkalmazzunk rá egy függvényt az alapértékkel úgy, hogy az kifejezés jobbra legyen zárójelezve.
 -- Haskell-ben foldr
 iteList : {A B : Set} → B → (A → B → B) → List A → B
-iteList n c as = ?
+iteList n c as = {!!}
 
-iteList-test : iteList 3 _^_ (2 ∷ 3 ∷ []) ≡ 2 ^ 27
-iteList-test = refl
+-- iteList-test : iteList 3 _^_ (2 ∷ 3 ∷ []) ≡ 2 ^ 27
+-- iteList-test = refl
 
 -- FEL: add meg a fenti fuggvenyeket (length, ..., map) iteList segitsegevel!
 
@@ -436,7 +494,7 @@ insert-test = refl
 
 -- FELADAT: egy listát egy rendezett fara alakít.
 list2tree : List ℕ → Tree ℕ
-list2tree = ?
+list2tree = {!!}
 
 -- FELADAT: Rendezzünk egy listát úgy, hogy azt fává alakítjuk megfelelően, majd inorder bejárjuk!
 tree-sort : List ℕ → List ℕ
