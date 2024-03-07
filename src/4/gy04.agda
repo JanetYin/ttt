@@ -5,6 +5,15 @@ open import Lib hiding (_+∞_; coiteℕ∞)
 open import Lib.Containers.List hiding (zipWith; head; tail)
 open import Lib.Containers.Stream hiding (zipWith; coiteStream)
 
+
+data X (A : Set) : Set where
+  Y : ℕ → X A
+  Z : X A → A → X A
+  Q : X A
+
+iteX : {A C : Set} → (ℕ → C) → (C → A → C) → C → X A → C
+iteX = ?
+
 ---------------------------------------------------------
 -- positivity
 ---------------------------------------------------------
@@ -105,10 +114,10 @@ byIndices = {!!}
 --         ℕ - algebra
 
 -- Mi lesz a Stream konstruktora?
-coiteStream : {A B : Set} → ?
+coiteStream : {A B : Set} → {!!}
 --               \_______________________________/
 --                        Stream A - coalgebra
-coiteStream = ?
+coiteStream = {!!}
 
 -- ex: redefine the above functions using coiteStream
 
