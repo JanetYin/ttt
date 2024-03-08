@@ -1,4 +1,4 @@
-module gy04_pre where
+module gy04 where
 
 open import Lib hiding (_+∞_; coiteℕ∞)
 
@@ -47,6 +47,8 @@ Bool esetén tehát úgy kell az if_then_else_-et felparaméterezni, hogy a fals
 
 Ez alapján mi lesz a Bool-oknak egy lehetséges η-szabálya?
 Válasz:
+if false then true else false ≡ false
+if true then true else false ≡ true
 
 Ugyanezt az ismert 𝟛 típuson is el lehet játszani.
 data 𝟛 : Set where
@@ -77,7 +79,8 @@ data Tm : Set where
 
 -- FELADAT: Tm-ből adjuk vissza a lam értékét.
 app : Tm → (Tm → Tm)
-app = {!!}
+app (lam x) = x
+-- app x y = y 
 
 self-apply : Tm
 self-apply = lam (λ t → app t t)
@@ -92,11 +95,11 @@ data Weird : Set where
   -- Hogy kell elolvasni magyarul a "foo" konstruktort?
 
 unweird : Weird → ⊥
-unweird = {!!}
+unweird (foo x) = x (foo x)
 
 -- ⊥ típusú értéknek TILOS léteznie, ellenkező esetben a rendszer inkonzisztens, nem használható SEMMIRE.
 bad : ⊥
-bad = {!!}
+bad = unweird (foo unweird)
 
 ---------------------------------------------------------
 -- coinductive types
@@ -120,7 +123,8 @@ open Stream
 -- Copattern matching!
 -- FELADAT: Add meg azt a végtelen listát, amely csak 0-kból áll.
 zeroes : Stream ℕ
-zeroes = {!!}
+head zeroes = zero
+tail zeroes = zeroes
 -- Honnan tudja agda, hogy ez totális?
 -- Termination checker nem tud futni, hiszen a lista végtelen.
 -- Productivity checker
@@ -128,13 +132,15 @@ zeroes = {!!}
 -- by pattern match on n
 -- FELADAT: Add meg azt a listát, amely n-től 0-ig számol vissza egyesével.
 countDownFrom : ℕ → List ℕ
-countDownFrom n = {!!}
+countDownFrom zero = zero ∷ []
+countDownFrom (suc n) = suc n ∷ countDownFrom n
 
 -- from n is not by pattern match on n
 -- copattern match on Stream
 -- FELADAT: Adjuk meg azt a végtelen listát, amely n-től 1-esével felfelé számol!
 from : ℕ → Stream ℕ
-from n = {!!}
+head (from n) = n
+tail (from n) = from (suc n)
 
 -- pointwise addition
 zipWith : {A B C : Set} → (A → B → C) → Stream A → Stream B → Stream C

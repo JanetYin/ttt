@@ -1,6 +1,6 @@
-module gy03_pre where
+module gy03 where
 
-open import Lib hiding (_+_; _*_; _-_; _^_; _!; pred; pred'; _>_; _<_; min; max)
+open import Lib hiding (max) -- hiding (_+_; _*_; _-_; _^_; _!; pred; pred'; _>_; _<_; min; max)
 open import Lib.Containers.List hiding (length; _++_; map; iteList)
 
 -- η = \eta = \Gh
@@ -38,9 +38,12 @@ tehát mivel a Bool-nak két értéke van, ezért a destruktornak PONTOSAN két 
 Melyik ez a függvény a Bool-ok felett, ami false-ra, illetve true-ra egyértelműen két különböző dolgot ad eredményül? (Akár haskell-ből, akár más oop nyelvekből ismert konstrukció.)
 Mi a destruktora?
 Válasz:
+if_then_else_
 
 Hány β-szabályra van szükség a Bool esetén?
 Válasz:
+if false then u else v ≡ v
+if true then u else v ≡ u
 
 Mik lesznek ezek a β-szabályok?
 Válasz:
@@ -52,9 +55,14 @@ data 𝟛 : Set where
 
 Mi lesz a 𝟛 típus destruktora?
 Válasz:
+ite3 : 𝟛 → A → A → A → A
 
 Akkor ennek a típusnak mik lesznek a β-szabályai?
 Válasz:
+ite3 a1 x y z ≡ x
+ite3 a2 x y z ≡ y
+ite3 a3 x y z ≡ z
+
 ----
 4 elemre:
 
@@ -75,6 +83,7 @@ Válasz:
 ----
 Mi a ⊥ destruktora?
 Válasz:
+exfalso
 
 Mi lesz a ⊥ típus β-szabálya?
 Válasz:
@@ -89,9 +98,13 @@ Természetesen semmi különleges, pontosan ugyanaz fog a destruktorban szerepel
 
 Mi lesz a destruktora?
 Válasz:
+iteAlma : Alma → A → (Bool → A) → A
 
 Mik lesznek a β-szabályai?
 Válasz:
+iteAlma c1 x y ≡ x
+iteAlma (c2 b) x y ≡ y b
+
 -----------------------------------------------------------
 Mi történik, ha van legalább két paramétere egy konstruktornak?
 
@@ -148,11 +161,13 @@ data Maybe (A : Set) : Set where
 
 -- FELADAT: Csökkents eggyel egy megadott természetes számot, ha lehet.
 pred' : ℕ → Maybe ℕ
-pred' = {!!}
+pred' zero = nothing
+pred' (suc x) = just x
 
 -- FELADAT: Ha lehet, akkor adj hozzá a számhoz egyet, egyébként az eredmény legyen 0.
 zerosuc : Maybe ℕ → ℕ
-zerosuc = {!!}
+zerosuc (just x) = suc x
+zerosuc nothing = zero
 
 pred↔zerosuc-test1 : pred' (zerosuc nothing) ≡ nothing
 pred↔zerosuc-test1 = refl
@@ -174,7 +189,8 @@ pred'' (suc n) = n
 -- Agda CSAK totális függvényeket fogad el.
 
 double : ℕ → ℕ
-double = {!!}
+double zero = zero
+double (suc x) = suc (suc (double x))
 
 double-test1 : double 2 ≡ 4
 double-test1 = refl
@@ -184,7 +200,9 @@ double-test3 : double 10 ≡ 20
 double-test3 = refl
 
 half : ℕ → ℕ
-half = {!!}
+half zero = zero
+half (suc zero) = zero
+half (suc (suc x)) = suc (half x)
 
 half-test1 : half 10 ≡ 5
 half-test1 = refl
@@ -194,7 +212,8 @@ half-test3 : half 12 ≡ 6
 half-test3 = refl
 
 _+_ : ℕ → ℕ → ℕ
-_+_ = {!!}
+zero + y = y
+suc x + y = x + (suc y)
 infixl 6 _+_
 
 +-test1 : 3 + 5 ≡ 8
@@ -205,7 +224,8 @@ infixl 6 _+_
 +-test3 = refl
 
 _*_ : ℕ → ℕ → ℕ
-_*_ = {!!}
+zero * y = zero
+suc x * y = (x * y) + y
 infixl 7 _*_
 
 *-test1 : 3 * 4 ≡ 12
@@ -218,7 +238,8 @@ infixl 7 _*_
 *-test4 = refl
 
 _^_ : ℕ → ℕ → ℕ
-_^_ = {!!}
+x ^ zero = 1 -- suc zero
+x ^ suc y = x * (x ^ y)
 infixr 8 _^_
 
 ^-test1 : 3 ^ 4 ≡ 81
@@ -233,7 +254,8 @@ infixr 8 _^_
 ^-test5 = refl
 
 _! : ℕ → ℕ
-_! = {!!}
+zero ! = 1
+suc x ! = suc x * (x !)
 
 !-test1 : 3 ! ≡ 6
 !-test1 = refl
@@ -243,7 +265,9 @@ _! = {!!}
 !-test3 = refl
 
 _-_ : ℕ → ℕ → ℕ
-_-_ = {!!}
+zero - y = zero
+suc x - zero = suc x
+suc x - suc y = x - y
 infixl 6 _-_
 
 -test1 : 3 - 2 ≡ 1
@@ -256,7 +280,9 @@ infixl 6 _-_
 
 -- FELADAT: Határozd meg, hogy az első szám nagyobb vagy egyenlő-e, mint a második.
 _≥_ : ℕ → ℕ → Bool
-_≥_ = {!!}
+x ≥ zero = true
+zero ≥ suc y = false
+suc x ≥ suc y = x ≥ y
 
 ≥test1 : 3 ≥ 2 ≡ true
 ≥test1 = refl
@@ -268,7 +294,12 @@ _≥_ = {!!}
 -- ne hasznalj rekurziot, hanem hasznald _≥_-t!
 -- FELADAT: Remélhetőleg értelemszerű.
 _>_ : ℕ → ℕ → Bool
-_>_ = {!!}
+-- zero > zero = false
+-- suc x > zero = true
+-- zero > suc y = false
+-- suc x > suc y = x > y
+x > y = x ≥ suc y
+
 
 >test1 : 3 > 2 ≡ true
 >test1 = refl
@@ -280,7 +311,11 @@ _>_ = {!!}
 -- ne hasznalj rekurziot
 -- FELADAT: Remélhetőleg értelemszerű.
 _<_ : ℕ → ℕ → Bool
-_<_ = {!!}
+-- zero < zero = false
+-- zero < suc y = true
+-- suc x < zero = false
+-- suc x < suc y = x < y
+x < y = y > x
 
 <test1 : 3 < 2 ≡ false
 <test1 = refl
@@ -291,7 +326,9 @@ _<_ = {!!}
 
 -- FELADAT: Két szám közül add vissza a kisebbet.
 min : ℕ → ℕ → ℕ
-min = {!!}
+min zero y = zero
+min (suc x) zero = zero
+min (suc x) (suc y) = suc (min x y)
 
 min-test1 : min 3 2 ≡ 2
 min-test1 = refl
@@ -302,7 +339,7 @@ min-test3 = refl
 
 -- FELADAT: Hasonlíts össze két számot! Ha az első kisebb, mint a második, akkor a harmadik paramétert add vissza; ha egyenlők, akkor a negyediket; ha nagyobb, akkor az ötödiket.
 comp : {A : Set} → ℕ → ℕ → A → A → A → A
-comp m n m<n m=n m>n = {!!}
+comp m n m<n m=n m>n = if m < n then m<n else (if m > n then m>n else m=n)
 
 comp-test1 : comp {ℕ} 10 10 0 1 2 ≡ 1
 comp-test1 = refl
@@ -314,8 +351,8 @@ comp-test3 = refl
 -- FELADAT: Határozd meg két szám legnagyobb közös osztóját.
 -- Segítség: Használd a comp-ot!
 gcd : ℕ → ℕ → ℕ
--- {-# TERMINATING #-} -- Csalás! De ezt a függvényt nem egyszerű jól definiálni ahhoz, hogy agda lássa, hogy terminál.
-gcd m n = {!!}
+{-# TERMINATING #-} -- Csalás! De ezt a függvényt nem egyszerű jól definiálni ahhoz, hogy agda lássa, hogy terminál.
+gcd m n = comp m n (gcd (n - m) m) m (gcd (m - n) n)
 
 gcd-test1 : gcd 6 9 ≡ 3
 gcd-test1 = refl
@@ -331,7 +368,7 @@ gcd-test5 = refl
 -- hasznald ugyanazt a definiciot, mint gcd-nel, de most fuel szerinti rekurzio
 gcd-helper : ℕ → ℕ → ℕ → ℕ
 gcd-helper zero m n = 42
-gcd-helper (suc fuel) m n = {!!}
+gcd-helper (suc fuel) m n = {!  !}
 gcd' : ℕ → ℕ → ℕ
 gcd' m n = gcd-helper (m + n) m n
 
@@ -350,7 +387,9 @@ gcd'-test5 = refl
 
 -- FELADAT: Páros-e egy szám?
 even? : ℕ → Bool
-even? = {!!}
+even? zero = true
+even? (suc zero) = false
+even? (suc (suc x)) = even? x
 
 even?-test1 : even? 3 ≡ false
 even?-test1 = refl
@@ -359,7 +398,9 @@ even?-test2 = refl
 
 -- FELADAT: Határozd meg a Fibonacci-sorozat n. elemét; a 0. eleme legyen 1.
 fib : ℕ → ℕ
-fib = {!!}
+fib zero = 1
+fib (suc zero) = 1
+fib (suc (suc x)) = fib (suc x) + fib x
 
 fib-test1 : fib 6 ≡ 13
 fib-test1 = refl
@@ -368,14 +409,17 @@ fib-test2 = refl
 
 -- FELADAT: Vizsgáld meg, hogy két szám egyenlő-e! Ne használj rekurziót!
 eq? : ℕ → ℕ → Bool
-eq? = {!!}
+eq? zero zero = true
+eq? zero (suc y) = false
+eq? (suc x) zero = false
+eq? (suc x) (suc y) = eq? x y
 
 eq?-test1 : eq? 4 3 ≡ false
 eq?-test1 = refl
 eq?-test2 : eq? 4 4 ≡ true
 eq?-test2 = refl
 
--- rem m n = a maradek, ha elosztjuk m-et (suc n)-el
+-- rem m n = a maradek, ha elosztjuk a-t (suc b)-el
 -- FELADAT: Két számot osszunk el, az eredmény legyen az egész osztás maradéka.
 rem : ℕ → ℕ → ℕ
 rem a b = {!!}
@@ -435,7 +479,8 @@ infixr 5 _∷_
 
 -- FELADAT: Határozzuk meg egy lista elemszámát!
 length : {A : Set} → List A → ℕ
-length = {!!}
+length [] = zero
+length (x ∷ xs) = suc (length xs)
 
 length-test1 : length {ℕ} (1 ∷ 2 ∷ 3 ∷ []) ≡ 3
 length-test1 = refl
@@ -444,32 +489,36 @@ length-test2 = refl
 
 -- FELADAT: Adjuk össze egy lista számait.
 sumList : List ℕ → ℕ
-sumList = {!!}
+sumList [] = zero
+sumList (x ∷ xs) = x + sumList xs
 
 sumList-test : sumList (1 ∷ 2 ∷ 3 ∷ []) ≡ 6
 sumList-test = refl
 
 -- FELADAT: Fűzzünk össze két listát!
 _++_ : {A : Set} → List A → List A → List A
-_++_ = {!!}
+[] ++ ys = ys
+(x ∷ xs) ++ ys = x ∷ (xs ++ ys)
 infixr 5 _++_
 
-++-test : the ℕ 3 ∷ 2 ∷ [] ++ 1 ∷ 4 ∷ [] ≡ 3 ∷ 2 ∷ 1 ∷ 4 ∷ []
+++-test : the ℕ 3 ∷ 2 ∷ [] ++ 1 ∷ 4 ∷ [] ≡ 3 ∷ (2 ∷ (1 ∷ (4 ∷ [])))
 ++-test = refl
 
--- FELADAT: Alkalmazzunk egy függvényt egy lista minden elemén!
+-- -- FELADAT: Alkalmazzunk egy függvényt egy lista minden elemén!
 map : {A B : Set} → (A → B) → List A → List B
-map = {!!}
+map f [] = []
+map f (x ∷ xs) = f x ∷ map f xs
 
 map-test : map (_+ 2) (3 ∷ 9 ∷ []) ≡ (5 ∷ 11 ∷ [])
 map-test = refl
 
--- FELADAT: Definiáld a lista destruktorát! Dolgozzunk fel egy listát:
--- ha üres a lista, akkor csak adjunk vissza egy alapértéket
--- ha a listában van elem, akkor alkalmazzunk rá egy függvényt az alapértékkel úgy, hogy az kifejezés jobbra legyen zárójelezve.
--- Haskell-ben foldr
+-- -- FELADAT: Definiáld a lista destruktorát! Dolgozzunk fel egy listát:
+-- -- ha üres a lista, akkor csak adjunk vissza egy alapértéket
+-- -- ha a listában van elem, akkor alkalmazzunk rá egy függvényt az alapértékkel úgy, hogy az kifejezés jobbra legyen zárójelezve.
+-- -- Haskell-ben foldr
 iteList : {A B : Set} → B → (A → B → B) → List A → B
-iteList n c as = {!!}
+iteList acc f [] = acc
+iteList acc f (x ∷ xs) = f x (iteList acc f xs)
 
 iteList-test : iteList 3 _^_ (2 ∷ 3 ∷ []) ≡ 2 ^ 27
 iteList-test = refl
@@ -532,7 +581,8 @@ t = node (node leaf 1 (node leaf 2 leaf)) 5 leaf
 
 -- FELADAT: Csináljuk meg egy fa inorder bejárását!
 tree2List : {A : Set} → Tree A → List A
-tree2List = {!!}
+tree2List leaf = []
+tree2List (node l x r) = (tree2List l) ++ x ∷ (tree2List r)
 
 tree2List-test : tree2List t ≡ 1 ∷ 2 ∷ 5 ∷ []
 tree2List-test = refl
@@ -542,7 +592,8 @@ tree2List-test = refl
 -- ez a fuggveny egy rendezett faba illeszt be egy uj erteket ugy,
 -- hogy a fa rendezett maradjon
 insert : ℕ → Tree ℕ → Tree ℕ
-insert = {!!}
+insert n leaf = node leaf n leaf
+insert n (node l x r) = if x < n then node l x (insert n r) else node (insert n l) x r
 
 t' : Tree ℕ
 t' = node (node (node leaf 0 leaf) 1 (node leaf 2 leaf)) 5 leaf
@@ -560,11 +611,12 @@ insert-test = refl
 
 -- FELADAT: egy listát egy rendezett fara alakít.
 list2tree : List ℕ → Tree ℕ
-list2tree = {!!}
+list2tree [] = leaf
+list2tree (x ∷ xs) = insert x (list2tree xs)
 
 -- FELADAT: Rendezzünk egy listát úgy, hogy azt fává alakítjuk megfelelően, majd inorder bejárjuk!
 tree-sort : List ℕ → List ℕ
-tree-sort = {!!}
+tree-sort x = tree2List (list2tree x)
 
 tree-sort-test1 : tree-sort (10 ∷ 2 ∷ 1 ∷ 5 ∷ []) ≡ 1 ∷ 2 ∷ 5 ∷ 10 ∷ []
 tree-sort-test1 = refl
