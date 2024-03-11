@@ -12,7 +12,24 @@ data X (A : Set) : Set where
   Q : X A
 
 iteX : {A C : Set} → (ℕ → C) → (C → A → C) → C → X A → C
-iteX = ?
+iteX f g h (Y x) = f x
+iteX f g h (Z x x₁) = g (iteX f g h x) x₁
+iteX f g h Q = h
+
+data List' (A : Set) : Set where
+  [] : List' A
+  _∷_ : A → List' A → List' A
+
+map' : {A B : Set} → (A → B) → List' A → List' B
+map' f [] = []
+map' f (x ∷ xs) = f x ∷ map' f xs
+
+length' : {A : Set} → List' A → ℕ
+length' [] = zero
+length' (x ∷ xs) = 1 + length' xs
+
+-- repeat' : {A : Set} → A → List' A
+-- repeat' x = x ∷ repeat' x
 
 ---------------------------------------------------------
 -- positivity
@@ -69,7 +86,8 @@ open Stream
 -- Copattern matching!
 -- FELADAT: Add meg azt a végtelen listát, amely csak 0-kból áll.
 zeroes : Stream ℕ
-zeroes = {!!}
+head zeroes = zero
+tail zeroes = zeroes
 -- Honnan tudja agda, hogy ez totális?
 -- Termination checker nem tud futni, hiszen a lista végtelen.
 -- Productivity checker
@@ -77,21 +95,33 @@ zeroes = {!!}
 -- by pattern match on n
 -- FELADAT: Add meg azt a listát, amely n-től 0-ig számol vissza egyesével.
 countDownFrom : ℕ → List ℕ
-countDownFrom n = {!!}
+countDownFrom zero = zero ∷ [] -- \::
+countDownFrom (suc n) = (suc n) ∷ (countDownFrom n)
 
 -- from n is not by pattern match on n
 -- copattern match on Stream
 -- FELADAT: Adjuk meg azt a végtelen listát, amely n-től 1-esével felfelé számol!
 from : ℕ → Stream ℕ
-from n = {!!}
+head (from n) = n
+tail (from n) = from (suc n)
+
+cycle : {A : Set} → List A → Stream A
+cycle [] = cycle []
+cycle (x ∷ xs) = {!!}
 
 -- pointwise addition
 zipWith : {A B C : Set} → (A → B → C) → Stream A → Stream B → Stream C
 zipWith = {!!}
 
+mapStream : {A B : Set} → (A → B) → Stream A → Stream B
+mapStream = {!!}
+
 -- Definiálható-e a filter sima listákon?
 filterL : {A : Set} → (A → Bool) → List A → List A
-filterL = {!!}
+filterL p [] = []
+filterL p (x ∷ xs) with p x
+... | false = ?
+... | true = ?
 
 -- Definiálható-e a filter Stream-eken?
 filterS : {A : Set} → (A → Bool) → Stream A → Stream A
@@ -103,7 +133,8 @@ interleave = {!!}
 
 -- get the n^th element of the stream
 get : {A : Set} → ℕ → Stream A → A
-get = {!!}
+get zero s = head s
+get (suc n) s = get n (tail s)
 
 -- byIndices [0,2,3,2,...] [1,2,3,4,5,...] = [1,3,4,2,...]
 byIndices : {A : Set} → Stream ℕ → Stream A → Stream A
