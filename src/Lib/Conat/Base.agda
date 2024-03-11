@@ -74,6 +74,14 @@ pred∞ (x + y) = pred∞ x +' y
 zero∞ +' y = pred∞ y
 suc∞ x +' y = suc∞ (x + y)
 
+infix 4 _ℕ≤ℕ∞_
+
+_ℕ≤ℕ∞_ : ℕ → ℕ∞ → Set
+zero ℕ≤ℕ∞ k = ⊤
+suc n ℕ≤ℕ∞ k with pred∞ k
+... | nothing = ⊥
+... | just k' = n ℕ≤ℕ∞ k'
+
 --------------------------------------------------
 -- Older idea of Conat with ⊤ ⊎ _
 --------------------------------------------------

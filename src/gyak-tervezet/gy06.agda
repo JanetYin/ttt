@@ -9,7 +9,7 @@ open import Lib
 Σ=× = {!!}
 
 -- Π A F is essentially (a : A) → F a
--- what döes this mean?
+-- what does this mean?
 
                     -- Π A (λ _ → B)
 Π=→ : {A B : Set} → ((a : A) → (λ _ → B) a) ≡ (A → B)
@@ -58,7 +58,7 @@ f⁻¹ {m} i = {!!}
 -- use f⁻¹
 -- this essentially merges finite sequences
 casef : {m n : ℕ}{C : Set} → (Fin m → C) → (Fin n → C) → Fin (m + n) → C
-casef {m}  g h i   = {!!}
+casef {m} g h i = {!!}
 
 test-casef : casef {3}{3} (λ i → i) (λ i → i) (suc (suc zero)) ≡ suc (suc zero)
 test-casef = refl
