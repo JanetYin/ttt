@@ -165,16 +165,12 @@ byIndices = {!!}
 --         ℕ - algebra
 
 -- Mi lesz a Stream konstruktora?
-coiteStream : ?
---                       \____________________________/
+coiteStream : {A B : Set} → ?
+--               \_______________________________/
 --                        Stream A - coalgebra
 coiteStream = ?
 
 -- ex: redefine the above functions using coiteStream
-
--- A fájl tetején lévő leírás alapján természetesen a Stream-nek is megadható az η-szabálya.
-Stream-η : ?
-Stream-η = ?
 
 -- ex: look at conatural numbers in Thorsten's book and do the exercises about them
 

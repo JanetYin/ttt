@@ -14,6 +14,10 @@ open import Lib.Sigma hiding (map)
 open import Lib.Sum hiding (map)
 open import Lib.Equality
 
+open import Lib.Containers.Vector
+  renaming ([] to []ᵥ ; _∷_ to _∷ᵥ_)
+  hiding (take; drop; head; tail; replicate; map; _++_)
+
 [] : ∀{i}{A : Set i} → CoVec A 0
 head [] ⦃ () ⦄
 tail [] ⦃ () ⦄
@@ -58,10 +62,15 @@ tail (substCoVec {n = n} {m} e xs) | zero∞ | suc∞ b | t with transℕ∞' (t
 tail (substCoVec {n = n} {m} e xs) | zero∞ | suc∞ b | t | ()
 tail (substCoVec {n = n} {m} e xs) | suc∞ n' | suc∞ m' | t = substCoVec {n = n'} {m'} (transℕ∞' (transℕ∞' (≡→≈ℕ∞′′ (sym eq1)) (prove e)) (≡→≈ℕ∞′′ eq2)) (t tt)
 
-take : ∀{i}{A : Set i}(n : ℕ∞){m : ℕ∞} → CoVec A (n +∞ m) → CoVec A n
-head (take n {m} xs) ⦃ e ⦄ with pred∞ n | weakenℕ∞ n m e | head xs
+take∞ : ∀{i}{A : Set i}(n : ℕ∞){m : ℕ∞} → CoVec A (n +∞ m) → CoVec A n
+head (take∞ n {m} xs) ⦃ e ⦄ with pred∞ n | weakenℕ∞ n m e | head xs
 ... | zero∞  | p | x = x ⦃ p ⦄
 ... | suc∞ _ | _ | x = x
-tail (take n {m} xs) with pred∞ n | (λ x → tail xs ⦃ x ⦄)
-tail (take n {m} xs) | zero∞ | _ = substCoVec 0=0 []
-tail (take n {m} xs) | suc∞ n' | t = take n' {m} (t tt)
+tail (take∞ n {m} xs) with pred∞ n | (λ x → tail xs ⦃ x ⦄)
+tail (take∞ n {m} xs) | zero∞ | _ = substCoVec 0=0 []
+tail (take∞ n {m} xs) | suc∞ n' | t = take∞ n' {m} (t tt)
+
+take : ∀{i}{A : Set i}(n : ℕ){m : ℕ∞} → .⦃ n ℕ≤ℕ∞ m ⦄ → CoVec A m → Vec A n
+take zero v = []ᵥ
+take (suc n) {m} v with pred∞ m in eq1
+... | just m' = head v ⦃ JustIsNotZero∞ {m} ⦃ ≡→≈ℕ∞′′ eq1 ⦄ ⦄ ∷ᵥ take n {m'} (substCoVec (≡→≈ℕ∞ (cong pred∞'' eq1)) (tail v ⦃ JustIsNotZero∞ {m} ⦃ ≡→≈ℕ∞′′ eq1 ⦄ ⦄))

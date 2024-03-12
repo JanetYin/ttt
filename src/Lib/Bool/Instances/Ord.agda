@@ -12,7 +12,8 @@ open import Lib.Ordering.Type
 -----------------------------------------
 
 open import Lib.Sigma.Type
-open import Lib.Equality
+open import Lib.Equality.Type
+open import Lib.Equality.Base
 
 instance
   OrdBool : Ord Bool

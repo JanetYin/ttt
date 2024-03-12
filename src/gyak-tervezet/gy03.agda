@@ -471,7 +471,7 @@ map-test = refl
 iteList : {A B : Set} → B → (A → B → B) → List A → B
 iteList n c as = {!!}
 
-iteList-test : iteList 3 _^_ (2 ∷ 3 ∷ []) ≡ 2 ^ 27
+iteList-test : iteList {ℕ} [] _∷_ (1 ∷ 2 ∷ 3 ∷ []) ≡ 1 ∷ 2 ∷ 3 ∷ []
 iteList-test = refl
 
 -- FEL: add meg a fenti fuggvenyeket (length, ..., map) iteList segitsegevel!
