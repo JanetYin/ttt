@@ -4,6 +4,57 @@ open import Lib hiding (fromℕ ; minMax)
 open import Lib.Containers.Vector hiding (head; tail; map; length; _++_)
 open import Lib.Containers.List hiding (head; tail; map; _++_; filter)
 
+
+
+
+
+
+
+
+
+
+
+-- \ge
+_≥_ : ℕ → ℕ → Bool
+zero ≥ zero = true
+zero ≥ suc k = false
+suc n ≥ zero = true
+suc n ≥ suc k = n ≥ k
+
+BoolToSet : Bool → Set
+BoolToSet false = ⊥
+BoolToSet true = ⊤
+
+subtraction : (n : ℕ) → (k : ℕ) → BoolToSet (n ≥ k) → ℕ
+subtraction zero zero x = zero
+subtraction (suc n) zero x = suc n
+subtraction (suc n) (suc k) x = subtraction n k x
+
+bothNotZero : ℕ → ℕ → Bool
+bothNotZero zero zero = false
+bothNotZero zero (suc k) = true
+bothNotZero (suc n) k = true
+
+power : (n : ℕ) → (k : ℕ) → BoolToSet (bothNotZero n k) → ℕ
+power zero (suc k) x = zero
+power (suc n) zero x = 1
+power (suc n) (suc k) x = (suc n) * (power (suc n) k tt)
+
+-- open import Agda.Builtin.Nat renaming (Nat to ℕ)
+-- open import Agda.Builtin.Bool
+-- open import Agda.Builtin.Unit
+-- data ⊥ : Set where
+
+
+
+
+
+
+
+
+
+
+
 -- Vec and Fin
 {-
 infixr 5 _∷_
@@ -11,11 +62,11 @@ data Vec (A : Set) : ℕ → Set where
   []  : Vec A 0
   _∷_ : {n : ℕ} → A → Vec A n → Vec A (suc n)
 -}
-head : {A : Set}{n : ℕ} → {!   !}
-head = {!!}
+head : {A : Set}{n : ℕ} → Vec A (suc n) → A  
+head (x ∷ v) = x
 
-tail : {A : Set}{n : ℕ} → {!   !}
-tail = {!!}
+tail : {A : Set}{n : ℕ} →  Vec A (suc n) → Vec A n
+tail (x ∷ v) = v
 
 countDownFrom : (n : ℕ) → Vec ℕ n
 countDownFrom = {!!}
@@ -23,11 +74,18 @@ countDownFrom = {!!}
 test-countDownFrom : countDownFrom 3 ≡ 3 ∷ 2 ∷ 1 ∷ []
 test-countDownFrom = refl
 
-_++_ : {A : Set}{m n : ℕ} → {!   !} → {!   !} → {!   !}
-xs ++ ys = {!!}
+_++_ : {A : Set}{m n : ℕ} →  Vec A m   → Vec A n  →  Vec A (m + n)
+[] ++ ys = ys
+(x ∷ xs) ++ ys = {!!}
 
-map : {!   !}
+map : {A B : Set} →   {n : ℕ} → (A → B) → Vec A n → Vec B n
 map f xs = {!!}
+
+zip : {!!} -- zip two lists
+zip = {!!}
+
+takeV : ?
+takeV = ?
 
 -- Melyik az a függvény, amit nem tudunk totálisan megírni (még)?
 -- Indexelés! Kell hozzá új ötlet!
