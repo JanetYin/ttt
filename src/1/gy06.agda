@@ -124,6 +124,8 @@ anything = {!!}
 ret : {X : Set} → X → ¬ ¬ X
 ret = {!!}
 
+-- Másik irány?
+
 fun : {X Y : Set} → (¬ X) ⊎ Y → (X → Y)
 fun = {!!}
 
