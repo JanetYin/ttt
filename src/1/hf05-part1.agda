@@ -16,8 +16,8 @@ nem üres vektornak megadja a maximum elemét.
 
 Segítség: Nem kell félni segédfüggvények definiálásától.
 -}
-maximum : {n : ℕ} → Vec ℕ {!!} → ℕ
-maximum = {!!}
+maximum : {n : ℕ} → Vec ℕ ? → ℕ
+maximum = ?
 
 -- minimum-ot hasonlóan lehet definiálni.
 
@@ -35,8 +35,8 @@ Definiáld az iteVec függvényt, amely legyen a vektor destruktora,
 azaz feldolgozza egy vektor összes elemét.
 (Ugyanazt csinálja, mint az iteList.)
 -}
-iteVec : {A B : Set}{n : ℕ} → (A → B → B) → B → Vec A {!!} → B
-iteVec = {!!}
+iteVec : {A B : Set}{n : ℕ} → (A → B → B) → B → Vec A ? → B
+iteVec = ?
 
 iteVec-test1 : iteVec _+_ 0 [] ≡ 0
 iteVec-test1 = refl
@@ -55,11 +55,11 @@ Ez a két függvény a foldr és foldl függőtípusos változatai, általánosa
 így egyértelmű, hogy a függvénynek tényleg azt kell csinálni, mint a foldr-nek
 és foldl-nek és más nem igazán lehet.
 -}
-elimVecᵣ : {A : Set}{n : ℕ}(B : ℕ → Set) → ({n : ℕ} → A → B {!!} → B {!!}) → B {!!} → Vec A {!!} → B {!!}
-elimVecᵣ = {!!}
+elimVecᵣ : {A : Set}{n : ℕ}(B : ℕ → Set) → ({n : ℕ} → A → B ? → B ?) → B ? → Vec A ? → B ?
+elimVecᵣ = ?
 
-elimVecₗ : {A : Set}{n : ℕ}(B : ℕ → Set) → ({n : ℕ} → B {!!} → A → B {!!}) → B {!!} → Vec A {!!} → B {!!}
-elimVecₗ = {!!}
+elimVecₗ : {A : Set}{n : ℕ}(B : ℕ → Set) → ({n : ℕ} → B ? → A → B ?) → B ? → Vec A ? → B ?
+elimVecₗ = ?
 
 elimVecᵣ-test1 : elimVecᵣ (λ _ → ℕ) _+_ 0 [] ≡ 0
 elimVecᵣ-test1 = refl
@@ -92,8 +92,8 @@ a vektorba.
 Ahogy ebben az esetben is látható, az explicit paraméterek is elnevezhetők.
 Pl. most n az első explicit paraméter.
 -}
-replicate : {A : Set}(n : ℕ) → A → Vec A {!!}
-replicate = {!!}
+replicate : {A : Set}(n : ℕ) → A → Vec A ?
+replicate = ?
 
 replicate-test1 : {A : Set} → (λ (x : A) → replicate 5 x) ≡ (λ x → x ∷ x ∷ x ∷ x ∷ x ∷ [])
 replicate-test1 = refl
@@ -109,8 +109,8 @@ Definiáld a take függvény, amely n db elemet megtart a vektor elejéről.
 A helyzet érdekessége, hogy most le is tudjuk írni, hogy van is legalább n db elem.
 És nem is tudunk nagyobb számot megadni, mint ahány elemű a vektor.
 -}
-take : {A : Set}{m : ℕ} → (n : ℕ) → Vec A {!!} → Vec A {!!}
-take = {!!}
+take : {A : Set}{m : ℕ} → (n : ℕ) → Vec A ? → Vec A ?
+take = ?
 
 take-test1 : take {ℕ} 4 (1 ∷ 2 ∷ 3 ∷ 4 ∷ 5 ∷ 6 ∷ []) ≡ 1 ∷ 2 ∷ 3 ∷ 4 ∷ []
 take-test1 = refl
@@ -124,8 +124,8 @@ take-test3 = refl
 {-
 Definiáld a drop függvényt, amely n db elemet elhagy a vektor elejéről.
 -}
-drop : {A : Set}{m : ℕ} → {!!} → Vec A {!!} → Vec A {!!}
-drop = {!!}
+drop : {A : Set}{m : ℕ} → ? → Vec A ? → Vec A ?
+drop = ?
 
 drop-test1 : drop {ℕ} 0 [] ≡ []
 drop-test1 = refl
@@ -143,8 +143,8 @@ drop-test4 = refl
 Definiáld a zipWith függvényt, amely azonos elemszámú vektorokat összepárosít egy adott
 függvény alapján (egyszerre haladva a két vektoron az elemeken alkalmazz egy függvényt).
 -}
-zipWith : {A B C : Set}{n : ℕ} → (A → B → C) → Vec A {!!} → Vec B {!!} → Vec C {!!}
-zipWith = {!!}
+zipWith : {A B C : Set}{n : ℕ} → (A → B → C) → Vec A ? → Vec B ? → Vec C ?
+zipWith = ?
 
 zipWith-test1 : zipWith _+_ (1 ∷ 3 ∷ 9 ∷ 2 ∷ []) (10 ∷ 0 ∷ 5 ∷ 6 ∷ []) ≡ 11 ∷ 3 ∷ 14 ∷ 8 ∷ []
 zipWith-test1 = refl
@@ -161,8 +161,8 @@ Hogy melyikben van több elem, ezt nem tudjuk, bármelyik lehet a nagyobb
 elemszámú.
 -}
 
-restrictWith : {A B C : Set}{n m : ℕ} → (A → B → C) → Vec A {!!} → Vec B {!!} → Vec C {!!}
-restrictWith = {!!}
+restrictWith : {A B C : Set}{n m : ℕ} → (A → B → C) → Vec A ? → Vec B ? → Vec C ?
+restrictWith = ?
 
 restrictWith-test1 : restrictWith _+_ (1 ∷ 3 ∷ 9 ∷ 2 ∷ []) (10 ∷ 0 ∷ 5 ∷ 6 ∷ []) ≡ 11 ∷ 3 ∷ 14 ∷ 8 ∷ []
 restrictWith-test1 = refl
@@ -178,8 +178,8 @@ restrictWith-test4 = refl
 {-
 Definiáld a splitAt függvényt, amely az n. indexű elemnél ketté bontja a vektort.
 -}
-splitAt : {A : Set}{m : ℕ} → {!!} → Vec A {!!} → {!!}
-splitAt = {!!}
+splitAt : {A : Set}{m : ℕ} → ? → Vec A ? → ?
+splitAt = ?
 
 splitAt-test1 : {A : Set} → (λ (xs : Vec A 10) → splitAt {A} {10} 0 xs) ≡ (λ xs → [] , xs)
 splitAt-test1 = refl
@@ -197,8 +197,8 @@ splitAt-test4 = refl
 Definiáld a matrixAdd függvényt, amely a mátrix összeadást valósítja meg.
 Segítség: A két mátrixnak milyennek kell lennie, hogy össze lehessen adni azokat?
 -}
-matrixAdd : {n m : ℕ} → Vec {!!} {!!} → Vec {!!} {!!} → Vec {!!} {!!}
-matrixAdd = {!!}
+matrixAdd : {n m : ℕ} → Vec ? ? → Vec ? ? → Vec ? ?
+matrixAdd = ?
 
 matrixAdd-test1 : matrixAdd {10} [] [] ≡ []
 matrixAdd-test1 = refl
