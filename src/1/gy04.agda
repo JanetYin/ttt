@@ -77,11 +77,12 @@ data Tm : Set where
 
 -- FELADAT: Tm-ből adjuk vissza a lam értékét.
 app : Tm → (Tm → Tm)
-app = {!!}
+app (lam x) = x
 
 self-apply : Tm
-self-apply = lam (λ t → app t t)
+self-apply = lam λ x → app x x
 
+-- lambda kalkulusból: Y = (λ x → x x) (λ x → x x)
 -- C-c C-n this:
 Ω : Tm
 Ω = app self-apply self-apply
@@ -90,13 +91,16 @@ self-apply = lam (λ t → app t t)
 data Weird : Set where
   foo : (Weird → ⊥) → Weird
   -- Hogy kell elolvasni magyarul a "foo" konstruktort?
-
+  -- Ha Weird-nek nincs eleme, akkor van eleme.
 unweird : Weird → ⊥
-unweird = {!!}
+unweird (foo x) = x (foo x)
 
 -- ⊥ típusú értéknek TILOS léteznie, ellenkező esetben a rendszer inkonzisztens, nem használható SEMMIRE.
 bad : ⊥
-bad = {!!}
+bad = unweird (foo unweird)
+
+pr : ⊥ ≡ Bool
+pr = exfalso bad
 
 ---------------------------------------------------------
 -- lists
@@ -129,10 +133,11 @@ sumList-test = refl
 
 -- FELADAT: Fűzzünk össze két listát!
 _++_ : {A : Set} → List A → List A → List A
-_++_ = {!!}
+[] ++ ys = ys
+(x ∷ xs) ++ ys = x ∷ xs ++ ys
 infixr 5 _++_
 
-++-test : the ℕ 3 ∷ 2 ∷ [] ++ 1 ∷ 4 ∷ [] ≡ 3 ∷ 2 ∷ 1 ∷ 4 ∷ []
+++-test : the (List ℕ) (3 ∷ 2 ∷ []) ++ the (List ℕ) (1 ∷ 4 ∷ []) ≡ 3 ∷ 2 ∷ 1 ∷ 4 ∷ []
 ++-test = refl
 
 -- FELADAT: Alkalmazzunk egy függvényt egy lista minden elemén!

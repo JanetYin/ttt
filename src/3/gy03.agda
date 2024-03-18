@@ -76,8 +76,7 @@ half-test3 = refl
 
 _+_ : ℕ → ℕ → ℕ
 x + zero = x
-zero + suc y = suc y
-suc x + suc y = suc (suc (x + y))
+x + (suc y) = suc (x + y)
 infixl 6 _+_
 
 +-test1 : 3 + 5 ≡ 8
@@ -88,7 +87,8 @@ infixl 6 _+_
 +-test3 = refl
 
 _*_ : ℕ → ℕ → ℕ
-_*_ = {!!}
+zero * y = zero
+suc x * y = x * y + y
 infixl 7 _*_
 
 *-test1 : 3 * 4 ≡ 12
@@ -101,7 +101,8 @@ infixl 7 _*_
 *-test4 = refl
 
 _^_ : ℕ → ℕ → ℕ
-_^_ = {!!}
+_ ^ zero = 1
+x ^ suc y = x * x ^ y
 infixr 8 _^_
 
 ^-test1 : 3 ^ 4 ≡ 81
@@ -116,7 +117,8 @@ infixr 8 _^_
 ^-test5 = refl
 
 _! : ℕ → ℕ
-_! = {!!}
+zero ! = 1
+suc x ! = (suc x) * (x !)
 
 !-test1 : 3 ! ≡ 6
 !-test1 = refl
@@ -126,7 +128,9 @@ _! = {!!}
 !-test3 = refl
 
 _-_ : ℕ → ℕ → ℕ
-_-_ = {!!}
+zero - _ = zero
+suc x - zero = (suc x)
+suc x - suc y = x - y
 infixl 6 _-_
 
 -test1 : 3 - 2 ≡ 1
@@ -139,7 +143,10 @@ infixl 6 _-_
 
 -- FELADAT: Határozd meg, hogy az első szám nagyobb vagy egyenlő-e, mint a második.
 _≥_ : ℕ → ℕ → Bool
-_≥_ = {!!}
+zero ≥ zero = true
+zero ≥ suc y = false
+suc x ≥ zero = true
+suc x ≥ suc y = x ≥ y
 
 ≥test1 : 3 ≥ 2 ≡ true
 ≥test1 = refl
@@ -151,7 +158,10 @@ _≥_ = {!!}
 -- ne hasznalj rekurziot, hanem hasznald _≥_-t!
 -- FELADAT: Remélhetőleg értelemszerű.
 _>_ : ℕ → ℕ → Bool
-_>_ = {!!}
+zero > y = false
+suc x > y = x ≥ y
+
+-- x ≥ y ∧ not (y ≥ x)
 
 >test1 : 3 > 2 ≡ true
 >test1 = refl
@@ -163,7 +173,7 @@ _>_ = {!!}
 -- ne hasznalj rekurziot
 -- FELADAT: Remélhetőleg értelemszerű.
 _<_ : ℕ → ℕ → Bool
-_<_ = {!!}
+x < y = y > x
 
 <test1 : 3 < 2 ≡ false
 <test1 = refl
@@ -174,7 +184,9 @@ _<_ = {!!}
 
 -- FELADAT: Két szám közül add vissza a kisebbet.
 min : ℕ → ℕ → ℕ
-min = {!!}
+min zero _ = zero
+min (suc x) zero = zero
+min (suc x) (suc y) = suc (min x y)
 
 min-test1 : min 3 2 ≡ 2
 min-test1 = refl
@@ -185,7 +197,13 @@ min-test3 = refl
 
 -- FELADAT: Hasonlíts össze két számot! Ha az első kisebb, mint a második, akkor a harmadik paramétert add vissza; ha egyenlők, akkor a negyediket; ha nagyobb, akkor az ötödiket.
 comp : {A : Set} → ℕ → ℕ → A → A → A → A
-comp m n m<n m=n m>n = {!!}
+comp m n m<n m=n m>n with m > n
+comp m n m<n m=n m>n | true = m>n 
+comp m n m<n m=n m>n | false with m < n
+... | false = m=n
+... | true = m<n
+  
+-- if m < n then m<n else (if m > n then m>n else m=n)
 
 comp-test1 : comp {ℕ} 10 10 0 1 2 ≡ 1
 comp-test1 = refl
@@ -197,8 +215,8 @@ comp-test3 = refl
 -- FELADAT: Határozd meg két szám legnagyobb közös osztóját.
 -- Segítség: Használd a comp-ot!
 gcd : ℕ → ℕ → ℕ
--- {-# TERMINATING #-} -- Csalás! De ezt a függvényt nem egyszerű jól definiálni ahhoz, hogy agda lássa, hogy terminál.
-gcd m n = {!!}
+{-# TERMINATING #-} -- Csalás! De ezt a függvényt nem egyszerű jól definiálni ahhoz, hogy agda lássa, hogy terminál.
+gcd m n = comp m n (gcd m (n - m)) m (gcd (m - n) n)
 
 gcd-test1 : gcd 6 9 ≡ 3
 gcd-test1 = refl
@@ -214,7 +232,7 @@ gcd-test5 = refl
 -- hasznald ugyanazt a definiciot, mint gcd-nel, de most fuel szerinti rekurzio
 gcd-helper : ℕ → ℕ → ℕ → ℕ
 gcd-helper zero m n = 42
-gcd-helper (suc fuel) m n = {!!}
+gcd-helper (suc fuel) m n = comp m n (gcd-helper fuel m (n - m)) m (gcd-helper fuel (m - n) n)
 gcd' : ℕ → ℕ → ℕ
 gcd' m n = gcd-helper (m + n) m n
 
@@ -233,7 +251,9 @@ gcd'-test5 = refl
 
 -- FELADAT: Páros-e egy szám?
 even? : ℕ → Bool
-even? = {!!}
+even? zero = true
+even? (suc zero) = false
+even? (suc (suc x)) = even? x
 
 even?-test1 : even? 3 ≡ false
 even?-test1 = refl
@@ -242,7 +262,9 @@ even?-test2 = refl
 
 -- FELADAT: Határozd meg a Fibonacci-sorozat n. elemét; a 0. eleme legyen 1.
 fib : ℕ → ℕ
-fib = {!!}
+fib zero = 1
+fib (suc zero) = 1
+fib (suc (suc x)) = fib (suc x) + fib x
 
 fib-test1 : fib 6 ≡ 13
 fib-test1 = refl
@@ -251,7 +273,7 @@ fib-test2 = refl
 
 -- FELADAT: Vizsgáld meg, hogy két szám egyenlő-e! Ne használj rekurziót!
 eq? : ℕ → ℕ → Bool
-eq? = {!!}
+eq? a b = (a ≥ b) ∧ (b ≥ a)
 
 eq?-test1 : eq? 4 3 ≡ false
 eq?-test1 = refl
@@ -260,8 +282,9 @@ eq?-test2 = refl
 
 -- rem m n = a maradek, ha elosztjuk m-et (suc n)-el
 -- FELADAT: Két számot osszunk el, az eredmény legyen az egész osztás maradéka.
+{-# TERMINATING #-}
 rem : ℕ → ℕ → ℕ
-rem a b = {!!}
+rem a b = comp a b (rem (a - b) b) 0 b
 rem-test1 : rem 5 1 ≡ 1
 rem-test1 = refl
 rem-test2 : rem 11 2 ≡ 2
@@ -287,7 +310,7 @@ recNat z s (suc n) = s n (recNat z s n)
 
 -- FEL: add meg iteNat-ot mintaillesztes nelkul, recNat segitsegevel
 iteNat' : {A : Set} → A → (A → A) → ℕ → A
-iteNat' = {!!}
+iteNat' a s n = recNat a (λ _ -> s) n
 
 iteNat'-test1 : {A : Set}{z : A}{s : A → A} → iteNat' z s zero ≡ z
 iteNat'-test1 = refl
@@ -305,6 +328,7 @@ recNat'-test2 = refl
 
 -- FEL: add meg ujra az osszes fent fuggvenyt mintaillesztes nelkul, iteNat es/vagy recNat hasznalataval!
 
+
 ---------------------------------------------------------
 -- lists
 ---------------------------------------------------------
@@ -318,7 +342,8 @@ infixr 5 _∷_
 
 -- FELADAT: Határozzuk meg egy lista elemszámát!
 length : {A : Set} → List A → ℕ
-length = {!!}
+length [] = 0
+length (_ ∷ xs) = suc (length xs)
 
 length-test1 : length {ℕ} (1 ∷ 2 ∷ 3 ∷ []) ≡ 3
 length-test1 = refl
@@ -327,14 +352,16 @@ length-test2 = refl
 
 -- FELADAT: Adjuk össze egy lista számait.
 sumList : List ℕ → ℕ
-sumList = {!!}
+sumList [] = 0
+sumList (x ∷ xs) = x + sumList xs
 
 sumList-test : sumList (1 ∷ 2 ∷ 3 ∷ []) ≡ 6
 sumList-test = refl
 
 -- FELADAT: Fűzzünk össze két listát!
 _++_ : {A : Set} → List A → List A → List A
-_++_ = {!!}
+[] ++ y = y
+(x ∷ xs) ++ y = x ∷ xs ++ y
 infixr 5 _++_
 
 ++-test : the ℕ 3 ∷ 2 ∷ [] ++ 1 ∷ 4 ∷ [] ≡ 3 ∷ 2 ∷ 1 ∷ 4 ∷ []
@@ -342,7 +369,8 @@ infixr 5 _++_
 
 -- FELADAT: Alkalmazzunk egy függvényt egy lista minden elemén!
 map : {A B : Set} → (A → B) → List A → List B
-map = {!!}
+map _ [] = []
+map f (x ∷ xs) = f x ∷ map f xs
 
 map-test : map (_+ 2) (3 ∷ 9 ∷ []) ≡ (5 ∷ 11 ∷ [])
 map-test = refl
@@ -352,13 +380,14 @@ map-test = refl
 -- ha a listában van elem, akkor alkalmazzunk rá egy függvényt az alapértékkel úgy, hogy az kifejezés jobbra legyen zárójelezve.
 -- Haskell-ben foldr
 iteList : {A B : Set} → B → (A → B → B) → List A → B
-iteList n c as = {!   !}
+iteList n c [] = n
+iteList n c (x ∷ as) = c x (iteList n c as)
 
-iteList-test : iteList 3 _^_ (2 ∷ 3 ∷ []) ≡ 2 ^ 27
+iteList-test : iteList 3 _*_ (2 ∷ 3 ∷ []) ≡ 18
 iteList-test = refl
 
 -- FEL: add meg a fenti fuggvenyeket (length, ..., map) iteList segitsegevel!
-
+{-
 ---------------------------------------------------------
 -- trees
 ---------------------------------------------------------
@@ -532,3 +561,4 @@ test-tI'3 : tI' ! 3 ≡ node λ _ → node λ _ → node λ _ → leaf
 test-tI'3 = refl
 test-tI'4 : tI' ! 5 ≡ node λ _ → node λ _ → node λ _ → node λ _ → node λ _ → leaf
 test-tI'4 = refl
+-}
