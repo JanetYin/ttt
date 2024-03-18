@@ -52,10 +52,10 @@ tail-≈ (++∞ {n = n} {xs} {ys}) = -- ++∞ {xs = tail xs} {ys}
 -}
 
 finite-dec : ∀{i}{A : Set i}{n : ℕ} → 
-  DecidableEquality A → (xs ys : CoVec A (embed n)) → Dec (xs ≈V ys)
-finite-dec {n = zero} e xs ys = yes (transV (CoVec-0-η xs) (symV (CoVec-0-η ys)))
-finite-dec {n = suc n} e xs ys with e (head xs) (head ys)
-finite-dec {n = suc n} e xs ys | no p = no λ x → p (head-≡ x)
-finite-dec {n = suc n} e xs ys | yes p with finite-dec {n = n} e (tail xs) (tail ys) 
-finite-dec {n = suc n} e xs ys | yes p | no q = no λ x → q (tail-≈ x)
-finite-dec {n = suc n} e xs ys | yes p | yes q = yes (p ∷V q)
+  ⦃ DecidableEquality A ⦄ → (xs ys : CoVec A (embed n)) → Dec (xs ≈V ys)
+finite-dec {n = zero} ⦃ e ⦄ xs ys = yes (transV (CoVec-0-η xs) (symV (CoVec-0-η ys)))
+finite-dec {n = suc n} ⦃ DecProof e ⦄ xs ys with e (head xs) (head ys)
+finite-dec {n = suc n} ⦃ DecProof e ⦄ xs ys | no p = no λ x → p (head-≡ x)
+finite-dec {n = suc n} ⦃ pr@(DecProof e) ⦄ xs ys | yes p with finite-dec {n = n} ⦃ pr ⦄ (tail xs) (tail ys)
+finite-dec {n = suc n} ⦃ DecProof e ⦄ xs ys | yes p | no q = no λ x → q (tail-≈ x)
+finite-dec {n = suc n} ⦃ DecProof e ⦄ xs ys | yes p | yes q = yes (p ∷V q)

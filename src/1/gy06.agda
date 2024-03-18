@@ -1,10 +1,46 @@
 module gy06 where
 
-open import Lib
+open import Lib -- hiding (IsNotZero∞)
+import Lib.Containers.List as L
+import Lib.Containers.Vector as V
 
-----------------------------------------------
--- Some Sigma types
-----------------------------------------------
+---------------------------------------------------------
+-- Sigma types
+---------------------------------------------------------
+
+-- Vissza a Vec-hez, de függőtípusos rendezett párral.
+
+fromList : {A : Set}(as : List A) → {!    !}
+fromList = {!!}
+
+{-
+record
+-}
+what : Σ ℕ (Vec Bool)
+what = {!   !} , {!   !}
+
+filter : {A : Set}{n : ℕ}(f : A → Bool) → Vec A n → Σ ℕ (Vec A) -- ezen lehet pontosítani, hiszen n elemnél nem kéne legyen benne több elem soha.
+filter = {!   !}
+
+test-filter : filter {ℕ} (3 <ᵇ_) (4 ∷ 3 ∷ 2 ∷ 5 ∷ []) ≡ (2 , 4 ∷ 5 ∷ [])
+test-filter = refl
+
+smarterLengthList : ∀{i}{A : Set i}{n : ℕ} → List A → {!    !}
+smarterLengthList = {!   !}
+
+smarterLengthVec : ∀{i}{A : Set i}{n : ℕ} → Vec A n → {!    !}
+smarterLengthVec = {!   !}
+
+minMax' : ℕ → ℕ → ℕ × ℕ
+minMax' n m = {!   !}
+
+-- Ugyanez sokkal jobban, de leginkább pontosabban.
+-- Az előző változatban vissza tudok adni csúnya dolgokat is.
+-- Pl. konstans (0 , 0)-t.
+minMax : (n m : ℕ) → ?
+minMax n m = {!   !}
+
+---------------------------------------------------------
 
 Σ=⊎ : {A B : Set} → Σ Bool (if_then A else B) ↔ A ⊎ B
 Σ=⊎ = {!!}
@@ -27,9 +63,45 @@ dependentCurry : {A : Set}{B : A → Set}{C : (a : A) → B a → Set} →
   ((a : A)(b : B a) → C a b) ↔ ((w : Σ A B) → C (fst w) (snd w))
 dependentCurry = {!!}
 
----------------------------------------------------------
--- propositional logic
 ------------------------------------------------------
+-- Conat -- Pihenés
+------------------------------------------------------
+{-
+IsNotZero∞ : ℕ∞ → Set
+IsNotZero∞ n = {!!}
+-}
+
+------------------------------------------------------
+-- CoVec -- NEM lesz vizsgában, csak érdekesség most.
+------------------------------------------------------
+
+infixr 5 _∷_
+record CoVec {ℓ}(A : Set ℓ) (n : ℕ∞) : Set ℓ where
+  coinductive
+  constructor _∷_
+  field
+    head : .⦃ IsNotZero∞ n ⦄ → A
+    tail : .⦃ IsNotZero∞ n ⦄ → CoVec A (pred∞'' (pred∞ n))
+
+open CoVec public
+-- \{{ = ⦃
+-- \}} = ⦄
+
+[] : ∀{i}{A : Set i} → ?
+[] = ?
+
+[1] : CoVec ℕ 1
+[1] = {!!}
+
+replicate : ∀{i}{A : Set i} → ?
+replicate n a = ?
+
+map : ∀{i j}{A : Set i}{B : Set j}{n : ℕ∞} → {!!}
+map = {!!}
+
+---------------------------------------------------------
+-- propositional logic -- Innentől lefelé lesz vizsgában.
+---------------------------------------------------------
 
 -- Curry-Howard izomorfizmus
 -- Elmélet:
@@ -51,6 +123,8 @@ anything = {!!}
 
 ret : {X : Set} → X → ¬ ¬ X
 ret = {!!}
+
+-- Másik irány?
 
 fun : {X Y : Set} → (¬ X) ⊎ Y → (X → Y)
 fun = {!!}
@@ -124,8 +198,7 @@ f1 = {!!}
 f2 : ({X Y : Set} → ¬ (X × Y) → ¬ X ⊎ ¬ Y) → {X Y : Set} → ¬ ¬ (X ⊎ Y) → ¬ ¬ X ⊎ ¬ ¬ Y
 f2 = {!!}
 
-----------------------------------------------------------------------
--- Not exactly first order logic but kinda is and kinda isn't.
+-- Not exactly first order logic but kinda is.
 
 f3 : Dec ((X Y : Set) → X ⊎ Y → Y)
 f3 = {!!}

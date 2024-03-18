@@ -1,65 +1,59 @@
 module gy09 where
 
-open import Lib hiding (sym; trans; cong; subst; idl+; idr+; sucr+; ass+; comm+; dist+*; nullr*; idl*; idr*; sucr*; ass*; comm*)
+open import Lib
 
 ---------------------------------------------------------
--- equality
+-- equational reasoning
 ------------------------------------------------------
 
-sym : ∀{i}{A : Set i}{x y : A} → x ≡ y → y ≡ x
-sym = {!!}
+p4 : (x y : ℕ) → ((x + (y + zero)) + x) ≡ (2 * x + y)
+p4 = {!!}
 
-trans : ∀{i}{A : Set i}{x y z : A} → x ≡ y → y ≡ z → x ≡ z
-trans = {!!}
+p3 : (a b : ℕ) → a + a + b + a * 0 ≡ 2 * a + b
+p3 = {!!}
 
-cong : ∀{i j}{A : Set i}{B : Set j}(f : A → B){x y : A} → x ≡ y → f x ≡ f y
-cong = {!!}
+p2 : (a b c : ℕ) → c * (b + 1 + a) ≡ a * c + b * c + c
+p2 = {!!}
 
-subst : ∀{i j}{A : Set i}(P : A → Set j){x y : A} → x ≡ y → P x → P y
-subst = {!!}
+[m+n]^2=m^2+2mn+n^2 : (m n : ℕ) → (m + n) * (m + n) ≡ m * m + 2 * m * n + n * n
+[m+n]^2=m^2+2mn+n^2 = {!!}
 
----------------------------------------------------------
--- properties of +,*
-------------------------------------------------------
+{-
+infixr 8 _^'_
+_^'_ : ℕ → ℕ → ℕ
+x ^' zero  = 1
+x ^' suc n = x * x ^' n
 
-idl+ : (n : ℕ) → zero + n ≡ n
-idl+ = {!!}
+infixr 8 _^_
+_^_ : (x y : ℕ) → .⦃ y + x ≢ℕ 0 ⦄ → ℕ
+x ^ zero = 1
+x ^ suc zero = x
+x ^ suc (suc y) = x * (x ^ suc y)
 
-idr+ : (n : ℕ) → n + zero ≡ n
-idr+ = {!!}
+-- A vesszős definíciót érdemes használni.
+-- A simáról nehéz állításokat bizonyítani.
+-}
 
-sucr+ : (n m : ℕ) → n + suc m ≡ suc (n + m)
-sucr+ = {!!}
+p1 : (a b : ℕ) → (a + b) ^' 2 ≡ a ^' 2 + 2 * a * b + b ^' 2
+p1 = {!!}
 
-ass+ : (m n o : ℕ) → (m + n) + o ≡ m + (n + o)
-ass+ = {!!}
+0^ : (n : ℕ) → 0 ^' (suc n) ≡ 0
+0^ = {!!}
 
-comm+-helper : (n m : ℕ) → suc n + m ≡ n + suc m
-comm+-helper = {!!}
+^0 : (a : ℕ) → a ^' 0 ≡ 1
+^0 = {!!}
 
-comm+ : (m n : ℕ) → m + n ≡ n + m
-comm+ = {!!}
+1^ : (n : ℕ) → 1 ^' n ≡ 1
+1^ = {!!}
 
-dist+* : (m n o : ℕ) → (n + o) * m ≡ n * m + o * m
-dist+* = {!!}
+^1 : (a : ℕ) → a ^' 1 ≡ a
+^1 = {!!}
 
-nullr* : (n : ℕ) → n * 0 ≡ 0
-nullr* = {!!}
+^+ : (a m n : ℕ) → a ^' (m + n) ≡ a ^' m * a ^' n
+^+ = {!!}
 
-idl* : (n : ℕ) → 1 * n ≡ n
-idl* = {!!}
+^* : (a m n : ℕ) → a ^' (m * n) ≡ (a ^' m) ^' n
+^* = {!!}
 
-idr* : (n : ℕ) → n * 1 ≡ n
-idr* = {!!}
-
-sucr* : (n m : ℕ) → n * suc m ≡ n + n * m
-sucr* = {!!}
-
-ass* : (m n o : ℕ) → (m * n) * o ≡ m * (n * o)
-ass* = {!!}
-
-comm*-helper : (n m : ℕ) → n + n * m ≡ n * suc m
-comm*-helper = {!!}
-
-comm* : (m n : ℕ) → m * n ≡ n * m
-comm* = {!!}
+*^ : (a b n : ℕ) → (a * b) ^' n ≡ a ^' n * b ^' n
+*^ = {!!}

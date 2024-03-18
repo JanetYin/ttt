@@ -9,6 +9,7 @@ module Lib where
 open import Lib.Class public
 open import Lib.Level public
 open import Lib.Function public
+open import Lib.Reflection public
 open import Lib.Unit public
   renaming (_≟_ to _≟⊤_)
 open import Lib.Empty public

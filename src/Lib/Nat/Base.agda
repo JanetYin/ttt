@@ -41,9 +41,13 @@ case-ℕ : ∀{i}{A : Set i} → ℕ → A → A → A
 case-ℕ zero    z s = z
 case-ℕ (suc _) z s = s
 
-rec-ℕ : ∀{i}{A : Set i} → ℕ → A → (A → A) → A
-rec-ℕ zero    a f = a
-rec-ℕ (suc n) a f = f (rec-ℕ n a f)
+ite-ℕ : ∀{i}{A : Set i} → ℕ → A → (A → A) → A
+ite-ℕ zero z s = z
+ite-ℕ (suc n) z s = s (ite-ℕ n z s)
+
+rec-ℕ : ∀{i}{A : Set i} → ℕ → A → (ℕ → A → A) → A
+rec-ℕ zero    z s = z
+rec-ℕ (suc n) z s = s n (rec-ℕ n z s)
 
 elim-ℕ : ∀{i}{A : ℕ → Set i} → (n : ℕ) → A 0 → ({k : ℕ} → A k → A (suc k)) → A n
 elim-ℕ         zero    a0 f = a0
