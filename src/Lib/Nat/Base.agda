@@ -9,6 +9,7 @@ open import Lib.Empty
 open import Lib.Sigma.Type
 open import Lib.Sum.Type
 open import Lib.Equality
+open import Lib.Containers.List.Type
 open import Lib.Nat.Equality.Base
 open import Agda.Builtin.Nat public
   hiding (Nat ; suc ; zero)
@@ -36,6 +37,22 @@ infixl 50 _!
 _! : ℕ → ℕ
 zero  ! = 1
 suc n ! = suc n * n !
+
+infixl 7 _div_
+_div_ : ℕ → ℕ → ℕ
+n div 1+m = div-helper 0 1+m n 1+m
+
+infixl 7 _mod_
+_mod_ : ℕ → ℕ → ℕ
+n mod 1+m = mod-helper 0 1+m n 1+m
+
+digits : ℕ → List ℕ
+digits 0 = 0 ∷ []
+digits n@(suc _) = digitsWithFuel n n [] where
+  digitsWithFuel : ℕ → ℕ → List ℕ → List ℕ
+  digitsWithFuel fuel zero acc = acc
+  digitsWithFuel zero n@(suc _) acc = []
+  digitsWithFuel (suc fuel) n@(suc _) acc = digitsWithFuel fuel (n div 9) (n mod 9 ∷ acc)
 
 case-ℕ : ∀{i}{A : Set i} → ℕ → A → A → A
 case-ℕ zero    z s = z
