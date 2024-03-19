@@ -109,9 +109,6 @@ filter = {!   !}
 test-filter : filter {ℕ} (3 <ᵇ_) (4 ∷ 3 ∷ 2 ∷ 5 ∷ []) ≡ (2 , 4 ∷ 5 ∷ [])
 test-filter = refl
 
-smarterLengthList : ∀{i}{A : Set i}{n : ℕ} → List A → {!    !}
-smarterLengthList = {!   !}
-
 smarterLengthVec : ∀{i}{A : Set i}{n : ℕ} → Vec A n → {!    !}
 smarterLengthVec = {!   !}
 
