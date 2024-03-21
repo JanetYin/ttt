@@ -1,91 +1,99 @@
 module gy07 where
 
 open import Lib
-
----------------------------------------------------------
--- propositional logic
-------------------------------------------------------
-
-subt-prod : {A A' B B' : Set} → (A → A') → (B → B') → A × B → A' × B'
-subt-prod = {!!}
-
-subt-fun : {A A' B B' : Set} → (A → A') → (B → B') → (A' → B) → (A → B')
-subt-fun = {!!}
-
-anything : {X Y : Set} → ¬ X → X → Y
-anything = {!!}
-
-ret : {X : Set} → X → ¬ ¬ X
-ret = {!!}
-
-fun : {X Y : Set} → (¬ X) ⊎ Y → (X → Y)
-fun = {!!}
-
--- De Morgan
-
-dm1 : {X Y : Set} →  ¬ (X ⊎ Y) ↔ ¬ X × ¬ Y
-dm1 = {!!}
-
-dm2 : {X Y : Set} → ¬ X ⊎ ¬ Y → ¬ (X × Y)
-dm2 = {!!}
-
-dm2b : {X Y : Set} → ¬ ¬ (¬ (X × Y) → ¬ X ⊎ ¬ Y)
-dm2b = {!!}
-
--- stuff
-
-nocontra : {X : Set} → ¬ (X ↔ ¬ X)
-nocontra = {!!}
-
-¬¬invol₁ : {X : Set} → ¬ ¬ ¬ ¬ X ↔ ¬ ¬ X
-¬¬invol₁ = {!!}
-
-¬¬invol₂ : {X : Set} → ¬ ¬ ¬ X ↔ ¬ X
-¬¬invol₂ = {!!}
-
-nnlem : {X : Set} → ¬ ¬ (X ⊎ ¬ X)
-nnlem = {!!}
-
-nndnp : {X : Set} → ¬ ¬ (¬ ¬ X → X)
-nndnp = {!!}
-
-dec2stab : {X : Set} → (X ⊎ ¬ X) → (¬ ¬ X → X)
-dec2stab = {!!}
-
--- you have to decide:
-{-
-Dec : Set → Set
-Dec A = A ⊎ ¬ A
--}
-
 open import Lib.Dec.PatternSynonym
 
-ee1 : {X Y : Set} → Dec (X ⊎ Y → ¬ ¬ (Y ⊎ X))
-ee1 = {!!}
+------------------------------------------------------
+-- statements as parameters
+------------------------------------------------------
 
-ee2 : {X : Set} → Dec (¬ (X ⊎ ¬ X))
-ee2 = {!!}
+blowUp : ((A : Set) → ¬ A) → ⊥
+blowUp f = ?
+-- what's the difference with this?
+-- (A : Set) → ¬ A → ⊥
 
-e3 : {X : Set} → Dec (¬ (X → (¬ X → X)))
-e3 = {!!}
+-- something like this may appear in the exam
 
-e4 : Dec ℕ
-e4 = {!!}
+---------------------------------------------------------
+-- predicate (first order) logic example
+---------------------------------------------------------
 
-e5 : Dec ⊥
-e5 = {!!}
+notExists↔noneOf : ∀{i}{A : Set i} → (P : A → Set) →
+                        (∀ x → ¬ (P x)) ↔ ¬ (Σ A (λ x → P x))
+notExists↔noneOf = {!!}
 
-e6 : {X : Set} → Dec (⊥ → X ⊎ ¬ X)
-e6 = {!!}
+module People
+  (Person    : Set)
+  (Ann       : Person)
+  (Kate      : Person)
+  (Peter     : Person)
+  (_childOf_ : Person → Person → Set)
+  (_sameAs_  : Person → Person → Set) -- ez most itt az emberek egyenlosege
+  where
 
-e7 : {X : Set} → Dec (X × ¬ X → ¬ X ⊎ X)
-e7 = {!!}
+  -- Define the _hasChild predicate.
+  _hasChild : Person → Set
+  x hasChild = {!!}
 
-e8 : {X : Set} → Dec ((X → X) → ⊥)
-e8 = {!!}
+  -- Formalise: Ann is not a child of Kate.
+  ANK : Set
+  ANK = {!!}
 
-f1 : {X Y : Set} → ¬ ¬ X ⊎ ¬ ¬ Y → ¬ ¬ (X ⊎ Y)
-f1 = {!!}
+  -- Formalise: there is someone with exactly one child.
+  ONE : Set
+  ONE = {!!}
 
-f2 : ({X Y : Set} → ¬ (X × Y) → ¬ X ⊎ ¬ Y) → {X Y : Set} → ¬ ¬ (X ⊎ Y) → ¬ ¬ X ⊎ ¬ ¬ Y
-f2 = {!!}
+  -- Define the relation _parentOf_.
+  _parentOf_ : Person → Person → Set
+  x parentOf y = {!!}
+
+  -- Formalise: No one is the parent of everyone.
+  NOPE : Set
+  NOPE = {!!}
+
+  -- Prove that if Ann has no children then Kate is not the child of Ann.
+  AK : ¬ (Σ Person λ y → y childOf Ann) → ¬ (Kate childOf Ann)
+  AK = {!!}
+
+  -- Prove that if there is no person who is his own parent than no one is the parent of everyone.
+  ¬xpopxthenNOPE : ¬ (Σ Person λ x → x parentOf x) → NOPE
+  ¬xpopxthenNOPE = {!!}
+
+---------------------------------------------------------
+-- predicate (first order) logic laws
+---------------------------------------------------------
+
+∀×-distr  :    (A : Set)(P : A → Set)(Q : A → Set) → ((a : A) → P a × Q a)  ↔ ((a : A) → P a) × ((a : A) → Q a)
+∀×-distr = {!!}
+
+∀⊎-distr  :    (A : Set)(P : A → Set)(Q : A → Set) → ((a : A) → P a) ⊎ ((a : A) → Q a) → ((a : A) → P a ⊎ Q a)
+∀⊎-distr = {!!}
+-- ez miért csak odafelé megy?
+-- miért nem ↔ van közte?
+
+Σ×-distr  :    (A : Set)(P : A → Set)(Q : A → Set) → (Σ A λ a → P a × Q a)  → Σ A P × Σ A Q
+Σ×-distr = {!!}
+
+Σ⊎-distr  :    (A : Set)(P : A → Set)(Q : A → Set) → (Σ A λ a → P a ⊎ Q a)  ↔ Σ A P ⊎ Σ A Q
+Σ⊎-distr = {!!}
+
+¬∀        :    (A : Set)(P : A → Set)              → (Σ A λ a → ¬ P a)      → ¬ ((a : A) → P a)
+¬∀ = {!!}
+
+-- Ugyanez van a fájl tetején is:
+¬Σ        :    (A : Set)(P : A → Set)              → (¬ Σ A λ a → P a)      ↔ ((a : A) → ¬ P a)
+¬Σ = {!!}
+
+¬¬∀-nat   :    (A : Set)(P : A → Set)              → ¬ ¬ ((x : A) → P x)    → (x : A) → ¬ ¬ (P x)
+¬¬∀-nat = {!!}
+
+∀⊎-distr' : ¬ ((A : Set)(P : A → Set)(Q : A → Set) → (((a : A) → P a ⊎ Q a) → ((a : A) → P a) ⊎ ((a : A) → Q a)))
+∀⊎-distr' = {!!}
+
+Σ×-distr' : ¬ ((A : Set)(P : A → Set)(Q : A → Set) → (Σ A P × Σ A Q → Σ A λ a → P a × Q a))
+Σ×-distr' w = {!!}
+ 
+Σ∀       : (A B : Set)(R : A → B → Set)        → (Σ A λ x → (y : B) → R x y) → (y : B) → Σ A λ x → R x y
+Σ∀ = {!!}
+AC       : (A B : Set)(R : A → B → Set)        → ((x : A) → Σ B λ y → R x y) → Σ (A → B) λ f → (x : A) → R x (f x)
+AC = {!!}

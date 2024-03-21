@@ -328,7 +328,7 @@ recNat'-test2 = refl
 
 -- FEL: add meg ujra az osszes fent fuggvenyt mintaillesztes nelkul, iteNat es/vagy recNat hasznalataval!
 
-{-
+
 ---------------------------------------------------------
 -- lists
 ---------------------------------------------------------
@@ -342,7 +342,8 @@ infixr 5 _∷_
 
 -- FELADAT: Határozzuk meg egy lista elemszámát!
 length : {A : Set} → List A → ℕ
-length = {!!}
+length [] = 0
+length (_ ∷ xs) = suc (length xs)
 
 length-test1 : length {ℕ} (1 ∷ 2 ∷ 3 ∷ []) ≡ 3
 length-test1 = refl
@@ -351,14 +352,16 @@ length-test2 = refl
 
 -- FELADAT: Adjuk össze egy lista számait.
 sumList : List ℕ → ℕ
-sumList = {!!}
+sumList [] = 0
+sumList (x ∷ xs) = x + sumList xs
 
 sumList-test : sumList (1 ∷ 2 ∷ 3 ∷ []) ≡ 6
 sumList-test = refl
 
 -- FELADAT: Fűzzünk össze két listát!
 _++_ : {A : Set} → List A → List A → List A
-_++_ = {!!}
+[] ++ y = y
+(x ∷ xs) ++ y = x ∷ xs ++ y
 infixr 5 _++_
 
 ++-test : the ℕ 3 ∷ 2 ∷ [] ++ 1 ∷ 4 ∷ [] ≡ 3 ∷ 2 ∷ 1 ∷ 4 ∷ []
@@ -366,7 +369,8 @@ infixr 5 _++_
 
 -- FELADAT: Alkalmazzunk egy függvényt egy lista minden elemén!
 map : {A B : Set} → (A → B) → List A → List B
-map = {!!}
+map _ [] = []
+map f (x ∷ xs) = f x ∷ map f xs
 
 map-test : map (_+ 2) (3 ∷ 9 ∷ []) ≡ (5 ∷ 11 ∷ [])
 map-test = refl
@@ -376,13 +380,14 @@ map-test = refl
 -- ha a listában van elem, akkor alkalmazzunk rá egy függvényt az alapértékkel úgy, hogy az kifejezés jobbra legyen zárójelezve.
 -- Haskell-ben foldr
 iteList : {A B : Set} → B → (A → B → B) → List A → B
-iteList n c as = {!   !}
+iteList n c [] = n
+iteList n c (x ∷ as) = c x (iteList n c as)
 
-iteList-test : iteList 3 _^_ (2 ∷ 3 ∷ []) ≡ 2 ^ 27
+iteList-test : iteList 3 _*_ (2 ∷ 3 ∷ []) ≡ 18
 iteList-test = refl
 
 -- FEL: add meg a fenti fuggvenyeket (length, ..., map) iteList segitsegevel!
-
+{-
 ---------------------------------------------------------
 -- trees
 ---------------------------------------------------------

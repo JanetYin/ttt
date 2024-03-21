@@ -6,81 +6,18 @@ open import Lib.Containers.List hiding (zipWith; head; tail)
 open import Lib.Containers.Stream hiding (zipWith; coiteStream)
 
 ---------------------------------------------------------
--- típusok η-szabályai
----------------------------------------------------------
-{-
-Emlékeztető: A η-szabály azt mondja meg, hogy mit tegyünk, ha destruktorra alkalmazunk konstruktort.
-Pl. függvények esetén (λ a → f a) ≡ f, ahol a függvényalkalmazás a destruktor és a λ a konstruktor.
-
-Természetesen más típusoknak is ugyanúgy van η-szabálya.
-
-Vegyük példaként a ⊤-ot:
-Destruktora: ite⊤ : A → ⊤ → A
-
-Ez alapján az η-szabály az alábbi lesz:
-ite⊤ tt x ≡ x
-
-Ez természetesen Agdában bizonyítható is.
--}
-
-ite⊤ : ∀{i}{A : Set i} → A → ⊤ → A
-ite⊤ x _ = x
-
-⊤η : ∀{x} → ite⊤ tt x ≡ x
-⊤η = refl
-
-{-
-Ahogy emlékeztek rá, a ⊤ η-szabálya úgy néz ki, hogy ∀ a → a ≡ tt,
-tehát itt is igaz lesz, hogy egy típusnak több egymással ekvivalens η-szabálya lehet.
-
-Nézzük újra példaként a Bool típust. A β-szabályai a következők voltak:
-if false then u else v ≡ u
-if true then u else v ≡ v
-
-Mi lehet az η-szabály? Hogy lehet "destruktorra alkalmazni konstruktort" ilyen esetben?
-Az if_then_else_ esetén a "then" és az "else" ágban lévő dolgok tetszőleges értékek lehetnek;
-ide akár konstruktort is be lehet írni. Tehát úgy lehet felépíteni az η-szabályokat, hogy a destruktor megfelelő
-helyeire beírom az azonos típus konstruktorait.
-Bool esetén ez azt jelenti, hogy az if_then_else_-ben a második és harmadik helyre kell a Bool két konstruktorát írni.
-Ezen felül úgy kell beírni a két konstruktort, hogy alapvetően az "identitás" függvényt kapjuk az adott típuson.
-Bool esetén tehát úgy kell az if_then_else_-et felparaméterezni, hogy a false-ra false legyen az eredmény, true-ra pedig true.
-
-Ez alapján mi lesz a Bool-oknak egy lehetséges η-szabálya?
-Válasz:
-if false then true else false ≡ false
-if true then true else false ≡ true
-
-Ugyanezt az ismert 𝟛 típuson is el lehet játszani.
-data 𝟛 : Set where
-  a1 a2 a3 : 𝟛
-
-Ismert a destruktor: ite𝟛 : A → A → A → 𝟛 → A
-
-Mi lesz a 𝟛 η-szabálya?
-Válasz:
-
-Természetes számokon a helyzet szintén nem változik.
-Ismert a destruktor: iteℕ : A → (A → A) → ℕ → A
-
-Mi lesz ℕ η-szabálya?
-Válasz:
-
--}
-
----------------------------------------------------------
 -- positivity
 ---------------------------------------------------------
 
 -- Miért nem enged agda bizonyos típusokat definiálni? Pl. alapesetben az alábbit sem.
 
 {-# NO_POSITIVITY_CHECK #-}
-data Tm  : Set where
+data Tm : Set where
   lam : (Tm → Tm) → Tm
 
 -- FELADAT: Tm-ből adjuk vissza a lam értékét.
 app : Tm → (Tm → Tm)
-app (lam x) = x
--- app x y = y 
+app (lam x) y = x y 
 
 self-apply : Tm
 self-apply = lam (λ t → app t t)
@@ -95,11 +32,11 @@ data Weird : Set where
   -- Hogy kell elolvasni magyarul a "foo" konstruktort?
 
 unweird : Weird → ⊥
-unweird (foo x) = x (foo x)
+unweird = {!!}
 
 -- ⊥ típusú értéknek TILOS léteznie, ellenkező esetben a rendszer inkonzisztens, nem használható SEMMIRE.
 bad : ⊥
-bad = unweird (foo unweird)
+bad = {!!}
 
 ---------------------------------------------------------
 -- coinductive types
@@ -123,7 +60,7 @@ open Stream
 -- Copattern matching!
 -- FELADAT: Add meg azt a végtelen listát, amely csak 0-kból áll.
 zeroes : Stream ℕ
-head zeroes = zero
+head zeroes = 0
 tail zeroes = zeroes
 -- Honnan tudja agda, hogy ez totális?
 -- Termination checker nem tud futni, hiszen a lista végtelen.
@@ -132,8 +69,8 @@ tail zeroes = zeroes
 -- by pattern match on n
 -- FELADAT: Add meg azt a listát, amely n-től 0-ig számol vissza egyesével.
 countDownFrom : ℕ → List ℕ
-countDownFrom zero = zero ∷ []
-countDownFrom (suc n) = suc n ∷ countDownFrom n
+countDownFrom zero = 0 ∷ []
+countDownFrom v@(suc n) = v ∷ countDownFrom n
 
 -- from n is not by pattern match on n
 -- copattern match on Stream
@@ -144,61 +81,52 @@ tail (from n) = from (suc n)
 
 -- pointwise addition
 zipWith : {A B C : Set} → (A → B → C) → Stream A → Stream B → Stream C
-head (zipWith f xs xy) = f (head xs) (head xy)
-tail (zipWith f xs xy) = zipWith f (tail xs) (tail xy)
+head (zipWith f xs ys) = f (head xs) (head ys)
+tail (zipWith f xs ys) = zipWith f (tail xs) (tail ys)
 
 -- Definiálható-e a filter sima listákon?
 filterL : {A : Set} → (A → Bool) → List A → List A
-filterL p [] = []
-filterL p (x ∷ ys) with p x
-filterL p (x ∷ ys) | false = filterL p ys
-... | true = x ∷ filterL p ys
+filterL _ []       = []
+filterL f (x ∷ xs) with f x
+... | false = filterL f xs
+... | true  = x ∷ filterL f xs
 
 -- Definiálható-e a filter Stream-eken?
--- Válasz: NEM!
-{-
+{- NEM LEHET MEGÍRNI
 filterS : {A : Set} → (A → Bool) → Stream A → Stream A
 head (filterS P xs) with P (head xs)
 ... | false = {!   !}
 ... | true = head xs
-tail (filterS P xs) = {!   !}
+tail (filterS P xs) = filterS P (tail xs)
 -}
 
 -- one element from the first stream, then from the second stream, then from the first, and so on
 interleave : {A : Set} → Stream A → Stream A → Stream A
-head (interleave xs ys) = head xs
-tail (interleave xs ys) = interleave ys (tail xs)
+head (interleave x y) = head x
+head (tail (interleave x y)) = head y
+tail (tail (interleave x y)) = interleave (tail x) (tail y)
 
 -- get the n^th element of the stream
 get : {A : Set} → ℕ → Stream A → A
-get zero ls = head ls
-get (suc x) ls = get x (tail ls)
+get zero xs    = head xs
+get (suc x) xs = get x (tail xs)
 
 -- byIndices [0,2,3,2,...] [1,2,3,4,5,...] = [1,3,4,2,...]
 byIndices : {A : Set} → Stream ℕ → Stream A → Stream A
-head (byIndices ns as) = get (head ns) as
-tail (byIndices ns as) = byIndices (tail ns) as
+head (byIndices ns xs) = get (head ns) xs
+tail (byIndices ns xs) = byIndices (tail ns) xs
 
 -- iteℕ : (A : Set) → A → (A → A)  → ℕ → A
 --        \______________________/
 --         ℕ - algebra
 
--- Mi lesz a Stream konstruktora?
-coiteStream : {A B : Set} → A → (A → A) → Stream B → Stream A
---               \_______________________________/
+coiteStream : {A : Set} (B : Set) → (B → A) → (B → B) → B → Stream A
+--                       \____________________________/
 --                        Stream A - coalgebra
-head (coiteStream x f st) = x
-tail (coiteStream x f st) = coiteStream (f x) f (tail st)
+head (coiteStream B h t b) = h b
+tail (coiteStream B h t b) = coiteStream B h t (t b)
 
 -- ex: redefine the above functions using coiteStream
-
-zeroes' : Stream ℕ
-zeroes' = coiteStream 0 (λ x → x) zeroes
-
-{-
-zipWith' : {A B C : Set} → (A → B → C) → Stream A → Stream B → Stream C
-zipWith' f as bs = {!   !}
--}
 
 -- ex: look at conatural numbers in Thorsten's book and do the exercises about them
 
@@ -213,10 +141,7 @@ record Machine : Set where
 open Machine
 
 calculatorFrom : ℕ → Machine
-getNumber (calculatorFrom n) = n
-add (calculatorFrom n) x = calculatorFrom $ n + x
-mul (calculatorFrom n) x = calculatorFrom $ x * n
-reset (calculatorFrom _) = calculatorFrom 0
+calculatorFrom n = {!!}
 
 c0 c1 c2 c3 c4 c5 : Machine
 c0 = calculatorFrom 0
@@ -234,7 +159,6 @@ c5 = add c4 2
 -- + Croissant: 400-ba kerül, kezdetben van 75 darab.
 -- + Snickers: 375-be kerül, kezdetben van 60 darab.
 -- Tudunk 1 terméket vásárolni, ha van elég bedobott pénzünk, ekkor a darabszámból vonjunk le egyet (ha lehet) és adjuk vissza a visszajárót, a kreditet nullázzuk le.
--- A gép tartalmát újra tudjuk tölteni, ekkor twix-ből legyen újra 50 darab, croissant-ból 75, snickers-ből pedig 60.
 
 -- conatural numbers
 {-
@@ -245,30 +169,8 @@ record ℕ∞ : Set where
 open ℕ∞
 -}
 
-{-
-_+_ : ℕ → ℕ → ℕ
-zero + y = y
-(suc x) + y = suc (x + y)
--}
-
 _+∞_ : ℕ∞ → ℕ∞ → ℕ∞
-pred∞ (x +∞ y) with pred∞ x
-... | just h = just (h +∞ y) 
--- h = x - 1; (x + y) - 1 = x + y - 1 = y + x - 1 = y + (x - 1) = (x - 1) + y = h + y
-... | nothing = pred∞ y
-
--- Zserbó bulizik
-
-suc∞' : ℕ∞ → ℕ∞
-pred∞ (suc∞' x) = just x
-
-{-
-NEM TERMINÁL
-_+∞''_ : ℕ∞ → ℕ∞ → ℕ∞
-x +∞'' y with pred∞ x
-... | just h = (h +∞'' (suc∞' y))
-... | nothing = y
--}
+_+∞_ = {!!}
 
 -- Ez a függvény létezik, ezzel lehet megnézni
 -- egy conat tényleges értékét.
@@ -278,24 +180,38 @@ x +∞'' y with pred∞ x
 {-
 ℕ∞→ℕ : ℕ → ℕ∞ → Maybe ℕ
 ℕ∞→ℕ zero _ = nothing
-ℕ∞→ℕ (suc n) c with pred∞ c  
+ℕ∞→ℕ (suc n) c with pred∞ c
 ... | zero∞ = just 0
 ... | suc∞ b with ℕ∞→ℕ n b
 ... | nothing = nothing
 ... | just x = just (suc x)
-
-ℕ∞→ℕ : ℕ → ℕ∞ → Maybe ℕ
-ℕ∞→ℕ zero _ = nothing
-ℕ∞→ℕ (suc n) c with pred∞ c | ℕ∞→ℕ n b (ha tudná, mi az a `b`!)   
-... | zero∞  | _       = just 0
-... | suc∞ b | nothing = nothing
-... | suc∞ b | just x  = just (suc x)
-
 -}
 
 coiteℕ∞ : {B : Set} → (B → Maybe B) → B → ℕ∞
-pred∞ (coiteℕ∞ f b) with f b
-... | just x  = just (coiteℕ∞ f x)
-... | nothing = nothing
+coiteℕ∞ = {!!}
 
 -- TODO, further exercises: network protocols, simple machines: chocolate machine (input: coin, getChocolate, getBackCoins, output: error, chocolate, money back), some Turing machines, animations, IO, repl, shell
+
+avg3 : ℕ → ℕ → ℕ → ℕ
+avg3 zero zero zero = zero
+avg3 zero zero (suc zero) = zero
+avg3 zero zero (suc (suc zero)) = zero
+avg3 zero zero (suc (suc b)) = b
+avg3 zero (suc zero) zero = zero
+avg3 zero (suc (suc zero)) zero = zero 
+avg3 zero (suc (suc b)) zero = b
+avg3 (suc zero) zero zero = zero
+avg3 (suc (suc zero)) zero zero = zero 
+avg3 (suc (suc b)) zero zero = b
+
+avg3 zero (suc zero) (suc zero) = zero
+avg3 (suc zero) zero (suc zero) = zero
+avg3 (suc zero) (suc zero) zero = zero
+
+avg3 zero (suc zero) (suc (suc c)) = suc (avg3 zero zero c)
+avg3 (suc zero) zero (suc (suc c)) = suc (avg3 zero zero c)
+avg3 (suc zero) (suc (suc c)) zero = suc (avg3 zero zero c)
+
+avg3 zero (suc (suc b)) (suc c) = avg3 zero b c 
+avg3 (suc zero) (suc zero) (suc c) = suc (avg3 zero zero c)
+avg3 (suc zero) (suc (suc b)) (suc c) = suc (avg3 zero b c)
