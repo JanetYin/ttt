@@ -185,11 +185,14 @@ what = {!   !} , {!   !}
 take' : {A : Set}{n : ℕ} → ℕ → Vec A n → Σ ℕ λ n → Vec A n
 take' = {!!}
 
+drop' : {A : Set}{n : ℕ} → ℕ → Vec A n → Σ ℕ λ n → Vec A n
+drop' = {!!}
+
 filter : {A : Set}{n : ℕ}(f : A → Bool) → Vec A n → Σ ℕ (Vec A) -- ezen lehet pontosítani, hiszen n elemnél nem kéne legyen benne több elem soha.
 filter f [] = {!!}
 filter f (x ∷ x₁) with f x
-... | false = ?
-... | true = ?
+... | false = {!!}
+... | true = {!!}
 
 test-filter : filter {ℕ} (3 <ᵇ_) (4 ∷ 3 ∷ 2 ∷ 5 ∷ []) ≡ (2 , 4 ∷ 5 ∷ [])
 test-filter = refl
