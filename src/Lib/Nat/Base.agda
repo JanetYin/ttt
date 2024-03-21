@@ -36,7 +36,7 @@ x ^ suc n = x * x ^ n
 infixl 50 _!
 _! : ℕ → ℕ
 zero  ! = 1
-suc n ! = suc n * n !
+suc n ! = n ! * suc n
 
 infixl 7 _div_
 _div_ : ℕ → ℕ → ℕ
