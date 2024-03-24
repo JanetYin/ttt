@@ -34,10 +34,10 @@ test-filter : filter {ℕ} (3 <ᵇ_) (4 ∷ 3 ∷ 2 ∷ 5 ∷ []) ≡ (2 , 4 ∷
 test-filter = refl
 
 length' : ∀{i}{A : Set i}{n : ℕ} → Vec A n → ℕ
-length' _ = 0
+length' _ = 0 -- gyanús, ez nem igazán length.
 
 smarterLengthVec : ∀{i}{A : Set i}{n} → Vec A n → Σ ℕ (λ k → n ≡ k)
-smarterLengthVec {n = l} _ = l , refl
+smarterLengthVec {n = l} _ = l , refl -- eh, nem igazán sikerült az n-et kioptimalizálni így, de a kioptimalizáláshoz itt olyan dolog kéne, amit még nem tanultunk.
 
 minMax' : ℕ → ℕ → ℕ × ℕ
 minMax' n m = {!   !}
