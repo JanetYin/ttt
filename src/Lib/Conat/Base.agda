@@ -66,6 +66,10 @@ pred∞'' : Maybe ℕ∞ → ℕ∞
 pred∞ (pred∞'' nothing) = nothing
 pred∞'' (just x) = x
 
+predℕ∞ : (n : ℕ∞) → .⦃ IsNotZero∞ n ⦄ → ℕ∞
+predℕ∞ n with pred∞ n
+... | suc∞ x = x
+
 infixl 6 _+_ _+'_
 _+_ : ℕ∞ → ℕ∞ → ℕ∞
 _+'_ : Maybe ℕ∞ → ℕ∞ → Maybe ℕ∞
