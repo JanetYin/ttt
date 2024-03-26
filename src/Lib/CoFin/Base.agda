@@ -7,11 +7,23 @@ open import Lib.Maybe
 open import Lib.Sigma
 open import Lib.Function
 open import Lib.InstanceSigma.Type
+open import Lib.Sum
+open import Lib.Empty
+open import Lib.Equality
+open import Lib.Containers.CoVector
+open import Lib.WorkInProgressConcept.DoNotIncludeInLib.Lazy
+
+{-
+
+So close, yet so far away
+
+postulate
+  η-cofin : {n : ℕ∞} → (c c' : CoFin n) → fpred∞ c ≡ fpred∞ c' → c ≡ c'
+-}
 
 f∞ : CoFin ∞
 inz f∞ = tt
 fpred∞ f∞ = just f∞
-
 
 coiteCoFin : ∀{ℓ}{n : ℕ∞}(P : ℕ∞ → Set ℓ) →
   (ginz : ({n : ℕ∞} → P n → IsNotZero∞ n)) →
@@ -35,3 +47,35 @@ opaque -- sztem segít
     (seed : P n) →
     CoFin n
   coiteCoFinιΣ P gen seed = coiteCoFinΣ P (fst ιΣ↔Σ ⊚ gen) seed
+
+singular-cof1 : (c : CoFin 1) → fpred∞ c ≡ nothing
+singular-cof1 c with fpred∞ c
+... | just x = exfalso (coz x)
+... | nothing = refl
+
+cof1 : CoFin 1
+inz cof1 = tt
+fpred∞ cof1 = nothing
+
+cof2-1 : CoFin 2
+inz cof2-1 = tt
+fpred∞ cof2-1 = nothing
+
+cof2-2 : CoFin 2
+inz cof2-2 = tt
+fpred∞ cof2-2 = just cof1
+
+diff : cof2-1 ≢ cof2-2
+diff x with cong fpred∞ x
+... | ()
+
+uniq : (a : CoFin 2) → fpred∞ a ≡ fpred∞ cof2-1 ⊎ fpred∞ a ≡ fpred∞ cof2-2
+uniq a with fpred∞ a
+... | just x = inr (cong just {!!})
+... | nothing = inl refl
+
+
+_‼ᶜ_ : ∀{ℓ}{A : Set ℓ}{n : ℕ∞} → CoVec A n → CoFin n → Lazy A
+cs ‼ᶜ f with fpred∞ f
+... | just x = later (delay {!!}) -- todo ha a viktor megcsinálja
+... | nothing = now (head cs ⦃ inz f ⦄)
