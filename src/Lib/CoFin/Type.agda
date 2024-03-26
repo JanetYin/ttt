@@ -12,7 +12,7 @@ record CoFin (n : ℕ∞) : Set where
   constructor cofin
   field
     ⦃ inz ⦄ : IsNotZero∞ n
-    fpred∞ : Maybe (CoFin (pred∞'' (pred∞ n)))
+    fpred∞ : Maybe (CoFin (predℕ∞ n))
 
 open CoFin public
 
