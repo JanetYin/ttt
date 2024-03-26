@@ -11,6 +11,6 @@ record CoVec {ℓ}(A : Set ℓ) (n : ℕ∞) : Set ℓ where
   constructor _∷_
   field
     head : .⦃ IsNotZero∞ n ⦄ → A
-    tail : .⦃ IsNotZero∞ n ⦄ → CoVec A (pred∞'' (pred∞ n))
+    tail : .⦃ p : IsNotZero∞ n ⦄ → CoVec A (predℕ∞ n)
 
 open CoVec public
