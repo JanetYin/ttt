@@ -6,7 +6,7 @@ open import Lib.Conat
 open import Lib.Maybe
 open import Lib.Sigma
 open import Lib.Function
-open import Lib.InstanceSigma.Type
+-- open import Lib.InstanceSigma.Type
 open import Lib.Sum
 open import Lib.Empty
 open import Lib.Equality
@@ -46,7 +46,7 @@ opaque -- sztem segít
     (gen : {n : ℕ∞} → P n → ιΣ (IsNotZero∞ n) (Maybe (P (predℕ∞ n)))) →
     (seed : P n) →
     CoFin n
-  coiteCoFinιΣ P gen seed = coiteCoFinΣ P (fst ιΣ↔Σ ⊚ gen) seed
+  coiteCoFinιΣ P gen seed =  coiteCoFinΣ P gen seed -- coiteCoFinΣ P (fst ιΣ↔Σ ⊚ gen) seed
 
 singular-cof1 : (c : CoFin 1) → fpred∞ c ≡ nothing
 singular-cof1 c with fpred∞ c
