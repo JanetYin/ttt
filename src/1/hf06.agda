@@ -16,6 +16,94 @@ even 1 = false
 even (suc (suc n)) = even n
 
 --------------------------------------------------------
+-- Elmélet: Függőtípusok elemszámai
+--------------------------------------------------------
+{-
+A függőtípusok is algebrai adattípusoknak számítanak, így természetesen a függőtípusok elemszámai is megadhatók könnyedén.
+Nem véletlen, hogy a típusok nevei rendre Σ és Π.
+
+Emlékeztetőül:
+| A ⊎ B | = |A| + |B|
+| A × B | = |A| ∙ |B|
+| A → B | = |B| ^ |A|
+
+Tfh:
+P : Bool → Set
+P true = Bool
+P false = ⊥
+
+Σ Bool P hány elemű lesz?
+Ha a Bool-om true (1 konkrét érték), akkor Bool típusú eredményt kell a másik részbe írnom, tehát eddig 2¹ = 2
+De ha a Bool-om false (1 konkrét érték), akkor ⊥ típusú eredmény kell, tehát 0¹ = 0
+
+Tehát a nap végén | Σ Bool P | = |Bool| + |⊥| = 2, mert a P egy Bool-tól függő típust ad eredményül, tehát maga a típus vagy P true típusú értéket tartalmaz vagy P false-ot.
+Az ilyen "vagy" kapcsolatról megbeszéltük korábban, hogy az az összeadást jelenti.
+
+Legyen most:
+P : Maybe Bool → Set
+P nothing = ⊤
+P (just true) = Bool
+P (just false) = Maybe Bool → Bool
+
+Hány elemű lesz Σ (Maybe Bool) P? Igazából a típus egyes elemei alapján csak meg kell nézni, hogy hány elemű típust adnak vissza.
+| Σ (Maybe Bool) P | = | P nothing | + | P (just true) | + | P (just false) | = |⊤| + |Bool| + |Maybe Bool → Bool| = 1 + 2 + 8 = 11
+
+Ez alapján az intuíció az lehet, hogy | Σ A B | = Σ (i : A) |B i|; tehát csak össze kell adni az egyes típusokból képzett új típusok elemszámát és ennyi.
+(Nem véletlen, hogy Σ a típus neve. Ellenőrizhető, hogy A × B elemszáma könnyen ki fog jönni, hogy ha B nem függőtípus.)
+
+Mi a helyzet, ha ugyanezt játszuk Π-vel? Hány elemű lesz Π A B?
+
+Megint konkrét helyzetben, legyen:
+P : Bool → Set
+P true = Bool
+P false = ⊥
+
+| Π Bool P | =⟨ Agda szintaxissal ⟩= | (b : Bool) → P b | kell.
+A függvényeknek totálisaknak kell lenniük, tehát ez azt jelenti, hogy MINDEN lehetséges b : Bool értékre P b-nek definiáltnak kell lennie, false-ra ÉS true-ra is.
+Intuíció alapján | P true | ÉS | P false | kelleni fog, az ÉS kapcsolat matematikában a szorzást szokta jelenteni, tehát | P true | ∙ | P false | elemszámú lesz
+ez a kifejezés.
+| P true | ∙ | P false | = |Bool| ∙ |⊥| = 2 ∙ 0 = 0
+Próbáljuk meg definiálni ezt a függvényt:
+-}
+P₁ : Bool → Set
+P₁ true = Bool
+P₁ false = ⊥
+
+ΠBoolP : Π Bool P₁
+ΠBoolP b = {!!}
+-- Rájöhetünk, hogy a false ággal gondok lesznek.
+{-
+Következő példa, ez a P már ismerős:
+P : Maybe Bool → Set
+P nothing = ⊤
+P (just true) = Bool
+P (just false) = Maybe Bool → Bool
+
+Hány elemű lesz Π (Maybe Bool) P?
+A függvények továbbra is totálisak kell legyenek. Ez azt jelenti, hogy a függvény definiálva kell legyen (P nothing)-ra, (P (just true))-ra ÉS (P (just false))-ra is,
+tehát lesz | P nothing | ∙ | P (just true) | ∙ | P (just false) | elemünk, |⊤| ∙ |Bool| ∙ |Maybe Bool → Bool| = 1 ∙ 2 ∙ 2³ = 16 elemű lesz Π (Maybe Bool) P.
+
+Intuíció alapján általánosan | Π A B | = Π (i : A) | B i |, tehát csak az összes B-ből képezhető típus elemszámát össze kell szorozni.
+
+Gyakorlás:
+Adott a következő P:
+
+P : Bool × Bool → Set
+P (true , true) = ⊤
+P (true , false) = Bool
+P (false , true) = Bool → Bool ⊎ ⊤
+P (false , false) = Bool ⊎ ⊤ → Bool
+
+Hány elemű lesz Σ (Bool × Bool) P?
+Hány elemű lesz Π (Bool × Bool) P?
+
+Kicsit érdekesebb ezeket vegyíteni, de az elv ugyanaz marad.
+Marad ugyanaz a P.
+
+Hány elemű lesz Π (a : Bool) (Σ (b : Bool) (P (a , b)))? ( Agda szintaxissal (a : Bool) → Σ Bool (λ b → P (a , b)) )
+Hány elemű lesz Σ (a : Bool) (Π (b : Bool) (P (a , b)))? ( Agda szintaxissal Σ Bool λ a → (b : Bool) →  P (a , b)) )
+-}
+--------------------------------------------------------
 
 {-
 Definiáld a _≤_ és _≥_ függvényeket, amelyek rendre meghatározzák
