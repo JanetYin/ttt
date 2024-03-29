@@ -29,3 +29,11 @@ raiseᵣ (suc n) m' = fsuc (raiseᵣ n m')
 raiseₗ : {m : ℕ} → Fin m → (n : ℕ) → Fin (m + n)
 raiseₗ {suc m} fzero n = fzero
 raiseₗ {suc m} (fsuc m') n = fsuc (raiseₗ {m} m' n)
+
+elim-Fin : ∀{ℓ}{k : ℕ}(P : {n : ℕ} → Fin n → Set ℓ) →
+  (pzero : {n : ℕ} → P (fzero {n})) →
+  (psuc : {n : ℕ}{f : Fin n} → P f → P (fsuc f)) →
+  (f : Fin k) →
+  P f
+elim-Fin P pzero psuc fzero = pzero
+elim-Fin P pzero psuc (fsuc f) = psuc (elim-Fin P pzero psuc f)

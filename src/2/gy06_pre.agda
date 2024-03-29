@@ -1,4 +1,4 @@
-module gy06 where
+module gy06_pre where
 
 open import Lib
 

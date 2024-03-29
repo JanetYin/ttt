@@ -43,11 +43,12 @@ transℕ∞Reflʳ' {zero∞} {zero∞} e = _
 transℕ∞Reflʳ' {suc∞ x} {suc∞ y} e = transℕ∞Reflʳ {x} {y} e
 prove-eq (transℕ∞Reflʳ {x} {y} e) = transℕ∞Reflʳ' {pred∞ x} {pred∞ y} (prove e)
 
-≡→≈ℕ∞ : {a b : ℕ∞} → a ≡ b → a ≈ℕ∞ b
-≡→≈ℕ∞ {a} refl = reflℕ∞ a
+instance
+  ≡→≈ℕ∞ : {a b : ℕ∞} → ⦃ a ≡ b ⦄ → a ≈ℕ∞ b
+  ≡→≈ℕ∞ {a} ⦃ refl ⦄ = reflℕ∞ a
 
-≡→≈ℕ∞′′ : {a b : Maybe ℕ∞} → a ≡ b → a ≈ℕ∞′′ b
-≡→≈ℕ∞′′ {a} refl = reflℕ∞' a
+  ≡→≈ℕ∞′′ : {a b : Maybe ℕ∞} → ⦃ a ≡ b ⦄ → a ≈ℕ∞′′ b
+  ≡→≈ℕ∞′′ {a} ⦃ refl ⦄ = reflℕ∞' a
 
 0=0 : 0 ≈ℕ∞ pred∞'' zero∞
 prove 0=0 = _
@@ -83,6 +84,9 @@ instance
   JustIsNotZero∞ : {n n' : ℕ∞} → .⦃ pred∞ n ≈ℕ∞′′ just n' ⦄ → IsNotZero∞ n
   JustIsNotZero∞ {n} with pred∞ n
   ... | suc∞ _ = tt
+
+  JustIsNotZero∞′′ : {n n' : ℕ∞} → ⦃ pred∞ n ≡ just n' ⦄ → IsNotZero∞ n
+  JustIsNotZero∞′′ {n} = JustIsNotZero∞ {n}
 
 +-injectiveʳ : (a b c : ℕ∞) → a ≈ℕ∞ b → a + c ≈ℕ∞ b + c
 +-injectiveʳ' : (a b : Maybe ℕ∞)(c : ℕ∞) → a ≈ℕ∞′′ b → a +' c ≈ℕ∞′′ b +' c

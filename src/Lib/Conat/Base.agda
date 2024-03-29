@@ -11,22 +11,24 @@ open import Lib.Sigma.Type
 open import Lib.Nat.Type
 open import Lib.Equality
 open import Lib.Maybe.Type
+open import Lib.Maybe.Base
 
 IsZero∞ᵗ : ℕ∞ → Σ Set (λ A → A ≡ ⊤ ⊎ A ≡ ⊥)
-IsZero∞ᵗ n with pred∞ n
-... | nothing = ⊤ , inl refl
-... | just _ = ⊥ , inr refl
+IsZero∞ᵗ n = ite-Maybe (λ _ → ⊥ , inr refl) (⊤ , inl refl) (pred∞ n)
 
 IsZero∞ : ℕ∞ → Set
 IsZero∞ n = fst (IsZero∞ᵗ n)
 
 IsNotZero∞ᵗ : ℕ∞ → Σ Set (λ A → A ≡ ⊤ ⊎ A ≡ ⊥)
-IsNotZero∞ᵗ n with pred∞ n
-... | nothing = ⊥ , inr refl
-... | just _ = ⊤ , inl refl
+IsNotZero∞ᵗ n = ite-Maybe (λ _ → ⊤ , inl refl) (⊥ , inr refl) (pred∞ n)
 
 IsNotZero∞ : ℕ∞ → Set
 IsNotZero∞ n = fst (IsNotZero∞ᵗ n)
+
+pred∞withProof : (n : ℕ∞) → Σ (Maybe ℕ∞) (ite-Maybe (λ _ → IsNotZero∞ n) (IsZero∞ n))
+pred∞withProof n with pred∞ n
+... | suc∞ x = suc∞ x , tt
+... | zero∞ = zero∞ , tt
 
 ℕ∞→ℕ : ℕ → ℕ∞ → Maybe ℕ
 ℕ∞→ℕ zero _ = nothing
@@ -60,11 +62,15 @@ succ∞' n = just λ where .pred∞ → n
 
 pred∞' : Maybe ℕ∞ → Maybe ℕ∞
 pred∞' nothing = nothing
-pred∞' (just x)  = pred∞ x
+pred∞' (just x) = pred∞ x
 
 pred∞'' : Maybe ℕ∞ → ℕ∞
 pred∞ (pred∞'' nothing) = nothing
 pred∞'' (just x) = x
+
+predℕ∞ : (n : ℕ∞) → .⦃ IsNotZero∞ n ⦄ → ℕ∞
+predℕ∞ n with pred∞ n
+... | suc∞ x = x
 
 infixl 6 _+_ _+'_
 _+_ : ℕ∞ → ℕ∞ → ℕ∞

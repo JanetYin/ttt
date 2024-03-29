@@ -1,4 +1,4 @@
-module gy05 where
+module gy05_pre where
 
 open import Lib hiding (fromℕ ; minMax)
 open import Lib.Containers.Vector hiding (head; tail; map; length; _++_)

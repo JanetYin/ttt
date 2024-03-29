@@ -1,35 +1,10 @@
-module gy06 where
+module gy07 where
 
 open import Lib
 
-----------------------------------------------
--- Some Sigma types
-----------------------------------------------
-
-Σ=⊎ : {A B : Set} → Σ Bool (if_then A else B) ↔ A ⊎ B
-Σ=⊎ = {!!}
-
-Σ=× : {A B : Set} → Σ A (λ _ → B) ↔ A × B
-Σ=× = {!!}
-
--- Π A F is essentially (a : A) → F a
--- what does this mean?
-
-                    -- Π A (λ _ → B)
-Π=→ : {A B : Set} → ((a : A) → (λ _ → B) a) ≡ (A → B)
-Π=→ = {!!}
-
-                    -- Π Bool (if_then A else B)
-→=× : {A B : Set} → ((b : Bool) → if b then A else B) ↔ A × B
-→=× = {!!}
-
-dependentCurry : {A : Set}{B : A → Set}{C : (a : A) → B a → Set} →
-  ((a : A)(b : B a) → C a b) ↔ ((w : Σ A B) → C (fst w) (snd w))
-dependentCurry = {!!}
-
 ---------------------------------------------------------
 -- propositional logic
-------------------------------------------------------
+---------------------------------------------------------
 
 -- Curry-Howard izomorfizmus
 -- Elmélet:
@@ -69,7 +44,7 @@ module Formalise where
   K : Set
   K = ?
 
----- Következményfogalom (logika tárgy 1-3. gyakorlat)
+  ---- Következményfogalom (logika tárgy 1-3. gyakorlat)
   -- Agdában legegyszerűbben szintaktikus következményekkel lehet foglalkozni.
 
   -- Mondd ki, és bizonyítsd be, hogy a fenti állításokból következik a K.
@@ -85,7 +60,7 @@ module Formalise where
   Köv2 : Köv
   Köv2 = ?
 
-----------------------------------------------------------------------------
+--------------------------------------------------
 
 subt-prod : {A A' B B' : Set} → (A → A') → (B → B') → A × B → A' × B'
 subt-prod = {!!}
@@ -98,6 +73,8 @@ anything = {!!}
 
 ret : {X : Set} → X → ¬ ¬ X
 ret = {!!}
+
+-- Másik irány?
 
 fun : {X Y : Set} → (¬ X) ⊎ Y → (X → Y)
 fun = {!!}
@@ -139,7 +116,7 @@ Dec : Set → Set
 Dec A = A ⊎ ¬ A
 -}
 
-open import Lib.Dec.PatternSynonym
+-- open import Lib.Dec.PatternSynonym
 
 ee1 : {X Y : Set} → Dec (X ⊎ Y → ¬ ¬ (Y ⊎ X))
 ee1 = {!!}
@@ -171,8 +148,7 @@ f1 = {!!}
 f2 : ({X Y : Set} → ¬ (X × Y) → ¬ X ⊎ ¬ Y) → {X Y : Set} → ¬ ¬ (X ⊎ Y) → ¬ ¬ X ⊎ ¬ ¬ Y
 f2 = {!!}
 
-----------------------------------------------------------------------
--- Not exactly first order logic but kinda is and kinda isn't.
+-- Not exactly first order logic but kinda is.
 
 f3 : Dec ((X Y : Set) → X ⊎ Y → Y)
 f3 = {!!}
