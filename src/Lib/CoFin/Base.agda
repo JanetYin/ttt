@@ -21,8 +21,8 @@ postulate
 -}
 
 f∞ : CoFin ∞
-inz f∞ = tt
 fpred∞ f∞ = just f∞
+
 
 coiteCoFin : ∀{ℓ}{n : ℕ∞}(P : ℕ∞ → Set ℓ) →
   (ginz : ({n : ℕ∞} → P n → IsNotZero∞ n)) →

@@ -25,6 +25,11 @@ IsNotZero∞ᵗ n = ite-Maybe (λ _ → ⊤ , inl refl) (⊥ , inr refl) (pred�
 IsNotZero∞ : ℕ∞ → Set
 IsNotZero∞ n = fst (IsNotZero∞ᵗ n)
 
+instance
+  recomputeIsNotZero∞ : {n : ℕ∞} → .⦃ IsNotZero∞ n ⦄ → IsNotZero∞ n
+  recomputeIsNotZero∞ {n} with pred∞ n
+  ... | just _ = tt
+
 pred∞withProof : (n : ℕ∞) → Σ (Maybe ℕ∞) (ite-Maybe (λ _ → IsNotZero∞ n) (IsZero∞ n))
 pred∞withProof n with pred∞ n
 ... | suc∞ x = suc∞ x , tt

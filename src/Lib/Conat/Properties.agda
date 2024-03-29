@@ -9,9 +9,14 @@ open import Lib.Conat.Literals
 open import Lib.Conat.Bisimulation
 open import Lib.Unit.Type
 open import Lib.Empty.Type
-open import Lib.Equality
+open import Lib.Equality.Type
 
 open import Lib.Maybe.Type
+
+instance
+  isPropIsNotZero∞ : {n : ℕ∞} → ⦃ p1 p2 : IsNotZero∞ n ⦄ → p1 ≡ p2
+  isPropIsNotZero∞ {n} with pred∞ n
+  ... | just x = refl
 
 reflℕ∞ : (x : ℕ∞) → x ≈ℕ∞ x
 reflℕ∞' : (x : Maybe ℕ∞) → x ≈ℕ∞′′ x
@@ -85,7 +90,7 @@ instance
   JustIsNotZero∞ {n} with pred∞ n
   ... | suc∞ _ = tt
 
-  JustIsNotZero∞′′ : {n n' : ℕ∞} → ⦃ pred∞ n ≡ just n' ⦄ → IsNotZero∞ n
+  JustIsNotZero∞′′ : {n n' : ℕ∞} → .⦃ pred∞ n ≡ just n' ⦄ → IsNotZero∞ n
   JustIsNotZero∞′′ {n} = JustIsNotZero∞ {n}
 
 +-injectiveʳ : (a b c : ℕ∞) → a ≈ℕ∞ b → a + c ≈ℕ∞ b + c
