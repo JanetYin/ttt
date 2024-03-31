@@ -93,6 +93,14 @@ suc n ℕ≤ℕ∞ k with pred∞ k
 ... | nothing = ⊥
 ... | just k' = n ℕ≤ℕ∞ k'
 
+infix 4 _ℕ<ℕ∞_
+
+_ℕ<ℕ∞_ : ℕ → ℕ∞ → Set
+n ℕ<ℕ∞ k with pred∞ k
+(n ℕ<ℕ∞ k)     | zero∞ = ⊥
+(zero ℕ<ℕ∞ k)  | suc∞ x = ⊤
+(suc n ℕ<ℕ∞ k) | suc∞ x = n ℕ<ℕ∞ x
+
 --------------------------------------------------
 -- Older idea of Conat with ⊤ ⊎ _
 --------------------------------------------------
