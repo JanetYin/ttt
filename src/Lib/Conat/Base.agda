@@ -86,8 +86,6 @@ zero∞ +' y = pred∞ y
 suc∞ x +' y = suc∞ (x + y)
 
 {-
-infixl 7 _*_ _*'_
-
 _*_ : ℕ∞ → ℕ∞ → ℕ∞
 _*'_ : Maybe ℕ∞ → ℕ∞ → Maybe ℕ∞
 suc∞ x *' k = just (k + x * k)
@@ -104,20 +102,24 @@ add n k = coiteℕ∞ f (n , k) where
   ... | just k' = just (n , k')
   ... | nothing = nothing
 
-mul : ℕ∞ → ℕ∞ → ℕ∞
-mul n k = coiteℕ∞ f (n , n , k) where
+infixl 7 _*_
+
+_*_ : ℕ∞ → ℕ∞ → ℕ∞
+n * k = coiteℕ∞ f (k , n , k) where
   f : ℕ∞ × ℕ∞ × ℕ∞ → Maybe (ℕ∞ × ℕ∞ × ℕ∞)
-  f (restore , e2 , e3) with pred∞ e2 | pred∞ e3
-  ... | suc∞ e2' | zero∞ = nothing
-  ... | zero∞ | suc∞ e3' = nothing
-  ... | zero∞ | zero∞ = nothing
-  ... | suc∞ e2' | suc∞ e3' with pred∞ e2' | pred∞ e3'
-  ... | suc∞ e2'' | suc∞ e3'' = just (restore , e2' , e3)
-  ... | suc∞ e2'' | zero∞ = just (restore , e2' , e3)
-  ... | zero∞ | suc∞ e3'' = just (restore , restore , e3')
-  ... | zero∞ | zero∞ = just (restore , e2' , e3')
-
-
+  f (restore , e1 , e2) with pred∞ e1
+  ... | nothing = nothing
+  ... | just e1' with pred∞ e2
+  ... | nothing = nothing
+  ... | just e2' with pred∞ e2'
+  ... | nothing = just (restore , e1' , restore)
+  ... | just e2'' = just (restore , e1 , e2')
+{-
+pow : ℕ∞ → ℕ∞ → ℕ∞
+pow n k = coiteℕ∞ f (n , n , k) where
+  f : ℕ∞ × ℕ∞ × ℕ∞ × ℕ∞ → Maybe (ℕ∞ × ℕ∞ × ℕ∞ × ℕ∞)
+  f (restore , e1 , e2 , e3) = {!!}
+-}
 infix 4 _ℕ≤ℕ∞_
 
 _ℕ≤ℕ∞_ : ℕ → ℕ∞ → Set
