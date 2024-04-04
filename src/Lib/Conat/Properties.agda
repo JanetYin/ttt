@@ -9,9 +9,17 @@ open import Lib.Conat.Literals
 open import Lib.Conat.Bisimulation
 open import Lib.Unit.Type
 open import Lib.Empty.Type
-open import Lib.Equality
+open import Lib.Equality.Type
+open import Lib.Equality.Base
+open import Lib.Nat.Type
 
 open import Lib.Maybe.Type
+open import Lib.Maybe.Properties
+
+instance
+  isPropIsNotZero∞ : {n : ℕ∞} → ⦃ p1 p2 : IsNotZero∞ n ⦄ → p1 ≡ p2
+  isPropIsNotZero∞ {n} with pred∞ n
+  ... | just x = refl
 
 reflℕ∞ : (x : ℕ∞) → x ≈ℕ∞ x
 reflℕ∞' : (x : Maybe ℕ∞) → x ≈ℕ∞′′ x
@@ -43,11 +51,22 @@ transℕ∞Reflʳ' {zero∞} {zero∞} e = _
 transℕ∞Reflʳ' {suc∞ x} {suc∞ y} e = transℕ∞Reflʳ {x} {y} e
 prove-eq (transℕ∞Reflʳ {x} {y} e) = transℕ∞Reflʳ' {pred∞ x} {pred∞ y} (prove e)
 
-≡→≈ℕ∞ : {a b : ℕ∞} → a ≡ b → a ≈ℕ∞ b
-≡→≈ℕ∞ {a} refl = reflℕ∞ a
+Conat-η : ∀{n} → conat' (pred∞ n) ≈ℕ∞ n
+prove (Conat-η {n}) = reflℕ∞' (pred∞ n)
 
-≡→≈ℕ∞′′ : {a b : Maybe ℕ∞} → a ≡ b → a ≈ℕ∞′′ b
-≡→≈ℕ∞′′ {a} refl = reflℕ∞' a
+instance
+  ≡→≈ℕ∞ : {a b : ℕ∞} → .⦃ a ≡ b ⦄ → a ≈ℕ∞ b
+  ≡→≈ℕ∞′′ : {a b : Maybe ℕ∞} → .⦃ a ≡ b ⦄ → a ≈ℕ∞′′ b
+  ≡→≈ℕ∞′′ {suc∞ a} {suc∞ b} ⦃ e ⦄ = ≡→≈ℕ∞ {a} {b} ⦃ just-injective e ⦄
+  ≡→≈ℕ∞′′ {zero∞} {zero∞} = tt
+  prove (≡→≈ℕ∞ {a} {b} ⦃ e ⦄) = ≡→≈ℕ∞′′ {pred∞ a} {pred∞ b} ⦃ cong pred∞ e ⦄
+
+  <→IsNotZero∞ : {n : ℕ}{k : ℕ∞} → .⦃ n ℕ<ℕ∞ k ⦄ → IsNotZero∞ k
+  <→IsNotZero∞ {n} {k} with pred∞ k
+  ... | suc∞ x = tt
+
+pred∞-injective : ∀{n k} → pred∞ n ≡ pred∞ k → n ≈ℕ∞ k
+prove (pred∞-injective {n} {k} e) = ≡→≈ℕ∞′′ ⦃ e ⦄
 
 0=0 : 0 ≈ℕ∞ pred∞'' zero∞
 prove 0=0 = _
@@ -83,6 +102,9 @@ instance
   JustIsNotZero∞ : {n n' : ℕ∞} → .⦃ pred∞ n ≈ℕ∞′′ just n' ⦄ → IsNotZero∞ n
   JustIsNotZero∞ {n} with pred∞ n
   ... | suc∞ _ = tt
+
+  JustIsNotZero∞′′ : {n n' : ℕ∞} → .⦃ pred∞ n ≡ just n' ⦄ → IsNotZero∞ n
+  JustIsNotZero∞′′ {n} = JustIsNotZero∞ {n}
 
 +-injectiveʳ : (a b c : ℕ∞) → a ≈ℕ∞ b → a + c ≈ℕ∞ b + c
 +-injectiveʳ' : (a b : Maybe ℕ∞)(c : ℕ∞) → a ≈ℕ∞′′ b → a +' c ≈ℕ∞′′ b +' c

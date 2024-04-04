@@ -11,22 +11,29 @@ open import Lib.Sigma.Type
 open import Lib.Nat.Type
 open import Lib.Equality
 open import Lib.Maybe.Type
+open import Lib.Maybe.Base
 
 IsZero∞ᵗ : ℕ∞ → Σ Set (λ A → A ≡ ⊤ ⊎ A ≡ ⊥)
-IsZero∞ᵗ n with pred∞ n
-... | nothing = ⊤ , inl refl
-... | just _ = ⊥ , inr refl
+IsZero∞ᵗ n = ite-Maybe (λ _ → ⊥ , inr refl) (⊤ , inl refl) (pred∞ n)
 
 IsZero∞ : ℕ∞ → Set
 IsZero∞ n = fst (IsZero∞ᵗ n)
 
 IsNotZero∞ᵗ : ℕ∞ → Σ Set (λ A → A ≡ ⊤ ⊎ A ≡ ⊥)
-IsNotZero∞ᵗ n with pred∞ n
-... | nothing = ⊥ , inr refl
-... | just _ = ⊤ , inl refl
+IsNotZero∞ᵗ n = ite-Maybe (λ _ → ⊤ , inl refl) (⊥ , inr refl) (pred∞ n)
 
 IsNotZero∞ : ℕ∞ → Set
 IsNotZero∞ n = fst (IsNotZero∞ᵗ n)
+
+instance
+  recomputeIsNotZero∞ : {n : ℕ∞} → .⦃ IsNotZero∞ n ⦄ → IsNotZero∞ n
+  recomputeIsNotZero∞ {n} with pred∞ n
+  ... | just _ = tt
+
+pred∞withProof : (n : ℕ∞) → Σ (Maybe ℕ∞) (ite-Maybe (λ _ → IsNotZero∞ n) (IsZero∞ n))
+pred∞withProof n with pred∞ n
+... | suc∞ x = suc∞ x , tt
+... | zero∞ = zero∞ , tt
 
 ℕ∞→ℕ : ℕ → ℕ∞ → Maybe ℕ
 ℕ∞→ℕ zero _ = nothing
@@ -60,11 +67,15 @@ succ∞' n = just λ where .pred∞ → n
 
 pred∞' : Maybe ℕ∞ → Maybe ℕ∞
 pred∞' nothing = nothing
-pred∞' (just x)  = pred∞ x
+pred∞' (just x) = pred∞ x
 
 pred∞'' : Maybe ℕ∞ → ℕ∞
 pred∞ (pred∞'' nothing) = nothing
 pred∞'' (just x) = x
+
+predℕ∞ : (n : ℕ∞) → .⦃ IsNotZero∞ n ⦄ → ℕ∞
+predℕ∞ n with pred∞ n
+... | suc∞ x = x
 
 infixl 6 _+_ _+'_
 _+_ : ℕ∞ → ℕ∞ → ℕ∞
@@ -74,6 +85,41 @@ pred∞ (x + y) = pred∞ x +' y
 zero∞ +' y = pred∞ y
 suc∞ x +' y = suc∞ (x + y)
 
+{-
+_*_ : ℕ∞ → ℕ∞ → ℕ∞
+_*'_ : Maybe ℕ∞ → ℕ∞ → Maybe ℕ∞
+suc∞ x *' k = just (k + x * k)
+zero∞ *' k = nothing
+pred∞ (n * k) = pred∞ n *' k
+-}
+
+add : ℕ∞ → ℕ∞ → ℕ∞
+add n k = coiteℕ∞ f (n , k) where
+  f : ℕ∞ × ℕ∞ → Maybe (ℕ∞ × ℕ∞)
+  f (n , k) with pred∞ n
+  ... | just n' = just (n' , k)
+  ... | nothing with pred∞ k
+  ... | just k' = just (n , k')
+  ... | nothing = nothing
+
+infixl 7 _*_
+
+_*_ : ℕ∞ → ℕ∞ → ℕ∞
+n * k = coiteℕ∞ f (k , n , k) where
+  f : ℕ∞ × ℕ∞ × ℕ∞ → Maybe (ℕ∞ × ℕ∞ × ℕ∞)
+  f (restore , e1 , e2) with pred∞ e1
+  ... | nothing = nothing
+  ... | just e1' with pred∞ e2
+  ... | nothing = nothing
+  ... | just e2' with pred∞ e2'
+  ... | nothing = just (restore , e1' , restore)
+  ... | just e2'' = just (restore , e1 , e2')
+{-
+pow : ℕ∞ → ℕ∞ → ℕ∞
+pow n k = coiteℕ∞ f (n , n , k) where
+  f : ℕ∞ × ℕ∞ × ℕ∞ × ℕ∞ → Maybe (ℕ∞ × ℕ∞ × ℕ∞ × ℕ∞)
+  f (restore , e1 , e2 , e3) = {!!}
+-}
 infix 4 _ℕ≤ℕ∞_
 
 _ℕ≤ℕ∞_ : ℕ → ℕ∞ → Set
@@ -81,6 +127,14 @@ zero ℕ≤ℕ∞ k = ⊤
 suc n ℕ≤ℕ∞ k with pred∞ k
 ... | nothing = ⊥
 ... | just k' = n ℕ≤ℕ∞ k'
+
+infix 4 _ℕ<ℕ∞_
+
+_ℕ<ℕ∞_ : ℕ → ℕ∞ → Set
+n ℕ<ℕ∞ k with pred∞ k
+(n ℕ<ℕ∞ k)     | zero∞ = ⊥
+(zero ℕ<ℕ∞ k)  | suc∞ x = ⊤
+(suc n ℕ<ℕ∞ k) | suc∞ x = n ℕ<ℕ∞ x
 
 --------------------------------------------------
 -- Older idea of Conat with ⊤ ⊎ _

@@ -1,4 +1,4 @@
-module gy06 where
+module gy06_pre where
 
 open import Lib
 
@@ -39,6 +39,53 @@ dependentCurry = {!!}
 --   ⊎ = ∨ = diszjunkció
 --   ¬ = ¬ = negáció
 --   ⊃ = → = implikáció
+
+--------------------------------------------------
+-- Formalisation
+--------------------------------------------------
+
+-- Formalizáljuk a mondatokat!
+
+-- Az egyes formalizált alap mondatrészeket vegyük fel modul paraméterként, akkor szépen fog működni minden.
+module Formalise where
+
+  -- Nem süt a nap.
+  form1 : Set
+  form1 = ?
+
+  -- Esik az eső és süt a nap.
+  form2 : Set
+  form2 = ?
+
+  -- Nem kell az esernyő vagy esik az eső.
+  form3 : Set
+  form3 = ?
+
+  -- Ha esik az eső és süt a nap, akkor van szivárvány.
+  form4 : Set
+  form4 = ?
+
+  -- Van szivárvány.
+  K : Set
+  K = ?
+
+---- Következményfogalom (logika tárgy 1-3. gyakorlat)
+  -- Agdában legegyszerűbben szintaktikus következményekkel lehet foglalkozni.
+
+  -- Mondd ki, és bizonyítsd be, hogy a fenti állításokból következik a K.
+  -- A típusban kell kimondani az állítást; az állítás kimondásához az eldöntésprobléma tételét kell használni.
+  -- Két féleképpen lehet bizonyítani.
+
+  Köv : Set
+  Köv = ?
+
+  Köv1 : Köv
+  Köv1 = ?
+
+  Köv2 : Köv
+  Köv2 = ?
+
+----------------------------------------------------------------------------
 
 subt-prod : {A A' B B' : Set} → (A → A') → (B → B') → A × B → A' × B'
 subt-prod = {!!}

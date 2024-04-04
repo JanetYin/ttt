@@ -21,10 +21,11 @@ open import Lib.Bool public
            ; contraposition to contrapositionᵇ
            ; _≟_ to _≟ᵇ_)
 open import Lib.Conat public
-  renaming (_+_ to _+∞_ ; _+'_ to _+∞'_ ; idr+ to idr+∞)
+  renaming (_+_ to _+∞_ ; _+'_ to _+∞'_ ; _*_ to _*∞_ ; idr+ to idr+∞)
 open import Lib.Sum public
   renaming (map to map⊎)
 open import Lib.Fin public
+open import Lib.CoFin public
 open import Lib.Equality public
 open import Lib.Dec public
 open import Lib.Maybe public

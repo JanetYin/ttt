@@ -170,7 +170,20 @@ open ℕ∞
 -}
 
 _+∞_ : ℕ∞ → ℕ∞ → ℕ∞
-_+∞_ = {!!}
+-- zero + y = y
+-- x@(suc h) + y = suc (h + y)
+pred∞ (x +∞ y) with pred∞ x
+... | just b = just (b +∞ y)
+... | nothing = just y
+
+suc∞ : ℕ∞ → ℕ∞
+pred∞ (suc∞ x) = just x
+
+_+∞''_ : ℕ∞ → ℕ∞ → ℕ∞
+x +∞'' y with pred∞ x
+-- x = h + 1
+... | just h  = suc∞ (h +∞'' y)
+... | nothing = y
 
 -- Ez a függvény létezik, ezzel lehet megnézni
 -- egy conat tényleges értékét.
@@ -215,3 +228,4 @@ avg3 (suc zero) (suc (suc c)) zero = suc (avg3 zero zero c)
 avg3 zero (suc (suc b)) (suc c) = avg3 zero b c 
 avg3 (suc zero) (suc zero) (suc c) = suc (avg3 zero zero c)
 avg3 (suc zero) (suc (suc b)) (suc c) = suc (avg3 zero b c)
+  

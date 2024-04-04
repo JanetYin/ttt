@@ -10,6 +10,7 @@ open import Lib.Bool.Type
 open import Lib.Bool.Base
 open import Lib.Nat.Type
 open import Lib.Nat.Base
+open import Lib.Conat.Type
 
 open import Agda.Builtin.Reflection public
 open import Agda.Builtin.String public
@@ -79,3 +80,16 @@ macro
       metaMagic msg unknown = typeError (strErr "Ide jutottunk?" ∷ [])
 -}
 -- if b then metaMagic msg hole else unify hole (quoteTerm ⊤))
+{-
+∣_∣T : Type → ℕ∞
+∣ var x args ∣T = {!!}
+∣ con c args ∣T = {!!}
+∣ def f args ∣T = {!!}
+∣ lam v t ∣T = {!!}
+∣ pat-lam cs args ∣T = {!!}
+∣ pi a b ∣T = {!!}
+∣ agda-sort s ∣T = {!!}
+∣ lit l ∣T = {!!}
+∣ meta x x₁ ∣T = {!!}
+∣ unknown ∣T = {!!}
+-}

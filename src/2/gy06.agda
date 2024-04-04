@@ -7,25 +7,32 @@ open import Lib
 ----------------------------------------------
 
 Σ=⊎ : {A B : Set} → Σ Bool (if_then A else B) ↔ A ⊎ B
-Σ=⊎ = {!!}
+fst Σ=⊎ (false , ab) = inr ab
+fst Σ=⊎ (true , ab) = inl ab
+snd Σ=⊎ (inl a) = true , a
+snd Σ=⊎ (inr b) = false , b
 
 Σ=× : {A B : Set} → Σ A (λ _ → B) ↔ A × B
-Σ=× = {!!}
+fst Σ=× (a , b) = a , b
+snd Σ=× (a , b) = a , b
 
 -- Π A F is essentially (a : A) → F a
 -- what does this mean?
 
                     -- Π A (λ _ → B)
 Π=→ : {A B : Set} → ((a : A) → (λ _ → B) a) ≡ (A → B)
-Π=→ = {!!}
+Π=→ = refl
 
                     -- Π Bool (if_then A else B)
 →=× : {A B : Set} → ((b : Bool) → if b then A else B) ↔ A × B
-→=× = {!!}
+fst →=× f = f true , f false
+snd →=× (a , b) false = b
+snd →=× (a , b) true = a
 
 dependentCurry : {A : Set}{B : A → Set}{C : (a : A) → B a → Set} →
   ((a : A)(b : B a) → C a b) ↔ ((w : Σ A B) → C (fst w) (snd w))
-dependentCurry = {!!}
+fst dependentCurry f (a , b) = f a b
+snd dependentCurry f a b = f (a , b)
 
 ---------------------------------------------------------
 -- propositional logic
@@ -37,34 +44,91 @@ dependentCurry = {!!}
 --   ∙ formalizálni állításokat típusokkal.
 --   × = ∧ = konjunkció
 --   ⊎ = ∨ = diszjunkció
---   ¬ = ¬ = negáció
+--   ¬ = ¬ = negáció (¬ : {A : Set} → A → ⊥)
 --   ⊃ = → = implikáció
 
+--------------------------------------------------
+-- Formalisation
+--------------------------------------------------
+
+-- Formalizáljuk a mondatokat!
+
+-- Az egyes formalizált alap mondatrészeket vegyük fel modul paraméterként, akkor szépen fog működni minden.
+module Formalise {A B C D : Set} where
+
+  {-
+  A - Süt a nap.
+  B - Esik az eső.
+  C - Kell az esernyő.
+  D - Van szivárvány.
+  -}
+  -- Nem süt a nap.
+  form1 : Set
+  form1 = ¬ A
+
+  -- Esik az eső és süt a nap.
+  form2 : Set
+  form2 = A × B
+
+  -- Nem kell az esernyő vagy esik az eső.
+  form3 : Set
+  form3 = ¬ C ⊎ B
+
+  -- Ha esik az eső és süt a nap, akkor van szivárvány.
+  form4 : Set
+  form4 = (B × A) → D
+
+  -- Van szivárvány.
+  K : Set
+  K = D
+
+---- Következményfogalom (logika tárgy 1-3. gyakorlat)
+  -- Agdában legegyszerűbben szintaktikus következményekkel lehet foglalkozni.
+
+  -- Mondd ki, és bizonyítsd be, hogy a fenti állításokból következik a K.
+  -- A típusban kell kimondani az állítást; az állítás kimondásához az eldöntésprobléma tételét kell használni.
+  -- Két féleképpen lehet bizonyítani.
+
+  Köv : Set
+  Köv = (form1 × form2 × form3 × form4) → K
+
+  Köv1 : Köv
+  Köv1 (f1 , f2 , f3 , f4) = f4 (snd f2 , fst f2)
+
+  Köv2 : Köv
+  Köv2 (f1 , f2 , f3 , f4) = exfalso (f1 (fst f2))
+
+----------------------------------------------------------------------------
+
 subt-prod : {A A' B B' : Set} → (A → A') → (B → B') → A × B → A' × B'
-subt-prod = {!!}
+subt-prod aa' bb' (a , b) = aa' a , bb' b
 
 subt-fun : {A A' B B' : Set} → (A → A') → (B → B') → (A' → B) → (A → B')
-subt-fun = {!!}
+subt-fun aa' bb' a'b a = bb' (a'b (aa' a))
 
 anything : {X Y : Set} → ¬ X → X → Y
-anything = {!!}
+anything ¬x x = exfalso (¬x x)
 
 ret : {X : Set} → X → ¬ ¬ X
-ret = {!!}
+ret x ¬x = ¬x x
 
 fun : {X Y : Set} → (¬ X) ⊎ Y → (X → Y)
-fun = {!!}
+fun (inl ¬x) x = anything ¬x x
+fun (inr y) x = y
 
 -- De Morgan
 
 dm1 : {X Y : Set} →  ¬ (X ⊎ Y) ↔ ¬ X × ¬ Y
-dm1 = {!!}
+fst dm1 ¬xy = (λ x → ¬xy (inl x)) , λ y → ¬xy (inr y)
+snd dm1 (¬x , ¬y) (inl x) = ¬x x
+snd dm1 (¬x , ¬y) (inr y) = ¬y y
 
 dm2 : {X Y : Set} → ¬ X ⊎ ¬ Y → ¬ (X × Y)
-dm2 = {!!}
+dm2 (inl ¬x) (x , y) = ¬x x
+dm2 (inr ¬y) (x , y) = ¬y y
 
 dm2b : {X Y : Set} → ¬ ¬ (¬ (X × Y) → ¬ X ⊎ ¬ Y)
-dm2b = {!!}
+dm2b f = f λ ¬xy → inl λ x → f λ ¬xy₁ → inr λ y → ¬xy (x , y)
 
 -- stuff
 
@@ -147,3 +211,4 @@ f8 = {!!}
 
 f9 : Dec ((X Y Z : Set) → (X ⊎ Y) × (X ⊎ Z) → (X ⊎ Y × Z))
 f9 = {!!}
+ 
