@@ -2,6 +2,12 @@
 
 module Lib.Function.Base where
 
+open import Agda.Primitive
+
+infix -1000 Π
+Π : ∀{a b}(A : Set a) → (A → Set b) → Set (a ⊔ b)
+Π A B = (a : A) → B a
+
 typeOf : ∀{a}{A : Set a} → A → Set a
 typeOf {A = A} _ = A
 

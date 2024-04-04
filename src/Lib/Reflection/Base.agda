@@ -5,8 +5,12 @@ module Lib.Reflection.Base where
 open import Lib.Unit.Type
 open import Lib.Function
 open import Lib.Containers.List.Type
+open import Lib.Containers.List.Base
 open import Lib.Bool.Type
 open import Lib.Bool.Base
+open import Lib.Nat.Type
+open import Lib.Nat.Base
+open import Lib.Conat.Type
 
 open import Agda.Builtin.Reflection public
 open import Agda.Builtin.String public
@@ -23,9 +27,69 @@ liftA2TC f tcA tcB = apTC (fmapTC f tcA) tcB
 constBindTC : ∀{i j}{A : Set i}{B : Set j} → TC A → TC B → TC B
 constBindTC tcA tcB = bindTC tcA (λ _ → tcB)
 
+concatString : List String → String
+concatString [] = ""
+concatString (s ∷ ss) = primStringAppend s (concatString ss)
+
+showNat : ℕ → String
+showNat n = showNatFuel n n where
+  showNatFuel : ℕ → ℕ → String
+  showNatFuel fuel 0 = "0"
+  showNatFuel fuel 1 = "1"
+  showNatFuel fuel 2 = "2"
+  showNatFuel fuel 3 = "3"
+  showNatFuel fuel 4 = "4"
+  showNatFuel fuel 5 = "5"
+  showNatFuel fuel 6 = "6"
+  showNatFuel fuel 7 = "7"
+  showNatFuel fuel 8 = "8"
+  showNatFuel fuel 9 = "9"
+  showNatFuel zero (suc (suc (suc (suc (suc (suc (suc (suc (suc (suc _)))))))))) = "No more fuel!"
+  showNatFuel (suc fuel) n@(suc (suc (suc (suc (suc (suc (suc (suc (suc (suc _)))))))))) = concatString (map (showNatFuel fuel) (digits n))
+{-
+showTerm : Term → String
+showTerm (var x args) = {!!}
+showTerm (con c args) = {!!}
+showTerm (def f args) = {!!}
+showTerm (lam v t) = {!!}
+showTerm (pat-lam cs args) = {!!}
+showTerm (pi a b) = {!!}
+showTerm (agda-sort s) = {!!}
+showTerm (lit l) = {!!}
+showTerm (meta x x₁) = {!!}
+showTerm unknown = {!!}
+-}
 macro
   doesNotTypeCheck : Term → Term → String → Term → TC ⊤
   doesNotTypeCheck t₁ t₂ msg hole = let info = arg-info visible (modality relevant quantity-0) in
     bindTC
       (catchTC (bindTC (inferType (def (quote _$_) (arg info t₁ ∷ arg info t₂ ∷ []))) (λ _ → returnTC true)) (returnTC false)) (λ b →
       if b then typeError (strErr msg ∷ []) else unify hole (quoteTerm ⊤))
+{-
+    where
+      metaMagic : String → Term → TC ⊤
+      metaMagic msg (var x args) = typeError (strErr "var" ∷ [])
+      metaMagic msg (con c args) = typeError (strErr "con" ∷ [])
+      metaMagic msg (def f args) = typeError (strErr ? ∷ [])
+      metaMagic msg (lam v t) = typeError (strErr "lam" ∷ [])
+      metaMagic msg (pat-lam cs args) = typeError (strErr "pat-lam" ∷ [])
+      metaMagic msg (pi a b) = typeError (strErr "pi" ∷ [])
+      metaMagic msg (agda-sort s) = typeError (strErr "agda-sort" ∷ [])
+      metaMagic msg (lit l) = typeError (strErr "lit" ∷ [])
+      metaMagic msg (meta m _) = blockTC (blockerMeta m)
+      metaMagic msg unknown = typeError (strErr "Ide jutottunk?" ∷ [])
+-}
+-- if b then metaMagic msg hole else unify hole (quoteTerm ⊤))
+{-
+∣_∣T : Type → ℕ∞
+∣ var x args ∣T = {!!}
+∣ con c args ∣T = {!!}
+∣ def f args ∣T = {!!}
+∣ lam v t ∣T = {!!}
+∣ pat-lam cs args ∣T = {!!}
+∣ pi a b ∣T = {!!}
+∣ agda-sort s ∣T = {!!}
+∣ lit l ∣T = {!!}
+∣ meta x x₁ ∣T = {!!}
+∣ unknown ∣T = {!!}
+-}

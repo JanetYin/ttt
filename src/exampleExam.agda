@@ -156,8 +156,8 @@ pred∞ ∞ = just ∞
 -- b1 and b2 should be such that b1 ℕ 1 2 ≠ b2 ℕ 1 2
 b1 b2 : (A : Set) → A → A → A
 -- END FIX
-b1 = λ A _ z → z
-b2 = λ A z _ → z
+b1 = ?
+b2 = ?
 -- BEGIN FIX
 test-b1-b2 : ¬ (b1 ℕ 1 2 ≡ b2 ℕ 1 2)
 test-b1-b2 ()
@@ -183,8 +183,6 @@ ref≤ : (x : ℕ) → x ≤ x
 -- END FIX
 ref≤ = {!!}
 
-
-
 -- BEGIN FIX
 cong⁻¹ : {A B : Set}(a b : A)(f : A → B) → ¬ (f a ≡ f b) → ¬ (a ≡ b)
 -- END FIX
@@ -203,10 +201,7 @@ noℕsqrt = {!!}
 -- BEGIN FIX
 ¬¬∃↓ : ¬ ((f : ℕ → ℕ) → Σ ℕ λ n → (k : ℕ) → suc (f n) ≤ (f k))
 -- END FIX
-¬¬∃↓ x with x (λ _ → 0)
-... | fst₁ , snd₁ with snd₁ 0
-... | zero , ()
-... | suc fst₂ , ()
+¬¬∃↓ = ?
 
 -- BEGIN FIX
 -- works like haskell's zip
@@ -224,9 +219,3 @@ test-s2 : takeStream 10 (mapStream (λ (a , b) → a + b) (zipStream (iterate (�
   100 ∷ 101 ∷ 102 ∷ 103 ∷ 104 ∷ 105 ∷ 106 ∷ 107 ∷ 108 ∷ 109 ∷ []
 test-s2 = refl
 -- END FIX
-
-norefl : ¬ ((A : Set)(R : A → A → Set) → ¬ ¬ A → Σ A λ a → R a a)
-norefl x with x ⊤ (λ _ _ → ⊥) (λ z → z tt)
-... | y = snd y
-
--- A ⊎ ¬ A
