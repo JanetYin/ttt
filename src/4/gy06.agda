@@ -15,6 +15,7 @@ open import Lib
 --   ¬ = ¬ = negáció
 --   ⊃ = → = implikáció
 
+
 --------------------------------------------------
 -- Formalisation
 --------------------------------------------------
@@ -22,27 +23,35 @@ open import Lib
 -- Formalizáljuk a mondatokat!
 
 -- Az egyes formalizált alap mondatrészeket vegyük fel modul paraméterként, akkor szépen fog működni minden.
-module Formalise where
+module Formalise
+  (TheSunIsShining : Set)
+  (ItsRaining : Set)
+  (WeNeedAnUmbrella : Set)
+  (Rainbow : Set)
+  where
 
   -- Nem süt a nap.
-  form1 : Set
-  form1 = ?
+  form1 : Set -- \neg
+  form1 = ¬ TheSunIsShining
 
   -- Esik az eső és süt a nap.
   form2 : Set
-  form2 = ?
+  form2 = TheSunIsShining × ItsRaining
 
   -- Nem kell az esernyő vagy esik az eső.
+  -- We don't need an umbrella or it's raining
   form3 : Set
-  form3 = ?
+  form3 = (¬ WeNeedAnUmbrella) ⊎ ItsRaining
 
   -- Ha esik az eső és süt a nap, akkor van szivárvány.
+  -- If it's raining and it's sunny, then there's a rainbow.
   form4 : Set
-  form4 = ?
+  form4 = (ItsRaining × TheSunIsShining) → Rainbow
 
   -- Van szivárvány.
+  -- There's a rainbow
   K : Set
-  K = ?
+  K = Rainbow
 
 ---- Következményfogalom (logika tárgy 1-3. gyakorlat)
   -- Agdában legegyszerűbben szintaktikus következményekkel lehet foglalkozni.
@@ -52,18 +61,23 @@ module Formalise where
   -- Két féleképpen lehet bizonyítani.
 
   Köv : Set
-  Köv = ?
+  Köv = (form1 × form2 × form3 × form4) → K
 
+--  C-u C-u C-c C-,
+-- form 1: TheSunIsShining → ⊥
+-- form 2: TheSunIsShining × ItsRaining
+-- form 3: (¬ WeNeedUmbrella) ⊎ ItsRaining
+-- form 4: (ItsRaining × TheSunIsShining) → Rainbow
   Köv1 : Köv
-  Köv1 = ?
+  Köv1 (form₁ , form₂ , form₃ , form₄) = exfalso (form₁ (fst form₂))
 
   Köv2 : Köv
-  Köv2 = ?
+  Köv2 = {!!}
 
 ----------------------------------------------------------------------------
 
 subt-prod : {A A' B B' : Set} → (A → A') → (B → B') → A × B → A' × B'
-subt-prod = {!!}
+subt-prod a→a' b→b' (a , b) = a→a' a , b→b' b
 
 subt-fun : {A A' B B' : Set} → (A → A') → (B → B') → (A' → B) → (A → B')
 subt-fun = {!!}
@@ -80,13 +94,20 @@ fun = {!!}
 -- De Morgan
 
 dm1 : {X Y : Set} →  ¬ (X ⊎ Y) ↔ ¬ X × ¬ Y
-dm1 = {!!}
+fst (fst dm1 a) x = a (inl x)
+snd (fst dm1 a) y = a (inr y)
+snd dm1 ¬X×¬Y (inl x) = fst ¬X×¬Y x
+snd dm1 ¬X×¬Y (inr y) = snd ¬X×¬Y y
 
 dm2 : {X Y : Set} → ¬ X ⊎ ¬ Y → ¬ (X × Y)
 dm2 = {!!}
 
 dm2b : {X Y : Set} → ¬ ¬ (¬ (X × Y) → ¬ X ⊎ ¬ Y)
-dm2b = {!!}
+dm2b a = {!!} -- a (λ ¬[x×y] → inl λ x → a (λ _ → inr λ y → ¬[x×y] (x , y)))
+
+
+wk : {A : Set} → A ⊎ (¬ A)
+wk = inr λ a → {!!}
 
 -- stuff
 
