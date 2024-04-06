@@ -1,9 +1,9 @@
 {-# OPTIONS --safe --guardedness #-}
 
-module Lib.Containers.Stream.Bisimulation where
+module Lib.Containers.Stream.Bisimilarity where
 
 open import Lib.Containers.Stream.Type
-open import Lib.Equality
+open import Lib.Equality.Type
 
 infixr 5 _∷S_
 infix 4 _≈S_

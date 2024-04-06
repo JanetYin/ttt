@@ -2,4 +2,4 @@
 
 module Lib.Containers.CoList.Equality where
 
-open import Lib.Containers.CoList.Bisimulation public
+open import Lib.Containers.CoList.Bisimilarity public

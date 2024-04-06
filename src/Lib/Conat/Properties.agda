@@ -6,7 +6,7 @@ open import Lib.Conat.PatternSynonym
 open import Lib.Conat.Type
 open import Lib.Conat.Base
 open import Lib.Conat.Literals
-open import Lib.Conat.Bisimulation
+open import Lib.Conat.Bisimilarity
 open import Lib.Unit.Type
 open import Lib.Empty.Type
 open import Lib.Equality.Type
