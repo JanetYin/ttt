@@ -13,7 +13,7 @@ open import Lib
 --   × = ∧ = konjunkció
 --   ⊎ = ∨ = diszjunkció
 --   ¬ = ¬ = negáció
---   ⊃ = → = implikáció
+--   → = ⊃ = implikáció
 
 --------------------------------------------------
 -- Formalisation
@@ -22,27 +22,27 @@ open import Lib
 -- Formalizáljuk a mondatokat!
 
 -- Az egyes formalizált alap mondatrészeket vegyük fel modul paraméterként, akkor szépen fog működni minden.
-module Formalise where
+module Formalise (S E Ke Sz : Set) where
 
   -- Nem süt a nap.
   form1 : Set
-  form1 = ?
+  form1 = ¬ S -- \neg = ¬
 
   -- Esik az eső és süt a nap.
   form2 : Set
-  form2 = ?
+  form2 = E × S
 
   -- Nem kell az esernyő vagy esik az eső.
   form3 : Set
-  form3 = ?
+  form3 = ¬ Ke ⊎ E
 
   -- Ha esik az eső és süt a nap, akkor van szivárvány.
   form4 : Set
-  form4 = ?
+  form4 = E × S → Sz
 
   -- Van szivárvány.
   K : Set
-  K = ?
+  K = Sz
 
   ---- Következményfogalom (logika tárgy 1-3. gyakorlat)
   -- Agdában legegyszerűbben szintaktikus következményekkel lehet foglalkozni.
@@ -52,13 +52,13 @@ module Formalise where
   -- Két féleképpen lehet bizonyítani.
 
   Köv : Set
-  Köv = ?
+  Köv = form1 → form2 → form3 → form4 → K
 
   Köv1 : Köv
-  Köv1 = ?
+  Köv1 ¬s e∧s ¬ke∨e e∧s→sz = exfalso (¬s (snd e∧s))
 
   Köv2 : Köv
-  Köv2 = ?
+  Köv2 ¬s e∧s ¬ke∨e e∧s→sz = e∧s→sz e∧s
 
 --------------------------------------------------
 
@@ -69,12 +69,16 @@ subt-fun : {A A' B B' : Set} → (A → A') → (B → B') → (A' → B) → (A
 subt-fun = {!!}
 
 anything : {X Y : Set} → ¬ X → X → Y
-anything = {!!}
+anything ¬x x = exfalso (¬x x)
 
 ret : {X : Set} → X → ¬ ¬ X
-ret = {!!}
+ret x f = f x
 
 -- Másik irány?
+{-
+otherway : {X : Set} → ¬ ¬ X → X
+otherway f = exfalso (f λ x → f λ x2 → f λ x3 → {!!})
+-}
 
 fun : {X Y : Set} → (¬ X) ⊎ Y → (X → Y)
 fun = {!!}
@@ -93,7 +97,7 @@ dm2b = {!!}
 -- stuff
 
 nocontra : {X : Set} → ¬ (X ↔ ¬ X)
-nocontra = {!!}
+nocontra f = let x = snd f λ x1 → fst f x1 x1 in fst f x x
 
 ¬¬invol₁ : {X : Set} → ¬ ¬ ¬ ¬ X ↔ ¬ ¬ X
 ¬¬invol₁ = {!!}
@@ -102,7 +106,7 @@ nocontra = {!!}
 ¬¬invol₂ = {!!}
 
 nnlem : {X : Set} → ¬ ¬ (X ⊎ ¬ X)
-nnlem = {!!}
+nnlem f = f (inr λ x → f (inl x))
 
 nndnp : {X : Set} → ¬ ¬ (¬ ¬ X → X)
 nndnp = {!!}
@@ -119,7 +123,7 @@ Dec A = A ⊎ ¬ A
 -- open import Lib.Dec.PatternSynonym
 
 ee1 : {X Y : Set} → Dec (X ⊎ Y → ¬ ¬ (Y ⊎ X))
-ee1 = {!!}
+ee1 = inl λ { (inl a) → λ f → f (inr a) ; (inr b) → λ f → f (inl b)}
 
 ee2 : {X : Set} → Dec (¬ (X ⊎ ¬ X))
 ee2 = {!!}
