@@ -15,12 +15,12 @@ inl-injective refl = refl
 inr-injective : ∀{i j}{A : Set i}{B : Set j}{x y : B} → inr {A = A} x ≡ inr y → x ≡ y
 inr-injective refl = refl
 
-swap-involutive : ∀{i j}{A : Set i}{B : Set j}{x : A ⊎ B} → swap (swap x) ≡ x
+swap-involutive : ∀{i j}{A : Set i}{B : Set j}{x : A ⊎ B} → swap⊎ (swap⊎ x) ≡ x
 swap-involutive {x = inl a} = refl
 swap-involutive {x = inr b} = refl
 
 comm⊎ : ∀{i j}{A : Set i}{B : Set j} → A ⊎ B ↔ B ⊎ A
-comm⊎ = swap , swap
+comm⊎ = swap⊎ , swap⊎
 
 ass⊎ : ∀{i j k}{A : Set i}{B : Set j}{C : Set k} → (A ⊎ B) ⊎ C ↔ A ⊎ (B ⊎ C)
 ass⊎ = (λ abc → case abc (λ ab → case ab (λ a → inl a) (λ b → inr (inl b))) (λ c → inr (inr c)))

@@ -2,4 +2,4 @@
 
 module Lib.Containers.CoVector.Equality where
 
-open import Lib.Containers.CoVector.Bisimulation public
+open import Lib.Containers.CoVector.Bisimilarity public

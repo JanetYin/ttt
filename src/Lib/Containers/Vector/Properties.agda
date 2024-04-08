@@ -5,12 +5,14 @@ module Lib.Containers.Vector.Properties where
 open import Lib.Containers.Vector.Type
 open import Lib.Containers.Vector.Base
 open import Lib.Sigma hiding (map)
-open import Lib.Equality
-open import Lib.Dec
+open import Lib.Equality -- all 3 modules needed
+open import Lib.Dec.Type
 open import Lib.Dec.PatternSynonym
-open import Lib.Nat
-open import Lib.Unit
-open import Lib.Empty
+open import Lib.Nat.Type
+open import Lib.Nat.Base
+open import Lib.Nat.Properties
+open import Lib.Unit.Type
+open import Lib.Empty.Type
 
 ∷-injectiveˡ : ∀{i}{A : Set i}{n : ℕ}{x y : A}{xs ys : Vec A n} → 
   x ∷ xs ≡ y ∷ ys → x ≡ y
@@ -36,3 +38,19 @@ open import Lib.Empty
 instance
   DecEqVec : ∀{i}{A : Set i}{n} → ⦃ DecidableEquality A ⦄ → DecidableEquality (Vec A n)
   DecEqVec ⦃ i1 ⦄ = DecProof (≡-dec-Vec (decide i1))
+
+substVec-suc : ∀{i}{A : Set i}{n}(x : A)(xs : Vec A n){m}(e : n ≡ m) → subst (λ k → Vec A (suc k)) e (x ∷ xs) ≡ x ∷ subst (Vec A) e xs
+substVec-suc {n = n} x xs {.n} refl = refl
+
+-- REMOVE THESE!!!
+dropV : {A : Set}{m : ℕ}(n : ℕ) → Vec A (n + m) → Vec A m
+dropV zero x = x
+dropV (suc n) (_ ∷ x) = dropV n x
+
+t3 : {A : Set}{n : ℕ}(ls : Vec A n) → dropV n (subst (Vec A) (sym (idr+ n)) ls) ≡ []
+t3 [] = refl
+t3 {A = A} {n = (suc n)} (l ∷ ls) =
+    cong (λ x → dropV (suc n) (subst (Vec A) x (l ∷ ls))) (symcong suc (idr+ n))
+ ◾ cong (λ x → dropV (suc n) x) (substcong (Vec A) suc (sym (idr+ n)))
+ ◾ cong (dropV (suc n)) (substVec-suc l ls (sym (idr+ n)))
+ ◾ t3 ls

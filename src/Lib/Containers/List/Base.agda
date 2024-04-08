@@ -5,10 +5,16 @@ module Lib.Containers.List.Base where
 open import Lib.Containers.List.Type
 open import Lib.Dec
 open import Lib.Dec.PatternSynonym
-open import Lib.Nat
-open import Lib.Unit
-open import Lib.Empty
-open import Lib.Bool
+open import Lib.Nat.Type
+open import Lib.Nat.Base
+open import Lib.Nat.Literals
+open import Lib.Conat.Type
+open import Lib.Conat.Base renaming (_+_ to _+∞_; _*_ to _*∞_; _^_ to _^∞_)
+open import Lib.Conat.Literals
+open import Lib.Unit.Type
+open import Lib.Empty.Type
+open import Lib.Bool.Type
+open import Lib.Bool.Base
 open import Lib.Equality
 open import Lib.Fin
 open import Lib.Maybe
@@ -22,6 +28,18 @@ length (x ∷ xs) = suc (length xs)
 sumℕ : List ℕ → ℕ
 sumℕ [] = 0
 sumℕ (x ∷ xs) = x + sumℕ xs
+
+productℕ : List ℕ → ℕ
+productℕ [] = 1
+productℕ (x ∷ xs) = x * productℕ xs
+
+sumℕ∞ : List ℕ∞ → ℕ∞
+sumℕ∞ [] = 0
+sumℕ∞ (x ∷ xs) = x +∞ sumℕ∞ xs
+
+productℕ∞ : List ℕ∞ → ℕ∞
+productℕ∞ [] = 1
+productℕ∞ (x ∷ xs) = x *∞ productℕ∞ xs
 
 infixr 5 _++_
 _++_ : ∀{i}{A : Set i} → List A → List A → List A

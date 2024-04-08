@@ -5,6 +5,9 @@ module Lib.Equality.Properties where
 open import Lib.Equality.Type
 open import Lib.Equality.Base
 
+symcong : ∀{i j}{A : Set i}{B : Set j}(f : A → B){a1 a2 : A}(e : a1 ≡ a2) → sym (cong f e) ≡ cong f (sym e)
+symcong f refl = refl
+
 trans-assoc : ∀{i}{A : Set i}{a b c d : A}(eq1 : a ≡ b)(eq2 : b ≡ c)(eq3 : c ≡ d) →
   trans (trans eq1 eq2) eq3 ≡ trans eq1 (trans eq2 eq3)
 trans-assoc refl _ _ = refl

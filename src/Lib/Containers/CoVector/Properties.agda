@@ -4,7 +4,7 @@ module Lib.Containers.CoVector.Properties where
 
 open import Lib.Containers.CoVector.Type
 open import Lib.Containers.CoVector.Base
-open import Lib.Containers.CoVector.Bisimulation
+open import Lib.Containers.CoVector.Bisimilarity
 open import Lib.Equality
 open import Lib.Conat renaming (_+_ to _+∞_)
 open import Lib.Nat

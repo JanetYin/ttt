@@ -1,10 +1,11 @@
 {-# OPTIONS --safe --guardedness #-}
 
-module Lib.Containers.CoVector.Bisimulation where
+module Lib.Containers.CoVector.Bisimilarity where
 
 open import Lib.Containers.CoVector.Type
-open import Lib.Conat
-open import Lib.Equality
+open import Lib.Conat.Type
+open import Lib.Conat.Base
+open import Lib.Equality.Type
 
 infixr 5 _∷V_
 infix 4 _≈V_
