@@ -112,11 +112,22 @@ test-tabulate = refl
 
 -- Sigma types
 
-what : Σ ℕ (Vec Bool)
-what = 10 , {!!}
+what : Σ ℕ λ x → Vec Bool x
+what = 1 , true ∷ []
 
 filter : {A : Set}{n : ℕ}(f : A → Bool) → Vec A n → Σ ℕ (Vec A)
-filter = {!!}
+filter f [] = 0 , []
+filter f (x ∷ xs) with f x
+... | false  = filter f xs
+... | true   = let h = filter f xs in suc (fst h) , x ∷ snd h
+
+tttttttttt : Σ Set λ x → Vec x 2
+fst tttttttttt = Fin 3
+snd tttttttttt = fsuc (fsuc fzero) ∷ (fzero ∷ [])
+
+hhhhh : {A : Set} → Σ A λ _ → Bool
+hhhhh = {!   !} , true
+
 
 test-filter : filter {ℕ} (3 <ᵇ_) (4 ∷ 3 ∷ 2 ∷ 5 ∷ []) ≡ (2 , 4 ∷ 5 ∷ [])
 test-filter = refl
