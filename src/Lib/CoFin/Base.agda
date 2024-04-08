@@ -1,6 +1,7 @@
 {-# OPTIONS --safe --guardedness #-}
 module Lib.CoFin.Base where
 
+-- !!! TODO: Az importokat rendbe kell rakni, hogy specifikusak legyenek és elkerüljük a ciklikus importokat !!!
 open import Lib.CoFin.Type
 open import Lib.Conat
 open import Lib.Maybe
@@ -10,7 +11,7 @@ open import Lib.Sum
 open import Lib.Empty
 open import Lib.Equality
 open import Lib.Containers.CoVector
-open import Lib.WorkInProgressConcept.DoNotIncludeInLib.Lazy
+-- open import Lib.WorkInProgressConcept.DoNotIncludeInLib.Lazy
 
 {-
 
@@ -21,7 +22,6 @@ postulate
 -}
 
 f∞ : CoFin ∞
-inz f∞ = tt
 fpred∞ f∞ = just f∞
 
 coiteCoFin : ∀{ℓ}{n : ℕ∞}(P : ℕ∞ → Set ℓ) →
@@ -53,21 +53,18 @@ singular-cof1 c with fpred∞ c
 ... | nothing = refl
 
 cof1 : CoFin 1
-inz cof1 = tt
 fpred∞ cof1 = nothing
 
 cof2-1 : CoFin 2
-inz cof2-1 = tt
 fpred∞ cof2-1 = nothing
 
 cof2-2 : CoFin 2
-inz cof2-2 = tt
 fpred∞ cof2-2 = just cof1
 
 diff : cof2-1 ≢ cof2-2
 diff x with cong fpred∞ x
 ... | ()
-
+{-
 uniq : (a : CoFin 2) → fpred∞ a ≡ fpred∞ cof2-1 ⊎ fpred∞ a ≡ fpred∞ cof2-2
 uniq a with fpred∞ a
 ... | just x = inr (cong just {!!})
@@ -75,5 +72,6 @@ uniq a with fpred∞ a
 
 _‼ᶜ_ : ∀{ℓ}{A : Set ℓ}{n : ℕ∞} → CoVec A n → CoFin n → Lazy A
 cs ‼ᶜ f with fpred∞ f
-... | just x = later (delay {!!}) -- todo ha a viktor megcsinálja
+... | just x = later (delay {!!}) -- TODO Marci, hajrá! :D
 ... | nothing = now (head cs ⦃ inz f ⦄)
+-}

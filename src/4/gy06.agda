@@ -1,10 +1,10 @@
-module gy07 where
+module gy06 where
 
 open import Lib
 
 ---------------------------------------------------------
 -- propositional logic
----------------------------------------------------------
+------------------------------------------------------
 
 -- Curry-Howard izomorfizmus
 -- Elmélet:
@@ -13,7 +13,8 @@ open import Lib
 --   × = ∧ = konjunkció
 --   ⊎ = ∨ = diszjunkció
 --   ¬ = ¬ = negáció
---   → = ⊃ = implikáció
+--   ⊃ = → = implikáció
+
 
 --------------------------------------------------
 -- Formalisation
@@ -22,29 +23,37 @@ open import Lib
 -- Formalizáljuk a mondatokat!
 
 -- Az egyes formalizált alap mondatrészeket vegyük fel modul paraméterként, akkor szépen fog működni minden.
-module Formalise (S E Ke Sz : Set) where
+module Formalise
+  (TheSunIsShining : Set)
+  (ItsRaining : Set)
+  (WeNeedAnUmbrella : Set)
+  (Rainbow : Set)
+  where
 
   -- Nem süt a nap.
-  form1 : Set
-  form1 = ¬ S -- \neg = ¬
+  form1 : Set -- \neg
+  form1 = ¬ TheSunIsShining
 
   -- Esik az eső és süt a nap.
   form2 : Set
-  form2 = E × S
+  form2 = TheSunIsShining × ItsRaining
 
   -- Nem kell az esernyő vagy esik az eső.
+  -- We don't need an umbrella or it's raining
   form3 : Set
-  form3 = ¬ Ke ⊎ E
+  form3 = (¬ WeNeedAnUmbrella) ⊎ ItsRaining
 
   -- Ha esik az eső és süt a nap, akkor van szivárvány.
+  -- If it's raining and it's sunny, then there's a rainbow.
   form4 : Set
-  form4 = E × S → Sz
+  form4 = (ItsRaining × TheSunIsShining) → Rainbow
 
   -- Van szivárvány.
+  -- There's a rainbow
   K : Set
-  K = Sz
+  K = Rainbow
 
-  ---- Következményfogalom (logika tárgy 1-3. gyakorlat)
+---- Következményfogalom (logika tárgy 1-3. gyakorlat)
   -- Agdában legegyszerűbben szintaktikus következményekkel lehet foglalkozni.
 
   -- Mondd ki, és bizonyítsd be, hogy a fenti állításokból következik a K.
@@ -52,33 +61,32 @@ module Formalise (S E Ke Sz : Set) where
   -- Két féleképpen lehet bizonyítani.
 
   Köv : Set
-  Köv = form1 → form2 → form3 → form4 → K
+  Köv = (form1 × form2 × form3 × form4) → K
 
+--  C-u C-u C-c C-,
+-- form 1: TheSunIsShining → ⊥
+-- form 2: TheSunIsShining × ItsRaining
+-- form 3: (¬ WeNeedUmbrella) ⊎ ItsRaining
+-- form 4: (ItsRaining × TheSunIsShining) → Rainbow
   Köv1 : Köv
-  Köv1 ¬s e∧s ¬ke∨e e∧s→sz = exfalso (¬s (snd e∧s))
+  Köv1 (form₁ , form₂ , form₃ , form₄) = exfalso (form₁ (fst form₂))
 
   Köv2 : Köv
-  Köv2 ¬s e∧s ¬ke∨e e∧s→sz = e∧s→sz e∧s
+  Köv2 = {!!}
 
---------------------------------------------------
+----------------------------------------------------------------------------
 
 subt-prod : {A A' B B' : Set} → (A → A') → (B → B') → A × B → A' × B'
-subt-prod = {!!}
+subt-prod a→a' b→b' (a , b) = a→a' a , b→b' b
 
 subt-fun : {A A' B B' : Set} → (A → A') → (B → B') → (A' → B) → (A → B')
 subt-fun = {!!}
 
 anything : {X Y : Set} → ¬ X → X → Y
-anything ¬x x = exfalso (¬x x)
+anything = {!!}
 
 ret : {X : Set} → X → ¬ ¬ X
-ret x f = f x
-
--- Másik irány?
-{-
-otherway : {X : Set} → ¬ ¬ X → X
-otherway f = exfalso (f λ x → f λ x2 → f λ x3 → {!!})
--}
+ret = {!!}
 
 fun : {X Y : Set} → (¬ X) ⊎ Y → (X → Y)
 fun = {!!}
@@ -86,18 +94,25 @@ fun = {!!}
 -- De Morgan
 
 dm1 : {X Y : Set} →  ¬ (X ⊎ Y) ↔ ¬ X × ¬ Y
-dm1 = {!!}
+fst (fst dm1 a) x = a (inl x)
+snd (fst dm1 a) y = a (inr y)
+snd dm1 ¬X×¬Y (inl x) = fst ¬X×¬Y x
+snd dm1 ¬X×¬Y (inr y) = snd ¬X×¬Y y
 
 dm2 : {X Y : Set} → ¬ X ⊎ ¬ Y → ¬ (X × Y)
 dm2 = {!!}
 
 dm2b : {X Y : Set} → ¬ ¬ (¬ (X × Y) → ¬ X ⊎ ¬ Y)
-dm2b = {!!}
+dm2b a = {!!} -- a (λ ¬[x×y] → inl λ x → a (λ _ → inr λ y → ¬[x×y] (x , y)))
+
+
+wk : {A : Set} → A ⊎ (¬ A)
+wk = inr λ a → {!!}
 
 -- stuff
 
 nocontra : {X : Set} → ¬ (X ↔ ¬ X)
-nocontra f = let x = snd f λ x1 → fst f x1 x1 in fst f x x
+nocontra = {!!}
 
 ¬¬invol₁ : {X : Set} → ¬ ¬ ¬ ¬ X ↔ ¬ ¬ X
 ¬¬invol₁ = {!!}
@@ -106,7 +121,7 @@ nocontra f = let x = snd f λ x1 → fst f x1 x1 in fst f x x
 ¬¬invol₂ = {!!}
 
 nnlem : {X : Set} → ¬ ¬ (X ⊎ ¬ X)
-nnlem f = f (inr λ x → f (inl x))
+nnlem = {!!}
 
 nndnp : {X : Set} → ¬ ¬ (¬ ¬ X → X)
 nndnp = {!!}
@@ -120,10 +135,10 @@ Dec : Set → Set
 Dec A = A ⊎ ¬ A
 -}
 
--- open import Lib.Dec.PatternSynonym
+open import Lib.Dec.PatternSynonym
 
 ee1 : {X Y : Set} → Dec (X ⊎ Y → ¬ ¬ (Y ⊎ X))
-ee1 = inl λ { (inl a) → λ f → f (inr a) ; (inr b) → λ f → f (inl b)}
+ee1 = {!!}
 
 ee2 : {X : Set} → Dec (¬ (X ⊎ ¬ X))
 ee2 = {!!}
@@ -152,7 +167,8 @@ f1 = {!!}
 f2 : ({X Y : Set} → ¬ (X × Y) → ¬ X ⊎ ¬ Y) → {X Y : Set} → ¬ ¬ (X ⊎ Y) → ¬ ¬ X ⊎ ¬ ¬ Y
 f2 = {!!}
 
--- Not exactly first order logic but kinda is.
+----------------------------------------------------------------------
+-- Not exactly first order logic but kinda is and kinda isn't.
 
 f3 : Dec ((X Y : Set) → X ⊎ Y → Y)
 f3 = {!!}

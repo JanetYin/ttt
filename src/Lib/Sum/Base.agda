@@ -35,9 +35,9 @@ fromInr f t = case t f (λ x → x)
 reduceIdem : ∀{i}{A : Set i} → A ⊎ A → A
 reduceIdem t = case t (λ x → x) (λ x → x)
 
-swap : ∀{i j}{A : Set i}{B : Set j} → A ⊎ B → B ⊎ A
-swap (inl x) = inr x
-swap (inr x) = inl x
+swap⊎ : ∀{i j}{A : Set i}{B : Set j} → A ⊎ B → B ⊎ A
+swap⊎ (inl x) = inr x
+swap⊎ (inr x) = inl x
 
 map : ∀{i j k l}{A : Set i}{B : Set j}{C : Set k}{D : Set l} →
        (A → C) → (B → D) → (A ⊎ B → C ⊎ D)
