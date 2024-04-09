@@ -284,3 +284,35 @@ f8 = {!!}
 
 f9 : Dec ((X Y Z : Set) → (X ⊎ Y) × (X ⊎ Z) → (X ⊎ Y × Z))
 f9 = {!!}
+
+f10 : Dec ((X Y Z : Set) → (X ⊎ Y) × (X ⊎ Z) → ((X ⊎ Y) × Z))
+f10 = {!!}
+
+f11 : Dec ((P Q : Set) → (P → Q) × Q → P)
+f11 = {!   !}
+
+f12 : Dec ((A B : Set) → (A → B) → ¬ ¬ A → ¬ ¬ B)
+f12 = {!   !}
+
+f13 : Dec ((P Q : Set) → (P → Q) → ¬ ¬ (¬ P ⊎ Q))
+f13 = {!   !}
+
+f14 : Dec ((P Q : Set) → (P ↔ Q) → (¬ P × Q) ⊎ (P × ¬ Q))
+f14 = {!   !}
+
+f15 : Dec ((P Q R S : Set) → (P → Q) × (R → S) × (¬ P ⊎ S) → (Q ⊎ ¬ R))
+f15 = {!   !}
+
+f16 : Dec ((P Q : Set) → P × Q ↔ ((P → Q) ↔ P))
+f16 = {!   !}
+
+f17 : Dec ((P Q : Set) → (P → Q) ↔ ((P ⊎ ¬ Q) ↔ Q))
+f17 = {!   !}
+
+f18 : Dec ((P Q : Set) → (¬ P ⊎ Q) ↔ P → P × ¬ Q)
+f18 = {!   !}
+
+-- Sokat kell ezzel szőrőzni. Amolyan igazi bizonyítás!
+-- Minden adja magát, csak sokáig adja magát.
+f19 : {X Y : Set} → Dec (¬ ((X ↔ Y) ↔ (¬ X ↔ ¬ Y)))
+f19 = {!   !}
