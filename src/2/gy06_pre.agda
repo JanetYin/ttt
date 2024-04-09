@@ -1,6 +1,12 @@
 module gy06_pre where
 
-open import Lib
+open import Lib.Sigma
+open import Lib.Sum
+open import Lib.Bool
+open import Lib.Equality
+open import Lib.Empty
+open import Lib.Nat
+open import Lib.Dec
 
 ----------------------------------------------
 -- Some Sigma types
@@ -51,23 +57,23 @@ module Formalise where
 
   -- Nem süt a nap.
   form1 : Set
-  form1 = ?
+  form1 = {!   !}
 
   -- Esik az eső és süt a nap.
   form2 : Set
-  form2 = ?
+  form2 = {!   !}
 
   -- Nem kell az esernyő vagy esik az eső.
   form3 : Set
-  form3 = ?
+  form3 = {!   !}
 
   -- Ha esik az eső és süt a nap, akkor van szivárvány.
   form4 : Set
-  form4 = ?
+  form4 = {!   !}
 
   -- Van szivárvány.
   K : Set
-  K = ?
+  K = {!   !}
 
 ---- Következményfogalom (logika tárgy 1-3. gyakorlat)
   -- Agdában legegyszerűbben szintaktikus következményekkel lehet foglalkozni.
@@ -77,13 +83,13 @@ module Formalise where
   -- Két féleképpen lehet bizonyítani.
 
   Köv : Set
-  Köv = ?
+  Köv = {!   !}
 
   Köv1 : Köv
-  Köv1 = ?
+  Köv1 = {!   !}
 
   Köv2 : Köv
-  Köv2 = ?
+  Köv2 = {!   !}
 
 ----------------------------------------------------------------------------
 
