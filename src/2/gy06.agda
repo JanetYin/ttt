@@ -1,6 +1,12 @@
 module gy06 where
 
-open import Lib
+open import Lib.Sigma
+open import Lib.Sum
+open import Lib.Bool
+open import Lib.Equality
+open import Lib.Empty
+open import Lib.Nat
+open import Lib.Dec
 
 ----------------------------------------------
 -- Some Sigma types
@@ -159,31 +165,33 @@ Dec A = A ⊎ ¬ A
 open import Lib.Dec.PatternSynonym
 
 ee1 : {X Y : Set} → Dec (X ⊎ Y → ¬ ¬ (Y ⊎ X))
-ee1 = {!!}
+ee1 = inl λ where (inl x) x₁ → x₁ (inr x)
+                  (inr y) x₁ → x₁ (inl y)
 
 ee2 : {X : Set} → Dec (¬ (X ⊎ ¬ X))
-ee2 = {!!}
+ee2 = inr λ f → f (inr λ x → f (inl x))
 
 e3 : {X : Set} → Dec (¬ (X → (¬ X → X)))
-e3 = {!!}
+e3 = inr λ f → f λ x ¬x → x
 
 e4 : Dec ℕ
-e4 = {!!}
+e4 = inl zero
 
 e5 : Dec ⊥
-e5 = {!!}
+e5 = inr λ x → x
 
 e6 : {X : Set} → Dec (⊥ → X ⊎ ¬ X)
-e6 = {!!}
+e6 = inl λ x → inl (exfalso x)
 
 e7 : {X : Set} → Dec (X × ¬ X → ¬ X ⊎ X)
-e7 = {!!}
+e7 = inl λ where (x , ¬x) → inr x
 
 e8 : {X : Set} → Dec ((X → X) → ⊥)
-e8 = {!!}
+e8 = inr λ f → f λ x → x
 
 f1 : {X Y : Set} → ¬ ¬ X ⊎ ¬ ¬ Y → ¬ ¬ (X ⊎ Y)
-f1 = {!!}
+f1 (inl a) x₁ = a λ x → x₁ (inl x)
+f1 (inr b) x₁ = b λ y → x₁ (inr y)
 
 f2 : ({X Y : Set} → ¬ (X × Y) → ¬ X ⊎ ¬ Y) → {X Y : Set} → ¬ ¬ (X ⊎ Y) → ¬ ¬ X ⊎ ¬ ¬ Y
 f2 = {!!}
@@ -192,23 +200,27 @@ f2 = {!!}
 -- Not exactly first order logic but kinda is and kinda isn't.
 
 f3 : Dec ((X Y : Set) → X ⊎ Y → Y)
-f3 = {!!}
+f3 = inr λ f → f ⊤ ⊥ (inl tt)
 
 f4 : Dec ((X Y Z : Set) → (X → Z) ⊎ (Y → Z) → (X ⊎ Y → Z))
-f4 = {!!}
+f4 = inr λ f → f ⊥ ⊤ ⊥ (inl (λ x → x)) (inr tt)
 
 f5 : Dec ((X Y Z : Set) → (X → Z) × (Y → Z) → (X × Y → Z))
-f5 = {!!}
+f5 = inl λ X Y Z (xz , yz) (x , y) → yz y
 
 f6 : Dec ((X Y Z : Set) → (X × Y → Z) → (X → Z) × (Y → Z))
-f6 = {!!}
+f6 = inr λ f → snd (f ⊥ ⊤ ⊥ λ x → fst x) tt
 
 f7 : Dec ((X Y Z : Set) → (X ⊎ Y × Z) → (X ⊎ Y) × (X ⊎ Z))
-f7 = {!!}
+f7 = inl λ where X Y Z (yes x) → inl x , inl x
+                 X Y Z (no (y , z)) → inr y , inr z
 
 f8 : Dec ((X Y Z : Set) → (X ⊎ Y) × (X ⊎ Z) → ((X ⊎ Y) × Z))
-f8 = {!!}
+f8 = inr λ f → snd (f ⊤ ⊤ ⊥ (inl tt , inl tt))
 
 f9 : Dec ((X Y Z : Set) → (X ⊎ Y) × (X ⊎ Z) → (X ⊎ Y × Z))
-f9 = {!!}
+f9 = inl λ where X Y Z (yes a , yes a₁) → inl a
+                 X Y Z (yes a , no b) → inl a
+                 X Y Z (no b , yes a) → inl a
+                 X Y Z (no b , no b₁) → inr (b , b₁)
  

@@ -1,6 +1,12 @@
 module gy07_pre where
 
-open import Lib
+open import Lib.Sigma
+open import Lib.Sum
+open import Lib.Bool
+open import Lib.Equality
+open import Lib.Empty
+open import Lib.Nat
+open import Lib.Dec
 open import Lib.Dec.PatternSynonym
 
 ------------------------------------------------------
@@ -8,7 +14,7 @@ open import Lib.Dec.PatternSynonym
 ------------------------------------------------------
 
 blowUp : ((A : Set) → ¬ A) → ⊥
-blowUp f = ?
+blowUp f = {!   !}
 -- what's the difference with this?
 -- (A : Set) → ¬ A → ⊥
 
