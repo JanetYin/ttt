@@ -66,7 +66,8 @@ macro
   doesNotTypeCheck t₁ t₂ msg hole = let info = arg-info visible (modality relevant quantity-0) in
     bindTC
       (catchTC (bindTC (inferType (def (quote _$_) (arg info t₁ ∷ arg info t₂ ∷ []))) (λ _ → returnTC true)) (returnTC false)) (λ b →
-      if b then metaMagic msg hole else unify hole (quoteTerm ⊤))
+      if b then typeError (strErr msg ∷ []) else unify hole (quoteTerm ⊤))
+{-
     where
       metaMagic : String → Term → TC ⊤
       metaMagic msg (var x args) = typeError (strErr "var" ∷ [])
@@ -79,7 +80,7 @@ macro
       metaMagic msg (lit l) = typeError (strErr "lit" ∷ [])
       metaMagic msg (meta m _) = blockTC (blockerMeta m)
       metaMagic msg unknown = typeError (strErr "Ide jutottunk?" ∷ [])
-
+-}
 -- if b then metaMagic msg hole else unify hole (quoteTerm ⊤))
 
 {-
