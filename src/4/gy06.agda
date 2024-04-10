@@ -76,8 +76,11 @@ module Formalise
 
 ----------------------------------------------------------------------------
 
+wklem : {A : Set} → ¬ ¬ (A ⊎ (¬ A))
+wklem ¬[a∨¬a] = ¬[a∨¬a] (inr λ a → ¬[a∨¬a] (inl a))
+
 subt-prod : {A A' B B' : Set} → (A → A') → (B → B') → A × B → A' × B'
-subt-prod a→a' b→b' (a , b) = a→a' a , b→b' b
+subt-prod a→a' b→b' (a , b) = (a→a' a) , (b→b' b)
 
 subt-fun : {A A' B B' : Set} → (A → A') → (B → B') → (A' → B) → (A → B')
 subt-fun = {!!}
@@ -103,7 +106,9 @@ dm2 : {X Y : Set} → ¬ X ⊎ ¬ Y → ¬ (X × Y)
 dm2 = {!!}
 
 dm2b : {X Y : Set} → ¬ ¬ (¬ (X × Y) → ¬ X ⊎ ¬ Y)
-dm2b a = {!!} -- a (λ ¬[x×y] → inl λ x → a (λ _ → inr λ y → ¬[x×y] (x , y)))
+dm2b a = {!!}
+
+-- a (λ ¬[x×y] → inl λ x → a (λ _ → inr λ y → ¬[x×y] (x , y)))
 
 
 wk : {A : Set} → A ⊎ (¬ A)
