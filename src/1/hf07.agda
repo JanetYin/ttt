@@ -92,10 +92,10 @@ e7 = {!   !}
 e8 : {X : Set} → Dec ((X → X) → ⊥)
 e8 = {!   !}
 
-e9 : {X Y : Set} → Dec (X ⊎ Y ↔ (¬ X → Y))
+e9 : {X Y : Set} → Dec (¬ (X ⊎ Y ↔ (¬ X → Y)))
 e9 = {!   !}
 
-e10 : {X Y : Set} → Dec ((¬ X → ¬ Y) → Y → X)
+e10 : {X Y : Set} → Dec (¬ ((¬ X → ¬ Y) → Y → X))
 e10 = {!   !}
 
 f1 : {X Y : Set} → ¬ ¬ X ⊎ ¬ ¬ Y → ¬ ¬ (X ⊎ Y)
