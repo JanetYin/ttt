@@ -2,33 +2,31 @@
 
 module Lib.Containers.CoList.Type where
 
-open import Lib.Unit
-open import Lib.Sum
-open import Lib.Sigma
+open import Lib.Unit.Type
+open import Lib.Maybe.Type
+open import Lib.Sigma.Type
 
-record CoList {a}(A : Set a) : Set a
-
-CoList′ : ∀{a}(A : Set a) → Set a
-CoList′ A = ⊤ ⊎ (A × CoList A)
-
-record CoList A where
+record CoList {a}(A : Set a) : Set a where
   coinductive
   constructor mkCoList
   field
-    headTail : CoList′ A
-  
-  infixr 5 _∷∞_
-  pattern []∞ = inl tt
-  pattern _∷∞_ x xs = inr (x , xs)
+    uncons : Maybe (A × CoList A)
 
-  head : ⊤ ⊎ A
-  head with headTail
-  ... | []∞ = inl tt
-  ... | x ∷∞ _ = inr x
+  head : Maybe A
+  head with uncons
+  ... | nothing = nothing
+  ... | just (x , _) = just x
 
-  tail : ⊤ ⊎ CoList A
-  tail with headTail
-  ... | []∞ = inl tt
-  ... | _ ∷∞ xs = inr xs
+  tail : Maybe (CoList A)
+  tail with uncons
+  ... | nothing = nothing
+  ... | just (_ , xs) = just xs
 
 open CoList public
+
+[] : ∀{a}{A : Set a} → CoList A
+uncons [] = nothing
+
+infixr 5 _∷_
+_∷_ : ∀{a}{A : Set a} → A → CoList A → CoList A
+uncons (x ∷ xs) = just (x , xs)

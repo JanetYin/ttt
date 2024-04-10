@@ -1,12 +1,12 @@
 {-# OPTIONS --safe --guardedness #-}
 
-module Lib.Conat.Bisimulation where
+module Lib.Conat.Bisimilarity where
 
 open import Lib.Conat.PatternSynonym
 open import Lib.Conat.Type
 open import Lib.Maybe.Type
-open import Lib.Unit
-open import Lib.Empty
+open import Lib.Unit.Type
+open import Lib.Empty.Type
 
 infix 4 _≈ℕ∞_ _≈ℕ∞′′_
 record _≈ℕ∞_ (x y : ℕ∞) : Set

@@ -11,6 +11,16 @@ open import Lib.Unit
 open import Lib.Empty
 open import Lib.Bool.Type
 
+comm× : ∀{i j}{A : Set i}{B : Set j} → A × B ↔ B × A
+comm× = swap× , swap×
+
+assocΣ : ∀{i j k}{A : Set i}{B : A → Set j}{C : (a : A) → B a → Set k} → (Σ (Σ A B) λ ab → C (fst ab) (snd ab)) ↔ Σ A (λ a → Σ (B a) (C a))
+fst assocΣ ((a , b) , c) = a , b , c
+snd assocΣ (a , b , c) = (a , b) , c
+
+assoc× : ∀{i j k}{A : Set i}{B : Set j}{C : Set k} → (A × B) × C ↔ A × B × C
+assoc× = assocΣ
+
 Σinj : ∀{i j}{A : Set i}{B : A → Set j}{a b : Σ A B} →
   (eq : a ≡ b) → (fst a ≡ fst b) × (subst B (cong fst eq) (snd a) ≡ snd b)
 Σinj refl = refl , refl

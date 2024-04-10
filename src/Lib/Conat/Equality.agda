@@ -2,4 +2,4 @@
 
 module Lib.Conat.Equality where
 
-open import Lib.Conat.Bisimulation public
+open import Lib.Conat.Bisimilarity public

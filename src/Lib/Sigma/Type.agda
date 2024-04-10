@@ -30,6 +30,10 @@ infixr 2 _×_
 _×_ : ∀{i j}(A : Set i)(B : Set j) → Set (i ⊔ j)
 A × B = Σ A (λ _ → B)
 
+infixr 4 _,'_
+_,'_ : ∀{a b}{A : Set a}{B : Set b} → A → B → A × B
+_,'_ = _,_
+
 infix 0 _↔_
 _↔_ : ∀{i j} → Set i → Set j → Set (i ⊔ j)
 A ↔ B = (A → B) × (B → A)

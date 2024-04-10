@@ -14,6 +14,15 @@ sym refl = refl
 trans : ∀{i}{A : Set i}{x y z : A} → x ≡ y → y ≡ z → x ≡ z
 trans refl eq2 = eq2
 
+-- \sq5 = ◾
+
+infixr 2 _◾_
+
+_◾_ : ∀{i}{A : Set i}{x y z : A} → x ≡ y → y ≡ z → x ≡ z
+_◾_ = trans
+
+{-# DISPLAY trans = _◾_ #-}
+
 cong : ∀{i j}{A : Set i}{B : Set j}(f : A → B){x y : A} → x ≡ y → f x ≡ f y
 cong f refl = refl
 

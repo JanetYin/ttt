@@ -1,10 +1,42 @@
-module gy07 where
+module gy06 where
 
 open import Lib
 
+----------------------------------------------
+-- Some Sigma types
+----------------------------------------------
+
+Σ=⊎ : {A B : Set} → Σ Bool (if_then A else B) ↔ A ⊎ B
+fst Σ=⊎ (false , sn) = inr sn
+fst Σ=⊎ (true , sn) = inl sn
+snd Σ=⊎ (inl a) = true , a
+snd Σ=⊎ (inr b) = false , b
+
+Σ=× : {A B : Set} → Σ A (λ _ → B) ↔ A × B
+fst Σ=× (fs , sn) = fs , sn
+snd Σ=× = id
+
+-- Π A F is essentially (a : A) → F a
+-- what does this mean?
+
+                    -- Π A (λ _ → B)
+Π=→ : {A B : Set} → ((a : A) → (λ _ → B) a) ≡ (A → B)
+Π=→ = refl
+
+                    -- Π Bool (if_then A else B)
+→=× : {A B : Set} → ((b : Bool) → if b then A else B) ↔ A × B
+fst →=× x = (x true) , (x false)
+snd →=× x false = snd x
+snd →=× x true = fst x
+
+dependentCurry : {A : Set}{B : A → Set}{C : (a : A) → B a → Set} →
+  ((a : A)(b : B a) → C a b) ↔ ((w : Σ A B) → C (fst w) (snd w))
+fst dependentCurry x w = x (fst w) (snd w)
+snd dependentCurry x a b = x (a , b)
+
 ---------------------------------------------------------
 -- propositional logic
----------------------------------------------------------
+------------------------------------------------------
 
 -- Curry-Howard izomorfizmus
 -- Elmélet:
@@ -13,91 +45,44 @@ open import Lib
 --   × = ∧ = konjunkció
 --   ⊎ = ∨ = diszjunkció
 --   ¬ = ¬ = negáció
---   → = ⊃ = implikáció
-
---------------------------------------------------
--- Formalisation
---------------------------------------------------
-
--- Formalizáljuk a mondatokat!
-
--- Az egyes formalizált alap mondatrészeket vegyük fel modul paraméterként, akkor szépen fog működni minden.
-module Formalise (S E Ke Sz : Set) where
-
-  -- Nem süt a nap.
-  form1 : Set
-  form1 = ¬ S -- \neg = ¬
-
-  -- Esik az eső és süt a nap.
-  form2 : Set
-  form2 = E × S
-
-  -- Nem kell az esernyő vagy esik az eső.
-  form3 : Set
-  form3 = ¬ Ke ⊎ E
-
-  -- Ha esik az eső és süt a nap, akkor van szivárvány.
-  form4 : Set
-  form4 = E × S → Sz
-
-  -- Van szivárvány.
-  K : Set
-  K = Sz
-
-  ---- Következményfogalom (logika tárgy 1-3. gyakorlat)
-  -- Agdában legegyszerűbben szintaktikus következményekkel lehet foglalkozni.
-
-  -- Mondd ki, és bizonyítsd be, hogy a fenti állításokból következik a K.
-  -- A típusban kell kimondani az állítást; az állítás kimondásához az eldöntésprobléma tételét kell használni.
-  -- Két féleképpen lehet bizonyítani.
-
-  Köv : Set
-  Köv = form1 → form2 → form3 → form4 → K
-
-  Köv1 : Köv
-  Köv1 ¬s e∧s ¬ke∨e e∧s→sz = exfalso (¬s (snd e∧s))
-
-  Köv2 : Köv
-  Köv2 ¬s e∧s ¬ke∨e e∧s→sz = e∧s→sz e∧s
-
---------------------------------------------------
+--   ⊃ = → = implikáció
 
 subt-prod : {A A' B B' : Set} → (A → A') → (B → B') → A × B → A' × B'
-subt-prod = {!!}
+subt-prod f g x = f (fst x) , g (snd x)
 
 subt-fun : {A A' B B' : Set} → (A → A') → (B → B') → (A' → B) → (A → B')
-subt-fun = {!!}
+subt-fun f g h a = g (h (f a))
 
 anything : {X Y : Set} → ¬ X → X → Y
-anything ¬x x = exfalso (¬x x)
+anything x y = exfalso (x y)
 
 ret : {X : Set} → X → ¬ ¬ X
 ret x f = f x
 
--- Másik irány?
-{-
-otherway : {X : Set} → ¬ ¬ X → X
-otherway f = exfalso (f λ x → f λ x2 → f λ x3 → {!!})
--}
+-- ¬ ¬ X = (¬ X) → ⊥ = (X → ⊥) → ⊥
 
 fun : {X Y : Set} → (¬ X) ⊎ Y → (X → Y)
-fun = {!!}
+fun (inl a) y = exfalso (a y)
+fun (inr b) y = b
 
 -- De Morgan
 
 dm1 : {X Y : Set} →  ¬ (X ⊎ Y) ↔ ¬ X × ¬ Y
-dm1 = {!!}
+fst dm1 x = (λ h → x (inl h)) , λ h → x (inr h)
+snd dm1 x (inl a) = fst x a
+snd dm1 x (inr b) = snd x b
 
 dm2 : {X Y : Set} → ¬ X ⊎ ¬ Y → ¬ (X × Y)
-dm2 = {!!}
+dm2 (inl a) v = a (fst v)
+dm2 (inr b) v = b (snd v)
 
 dm2b : {X Y : Set} → ¬ ¬ (¬ (X × Y) → ¬ X ⊎ ¬ Y)
-dm2b = {!!}
+dm2b x = x (λ f → inl λ g → x (λ _ → inr λ y → f (g , y)))
 
 -- stuff
 
 nocontra : {X : Set} → ¬ (X ↔ ¬ X)
-nocontra f = let x = snd f λ x1 → fst f x1 x1 in fst f x x
+nocontra = {!!}
 
 ¬¬invol₁ : {X : Set} → ¬ ¬ ¬ ¬ X ↔ ¬ ¬ X
 ¬¬invol₁ = {!!}
@@ -106,7 +91,7 @@ nocontra f = let x = snd f λ x1 → fst f x1 x1 in fst f x x
 ¬¬invol₂ = {!!}
 
 nnlem : {X : Set} → ¬ ¬ (X ⊎ ¬ X)
-nnlem f = f (inr λ x → f (inl x))
+nnlem = {!!}
 
 nndnp : {X : Set} → ¬ ¬ (¬ ¬ X → X)
 nndnp = {!!}
@@ -120,10 +105,10 @@ Dec : Set → Set
 Dec A = A ⊎ ¬ A
 -}
 
--- open import Lib.Dec.PatternSynonym
+open import Lib.Dec.PatternSynonym
 
 ee1 : {X Y : Set} → Dec (X ⊎ Y → ¬ ¬ (Y ⊎ X))
-ee1 = inl λ { (inl a) → λ f → f (inr a) ; (inr b) → λ f → f (inl b)}
+ee1 = {!!}
 
 ee2 : {X : Set} → Dec (¬ (X ⊎ ¬ X))
 ee2 = {!!}
@@ -152,7 +137,8 @@ f1 = {!!}
 f2 : ({X Y : Set} → ¬ (X × Y) → ¬ X ⊎ ¬ Y) → {X Y : Set} → ¬ ¬ (X ⊎ Y) → ¬ ¬ X ⊎ ¬ ¬ Y
 f2 = {!!}
 
--- Not exactly first order logic but kinda is.
+----------------------------------------------------------------------
+-- Not exactly first order logic but kinda is and kinda isn't.
 
 f3 : Dec ((X Y : Set) → X ⊎ Y → Y)
 f3 = {!!}
@@ -174,3 +160,4 @@ f8 = {!!}
 
 f9 : Dec ((X Y Z : Set) → (X ⊎ Y) × (X ⊎ Z) → (X ⊎ Y × Z))
 f9 = {!!}
+ 

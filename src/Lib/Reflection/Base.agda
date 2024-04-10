@@ -11,6 +11,8 @@ open import Lib.Bool.Base
 open import Lib.Nat.Type
 open import Lib.Nat.Base
 open import Lib.Conat.Type
+open import Lib.Conat.Base renaming (_+_ to _+∞_; _*_ to _*∞_; _^_ to _^∞_)
+open import Lib.Conat.Literals
 
 open import Agda.Builtin.Reflection public
 open import Agda.Builtin.String public
@@ -46,19 +48,19 @@ showNat n = showNatFuel n n where
   showNatFuel fuel 9 = "9"
   showNatFuel zero (suc (suc (suc (suc (suc (suc (suc (suc (suc (suc _)))))))))) = "No more fuel!"
   showNatFuel (suc fuel) n@(suc (suc (suc (suc (suc (suc (suc (suc (suc (suc _)))))))))) = concatString (map (showNatFuel fuel) (digits n))
-{-
+
 showTerm : Term → String
-showTerm (var x args) = {!!}
-showTerm (con c args) = {!!}
-showTerm (def f args) = {!!}
-showTerm (lam v t) = {!!}
-showTerm (pat-lam cs args) = {!!}
-showTerm (pi a b) = {!!}
-showTerm (agda-sort s) = {!!}
-showTerm (lit l) = {!!}
-showTerm (meta x x₁) = {!!}
-showTerm unknown = {!!}
--}
+showTerm (var x args) = "var"
+showTerm (con c args) = "con"
+showTerm (def f args) = primShowQName f
+showTerm (lam v t) = "lam"
+showTerm (pat-lam cs args) = "pat-lam"
+showTerm (pi a b) = "pi"
+showTerm (agda-sort s) = "agda-sort"
+showTerm (lit l) = "lit"
+showTerm (meta x x₁) = "meta"
+showTerm unknown = "unknown"
+
 macro
   doesNotTypeCheck : Term → Term → String → Term → TC ⊤
   doesNotTypeCheck t₁ t₂ msg hole = let info = arg-info visible (modality relevant quantity-0) in
@@ -70,7 +72,7 @@ macro
       metaMagic : String → Term → TC ⊤
       metaMagic msg (var x args) = typeError (strErr "var" ∷ [])
       metaMagic msg (con c args) = typeError (strErr "con" ∷ [])
-      metaMagic msg (def f args) = typeError (strErr ? ∷ [])
+      metaMagic msg (def f args) = typeError (termErr t₁ ∷ strErr " " ∷ termErr t₂ ∷ strErr " " ∷ termErr hole ∷ [])
       metaMagic msg (lam v t) = typeError (strErr "lam" ∷ [])
       metaMagic msg (pat-lam cs args) = typeError (strErr "pat-lam" ∷ [])
       metaMagic msg (pi a b) = typeError (strErr "pi" ∷ [])
@@ -80,16 +82,8 @@ macro
       metaMagic msg unknown = typeError (strErr "Ide jutottunk?" ∷ [])
 -}
 -- if b then metaMagic msg hole else unify hole (quoteTerm ⊤))
+
 {-
-∣_∣T : Type → ℕ∞
-∣ var x args ∣T = {!!}
-∣ con c args ∣T = {!!}
-∣ def f args ∣T = {!!}
-∣ lam v t ∣T = {!!}
-∣ pat-lam cs args ∣T = {!!}
-∣ pi a b ∣T = {!!}
-∣ agda-sort s ∣T = {!!}
-∣ lit l ∣T = {!!}
-∣ meta x x₁ ∣T = {!!}
-∣ unknown ∣T = {!!}
+∣_∣T : Type → TC ℕ∞
+∣ t ∣T = ?
 -}
