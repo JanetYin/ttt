@@ -46,7 +46,8 @@ f10 = {!!}
 -- erre mindjárt visszatérünk
 notExists↔noneOf : ∀{i}{A : Set i} -> (P : A -> Set) ->
                         (∀ x -> ¬ (P x)) ↔ ¬ (Σ A (λ x -> P x))
-notExists↔noneOf = {!!}
+fst (notExists↔noneOf P) x (fs , sn) = x fs sn
+snd (notExists↔noneOf P) ¬s a p = ¬s (a , p)
 
 module People
   (Person    : Set)
@@ -59,23 +60,23 @@ module People
 
   -- Define the _hasChild predicate.
   _hasChild : Person → Set
-  x hasChild = {!!}
+  x hasChild = Σ Person (λ y → y childOf x)
 
   -- Formalise: Ann is not a child of Kate.
   ANK : Set
-  ANK = {!!}
+  ANK = ¬ (Ann childOf Kate)
 
   -- Formalise: there is someone with exactly one child.
   ONE : Set
-  ONE = {!!}
+  ONE = Σ Person (λ x → Σ Person (λ y → y childOf x × (∀ (z : Person) → z childOf x → z sameAs y)))
 
   -- Define the relation _parentOf_.
   _parentOf_ : Person → Person → Set
-  x parentOf y = {!!}
+  x parentOf y = y childOf x
 
   -- Formalise: No one is the parent of everyone.
   NOPE : Set
-  NOPE = {!!}
+  NOPE = ¬ Σ Person (λ x → ∀ (z : Person) → z childOf x)
 
   -- Prove that if Ann has no children then Kate is not the child of Ann.
   AK : ¬ (Σ Person λ y → y childOf Ann) → ¬ (Kate childOf Ann)

@@ -1,59 +1,110 @@
-module gy10 where
+module gy10-pre where
 
-open import Lib
+open import Lib hiding (_≟ℕ_)
+open import Lib.Containers.List
 
 ---------------------------------------------------------
--- equational reasoning
+-- konstruktorok injektivitasa
 ------------------------------------------------------
 
-p4 : (x y : ℕ) → ((x + (y + zero)) + x) ≡ (2 * x + y)
-p4 = {!!}
+sucinj : (m n : ℕ) → ℕ.suc m ≡ suc n → m ≡ n
+sucinj = {!!}
 
-p3 : (a b : ℕ) → a + a + b + a * 0 ≡ 2 * a + b
-p3 = {!!}
+-- prove it without pattern matching on e! (hint: use pred)
+sucinj' : (m n : ℕ) → ℕ.suc m ≡ suc n → m ≡ n
+sucinj' m n e = {!!}
 
-p2 : (a b c : ℕ) → c * (b + 1 + a) ≡ a * c + b * c + c
-p2 = {!!}
+data Tree : Set where
+  leaf : Tree
+  node : (ℕ → Tree) → Tree
 
-[m+n]^2=m^2+2mn+n^2 : (m n : ℕ) → (m + n) * (m + n) ≡ m * m + 2 * m * n + n * n
-[m+n]^2=m^2+2mn+n^2 = {!!}
+nodeinj : ∀{f g} → node f ≡ node g → f ≡ g
+nodeinj = {!!}
 
-{-
-infixr 8 _^'_
-_^'_ : ℕ → ℕ → ℕ
-x ^' zero  = 1
-x ^' suc n = x * x ^' n
+data BinTree : Set where
+  leaf : BinTree
+  node : BinTree → BinTree → BinTree
 
-infixr 8 _^_
-_^_ : (x y : ℕ) → .⦃ y + x ≢ℕ 0 ⦄ → ℕ
-x ^ zero = 1
-x ^ suc zero = x
-x ^ suc (suc y) = x * (x ^ suc y)
+nodeinjl : ∀{x y x' y'} → BinTree.node x y ≡ node x' y' → x ≡ x'
+nodeinjl = {!!}
 
--- A vesszős definíciót érdemes használni.
--- A simáról nehéz állításokat bizonyítani.
--}
+nodeinjr : ∀{x y x' y'} → BinTree.node x y ≡ node x' y' → y ≡ y'
+nodeinjr = {!!}
 
-p1 : (a b : ℕ) → (a + b) ^' 2 ≡ a ^' 2 + 2 * a * b + b ^' 2
-p1 = {!!}
+∷inj1 : {A : Set}{x y : A}{xs ys : List A} → x ∷ xs ≡ y ∷ ys → x ≡ y
+∷inj1 = {!!}
 
-0^ : (n : ℕ) → 0 ^' (suc n) ≡ 0
-0^ = {!!}
+∷inj2 : {A : Set}{x y : A}{xs ys : List A} → x ∷ xs ≡ y ∷ ys → xs ≡ ys
+∷inj2 = {!!}
 
-^0 : (a : ℕ) → a ^' 0 ≡ 1
-^0 = {!!}
+-- prove all of the above without pattern matching on equalities!
 
-1^ : (n : ℕ) → 1 ^' n ≡ 1
-1^ = {!!}
+---------------------------------------------------------
+-- konstruktorok diszjunktsaga
+------------------------------------------------------
 
-^1 : (a : ℕ) → a ^' 1 ≡ a
-^1 = {!!}
+true≠false : true ≢ false
+true≠false = {!!}
 
-^+ : (a m n : ℕ) → a ^' (m + n) ≡ a ^' m * a ^' n
-^+ = {!!}
+-- prove this without pattern matching in this function on e! (use subst!)
+true≠false' : true ≢ false
+true≠false' e = {!!}
 
-^* : (a m n : ℕ) → a ^' (m * n) ≡ (a ^' m) ^' n
-^* = {!!}
+zero≠sucn : {n : ℕ} → zero ≢ ℕ.suc n
+zero≠sucn = {!!}
 
-*^ : (a b n : ℕ) → (a * b) ^' n ≡ a ^' n * b ^' n
-*^ = {!!}
+n≠sucn : (n : ℕ) → n ≢ suc n
+n≠sucn = {!!}
+
+-- prove this using induction on n!
+n≠sucn' : (n : ℕ) → n ≢ suc n
+n≠sucn' n = {!!}
+
+leaf≠node : ∀{f} → Tree.leaf ≢ node f
+leaf≠node = {!!}
+
+leaf≠node' : ∀{x y} → BinTree.leaf ≢ node x y
+leaf≠node' = {!!}
+
+nil≠cons : {A : Set}{x : A}{xs : List A} → [] ≢ x ∷ xs
+nil≠cons = {!!}
+
+---------------------------------------------------------
+-- rendezes
+------------------------------------------------------
+
+_≤_ : ℕ → ℕ → Set
+x ≤ y = Σ ℕ λ m → m + x ≡ y
+
+1≤3 : 1 ≤ 3
+1≤3 = {!!}
+
+¬2≤1 : ¬ (2 ≤ 1)
+¬2≤1 = {!!}
+
+n≤sucn : ∀ (n : ℕ) -> n ≤ suc n
+n≤sucn = {!!}
+
+sucinj≤ : ∀ (n m : ℕ) -> n ≤ m -> suc n ≤ suc m
+sucinj≤ = {!!}
+
+predinj≤ : ∀ (n m : ℕ) -> suc n ≤ suc m -> n ≤ m
+predinj≤ = {!!}
+
+---------------------------------------------------------
+-- egyenlosegek eldonthetosege
+------------------------------------------------------
+
+_≟Bool_ : (b b' : Bool) → Dec (b ≡ b')
+b ≟Bool b' = {!  !}
+
+_≟ℕ_ : (n n' : ℕ) → Dec (n ≡ n')
+_≟ℕ_ = {!!}
+
+-- is equality for Tree decidable?
+
+_≟BinTree_ : (t t' : BinTree) → Dec (t ≡ t')
+_≟BinTree_ = {!!}
+
+_≟List_ : {A : Set} → ({x y : A} → Dec (x ≡ y)) → {xs ys : List A} → Dec (xs ≡ ys)
+_≟List_ = {!!}
