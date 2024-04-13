@@ -4,7 +4,7 @@ module Lib.Containers.Stream.Properties where
 
 open import Lib.Containers.Stream.Type
 open import Lib.Containers.Stream.Base
-open import Lib.Containers.Stream.Bisimulation
+open import Lib.Containers.Stream.Bisimilarity
 open import Lib.Equality
 
 reflS : ∀{i}{A : Set i}(xs : Stream A) → xs ≈S xs

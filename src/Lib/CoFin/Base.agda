@@ -1,25 +1,21 @@
 {-# OPTIONS --safe --guardedness #-}
 module Lib.CoFin.Base where
 
--- !!! TODO: Az importokat rendbe kell rakni, hogy specifikusak legyenek és elkerüljük a ciklikus importokat !!!
 open import Lib.CoFin.Type
-open import Lib.Conat
-open import Lib.Maybe
-open import Lib.Sigma
+open import Lib.Conat.Type
+open import Lib.Conat.Base
+open import Lib.Conat.Literals
+open import Lib.Maybe.Type
+open import Lib.Sigma.Type
 open import Lib.Function
-open import Lib.Sum
-open import Lib.Empty
-open import Lib.Equality
-open import Lib.Containers.CoVector
+open import Lib.Sum.Type
+open import Lib.Empty.Type
+open import Lib.Empty.Base
+open import Lib.Unit.Type
+open import Lib.Equality.Type
+open import Lib.Equality.Base
+open import Lib.Containers.CoVector.Type
 -- open import Lib.WorkInProgressConcept.DoNotIncludeInLib.Lazy
-
-{-
-
-So close, yet so far away
-
-postulate
-  η-cofin : {n : ℕ∞} → (c c' : CoFin n) → fpred∞ c ≡ fpred∞ c' → c ≡ c'
--}
 
 f∞ : CoFin ∞
 fpred∞ f∞ = just f∞
