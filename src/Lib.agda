@@ -59,7 +59,7 @@ open import Lib.Containers.Vector.Type hiding (module Vec) public
 module Vec where
   open import Lib.Containers.Vector hiding (module Vec) public
 
-open import Lib.Containers.CoVector.Type hiding (module CoVec) public
+open import Lib.Containers.CoVector.Type hiding (module CoVec; []) public
 module CoVec where
   open import Lib.Containers.CoVector hiding (module CoVec) public
 

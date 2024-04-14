@@ -4,6 +4,7 @@ module Lib.Containers.CoVector.Type where
 
 open import Lib.Conat.Type
 open import Lib.Conat.Base
+open import Lib.Conat.Literals
 
 infixr 5 _∷_
 record CoVec {ℓ}(A : Set ℓ) (n : ℕ∞) : Set ℓ where
@@ -14,3 +15,8 @@ record CoVec {ℓ}(A : Set ℓ) (n : ℕ∞) : Set ℓ where
     tail : .⦃ p : IsNotZero∞ n ⦄ → CoVec A (predℕ∞ n)
 
 open CoVec public
+
+instance
+  [] : ∀{i}{A : Set i} → CoVec A 0
+  head [] ⦃ () ⦄
+  tail [] ⦃ () ⦄
