@@ -1,52 +1,34 @@
-module gy08 where
+module gy07 where
 
-open import Lib
+open import Lib.Sigma
+open import Lib.Sum
+open import Lib.Bool
+open import Lib.Equality
+open import Lib.Empty
+open import Lib.Nat
+open import Lib.Dec
 open import Lib.Dec.PatternSynonym
 
 ------------------------------------------------------
 -- statements as parameters
 ------------------------------------------------------
 
-blowUp : ((A : Set) -> ¬ A) -> ⊥
+blowUp : ((A : Set) → ¬ A) → ⊥
 blowUp f = f ⊤ tt
 -- what's the difference with this?
--- (A : Set) -> ¬ A -> ⊥
+-- example : (A : Set) → ¬ A → ⊥
+-- example A x = {!   !}
 
 -- something like this may appear in the exam
-
-------------------------------------------------------
--- practicing
-------------------------------------------------------
-
-f4 : Dec ((X Y : Set) → X ⊎ Y → Y)
-f4 = {!!}
-
-f5 : Dec ((X Y Z : Set) → (X → Z) ⊎ (Y → Z) → (X ⊎ Y → Z))
-f5 = {!!}
-
-f6 : Dec ((X Y Z : Set) → (X → Z) × (Y → Z) → (X × Y → Z))
-f6 = {!!}
-
-f7 : Dec ((X Y Z : Set) → (X × Y → Z) → (X → Z) × (Y → Z))
-f7 = {!!}
-
-f8 : Dec ((X Y Z : Set) → (X ⊎ Y × Z) → (X ⊎ Y) × (X ⊎ Z))
-f8 = {!!}
-
-f9 : Dec ((X Y Z : Set) → (X ⊎ Y) × (X ⊎ Z) → (X ⊎ Y × Z))
-f9 = {!!}
-
-f10 : Dec ((X Y Z : Set) → (X ⊎ Y) × (X ⊎ Z) → ((X ⊎ Y) × Z))
-f10 = {!!}
 
 ---------------------------------------------------------
 -- predicate (first order) logic example
 ---------------------------------------------------------
 
--- erre mindjárt visszatérünk
-notExists↔noneOf : ∀{i}{A : Set i} -> (P : A -> Set) ->
-                        (∀ x -> ¬ (P x)) ↔ ¬ (Σ A (λ x -> P x))
-notExists↔noneOf = {!!}
+notExists↔noneOf : ∀{i}{A : Set i} → (P : A → Set) →
+                        (∀ x → ¬ (P x)) ↔ ¬ (Σ A (λ x → P x))
+fst (notExists↔noneOf P) f x = f (fst x) (snd x)
+snd (notExists↔noneOf P) f a pa = f (a , pa)
 
 module People
   (Person    : Set)
@@ -59,31 +41,34 @@ module People
 
   -- Define the _hasChild predicate.
   _hasChild : Person → Set
-  x hasChild = {!!}
+  x hasChild = Σ Person λ p → p childOf x
 
   -- Formalise: Ann is not a child of Kate.
   ANK : Set
-  ANK = {!!}
+  ANK = ¬ (Ann childOf Kate)
 
   -- Formalise: there is someone with exactly one child.
   ONE : Set
-  ONE = {!!}
+  ONE = Σ Person λ p → Σ Person λ c → c childOf p × (∀ (y : Person) → ¬ (y childOf p) ⊎ y sameAs c)
 
   -- Define the relation _parentOf_.
   _parentOf_ : Person → Person → Set
-  x parentOf y = {!!}
+  x parentOf y = y childOf x
 
   -- Formalise: No one is the parent of everyone.
   NOPE : Set
-  NOPE = {!!}
+  NOPE = ¬ Σ Person λ p → ∀ (x : Person) → p parentOf x
+
+  NOPE' : Set
+  NOPE' = ∀ (p : Person) → ¬ (∀ (x : Person) → p parentOf x)
 
   -- Prove that if Ann has no children then Kate is not the child of Ann.
   AK : ¬ (Σ Person λ y → y childOf Ann) → ¬ (Kate childOf Ann)
-  AK = {!!}
+  AK f kca = f (Kate , kca)
 
   -- Prove that if there is no person who is his own parent than no one is the parent of everyone.
   ¬xpopxthenNOPE : ¬ (Σ Person λ x → x parentOf x) → NOPE
-  ¬xpopxthenNOPE = {!!}
+  ¬xpopxthenNOPE f (p , g) = f (p , g p)
 
 ---------------------------------------------------------
 -- predicate (first order) logic laws
@@ -91,19 +76,25 @@ module People
 
 ∀×-distr  :    (A : Set)(P : A → Set)(Q : A → Set) → ((a : A) → P a × Q a)  ↔ ((a : A) → P a) × ((a : A) → Q a)
 ∀×-distr = {!!}
+
 ∀⊎-distr  :    (A : Set)(P : A → Set)(Q : A → Set) → ((a : A) → P a) ⊎ ((a : A) → Q a) → ((a : A) → P a ⊎ Q a)
 ∀⊎-distr = {!!}
--- ez miért csak odafelé?
+-- ez miért csak odafelé megy?
+-- miért nem ↔ van közte?
+
 Σ×-distr  :    (A : Set)(P : A → Set)(Q : A → Set) → (Σ A λ a → P a × Q a)  → Σ A P × Σ A Q
 Σ×-distr = {!!}
+
 Σ⊎-distr  :    (A : Set)(P : A → Set)(Q : A → Set) → (Σ A λ a → P a ⊎ Q a)  ↔ Σ A P ⊎ Σ A Q
 Σ⊎-distr = {!!}
+
 ¬∀        :    (A : Set)(P : A → Set)              → (Σ A λ a → ¬ P a)      → ¬ ((a : A) → P a)
 ¬∀ = {!!}
+
+-- Ugyanez van a fájl tetején is:
 ¬Σ        :    (A : Set)(P : A → Set)              → (¬ Σ A λ a → P a)      ↔ ((a : A) → ¬ P a)
 ¬Σ = {!!}
-⊎↔ΣBool   :    (A B : Set)                         → (A ⊎ B)                ↔ Σ Bool (λ b → if b then A else B)
-⊎↔ΣBool = {!!}
+
 ¬¬∀-nat   :    (A : Set)(P : A → Set)              → ¬ ¬ ((x : A) → P x)    → (x : A) → ¬ ¬ (P x)
 ¬¬∀-nat = {!!}
 

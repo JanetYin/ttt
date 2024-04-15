@@ -24,8 +24,9 @@ record CoList {a}(A : Set a) : Set a where
 
 open CoList public
 
-[] : ∀{a}{A : Set a} → CoList A
-uncons [] = nothing
+instance
+  [] : ∀{a}{A : Set a} → CoList A
+  uncons [] = nothing
 
 infixr 5 _∷_
 _∷_ : ∀{a}{A : Set a} → A → CoList A → CoList A
