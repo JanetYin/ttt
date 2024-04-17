@@ -68,6 +68,10 @@ filter p (x ∷ xs) with decide p x
 ... | yes f = x ∷ filter p xs
 ... | no f = filter p xs
 
+filterᵇ : ∀{i}{A : Set i} → (A → Bool) → List A → List A
+filterᵇ p [] = []
+filterᵇ p (x ∷ xs) = let r = filterᵇ p xs in if p x then x ∷ r else r
+
 reverseNaive : ∀{i}{A : Set i} → List A → List A
 reverseNaive [] = []
 reverseNaive (x ∷ xs) = reverseNaive xs ++ x ∷ []
