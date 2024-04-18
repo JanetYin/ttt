@@ -18,19 +18,19 @@ module People
 
   -- Define the _hasChild predicate.
   _hasChild : Person → Set
-  x hasChild = {!!}
+  x hasChild = Σ Person λ p → p childOf x
 
   -- Formalise: Noone is their own child
   NOC : Set
-  NOC = ?
+  NOC = (p : Person) → ¬ (p childOf p)
 
   -- Formalise: Ann is not a child of Kate.
   ANK : Set
-  ANK = {!!}
+  ANK = ¬ (Ann childOf Kate)
 
   -- Formalise: there is someone with exactly one child.
   ONE : Set
-  ONE = {!!}
+  ONE = Σ Person λ p → (p hasChild) × ((x y : Person) → x childOf p × y childOf p → x sameAs y)
 
   -- Define the relation _parentOf_.
   _parentOf_ : Person → Person → Set
@@ -56,7 +56,9 @@ module People
 ∀×-distr = {!!}
 
 ∀⊎-distr  :    (A : Set)(P : A → Set)(Q : A → Set) → ((a : A) → P a) ⊎ ((a : A) → Q a) → ((a : A) → P a ⊎ Q a)
-∀⊎-distr = {!!}
+∀⊎-distr A P Q (inl Pa) a = inl (Pa a)
+∀⊎-distr A P Q (inr Qa) a = inr (Qa a)
+---      ^ ^ ^
 -- ez miért csak odafelé megy?
 -- miért nem ↔ van közte?
 
@@ -64,7 +66,10 @@ module People
 Σ×-distr = {!!}
 
 Σ⊎-distr  :    (A : Set)(P : A → Set)(Q : A → Set) → (Σ A λ a → P a ⊎ Q a)  ↔ Σ A P ⊎ Σ A Q
-Σ⊎-distr = {!!}
+fst (Σ⊎-distr A P Q) (a , inl Pa) = inl (a , Pa)
+fst (Σ⊎-distr A P Q) (a , inr Qa) = inr (a , Qa)
+snd (Σ⊎-distr A P Q) (inl (a , Pa)) = a , (inl Pa)
+snd (Σ⊎-distr A P Q) (inr (a , Qa)) = a , inr Qa
 
 ¬∀        :    (A : Set)(P : A → Set)              → (Σ A λ a → ¬ P a)      → ¬ ((a : A) → P a)
 ¬∀ = {!!}
@@ -73,11 +78,27 @@ module People
 ¬Σ        :    (A : Set)(P : A → Set)              → (¬ Σ A λ a → P a)      ↔ ((a : A) → ¬ P a)
 ¬Σ = {!!}
 
+
+
 ¬¬∀-nat   :    (A : Set)(P : A → Set)              → ¬ ¬ ((x : A) → P x)    → (x : A) → ¬ ¬ (P x)
 ¬¬∀-nat = {!!}
 
+∀→∃ : Dec ((A : Set)(P : A → Set) → ((a : A) → P a) → Σ A P)
+∀→∃ = inr (λ x → fst (x ⊥ (λ _ → ⊤) (λ ())))
+
 ∀⊎-distr' : ¬ ((A : Set)(P : A → Set)(Q : A → Set) → (((a : A) → P a ⊎ Q a) → ((a : A) → P a) ⊎ ((a : A) → Q a)))
-∀⊎-distr' = {!!}
+∀⊎-distr' x with x Bool P Q proof1
+  where
+    P Q : Bool → Set
+    P false = ⊥
+    P true = ⊤
+    Q false = ⊤
+    Q true = ⊥
+    proof1 : (b : Bool) → P b ⊎ Q b
+    proof1 false = inr tt
+    proof1 true = inl tt
+... | inl a = a false
+... | inr b = b true
 
 Σ×-distr' : ¬ ((A : Set)(P : A → Set)(Q : A → Set) → (Σ A P × Σ A Q → Σ A λ a → P a × Q a))
 Σ×-distr' w = {!!}
