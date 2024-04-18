@@ -7,5 +7,5 @@ open import Lib.Level
 
 infixr 5 _∷_
 data HList {i} : List (Set i) → Set (lsuc i) where
-  [] : HList []
+  instance [] : HList []
   _∷_ : ∀{A : Set i}{As : List (Set i)} → A → HList As → HList (A ∷ As)

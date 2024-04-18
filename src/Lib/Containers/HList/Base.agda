@@ -3,11 +3,12 @@
 module Lib.Containers.HList.Base where
 
 open import Lib.Containers.HList.Type
-open import Lib.Containers.List using (List; []; _∷_; map)
+open import Lib.Containers.List.Type
+open import Lib.Containers.List.Base using (map)
 open import Lib.Level
 
 head : ∀{i}{A : Set i}{As : List (Set i)} → HList (A ∷ As) → A
-head (x ∷ xs) = x
+head (x ∷ _) = x
 
 tail : ∀{i}{A : Set i}{As : List (Set i)} → HList (A ∷ As) → HList As
 tail (_ ∷ xs) = xs

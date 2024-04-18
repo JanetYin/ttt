@@ -23,4 +23,4 @@ coz : CoFin 0 → ⊥
 coz = inz
 
 proba : (n : ℕ∞) → .⦃ p1 p2 : IsNotZero∞ n ⦄ → CoFin n
-proba n = cofin ⦃ recomputeIsNotZero∞ {n} ⦄ nothing
+proba n = cofin ⦃ recomputeIsNotZero∞ {n} ⦄ {- Az instance paramétert még valahogy el kéne tűntetni. -} nothing

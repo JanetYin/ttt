@@ -1,4 +1,4 @@
-module gy08 where
+module gy09 where
 
 open import Lib hiding (sym; trans; cong; subst; idl+; idr+; sucr+; ass+; comm+; dist+*; nullr*; idl*; idr*; sucr*; ass*; comm*)
 
@@ -12,6 +12,32 @@ sym = {!!}
 trans : ∀{i}{A : Set i}{x y z : A} → x ≡ y → y ≡ z → x ≡ z
 trans = {!!}
 
+{-
+other notions of trans:
+_◾_ = \sq5
+
+\< = ⟨ ; \> = ⟩ ; \qed = ∎
+_≡⟨_⟩_ + _∎
+
+_≡⟨_⟩_
+Λ  Λ ^-- proof
+|  |
+|  ⌞ proof
+value
+
+_∎ = basically reflexivity proof with an explicit value
+
+Usual way of using this notion:
+
+value1
+  ≡⟨ proof1 ⟩
+value2
+  ≡⟨ proof2 ⟩
+value3
+  ≡⟨ proof3 ⟩
+value4 ∎
+-}
+
 cong : ∀{i j}{A : Set i}{B : Set j}(f : A → B){x y : A} → x ≡ y → f x ≡ f y
 cong = {!!}
 
@@ -20,7 +46,7 @@ subst = {!!}
 
 ---------------------------------------------------------
 -- properties of +,*
-------------------------------------------------------
+---------------------------------------------------------
 
 idl+ : (n : ℕ) → zero + n ≡ n
 idl+ = {!!}

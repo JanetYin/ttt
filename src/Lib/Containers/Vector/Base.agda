@@ -2,14 +2,16 @@
 
 module Lib.Containers.Vector.Base where
 
-open import Lib.Unit
+open import Lib.Unit.Type
 open import Lib.Containers.Vector.Type
-open import Lib.Sigma hiding (map)
+open import Lib.Sigma.Type
 open import Agda.Builtin.FromNat
-open import Lib.Fin
-open import Lib.Nat
+open import Lib.Fin.Type
+open import Lib.Nat.Type
+open import Lib.Nat.Base
+open import Lib.Nat.Literals
 open import Lib.Level
-open import Lib.Bool
+open import Lib.Bool.Type
 open import Lib.Equality.Type
 open import Lib.Equality.Base using (cong)
 
@@ -40,7 +42,8 @@ concat []         = []
 concat (xs ∷ xss) = xs ++ concat xss
 
 lengthᵗ : ∀{i}{A : Set i}{n : ℕ} → Vec A n → Σ ℕ (n ≡_)
-lengthᵗ {n = n} _ = (n , refl)
+lengthᵗ {n = .0} [] = 0 , refl
+lengthᵗ {n = .(suc _)} (x ∷ xs) = let (n , p) = lengthᵗ xs in suc n , cong suc p
 
 length : ∀{i}{A : Set i}{n : ℕ} → Vec A n → ℕ
 length xs = fst (lengthᵗ xs)

@@ -7,29 +7,40 @@ open import Lib hiding (sym; trans; cong; subst; idl+; idr+; sucr+; ass+; comm+;
 ------------------------------------------------------
 
 sym : ∀{i}{A : Set i}{x y : A} → x ≡ y → y ≡ x
-sym = {!!}
+sym refl = refl
 
 trans : ∀{i}{A : Set i}{x y z : A} → x ≡ y → y ≡ z → x ≡ z
-trans = {!!}
+trans refl b = b
 
 cong : ∀{i j}{A : Set i}{B : Set j}(f : A → B){x y : A} → x ≡ y → f x ≡ f y
-cong = {!!}
+cong f refl = refl
 
 subst : ∀{i j}{A : Set i}(P : A → Set j){x y : A} → x ≡ y → P x → P y
-subst = {!!}
+subst P refl b = b
+
+sym' : ∀{i}{A : Set i}{x y : A} → x ≡ y → y ≡ x
+sym' a = subst (λ h → h ≡ _) a refl
+
+trans' : ∀{i}{A : Set i}{x y z : A} → x ≡ y → y ≡ z → x ≡ z
+trans' a = subst (λ h → h ≡ _ → _) a id
+
+cong' : ∀{i j}{A : Set i}{B : Set j}(f : A → B){x y : A} → x ≡ y → f x ≡ f y
+cong' f a = subst (λ h → _ ≡ f h) a refl
 
 ---------------------------------------------------------
 -- properties of +,*
 ------------------------------------------------------
 
 idl+ : (n : ℕ) → zero + n ≡ n
-idl+ = {!!}
+idl+ n = refl
 
 idr+ : (n : ℕ) → n + zero ≡ n
-idr+ = {!!}
+idr+ zero = refl
+idr+ (suc n) = cong suc (idr+ n)
 
 sucr+ : (n m : ℕ) → n + suc m ≡ suc (n + m)
-sucr+ = {!!}
+sucr+ zero m = refl
+sucr+ (suc n) m = cong suc (sucr+ n m)
 
 ass+ : (m n o : ℕ) → (m + n) + o ≡ m + (n + o)
 ass+ = {!!}

@@ -18,10 +18,6 @@ open import Lib.Containers.Vector
   renaming ([] to []ᵥ ; _∷_ to _∷ᵥ_)
   hiding (take; drop; head; tail; replicate; map; _++_)
 
-[] : ∀{i}{A : Set i} → CoVec A 0
-head [] ⦃ () ⦄
-tail [] ⦃ () ⦄
-
 replicate : ∀{i}{A : Set i} → (n : ℕ∞) → A → CoVec A n
 head (replicate n a) = a
 tail (replicate n a) = replicate (predℕ∞ n) a

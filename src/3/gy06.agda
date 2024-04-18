@@ -97,7 +97,8 @@ nndnp : {X : Set} → ¬ ¬ (¬ ¬ X → X)
 nndnp = {!!}
 
 dec2stab : {X : Set} → (X ⊎ ¬ X) → (¬ ¬ X → X)
-dec2stab = {!!}
+dec2stab (inl a) x₁ = a
+dec2stab (inr b) x₁ = exfalso (x₁ b)
 
 -- you have to decide:
 {-
@@ -108,49 +109,54 @@ Dec A = A ⊎ ¬ A
 open import Lib.Dec.PatternSynonym
 
 ee1 : {X Y : Set} → Dec (X ⊎ Y → ¬ ¬ (Y ⊎ X))
-ee1 = {!!}
+ee1 {X} {Y} = yes f where
+  f : X ⊎ Y → ¬ (¬ (Y ⊎ X))
+  f (yes a) x₁ = x₁ (no a)
+  f (no b) x₁ = x₁ (yes b)
 
 ee2 : {X : Set} → Dec (¬ (X ⊎ ¬ X))
-ee2 = {!!}
+ee2 = no λ x → x (no (λ y → x (inl y)))
 
 e3 : {X : Set} → Dec (¬ (X → (¬ X → X)))
-e3 = {!!}
+e3 = no (λ f → f (λ x _ → x))
 
 e4 : Dec ℕ
-e4 = {!!}
+e4 = yes 42
 
 e5 : Dec ⊥
-e5 = {!!}
+e5 = no id
 
 e6 : {X : Set} → Dec (⊥ → X ⊎ ¬ X)
-e6 = {!!}
+e6 = yes exfalso
 
 e7 : {X : Set} → Dec (X × ¬ X → ¬ X ⊎ X)
-e7 = {!!}
+e7 = yes (λ x → yes (snd x))
 
 e8 : {X : Set} → Dec ((X → X) → ⊥)
-e8 = {!!}
+e8 = no (λ x → x id)
 
 f1 : {X Y : Set} → ¬ ¬ X ⊎ ¬ ¬ Y → ¬ ¬ (X ⊎ Y)
-f1 = {!!}
+f1 (yes a) f = a (λ x → f (inl x))
+f1 (no b) f = b (λ x → f (inr x))
 
 f2 : ({X Y : Set} → ¬ (X × Y) → ¬ X ⊎ ¬ Y) → {X Y : Set} → ¬ ¬ (X ⊎ Y) → ¬ ¬ X ⊎ ¬ ¬ Y
-f2 = {!!}
+f2 x {X} {Y} y = x { X → ⊥} {Y → ⊥} λ b → y (λ h → case h (fst b) (snd b)) 
+-- yes (λ b → y (λ v → case v b λ h → {!   !}))
 
 ----------------------------------------------------------------------
 -- Not exactly first order logic but kinda is and kinda isn't.
 
 f3 : Dec ((X Y : Set) → X ⊎ Y → Y)
-f3 = {!!}
+f3 = no (λ f → f ⊤ _ (inl tt))
 
 f4 : Dec ((X Y Z : Set) → (X → Z) ⊎ (Y → Z) → (X ⊎ Y → Z))
-f4 = {!!}
+f4 = no (λ f → f ⊤ ⊥ _ (no id) (inl tt))
 
 f5 : Dec ((X Y Z : Set) → (X → Z) × (Y → Z) → (X × Y → Z))
 f5 = {!!}
 
 f6 : Dec ((X Y Z : Set) → (X × Y → Z) → (X → Z) × (Y → Z))
-f6 = {!!}
+f6 = no (λ f → (snd (f ⊥ ⊤ _ fst )) tt)
 
 f7 : Dec ((X Y Z : Set) → (X ⊎ Y × Z) → (X ⊎ Y) × (X ⊎ Z))
 f7 = {!!}
@@ -160,4 +166,4 @@ f8 = {!!}
 
 f9 : Dec ((X Y Z : Set) → (X ⊎ Y) × (X ⊎ Z) → (X ⊎ Y × Z))
 f9 = {!!}
- 
+  

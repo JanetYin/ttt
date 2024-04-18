@@ -5,8 +5,10 @@ module Lib.Containers.Stream.Base where
 open import Lib.Containers.Stream.Type
 open import Lib.Containers.List.Type
 open import Lib.Containers.Vector.Type
-open import Lib.Sigma hiding (map)
-open import Lib.Nat
+open import Lib.Sigma.Type
+open import Lib.Nat.Type
+
+
 
 repeat : ∀{i}{A : Set i} → A → Stream A
 head (repeat x) = x

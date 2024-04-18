@@ -3,7 +3,7 @@
 module Lib.Containers.List.Base where
 
 open import Lib.Containers.List.Type
-open import Lib.Dec
+open import Lib.Dec.Type
 open import Lib.Dec.PatternSynonym
 open import Lib.Nat.Type
 open import Lib.Nat.Base
@@ -15,11 +15,12 @@ open import Lib.Unit.Type
 open import Lib.Empty.Type
 open import Lib.Bool.Type
 open import Lib.Bool.Base
-open import Lib.Equality
-open import Lib.Fin
-open import Lib.Maybe
-open import Lib.Sum hiding (map)
-open import Lib.Sigma hiding (map)
+open import Lib.Equality.Type
+open import Lib.Equality.Base
+open import Lib.Fin.Type
+open import Lib.Maybe.Type
+open import Lib.Sum.Type
+open import Lib.Sigma.Type
 
 length : ∀{i}{A : Set i} → List A → ℕ
 length [] = 0
@@ -66,6 +67,10 @@ filter p [] = []
 filter p (x ∷ xs) with decide p x
 ... | yes f = x ∷ filter p xs
 ... | no f = filter p xs
+
+filterᵇ : ∀{i}{A : Set i} → (A → Bool) → List A → List A
+filterᵇ p [] = []
+filterᵇ p (x ∷ xs) = let r = filterᵇ p xs in if p x then x ∷ r else r
 
 reverseNaive : ∀{i}{A : Set i} → List A → List A
 reverseNaive [] = []
@@ -119,25 +124,39 @@ _‼_ : ∀{i}{A : Set i}(xs : List A) → Fin (length xs) → A
 (x ∷ _) ‼ fzero    = x
 (_ ∷ xs) ‼ (fsuc i) = xs ‼ i
 
-head : ∀{i}{A : Set i} → List A → Maybe A
-head []      = nothing
-head (x ∷ _) = just x
+head' : ∀{i}{A : Set i} → List A → Maybe A
+head' []      = nothing
+head' (x ∷ _) = just x
 
-tail : ∀{i}{A : Set i} → List A → Maybe (List A)
-tail []       = nothing
-tail (_ ∷ xs) = just xs
+tail' : ∀{i}{A : Set i} → List A → Maybe (List A)
+tail' []       = nothing
+tail' (_ ∷ xs) = just xs
 
-last : ∀{i}{A : Set i} → List A → Maybe A
-last []       = nothing
-last (x ∷ []) = just x
-last (_ ∷ xs@(_ ∷ _)) = last xs
+last' : ∀{i}{A : Set i} → List A → Maybe A
+last' []       = nothing
+last' (x ∷ []) = just x
+last' (_ ∷ xs@(_ ∷ _)) = last' xs
 
-init  : ∀{i}{A : Set i} → List A → Maybe (List A)
-init []       = nothing
-init (_ ∷ []) = just []
-init (x ∷ xs@(_ ∷ _)) with init xs
+init'  : ∀{i}{A : Set i} → List A → Maybe (List A)
+init' []       = nothing
+init' (_ ∷ []) = just []
+init' (x ∷ xs@(_ ∷ _)) with init' xs
 ... | just ys = just (x ∷ ys)
 ... | nothing = nothing
+
+head : ∀{i}{A : Set i} → (xs : List A) → .⦃ NotNull xs ⦄ → A
+head (x ∷ _) = x
+
+tail : ∀{i}{A : Set i} → (xs : List A) → .⦃ NotNull xs ⦄ → List A
+tail (_ ∷ xs) = xs
+
+last : ∀{i}{A : Set i} → (xs : List A) → .⦃ NotNull xs ⦄ → A
+last (x ∷ []) = x
+last (_ ∷ xs@(_ ∷ _)) = last xs
+
+init  : ∀{i}{A : Set i} → (xs : List A) → .⦃ NotNull xs ⦄ → List A
+init (_ ∷ []) = []
+init (x ∷ xs@(_ ∷ _)) = x ∷ init xs
 
 take : ∀{i}{A : Set i} → ℕ → List A → List A
 take zero    xs       = []
