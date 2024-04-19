@@ -21,6 +21,7 @@ open import Lib.Fin.Type
 open import Lib.Maybe.Type
 open import Lib.Sum.Type
 open import Lib.Sigma.Type
+open import Lib.UnitOrEmpty.Type
 
 length : ∀{i}{A : Set i} → List A → ℕ
 length [] = 0

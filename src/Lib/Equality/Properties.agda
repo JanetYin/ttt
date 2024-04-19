@@ -10,7 +10,7 @@ symcong f refl = refl
 
 trans-assoc : ∀{i}{A : Set i}{a b c d : A}(eq1 : a ≡ b)(eq2 : b ≡ c)(eq3 : c ≡ d) →
   trans (trans eq1 eq2) eq3 ≡ trans eq1 (trans eq2 eq3)
-trans-assoc refl _ _ = refl
+trans-assoc _ _ refl = refl
 
 cong∘ : ∀{i j}{A : Set i}{B : Set j}(f : B → A)(g : A → B) →
   {a b : A}(eq : a ≡ b) → cong f (cong g eq) ≡ cong (λ x → f (g x)) eq

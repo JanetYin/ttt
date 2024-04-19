@@ -12,7 +12,7 @@ sym : ∀{i}{A : Set i}{x y : A} → x ≡ y → y ≡ x
 sym refl = refl
 
 trans : ∀{i}{A : Set i}{x y z : A} → x ≡ y → y ≡ z → x ≡ z
-trans refl eq2 = eq2
+trans eq1 refl = eq1
 
 -- \sq5 = ◾
 
@@ -59,6 +59,3 @@ _ ∎ = refl
 
 infixr 2 _≡⟨_⟩_
 infix 3 _∎
-
-⊤or⊥ : Set₁
-⊤or⊥ = Σ Set (λ A → A ≡ ⊤ ⊎ A ≡ ⊥)

@@ -37,9 +37,9 @@ sucr+ : (n m : ℕ) → n + suc m ≡ suc (n + m)
 sucr+ zero m = refl
 sucr+ (suc n) m = cong suc (sucr+ n m)
 
-ass+ : (m n o : ℕ) → (m + n) + o ≡ m + (n + o)
-ass+ zero n o = refl
-ass+ (suc m) n o = cong suc (ass+ m n o)
+assoc+ : (m n o : ℕ) → (m + n) + o ≡ m + (n + o)
+assoc+ zero n o = refl
+assoc+ (suc m) n o = cong suc (assoc+ m n o)
 
 comm+ : (m n : ℕ) → m + n ≡ n + m
 comm+ zero n = sym (idr+ n)
@@ -47,23 +47,23 @@ comm+ (suc m) n = trans (cong suc (comm+ m n)) (sym (sucr+ n m))
 
 dist+* : (m n o : ℕ) → (m + n) * o ≡ m * o + n * o
 dist+* zero n o = refl
-dist+* (suc m) n o = trans (cong (o +_) (dist+* m n o)) (sym (ass+ o (m * o) (n * o)))
+dist+* (suc m) n o = trans (cong (o +_) (dist+* m n o)) (sym (assoc+ o (m * o) (n * o)))
 
 dist*+ : (m n o : ℕ) → m * (n + o) ≡ m * n + m * o
 dist*+ zero n o = refl
 dist*+ (suc m) n o =
   n + o + m * (n + o)
-  ≡⟨ ass+ n o (m * (n + o)) ⟩
+  ≡⟨ assoc+ n o (m * (n + o)) ⟩
   n + (o + m * (n + o)) 
   ≡⟨ cong (n +_) (comm+ o (m * (n + o))) ⟩
   n + (m * (n + o) + o)
-  ≡⟨ sym (ass+ n (m * (n + o)) o) ⟩
+  ≡⟨ sym (assoc+ n (m * (n + o)) o) ⟩
   n + m * (n + o) + o
   ≡⟨ cong (λ x → n + x + o) (dist*+ m n o) ⟩
   n + (m * n + m * o) + o
-  ≡⟨ cong (_+ o) (sym (ass+ n (m * n) (m * o))) ⟩
+  ≡⟨ cong (_+ o) (sym (assoc+ n (m * n) (m * o))) ⟩
   n + m * n + m * o + o
-  ≡⟨ ass+ (n + m * n) (m * o) o ⟩
+  ≡⟨ assoc+ (n + m * n) (m * o) o ⟩
   n + m * n + (m * o + o)
   ≡⟨ cong ((n + m * n) +_) (comm+ (m * o) o) ⟩
   n + m * n + (o + m * o) ∎
@@ -87,7 +87,7 @@ sucr* (suc n) m =
   suc (n * suc m + m)
   ≡⟨ cong (λ x → suc (x + m)) (sucr* n m) ⟩
   suc (n + n * m + m)
-  ≡⟨ cong suc (ass+ n (n * m) m) ⟩
+  ≡⟨ cong suc (assoc+ n (n * m) m) ⟩
   suc (n + (n * m + m))
   ≡⟨ cong (λ x → suc (n + x)) (comm+ (n * m) m) ⟩
   suc (n + (m + n * m)) ∎
