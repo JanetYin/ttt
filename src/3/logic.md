@@ -7,4 +7,4 @@
 | $\rightarrow$ | ^ | ⊃ |
 | ¬ / $\rightarrow\bot$ | $(1 -x)\text{ ahol }x\in\R$ / $0 ^ x\text{ ahol } x\in\N$ | ¬ |
 | $\{\forall\}$ | $\forall$ | $\forall$ |
-| $\Sigma$ | $\exists$ | $\exists$
+| $\Sigma$ | $\exists$ | $\exists$ |
