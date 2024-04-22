@@ -32,6 +32,7 @@ open import Lib.Dec public
 open import Lib.Maybe public
 open import Lib.Ordering public
   renaming (_≟_ to _≟Ordering_)
+open import Lib.UnitOrEmpty public
 
 ------------------------------------------------------------
 -- Change when needed

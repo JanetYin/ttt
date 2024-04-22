@@ -102,6 +102,14 @@ snd (fst dm1 a) y = a (inr y)
 snd dm1 ¬X×¬Y (inl x) = fst ¬X×¬Y x
 snd dm1 ¬X×¬Y (inr y) = snd ¬X×¬Y y
 
+expr₁ : {A B : Set} → (¬ (A → B) → ¬ ¬ A × ¬ B)
+fst (expr₁ x) x₁ = x (λ a → exfalso (x₁ a))
+snd (expr₁ x) b = x (λ _ → b)
+
+expr₂ : {A B : Set} → ¬ ¬ (¬ (A → B) → A × ¬ B)
+expr₂ x = x (λ ¬[a→b] → exfalso (¬[a→b] (λ a → exfalso (x (λ _ → a , (λ b → ¬[a→b] (λ _ → b))))))
+          , (λ b → ¬[a→b] (λ _ → b)))
+
 dm2 : {X Y : Set} → ¬ X ⊎ ¬ Y → ¬ (X × Y)
 dm2 = {!!}
 
