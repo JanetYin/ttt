@@ -15,6 +15,27 @@ p3 = {!!}
 p2 : (a b c : ℕ) → c * (b + 1 + a) ≡ a * c + b * c + c
 p2 = {!!}
 
+p9' : 0 ≢ the ℕ 1
+p9' = {!   !}
+
+p9 : 2 * 2 ≢ 5 * 1
+p9 = {!   !}
+
+-- Egyszerűbb, amikor mondani kell egy ellenpéldát:
+p10 : ¬ ((n : ℕ) → n + 2 ≡ n + 1)
+p10 = {!   !}
+
+-- ...mintsem bizonyítani, hogy ez a kettő sosem lesz egyenlő:
+p11 : (n : ℕ) → n + 2 ≢ n + 1
+p11 = {!   !}
+
+-- Mókásabb helyzet.
+p11'' : ¬ Σ ℕ (λ n → n + 3 ≡ n + 1)
+p11'' = {!   !}
+
+p12 : ¬ Σ ℕ (λ n → n + n ≡ 3)
+p12 = {!   !}
+
 [m+n]^2=m^2+2mn+n^2 : (m n : ℕ) → (m + n) * (m + n) ≡ m * m + 2 * m * n + n * n
 [m+n]^2=m^2+2mn+n^2 = {!!}
 

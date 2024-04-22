@@ -55,6 +55,7 @@ digits n@(suc _) = digitsWithFuel n n [] where
   digitsWithFuel zero n@(suc _) acc = []
   digitsWithFuel (suc fuel) n@(suc _) acc = digitsWithFuel fuel (n div 9) (n mod 9 ∷ acc)
 
+{-
 Evenᵗ : ℕ → ⊤or⊥
 Evenᵗ 0 = ⊤ , inl refl
 Evenᵗ 1 = ⊥ , inr refl
@@ -70,6 +71,15 @@ Oddᵗ (suc (suc n)) = Oddᵗ n
 
 Odd : ℕ → Set
 Odd n = fst (Oddᵗ n)
+-}
+
+data Even : ℕ → Set where
+  instance Even0 : Even 0
+  instance Even+2 : {n : ℕ} → .⦃ Even n ⦄ → Even (suc (suc n))
+
+data Odd : ℕ → Set where
+  instance Odd1 : Odd 1
+  instance Odd+2 : {n : ℕ} → .⦃ Odd n ⦄ → Odd (suc (suc n))
 
 case-ℕ : ∀{i}{A : Set i} → ℕ → A → A → A
 case-ℕ zero    z s = z
