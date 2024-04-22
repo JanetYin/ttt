@@ -115,33 +115,3 @@ ite≡ E u refl = u
 
 ind≡ : {A : Set}{a : A}(P : {b : A} → a ≡ b → Set) → P refl → {b : A}(e : a ≡ b) → P e
 ind≡ P u refl = u
-
--- ext class is 4 minutes shorter
-
-
--- uncong' : {A B : Set}(f : A → B){a a' : A} → f a ≡ f a' → a ≡ a'
-
-
--- ℕ ≡ ⊤ → 0 ≡ 1
-
--- look at computing types, e.g. _^_, and prove some equations about it
-
-
-
-
-
-
-
-
--- alternative implementation of Vec?
-
-
-{-
-Taking the principle of excluded middle from the mathematician
-would be the same, say, as proscribing the telescope to the as-
-tronomer or to the boxer the use of his fists. To prohibit existence
-statements and the principle of excluded middle is tantamount to
-relinquishing the science of mathematics altogether.
--}
-
--- tnd/lem : (a : prop) → (a ∨ ¬ a) == true
