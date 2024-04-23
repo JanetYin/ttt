@@ -1,14 +1,7 @@
-{-# OPTIONS --without-K #-}
-
 module lec10 where
 
-data _≡_ {A : Set}(a : A) : A → Set where
-  refl : a ≡ a
-
-{-
 open import Lib
 
--- data _≡_ {A : Set}(a : A) : A → Set where
 -- a ≡_ : A → Set, this is the predicate which says "equal to a"
 -- 3 ≡_ : ℕ → Set meaning "equal to 3"
 -- true ≡_ : Bool → Set
@@ -74,8 +67,8 @@ NatNotTop e = coeinj e {0}{1} e'
 NatNotTop' : ¬ (ℕ ≡ ⊤)
 NatNotTop' e with NatNotTop e
 ... | ()
--}
--- in ordinary Agda I can prove this
+
+-- in ordinary Agda I can prove this, but using --without-K it's not provable
 UIP UIP' : {A : Set}(a b : A)(p q : a ≡ b) → p ≡ q
 UIP a .a refl e = {!e!}
 
