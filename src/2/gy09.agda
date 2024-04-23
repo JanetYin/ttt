@@ -46,13 +46,6 @@ p10 f with f 0
 p11 : (n : ℕ) → n + 2 ≢ n + 1
 p11 (suc n) e = p11 n (suc-inj e)
 
-{-
-Béla
-Tóth Zalán
-Martin
-Topolyai Máté
--}
-
 -- Mókásabb helyzet.
 p11'' : ¬ Σ ℕ (λ n → n + 3 ≡ n + 1)
 p11'' = f g where
