@@ -30,9 +30,11 @@ p2 = {!!}
 -- \==n = ≢
 p9' : 0 ≢ the ℕ 1
 p9' ()
+-- Axióma 1: Konstruktorok diszjunktak, tehát különböző nevű konstruktorok tényleg különbözőek
 
 p9 : 2 * 2 ≢ 5 * 1
 p9 ()
+-- Axióma 2: Konstruktorok injektívek, tehát egyenlőség két oldalán lévő azonos konstruktorokat le lehet nyelni.
 
 suc-inj : ∀{x y} → suc x ≡ suc y → x ≡ y
 suc-inj refl = refl
@@ -45,6 +47,7 @@ p10 f with f 0
 -- ...mintsem bizonyítani, hogy ez a kettő sosem lesz egyenlő:
 p11 : (n : ℕ) → n + 2 ≢ n + 1
 p11 (suc n) e = p11 n (suc-inj e)
+-- A függvény nem végtelen; nem felejtjük el, hogy a 0 is le van kezelve, csak agda magától tudja, hogy baromság.
 
 -- Mókásabb helyzet.
 p11'' : ¬ Σ ℕ (λ n → n + 3 ≡ n + 1)
