@@ -4,13 +4,14 @@ module Lib.Nat.Base where
 
 open import Lib.Nat.Literals
 open import Lib.Nat.Type
-open import Lib.Unit
-open import Lib.Empty
+open import Lib.Unit.Type
+open import Lib.Empty.Type
 open import Lib.Sigma.Type
 open import Lib.Sum.Type
 open import Lib.Equality
 open import Lib.Containers.List.Type
 open import Lib.Nat.Equality.Base
+open import Lib.UnitOrEmpty.Type
 open import Agda.Builtin.Nat public
   hiding (Nat ; suc ; zero)
   renaming (_<_ to _<ᵇ_ ; _==_ to _==ᵇ_ ; _-_ to _-'_)
@@ -33,6 +34,38 @@ _^_ : ℕ → ℕ → ℕ
 x ^ zero  = 1
 x ^ suc n = x * x ^ n
 
+infix 8 _⁰ _¹ _² _³ _⁴ _⁵ _⁶ _⁷ _⁸ _⁹
+
+_⁰ : ℕ → ℕ
+_⁰ = _^ 0
+
+_¹ : ℕ → ℕ
+_¹ = _^ 1
+
+_² : ℕ → ℕ
+_² = _^ 2
+
+_³ : ℕ → ℕ
+_³ = _^ 3
+
+_⁴ : ℕ → ℕ
+_⁴ = _^ 4
+
+_⁵ : ℕ → ℕ
+_⁵ = _^ 5
+
+_⁶ : ℕ → ℕ
+_⁶ = _^ 6
+
+_⁷ : ℕ → ℕ
+_⁷ = _^ 7
+
+_⁸ : ℕ → ℕ
+_⁸ = _^ 8
+
+_⁹ : ℕ → ℕ
+_⁹ = _^ 9
+
 infixl 50 _!
 _! : ℕ → ℕ
 zero  ! = 1
@@ -53,6 +86,32 @@ digits n@(suc _) = digitsWithFuel n n [] where
   digitsWithFuel fuel zero acc = acc
   digitsWithFuel zero n@(suc _) acc = []
   digitsWithFuel (suc fuel) n@(suc _) acc = digitsWithFuel fuel (n div 9) (n mod 9 ∷ acc)
+
+{-
+Evenᵗ : ℕ → ⊤or⊥
+Evenᵗ 0 = ⊤ , inl refl
+Evenᵗ 1 = ⊥ , inr refl
+Evenᵗ (suc (suc n)) = Evenᵗ n
+
+Even : ℕ → Set
+Even n = fst (Evenᵗ n)
+
+Oddᵗ : ℕ → ⊤or⊥
+Oddᵗ 0 = ⊥ , inr refl
+Oddᵗ 1 = ⊤ , inl refl
+Oddᵗ (suc (suc n)) = Oddᵗ n
+
+Odd : ℕ → Set
+Odd n = fst (Oddᵗ n)
+-}
+
+data Even : ℕ → Set where
+  instance Even0 : Even 0
+  instance Even+2 : {n : ℕ} → .⦃ Even n ⦄ → Even (suc (suc n))
+
+data Odd : ℕ → Set where
+  instance Odd1 : Odd 1
+  instance Odd+2 : {n : ℕ} → .⦃ Odd n ⦄ → Odd (suc (suc n))
 
 case-ℕ : ∀{i}{A : Set i} → ℕ → A → A → A
 case-ℕ zero    z s = z

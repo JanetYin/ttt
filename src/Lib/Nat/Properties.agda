@@ -6,10 +6,12 @@ open import Lib.Nat.Type
 open import Lib.Nat.Base
 open import Lib.Nat.Equality.Base
 open import Lib.Unit.Type
-open import Lib.Equality
+open import Lib.Equality.Type
+open import Lib.Equality.Base
 open import Lib.Dec
-open import Lib.Dec.PatternSynonym
 open import Lib.Sigma.Type
+open import Lib.Sum.Type
+open import Lib.Sum.Base
 
 suc-injective : ∀{n m} → suc n ≡ suc m → n ≡ m
 suc-injective refl = refl
@@ -37,9 +39,9 @@ sucr+ : (n m : ℕ) → n + suc m ≡ suc (n + m)
 sucr+ zero m = refl
 sucr+ (suc n) m = cong suc (sucr+ n m)
 
-ass+ : (m n o : ℕ) → (m + n) + o ≡ m + (n + o)
-ass+ zero n o = refl
-ass+ (suc m) n o = cong suc (ass+ m n o)
+assoc+ : (m n o : ℕ) → (m + n) + o ≡ m + (n + o)
+assoc+ zero n o = refl
+assoc+ (suc m) n o = cong suc (assoc+ m n o)
 
 comm+ : (m n : ℕ) → m + n ≡ n + m
 comm+ zero n = sym (idr+ n)
@@ -47,23 +49,23 @@ comm+ (suc m) n = trans (cong suc (comm+ m n)) (sym (sucr+ n m))
 
 dist+* : (m n o : ℕ) → (m + n) * o ≡ m * o + n * o
 dist+* zero n o = refl
-dist+* (suc m) n o = trans (cong (o +_) (dist+* m n o)) (sym (ass+ o (m * o) (n * o)))
+dist+* (suc m) n o = trans (cong (o +_) (dist+* m n o)) (sym (assoc+ o (m * o) (n * o)))
 
 dist*+ : (m n o : ℕ) → m * (n + o) ≡ m * n + m * o
 dist*+ zero n o = refl
 dist*+ (suc m) n o =
   n + o + m * (n + o)
-  ≡⟨ ass+ n o (m * (n + o)) ⟩
+  ≡⟨ assoc+ n o (m * (n + o)) ⟩
   n + (o + m * (n + o)) 
   ≡⟨ cong (n +_) (comm+ o (m * (n + o))) ⟩
   n + (m * (n + o) + o)
-  ≡⟨ sym (ass+ n (m * (n + o)) o) ⟩
+  ≡⟨ sym (assoc+ n (m * (n + o)) o) ⟩
   n + m * (n + o) + o
   ≡⟨ cong (λ x → n + x + o) (dist*+ m n o) ⟩
   n + (m * n + m * o) + o
-  ≡⟨ cong (_+ o) (sym (ass+ n (m * n) (m * o))) ⟩
+  ≡⟨ cong (_+ o) (sym (assoc+ n (m * n) (m * o))) ⟩
   n + m * n + m * o + o
-  ≡⟨ ass+ (n + m * n) (m * o) o ⟩
+  ≡⟨ assoc+ (n + m * n) (m * o) o ⟩
   n + m * n + (m * o + o)
   ≡⟨ cong ((n + m * n) +_) (comm+ (m * o) o) ⟩
   n + m * n + (o + m * o) ∎
@@ -87,18 +89,18 @@ sucr* (suc n) m =
   suc (n * suc m + m)
   ≡⟨ cong (λ x → suc (x + m)) (sucr* n m) ⟩
   suc (n + n * m + m)
-  ≡⟨ cong suc (ass+ n (n * m) m) ⟩
+  ≡⟨ cong suc (assoc+ n (n * m) m) ⟩
   suc (n + (n * m + m))
   ≡⟨ cong (λ x → suc (n + x)) (comm+ (n * m) m) ⟩
   suc (n + (m + n * m)) ∎
 
-ass* : (m n o : ℕ) → (m * n) * o ≡ m * (n * o)
-ass* zero n o = refl
-ass* (suc m) n o =
+assoc* : (m n o : ℕ) → (m * n) * o ≡ m * (n * o)
+assoc* zero n o = refl
+assoc* (suc m) n o =
   (n + m * n) * o
   ≡⟨ dist+* n (m * n) o ⟩
   n * o + m * n * o 
-  ≡⟨ cong (n * o +_) (ass* m n o) ⟩
+  ≡⟨ cong (n * o +_) (assoc* m n o) ⟩
   n * o + m * (n * o) ∎
 
 comm* : (m n : ℕ) → m * n ≡ n * m
@@ -119,7 +121,7 @@ idr^ = idr*
 
 dist^+ : (m n o : ℕ) → m ^ (n + o) ≡ m ^ n * m ^ o
 dist^+ m zero o = sym (idr+ (m ^ o))
-dist^+ m (suc n) o = trans (cong (m *_) (dist^+ m n o)) (sym (ass* m (m ^ n) (m ^ o)))
+dist^+ m (suc n) o = trans (cong (m *_) (dist^+ m n o)) (sym (assoc* m (m ^ n) (m ^ o)))
 
 dist^* : (a m n : ℕ) → a ^ (m * n) ≡ (a ^ m) ^ n
 dist^* a 0 n = sym (nulll^ n)
@@ -132,13 +134,13 @@ dist^* a (suc m) (suc n) =
   a * (a ^ n * (a ^ m * (a ^ m) ^ n))
   ≡⟨ cong (λ x → a * (a ^ n * (a ^ m * x))) (sym (dist^* a m n)) ⟩
   a * (a ^ n * (a ^ m * a ^ (m * n)))
-  ≡⟨ cong (a *_) (sym (ass* (a ^ n) (a ^ m) (a ^ (m * n)))) ⟩
+  ≡⟨ cong (a *_) (sym (assoc* (a ^ n) (a ^ m) (a ^ (m * n)))) ⟩
   a * (a ^ n * a ^ m * a ^ (m * n))
   ≡⟨ cong (λ x → a * (x * a ^ (m * n))) (comm* (a ^ n) (a ^ m)) ⟩
   a * (a ^ m * a ^ n * a ^ (m * n))
-  ≡⟨ cong (a *_) (ass* (a ^ m) (a ^ n) (a ^ (m * n))) ⟩
+  ≡⟨ cong (a *_) (assoc* (a ^ m) (a ^ n) (a ^ (m * n))) ⟩
   a * (a ^ m * (a ^ n * a ^ (m * n)))
-  ≡⟨ sym (ass* a (a ^ m) (a ^ n * a ^ (m * n))) ⟩
+  ≡⟨ sym (assoc* a (a ^ m) (a ^ n * a ^ (m * n))) ⟩
   a * a ^ m * (a ^ n * a ^ (m * n))
   ≡⟨ cong (a * a ^ m *_) (sym (dist^+ a n (m * n))) ⟩
   a * a ^ m * a ^ (n + m * n)
@@ -151,16 +153,18 @@ dist*^ a b (suc n) =
   a * b * (a * b) ^ n
   ≡⟨ cong (a * b *_) (dist*^ a b n) ⟩
   a * b * (a ^ n * b ^ n)
-  ≡⟨ ass* a b (a ^ n * b ^ n) ⟩
+  ≡⟨ assoc* a b (a ^ n * b ^ n) ⟩
   a * (b * (a ^ n * b ^ n))
-  ≡⟨ cong (a *_) (sym (ass* b (a ^ n) (b ^ n))) ⟩
+  ≡⟨ cong (a *_) (sym (assoc* b (a ^ n) (b ^ n))) ⟩
   a * (b * a ^ n * b ^ n)
   ≡⟨ cong (λ x → a * (x * b ^ n)) (comm* b (a ^ n)) ⟩
   a * (a ^ n * b * b ^ n)
-  ≡⟨ cong (a *_) (ass* (a ^ n) b (b ^ n)) ⟩
+  ≡⟨ cong (a *_) (assoc* (a ^ n) b (b ^ n)) ⟩
   a * (a ^ n * (b * b ^ n))
-  ≡⟨ sym (ass* a (a ^ n) (b * b ^ n)) ⟩
+  ≡⟨ sym (assoc* a (a ^ n) (b * b ^ n)) ⟩
   a * a ^ n * (b * b ^ n) ∎
+
+open import Lib.Dec.PatternSynonym
 
 infix 4 _≟_
 _≟_ : (x y : ℕ) → Dec (x ≡ y)
@@ -170,3 +174,53 @@ _≟_ (suc x) zero = no (λ ())
 _≟_ (suc x) (suc y) with _≟_ x y
 ... | yes refl = yes refl
 ... | no p = no λ a → p (suc-injective a)
+
+Odd-2 : {n : ℕ} → Odd (suc (suc n)) → Odd n
+Odd-2 {zero} (Odd+2 ⦃ ⦄)
+Odd-2 {suc zero} e = Odd1
+Odd-2 {suc (suc n)} (Odd+2 ⦃ p ⦄) = Odd+2 ⦃ Odd-2 {n} p ⦄
+
+Even-2 : {n : ℕ} → Even (suc (suc n)) → Even n
+Even-2 {zero} _ = Even0
+Even-2 {suc zero} (Even+2 ⦃ ⦄)
+Even-2 {suc (suc n)} (Even+2 ⦃ p ⦄) = Even+2 ⦃ Even-2 {n} p ⦄
+
+EvenOdd : (n : ℕ) → Even n ⊎ Odd n
+EvenOdd zero = inl Even0
+EvenOdd (suc zero) = inr Odd1
+EvenOdd (suc (suc n)) = case (EvenOdd n) (λ even-n → inl (Even+2 ⦃ even-n ⦄)) λ odd-n → inr (Odd+2 ⦃ odd-n ⦄)
+
+EvenConsecutive : (n : ℕ) → Even n ⊎ Even (suc n)
+EvenConsecutive zero = inl Even0
+EvenConsecutive (suc n) = case (EvenConsecutive n) (λ even-n → inr (Even+2 ⦃ even-n ⦄)) inl
+
+OddConsecutive : (n : ℕ) → Odd n ⊎ Odd (suc n)
+OddConsecutive zero = inr Odd1
+OddConsecutive (suc n) = case (OddConsecutive n) (λ odd-n → inr (Odd+2 ⦃ odd-n ⦄)) inl
+
+EvenOdd-suc : (n : ℕ) → Even n → Odd (suc n)
+EvenOdd-suc zero e = Odd1
+EvenOdd-suc (suc (suc n)) (Even+2 ⦃ p ⦄) = Odd+2 ⦃ EvenOdd-suc n p ⦄
+
+OddEven-suc : (n : ℕ) → Odd n → Even (suc n)
+OddEven-suc (suc zero) e = Even+2
+OddEven-suc (suc (suc n)) (Odd+2 ⦃ p ⦄) = Even+2 ⦃ OddEven-suc n p ⦄
+
+EvenOdd+ : (n k : ℕ) → Even n × Even k ⊎ Odd n × Odd k ↔ Even (n + k)
+fst (EvenOdd+ zero k) (inl a) = snd a
+fst (EvenOdd+ (suc zero) k) (inr b) = OddEven-suc k (snd b)
+fst (EvenOdd+ (suc (suc n)) k) (inl (Even+2 ⦃ even-n ⦄ , even-k)) = Even+2 ⦃ fst (EvenOdd+ n k) (inl (even-n , even-k)) ⦄
+fst (EvenOdd+ (suc (suc n)) k) (inr (Odd+2 ⦃ odd-n ⦄ , odd-k)) = Even+2 ⦃ fst (EvenOdd+ n k) (inr (odd-n , odd-k)) ⦄
+snd (EvenOdd+ zero k) e = inl (Even0 , e)
+snd (EvenOdd+ (suc zero) k) e = inr (Odd1 , Odd-2 {k} (EvenOdd-suc (suc k) e))
+snd (EvenOdd+ (suc (suc n)) k) e with snd (EvenOdd+ n k) (Even-2 e)
+... | inl (even-n , even-k) = inl (Even+2 ⦃ even-n ⦄ , even-k)
+... | inr (odd-n , odd-k) = inr (Odd+2 ⦃ odd-n ⦄ , odd-k)
+
+Even2* : (n : ℕ) → Even (n + n)
+Even2* zero = Even0
+Even2* (suc n) = subst (λ x → Even (suc x)) (sym (sucr+ n n)) (Even+2 ⦃ Even2* n ⦄)
+
+EvenMulConsecutive : (n : ℕ) → Even (n * suc n)
+EvenMulConsecutive zero = Even0
+EvenMulConsecutive (suc n) = Even+2 ⦃ subst Even (assoc+ n n _ ◾ cong (n +_) (sym (sucr* n (suc n)))) (fst (EvenOdd+ (n + n) (n * suc n)) (inl (Even2* n , EvenMulConsecutive n))) ⦄
