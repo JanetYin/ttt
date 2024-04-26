@@ -1,17 +1,17 @@
 module gy10 where
 
 open import Lib hiding (_≟ℕ_)
-open import Lib.Containers.List
+open List
 
 ---------------------------------------------------------
 -- konstruktorok injektivitasa
 ------------------------------------------------------
 
-sucinj : (m n : ℕ) → ℕ.suc m ≡ suc n → m ≡ n
+sucinj : (m n : ℕ) → suc m ≡ suc n → m ≡ n
 sucinj = {!!}
 
 -- prove it without pattern matching on e! (hint: use pred)
-sucinj' : (m n : ℕ) → ℕ.suc m ≡ suc n → m ≡ n
+sucinj' : (m n : ℕ) → suc m ≡ suc n → m ≡ n
 sucinj' m n e = {!!}
 
 data Tree : Set where
@@ -50,7 +50,7 @@ true≠false = {!!}
 true≠false' : true ≢ false
 true≠false' e = {!!}
 
-zero≠sucn : {n : ℕ} → zero ≢ ℕ.suc n
+zero≠sucn : {n : ℕ} → zero ≢ suc n
 zero≠sucn = {!!}
 
 n≠sucn : (n : ℕ) → n ≢ suc n
@@ -82,14 +82,14 @@ x ≤ y = Σ ℕ λ m → m + x ≡ y
 ¬2≤1 : ¬ (2 ≤ 1)
 ¬2≤1 = {!!}
 
-n≤sucn : ∀ (n : ℕ) -> n ≤ suc n
+n≤sucn : ∀ (n : ℕ) → n ≤ suc n
 n≤sucn = {!!}
 
-sucinj≤ : ∀ (n m : ℕ) -> n ≤ m -> suc n ≤ suc m
-sucinj≤ = {!!}
+suc-monotonous≤ : ∀ (n m : ℕ) → n ≤ m → suc n ≤ suc m
+suc-monotonous≤ = {!!}
 
-predinj≤ : ∀ (n m : ℕ) -> suc n ≤ suc m -> n ≤ m
-predinj≤ = {!!}
+sucinj≤ : ∀ (n m : ℕ) → suc n ≤ suc m → n ≤ m
+sucinj≤ = {!!}
 
 ---------------------------------------------------------
 -- egyenlosegek eldonthetosege
