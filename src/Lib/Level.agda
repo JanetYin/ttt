@@ -12,6 +12,9 @@ record Lift {a} ℓ (A : Set a) : Set (a ⊔ ℓ) where
 
 open Lift public
 
+0ℓ : Level
+0ℓ = lzero
+
 level : Nat → Level
 level zero = lzero
 level (suc n) = lsuc (level n)

@@ -37,3 +37,8 @@ elim-Fin : ∀{ℓ}{k : ℕ}(P : {n : ℕ} → Fin n → Set ℓ) →
   P f
 elim-Fin P pzero psuc fzero = pzero
 elim-Fin P pzero psuc (fsuc f) = psuc (elim-Fin P pzero psuc f)
+
+lift-f : ∀ {m n } k → (Fin m → Fin n ) → Fin (k + m) → Fin (k + n)
+lift-f zero f i = f i 
+lift-f (suc k) f fzero = fzero 
+lift-f (suc k) f (fsuc i) = fsuc (lift-f k f i)
