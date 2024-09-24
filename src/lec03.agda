@@ -1,6 +1,6 @@
 module lec03 where
 
-open import Lib hiding (_×_ ; fst ; snd ; Σ ; _,_ ; _+_ ; _*_ ; _^_ ; pred ; pred')
+open import Lib hiding (_×_ ; fst ; snd ; Σ ; _,_ ; _+_ ; _*_ ; _^_ ; pred ; pred'; curry; uncurry; add)
 open import Lib.Product
 
 {-
@@ -60,7 +60,13 @@ g (b , n) = if b then inl n else'' inr n
 
 -- HW: prove that ∀ x → f (g x) ≡ x
 -- HW: prove that ∀ x → g (f x) ≡ x
+f₁ : ∀ x → f (g x) ≡ x 
+f₁ (inl tt , snd₁) = refl
+f₁ (inr tt , snd₁) = refl
 
+g₁ :  ∀ x → g (f x) ≡ x 
+g₁ (inl a) = refl
+g₁ (inr b) = refl
 -- Moses Schönfinkel
 curry : {A B C : Set} → (A × B → C) → (A → B → C)
 curry f a b = f (a , b)

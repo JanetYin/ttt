@@ -10,9 +10,16 @@ contradiction p ¬p = exfalso (¬p p)
 
 contraposition : ∀{i j}{P : Set i}{Q : Set j} → (P → Q) → ¬ Q → ¬ P
 contraposition f ¬q p = contradiction (f p) ¬q
-
+n→z : ∀ {n x y z : ℕ} → n + (x + y) ≡ x + z
 weaken : {X : Set} → X → ¬ ¬ X
 weaken x = λ ¬x → ¬x x
+-- Prove that n + y ≡ z
+n+y≡z : ∀ {n y z : ℕ} → (n + y ≡ z)
+n+y≡z {n} {y} {z} = n→z {n} {0} {y} {z}
+
+-- Now we instantiate the proof
+example : ∀ n y → n + y ≡ n + y
+example n y = n+y≡z {n} {y} {n + y}
 -}
 
 ----------------------------------------------
@@ -20,6 +27,7 @@ weaken x = λ ¬x → ¬x x
 ----------------------------------------------
 
 module F1 where
+
 
   -- Ha bementem dolgozni, akkor kapok fizetést.
   form1 : Set
@@ -292,10 +300,10 @@ f11 : Dec ((P Q : Set) → (P → Q) × Q → P)
 f11 = {!   !}
 
 f12 : Dec ((A B : Set) → (A → B) → ¬ ¬ A → ¬ ¬ B)
-f12 = {!   !}
+f12 = inl (λ A B x x₁ x₂ → x₁ (λ x₃ → x₂ (x x₃)))
 
 f13 : Dec ((P Q : Set) → (P → Q) → ¬ ¬ (¬ P ⊎ Q))
-f13 = {!   !}
+f13 = inl (λ P Q x x₁ → x₁ (inr (x {!   !})))
 
 f14 : Dec ((P Q : Set) → (P ↔ Q) → (¬ P × Q) ⊎ (P × ¬ Q))
 f14 = {!   !}
@@ -312,7 +320,12 @@ f17 = {!   !}
 f18 : Dec ((P Q : Set) → (¬ P ⊎ Q) ↔ P → P × ¬ Q)
 f18 = {!   !}
 
+p19 : {X Y : Set} → ¬ ((X ↔ Y) ↔ (¬ X ↔ ¬ Y))
+p19 (fst₁ , snd₁) = {!   !}
+ -- where 
+
+
 -- Sokat kell ezzel szőrőzni. Amolyan igazi bizonyítás!
 -- Minden adja magát, csak sokáig adja magát.
 f19 : {X Y : Set} → Dec (¬ ((X ↔ Y) ↔ (¬ X ↔ ¬ Y)))
-f19 = {!   !}
+f19 {X} {Y} = inl {!   !}

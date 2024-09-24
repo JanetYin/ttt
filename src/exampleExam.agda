@@ -133,6 +133,20 @@ x ≡⟨ x≡y ⟩ y≡z = trans x≡y y≡z
 _∎ : ∀{i}{A : Set i}(a : A) → a ≡ a
 a ∎ = refl
 
+nullr* : (n : ℕ) → n * 0 ≡ 0
+nullr* zero = refl
+nullr* (suc n) = nullr* n
+
+p3 : (a b : ℕ) → a + a + b + a * 0 ≡ 2 * a + b
+p3 a b = 
+  a + a + b + a * 0
+  ≡⟨ cong (λ x → a + a + b + x) (nullr* a) ⟩
+  a + a + b + 0
+  ≡⟨ idr+ (a + a + b) ⟩
+  a + a + b
+  ≡⟨ sym (cong (λ x  → a + x + b) (idr+ a )) ⟩ --a + (a + zero) + b
+  refl
+
 takeStream : ∀{ℓ}{A : Set ℓ}(n : ℕ) → Stream A → Vec A n
 takeStream zero x = []
 takeStream (suc n) x = (head x) ∷ (takeStream n (tail x))
@@ -156,58 +170,65 @@ pred∞ ∞ = just ∞
 -- b1 and b2 should be such that b1 ℕ 1 2 ≠ b2 ℕ 1 2
 b1 b2 : (A : Set) → A → A → A
 -- END FIX
-b1 = ?
-b2 = ?
+b1 A x x₁ = x
+b2 A x x₁ = x₁
 -- BEGIN FIX
 test-b1-b2 : ¬ (b1 ℕ 1 2 ≡ b2 ℕ 1 2)
 test-b1-b2 ()
 -- END FIX
 
--- BEGIN FIX
+
 weirdLogicalEquiv : (A B C : Set) → (B → A → (⊥ ⊎ C)) ↔ (A → (B → C × A))
 -- END FIX
-weirdLogicalEquiv = {!!}
+weirdLogicalEquiv = {!   !}
 
 -- BEGIN FIX
 cocΣ : (A : Set)(B : A → Set) → Σ A B ↔ ((C : Set) → ((a : A) → B a → C) → C)
 -- END FIX
-cocΣ = {!!}
+cocΣ  = {!   !}
 
 -- BEGIN FIX
 prop : {P : Set} → P ⊎ ¬ P → (¬ ( ¬ P) → P)
 -- END FIX
-prop = {!!}
+prop = {!   !}
 
 -- BEGIN FIX
 ref≤ : (x : ℕ) → x ≤ x
 -- END FIX
-ref≤ = {!!}
+ref≤ = {!   !}
 
 -- BEGIN FIX
 cong⁻¹ : {A B : Set}(a b : A)(f : A → B) → ¬ (f a ≡ f b) → ¬ (a ≡ b)
 -- END FIX
-cong⁻¹ = {!!}
+cong⁻¹ = {!   !}
 
 -- BEGIN FIX
 a+b=0→a=0 : (a b : ℕ) → (a + b) ≡ 0 → a ≡ 0
 -- END FIX
-a+b=0→a=0 = {!!}
+a+b=0→a=0 = {!   !}
 
 -- BEGIN FIX
 noℕsqrt : ¬ ((n k : ℕ) → Σ ℕ λ m → m * m ≡ n * k)
 -- END FIX
-noℕsqrt = {!!}
+noℕsqrt = {!   !}
 
 -- BEGIN FIX
 ¬¬∃↓ : ¬ ((f : ℕ → ℕ) → Σ ℕ λ n → (k : ℕ) → suc (f n) ≤ (f k))
 -- END FIX
-¬¬∃↓ = ?
-
+¬¬∃↓ = {!   !}
+{- 
+¬¬∃↓ x | zero , snd₁ with snd₁ zero 
+¬¬∃↓ x | zero , snd₁ | zero , ()
+¬¬∃↓ x | zero , snd₁ | suc fst₁ , ()
+¬¬∃↓ x | suc fst₁ , snd₁ with snd₁ zero 
+... | zero , ()
+... | suc fst₂ , ()
+-}
 -- BEGIN FIX
 -- works like haskell's zip
 zipStream : {A B : Set} → Stream A → Stream B → Stream (A × B)
 -- END FIX
-zipStream = {!!}
+zipStream = {!   !}
 -- BEGIN FIX
 test-s1 : takeStream 10 (zipStream (iterate suc 0) (iterate pred 100)) ≡
   (0 , 100) ∷ (1 , 99) ∷ (2 , 98) ∷
@@ -219,3 +240,82 @@ test-s2 : takeStream 10 (mapStream (λ (a , b) → a + b) (zipStream (iterate (�
   100 ∷ 101 ∷ 102 ∷ 103 ∷ 104 ∷ 105 ∷ 106 ∷ 107 ∷ 108 ∷ 109 ∷ []
 test-s2 = refl
 -- END FIX
+ 
+bool3 : (f : Bool → Bool)(x : Bool) → f (f (f x)) ≡ f x
+bool3 = {!   !}
+
+
+  
+-- BEGIN FIX
+-- weirdLogicalEquiv : (A B C : Set) → (B → A → (⊥ ⊎ C)) ↔ (A → (B → C × A))
+-- -- END FIX
+-- fst (weirdLogicalEquiv A B C) x x₁ x₂ = (case (x x₂ x₁) exfalso λ x₃ → x₃) , x₁
+-- snd (weirdLogicalEquiv A B C) x x₁ x₂ = inr  (fst (x x₂ x₁))
+
+-- -- BEGIN FIX
+-- cocΣ : (A : Set)(B : A → Set) → Σ A B ↔ ((C : Set) → ((a : A) → B a → C) → C)
+-- -- END FIX
+-- fst (cocΣ A B) x C x₁ = x₁ (fst x) (snd x)
+-- snd (cocΣ A B) x = x (Σ A B) λ a x₁ → a , x₁
+
+-- -- BEGIN FIX
+-- prop : {P : Set} → P ⊎ ¬ P → (¬ ( ¬ P) → P)
+-- -- END FIX
+-- prop (inl x) x₁ = x
+-- prop (inr x) x₁ = exfalso (x₁ x)
+
+-- -- BEGIN FIX
+-- ref≤ : (x : ℕ) → x ≤ x
+-- -- END FIX
+-- ref≤ zero = zero , refl
+-- ref≤ (suc x) = zero , refl
+
+-- -- BEGIN FIX
+-- cong⁻¹ : {A B : Set}(a b : A)(f : A → B) → ¬ (f a ≡ f b) → ¬ (a ≡ b)
+-- -- END FIX
+-- cong⁻¹ a .a f x refl = x refl
+
+-- -- BEGIN FIX
+-- a+b=0→a=0 : (a b : ℕ) → (a + b) ≡ 0 → a ≡ 0
+-- -- END FIX
+-- a+b=0→a=0 zero b x = refl
+
+-- -- BEGIN FIX
+-- noℕsqrt : ¬ ((n k : ℕ) → Σ ℕ λ m → m * m ≡ n * k)
+-- -- END FIX
+-- noℕsqrt x with x 1 2 
+-- ... | suc (suc zero) , ()
+-- ... | suc (suc (suc fst₁)) , ()
+
+-- -- BEGIN FIX
+-- ¬¬∃↓ : ¬ ((f : ℕ → ℕ) → Σ ℕ λ n → (k : ℕ) → suc (f n) ≤ (f k))
+-- -- END FIX
+-- ¬¬∃↓ x with snd (x (λ _ → 0)) 0
+-- ... | zero , ()
+-- ... | suc fst₁ , ()
+-- {- 
+-- ¬¬∃↓ x | zero , snd₁ with snd₁ zero 
+-- ¬¬∃↓ x | zero , snd₁ | zero , ()
+-- ¬¬∃↓ x | zero , snd₁ | suc fst₁ , ()
+-- ¬¬∃↓ x | suc fst₁ , snd₁ with snd₁ zero 
+-- ... | zero , ()
+-- ... | suc fst₂ , ()
+-- -}
+-- -- BEGIN FIX
+-- -- works like haskell's zip
+-- zipStream : {A B : Set} → Stream A → Stream B → Stream (A × B)
+-- -- END FIX
+-- head (zipStream x x₁) = (head x) , head x₁
+-- tail (zipStream x x₁) = mkStream (head (tail x) , head (tail x₁)) (zipStream (tail (tail x)) (tail (tail x₁)))
+-- -- BEGIN FIX
+-- test-s1 : takeStream 10 (zipStream (iterate suc 0) (iterate pred 100)) ≡
+--   (0 , 100) ∷ (1 , 99) ∷ (2 , 98) ∷
+--   (3 , 97)  ∷ (4 , 96) ∷ (5 , 95) ∷
+--   (6 , 94)  ∷ (7 , 93) ∷ (8 , 92) ∷
+--   (9 , 91) ∷ []
+-- test-s1 = refl
+-- test-s2 : takeStream 10 (mapStream (λ (a , b) → a + b) (zipStream (iterate (λ x → suc (suc x)) 0) (iterate pred 100))) ≡
+--   100 ∷ 101 ∷ 102 ∷ 103 ∷ 104 ∷ 105 ∷ 106 ∷ 107 ∷ 108 ∷ 109 ∷ []
+-- test-s2 = refl
+-- -- END FIX
+ 

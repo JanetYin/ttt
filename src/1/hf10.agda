@@ -3,11 +3,28 @@ module hf10 where
 open import Lib
 
 -- Lib.Nat.Properties-ben vannak a tételek.
-
+-- *^ : (a b n : ℕ) → (a * b) ^ n ≡ a ^ n * b ^ n
+-- ^* : (a m n : ℕ) → a ^ (m * n) ≡ (a ^ m) ^ n
+-- ^+ : (a m n : ℕ) → a ^ (m + n) ≡ a ^ m * a ^ n
+-- p^2 : (a : ℕ) → a ^ 2 ≡ a * a 
 -- Gonosz feladat, a 100 miatt túl hosszú lenne a kifejezés lépésenként,
 -- ha hagynánk agdát is dolgozni.
+p^2 : (a : ℕ) → a ^ 2 ≡ a * a 
+p^2 a = cong (a *_) (idr* a)
+
+
 p5 : (a : ℕ) → (10 * a + 5) ^ 2 ≡ a * (suc a) * 100 + 25
-p5 = {!   !}
+p5 a = 
+  (10 * a + 5) ^ 2
+  ≡⟨ cong (λ x → x) (p^2 (10 * a + 5)  ) ⟩
+  (10 * a + 5) * (10 * a + 5)
+   ≡⟨ {!   !} ⟩
+  {!   !}
+   ≡⟨ {!   !} ⟩
+  {!   !}
+   ≡⟨ {!   !} ⟩
+  a * (suc a) * 100 + 25 ∎
+  
 
 -- Elsőre ijesztő, másodjára jobban meg kell nézni, hogy mi is van.
 p6 : (a b c d e : ℕ) →

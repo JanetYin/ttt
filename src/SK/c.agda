@@ -36,6 +36,8 @@ data Σ (A : Set)(B : A → Set) : Set where
 record ⊤ : Set where constructor tt
 data ⊥ : Set where
 
+-- data _—→_ : Model.Tm → Model.Tm → Set where
+
 -- ¬_ : Set → Set
 -- ¬ A = A → ⊥
 
@@ -56,6 +58,7 @@ data _⊎_ {i}(A B : Set i) : Set i where
   inr : B → A ⊎ B
 -- subst : ∀ {A : Set} {x y : A} (P : A → Set) → x ≡ y → P x → P y
 -- subst P refl px = px
+
 
 module Syn where
   infixl 4 _·_

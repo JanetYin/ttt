@@ -38,8 +38,14 @@ module Syn' = Model Syn'
 --   ⟦ Syn.K ⟧ = K --⟦ Syn.K ⟧ ≡ K
 --   ⟦ Syn.S ⟧ = S --⟦ Syn.S ⟧ ≡ S
 --   ⟦ a Syn.· b ⟧ = {!   !}
+-- data _—→_ : Tm → Tm → Set where
+-- module reduction (m : Model) where 
+--         open Model m 
+--         infix 4 _—→_
 
-
+        
+        
+          
 module programmingWithCombinators (m : Model) where
   open Model m
   infixl 5 _·s_
@@ -425,7 +431,7 @@ module notFiniteModel
         Kβ 
 
     B : Tm
-    B = S · (K · S) · K -- (S <> (K <> S) <> K) <> K
+    B = S · (K · S) · K
     Bβ : ∀{f g u} → B · f · g · u ≡ f · (g · u)
     Bβ {f}{g}{u} = 
         cong (λ z → z · g · u) Sβ ◾
@@ -656,31 +662,6 @@ module notFiniteModel2
             ≡⟨ (almost0j {j} ) ⟩ 
       refl
              
-             
-      --         ≡⟨  sym (trans (sym (almost0j {j})) (trans (flattenval almost0 j) (trans (sym (projβ (suc (suc m)) j (us {j}))) ((sym (cong (λ x → x ·s us ) fi=fj)))))) ⟩ 
-      -- refl 
-      
-      -- ≡⟨  sym (trans (sym (almost0j {j})) (trans (flattenval almost0 j) 
-      --(trans (sym (projβ (suc (suc m)) j (us {j}))) ((sym (cong (λ x → x ·s us ) fi=fj)))))) ⟩ 
-     
-      --sym (almost0j {j})
-              -- ≡⟨ {!   !} ⟩ 
-      -- {!   !}
-      --          ≡⟨ flattenval almost0 j ⟩ 
-      -- {!   !}
-      --         ≡⟨ sym (projβ (suc (suc m)) j (us {j})) ⟩ 
-      -- {! fsuc fzero!}
-      --         ≡⟨ sym (cong (λ x → x ·s us ) fi=fj) ⟩ 
-      -- {! !}
-    
-      -- -- (sym (trans
-      
-      --  (sym (almost0j {j})) 
-      -- (trans (flattenval almost0 j)  
-
-      -- (trans (sym (projβ (suc (suc m)) j (us {j}))) 
-      --(sym (cong (λ x → x ·s us ) fi=fj))))))))
-
     bot : ⊥
     bot with contra
     bot | ()

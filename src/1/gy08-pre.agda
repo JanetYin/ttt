@@ -1,4 +1,4 @@
-module gy08 where
+module gy08-pre where
 
 open import Lib
 -- open import Lib.Dec.PatternSynonym
@@ -64,7 +64,8 @@ module People
 ---------------------------------------------------------
 
 ∀×-distr  :    (A : Set)(P : A → Set)(Q : A → Set) → ((a : A) → P a × Q a) ↔ ((a : A) → P a) × ((a : A) → Q a)
-∀×-distr = {!!}
+fst (∀×-distr A P Q) = λ x → (λ a → fst (x a)) , (λ a → snd (x a ))
+snd (∀×-distr A P Q) = λ x a → (fst x a) , (snd x a)
 
 -- !!!
 Σ⊎-distr  :    (A : Set)(P : A → Set)(Q : A → Set) → (Σ A λ a → P a ⊎ Q a) ↔ Σ A P ⊎ Σ A Q
@@ -89,11 +90,12 @@ module People
 Σ×-distr' = {!!}
 
 ¬∀        :    (A : Set)(P : A → Set)              → (Σ A λ a → ¬ P a)      → ¬ ((a : A) → P a)
-¬∀ = {!!}
+¬∀ A P x x₁ = snd x (x₁ (fst x))
 
 -- Ugyanez van a fájl tetején is:
 ¬Σ        :    (A : Set)(P : A → Set)              → (¬ Σ A λ a → P a)      ↔ ((a : A) → ¬ P a)
-¬Σ = {!!}
+fst (¬Σ A P) = λ x a x₁ → {!   !}
+snd (¬Σ A P) = λ x x₁ → {!   !}
 
 ¬¬∀-nat   :    (A : Set)(P : A → Set)              → ¬ ¬ ((x : A) → P x)    → (x : A) → ¬ ¬ (P x)
 ¬¬∀-nat = {!!}

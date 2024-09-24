@@ -8,7 +8,7 @@ open import Lib
 ------------------------------------------------------
 
 blowUp : ((A : Set) → ¬ A) → ⊥
-blowUp f = {!!}
+blowUp f = f ⊤ tt
 -- what's the difference with this?
 -- (A : Set) → ¬ A → ⊥
 
@@ -20,7 +20,8 @@ blowUp f = {!!}
 
 notExists↔noneOf : ∀{i}{A : Set i} → (P : A → Set) →
                         ¬ (Σ A (λ x → P x)) ↔ (∀ x → ¬ (P x))
-notExists↔noneOf = {!!}
+fst (notExists↔noneOf P) x x₁ x₂ = x (x₁ , x₂)
+snd (notExists↔noneOf P) x x₁ = x (fst x₁) (snd x₁)
 
 module People
   (Person    : Set) -- Univerzum
@@ -100,8 +101,6 @@ snd (Σ⊎-distr A P Q) (inr (a , Qa)) = a , inr Qa
 ... | inl a = a true
 ... | inr b = b false
 
-
-
 -- !!!
 Σ×-distr  : Dec ((A : Set)(P : A → Set)(Q : A → Set) → (Σ A λ a → P a × Q a)  → Σ A P × Σ A Q)
 Σ×-distr = inl (λ { A P Q (a , Pa , Qa) → (a , Pa) , (a , Qa) })
@@ -121,17 +120,21 @@ snd (Σ⊎-distr A P Q) (inr (a , Qa)) = a , inr Qa
     ... | true , Pa , Qa = Pa
 
 ¬∀        :    (A : Set)(P : A → Set)              → (Σ A λ a → ¬ P a)      → ¬ ((a : A) → P a)
-¬∀ = {!!}
+¬∀ A P x x₁ = snd x (x₁ (fst x))
 
 -- Ugyanez van a fájl tetején is:
 ¬Σ        :    (A : Set)(P : A → Set)              → (¬ Σ A λ a → P a)      ↔ ((a : A) → ¬ P a)
-¬Σ = {!!}
+fst (¬Σ A P) x a x₁ = x (a , x₁)
+snd (¬Σ A P) x x₁ = x (fst x₁) (snd x₁)
 
 ¬¬∀-nat   :    (A : Set)(P : A → Set)              → ¬ ¬ ((x : A) → P x)    → (x : A) → ¬ ¬ (P x)
-¬¬∀-nat = {!!}
+¬¬∀-nat A P x x₁ x₂ = x (λ x₃ → x₂ (x₃ x₁))
  
 Σ∀       : (A B : Set)(R : A → B → Set)        → (Σ A λ x → (y : B) → R x y) → (y : B) → Σ A λ x → R x y
-Σ∀ = {!!}
+Σ∀ A B R x y = (fst x) , (snd x y)
 
 AC       : (A B : Set)(R : A → B → Set)        → ((x : A) → Σ B λ y → R x y) → Σ (A → B) λ f → (x : A) → R x (f x)
-AC = {!!}
+AC A B R x = (λ x₁ → fst (x x₁)) , λ x₁ → snd (x x₁)
+
+P04 : (A : Set)(P : A → Set) → ((x : A) → ¬ P x) → {!   !} -- (¬ Σ A λ a → P a)   
+P04 = {!   !}

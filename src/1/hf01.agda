@@ -107,8 +107,8 @@ Definiálj két függvényt, f1, f2, amelyekre teljesülnek az alábbiak:
 -- f1 ℕ _+_ 2 ≠ f2 ℕ _+_ 2
 -}
 f1 f2 : (A : Set) → (A → A → A) → A → A
-f1 = ?
-f2 = ?
+f1 A x x₁ = x x₁ (x x₁ x₁)
+f2 A x x₁ = x x₁ x₁
 
 f1-f2₁ : f1 ℕ _*_ 0 ≡ f2 ℕ _*_ 0
 f1-f2₁ = refl

@@ -112,7 +112,9 @@ mint a másik szám.
 -}
 infix 4 _≤ℕ_
 _≤ℕ_ : ℕ → ℕ → Set
-_≤ℕ_ = {!   !}
+zero ≤ℕ x₁ = ⊤
+suc x ≤ℕ zero = ⊥
+suc x ≤ℕ suc x₁ = x ≤ℕ x₁
 
 ≤-test1 : (λ x → 0 ≤ℕ x) ≡ (λ x → ⊤)
 ≤-test1 = refl
@@ -125,7 +127,9 @@ _≤ℕ_ = {!   !}
 
 infix 4 _≥ℕ_
 _≥ℕ_ : ℕ → ℕ → Set
-_≥ℕ_ = {!   !}
+x ≥ℕ zero = ⊤
+zero ≥ℕ suc x₁ = ⊥
+suc x ≥ℕ suc x₁ = x ≥ℕ x₁
 
 ≥-test1 : (λ x → x ≥ℕ 0) ≡ (λ x → ⊤)
 ≥-test1 = refl
@@ -142,7 +146,10 @@ két természetes szám egyenlő egymással.
 -}
 infix 4 _≡ℕ_
 _≡ℕ_ : ℕ → ℕ → Set
-_≡ℕ_ = {!   !}
+zero ≡ℕ zero = ⊤
+zero ≡ℕ suc x₁ = ⊥
+suc x ≡ℕ zero = ⊥
+suc x ≡ℕ suc x₁ = x ≡ℕ x₁
 
 ≡ℕ-test1 : 3 ≡ℕ 3
 ≡ℕ-test1 = tt
@@ -158,8 +165,11 @@ Bizonyítsd, hogy az ≡ℕ művelet reflexív!
 Segítség: Nézd meg, hogy mi történik, ha mintaillesztés történik n-re. (Nem mintha lehetne igazán mást csinálni.)
 -}
 reflℕ : (n : ℕ) → n ≡ℕ n
-reflℕ = {!   !}
-
+reflℕ zero = tt
+reflℕ (suc n) = reflℕ n
+≤ℕ' : (x y : ℕ) → x ≤ℕ y
+≤ℕ' zero y = tt
+≤ℕ' (suc x) y = {!   !}
 {-
 Definiáld a min és a max függvényt, amely két szám közül rendre a kisebbet, illetve
 a nagyobbat adja vissza és mellette egy bizonyítást, hogy a jót adja vissza.
@@ -173,7 +183,9 @@ Utófeltétel: Létezik olyan (n : ℕ) szám (Σ első paramétere), amelyre te
   -- ha x ≥ y, akkor y megegyezik n-nel
 -}
 min : (x y : ℕ) → Σ ℕ (λ n → x ≤ℕ y × x ≡ℕ n ⊎ x ≥ℕ y × y ≡ℕ n)
-min = {!   !}
+min x y with y < x  
+... | false = x , inl ({!   !} , reflℕ x) -- y >= x x <= y
+... | true = y , inr ({!   !} , (reflℕ y)) --y < x
 
 min-test1 : fst (min 3 6) ≡ 3
 min-test1 = refl
